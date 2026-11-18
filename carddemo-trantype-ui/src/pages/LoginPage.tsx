@@ -34,8 +34,8 @@ export function LoginPage() {
     <Box component="main" p={3} maxWidth={800}>
       <ScreenHeader tranId="CC00" programName="COSGN00C" title="Sign on" />
       <Box component="form" onSubmit={submit} sx={{ display: 'flex', flexDirection: 'column', gap: 2, maxWidth: 300 }}>
-        <TextField label="User ID" value={username} onChange={(e) => setUsername(e.target.value)} inputProps={{ maxLength: 8 }} autoFocus />
-        <TextField label="Password" type="password" value={password} onChange={(e) => setPassword(e.target.value)} inputProps={{ maxLength: 8 }} />
+        <TextField label="User ID" value={username} onChange={(e) => setUsername(e.target.value)} autoFocus />
+        <TextField label="Password" type="password" value={password} onChange={(e) => setPassword(e.target.value)} />
         <Button type="submit" variant="contained">
           ENTER=Sign-in
         </Button>
