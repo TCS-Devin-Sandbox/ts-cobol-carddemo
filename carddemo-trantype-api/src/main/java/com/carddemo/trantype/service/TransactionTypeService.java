@@ -44,6 +44,10 @@ public class TransactionTypeService {
     private TransactionTypePage readForward(String startKey, int size, int pageNumber, Filters f) {
         List<TransactionType> fetched = repository.findForward(startKey, f.typeFlag(), f.type(),
                 f.descFlag(), f.descLike(), Limit.of(size + 1));
+        if (fetched.isEmpty() && !startKey.isEmpty()) {
+            // rows from the cursor onwards were deleted or no longer match: restart at page 1 (deviation D-07)
+            return readForward("", size, 1, f);
+        }
         boolean hasNext = fetched.size() > size;
         String nextCursor = hasNext ? fetched.get(size).getTrType() : null;
         List<TransactionType> rows = hasNext ? fetched.subList(0, size) : fetched;

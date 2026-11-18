@@ -136,7 +136,7 @@ components:
 
 | Request | SQL (JPQL with source-style filter flags) | Result |
 |---|---|---|
-| forward, cursor `c` (default `''`) | `tr_type >= c AND filters ORDER BY tr_type LIMIT size+1` | rows = first `size`; `hasNext` = got `size+1`; `nextCursor` = row `size+1` key |
+| forward, cursor `c` (default `''`) | `tr_type >= c AND filters ORDER BY tr_type LIMIT size+1` | rows = first `size`; `hasNext` = got `size+1`; `nextCursor` = row `size+1` key; no rows from a non-empty `c` → first page (D-07) |
 | backward, cursor `c` | `tr_type < c AND filters ORDER BY tr_type DESC LIMIT size`, reversed | if fewer than `size` rows exist before `c` → return the first page (page 1) instead (deviation D-07); `hasNext` / `nextCursor` via forward look-ahead from `lastKey` |
 | any | `hasPrev` = exists `tr_type < firstKey AND filters` | |
 | no rows | `message` = 'No Records found for these filter conditions' when a filter is active (1290 COUNT=0), else 'No records found for this search condition.' (8000) | `pageNumber` = 1 |

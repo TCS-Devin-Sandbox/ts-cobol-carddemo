@@ -229,4 +229,13 @@ class TransactionTypeServiceTest {
         service.delete("08");
         verify(repository).deleteByTrType("08");
     }
+
+    @Test
+    void forwardFromCursorWithNoRemainingRowsRestartsAtFirstPage() {
+        rows(9);
+        TransactionTypePage page = service.list("50", PageDirection.FORWARD, 7, 2, null, null);
+        assertThat(page.rows()).extracting(TransactionTypeDto::trType).startsWith("01").hasSize(7);
+        assertThat(page.pageNumber()).isEqualTo(1);
+        assertThat(page.message()).isNull();
+    }
 }
