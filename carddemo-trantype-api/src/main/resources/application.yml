@@ -1,0 +1,29 @@
+spring:
+  application:
+    name: carddemo-trantype-api
+  datasource:
+    url: ${DB_URL:jdbc:postgresql://localhost:5432/carddemo}
+    username: ${DB_USER:carddemo}
+    password: ${DB_PASSWORD:carddemo}
+  jpa:
+    open-in-view: false
+    hibernate:
+      ddl-auto: none
+  flyway:
+    locations: classpath:db/migration
+
+carddemo:
+  security:
+    # Passwords are required; start-up fails when they are empty. Built-in defaults exist only in the 'local' profile.
+    admin-username: ${CARDDEMO_ADMIN_USER:admin}
+    admin-password: ${CARDDEMO_ADMIN_PASSWORD:}
+    user-username: ${CARDDEMO_USER_USER:user}
+    user-password: ${CARDDEMO_USER_PASSWORD:}
+
+server:
+  port: ${PORT:8080}
+  servlet:
+    session:
+      cookie:
+        http-only: true
+        same-site: strict

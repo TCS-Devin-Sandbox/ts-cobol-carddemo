@@ -1,0 +1,5 @@
+# Local development only: activate with SPRING_PROFILES_ACTIVE=local (or -Dspring-boot.run.profiles=local).
+carddemo:
+  security:
+    admin-password: ${CARDDEMO_ADMIN_PASSWORD:admin123}
+    user-password: ${CARDDEMO_USER_PASSWORD:user123}
