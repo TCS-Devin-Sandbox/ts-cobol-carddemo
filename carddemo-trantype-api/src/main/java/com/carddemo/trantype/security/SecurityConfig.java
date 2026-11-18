@@ -71,6 +71,8 @@ public class SecurityConfig {
                                           @Value("${carddemo.security.admin-password}") String adminPassword,
                                           @Value("${carddemo.security.user-username}") String regularUser,
                                           @Value("${carddemo.security.user-password}") String regularPassword) {
+        requirePassword("carddemo.security.admin-password (CARDDEMO_ADMIN_PASSWORD)", adminPassword);
+        requirePassword("carddemo.security.user-password (CARDDEMO_USER_PASSWORD)", regularPassword);
         return new InMemoryUserDetailsManager(
                 User.withUsername(adminUser).password(encoder.encode(adminPassword)).roles("ADMIN").build(),
                 User.withUsername(regularUser).password(encoder.encode(regularPassword)).roles("USER").build());
@@ -81,6 +83,12 @@ public class SecurityConfig {
         DaoAuthenticationProvider provider = new DaoAuthenticationProvider(encoder);
         provider.setUserDetailsService(users);
         return new ProviderManager(provider);
+    }
+
+    static void requirePassword(String property, String value) {
+        if (value == null || value.isBlank()) {
+            throw new IllegalStateException(property + " must be set, or run with the 'local' profile for development defaults");
+        }
     }
 
     private static void write(ObjectMapper mapper, HttpServletResponse res, HttpStatus status, ErrorCode code,

@@ -14,10 +14,11 @@ spring:
 
 carddemo:
   security:
+    # Passwords are required; start-up fails when they are empty. Built-in defaults exist only in the 'local' profile.
     admin-username: ${CARDDEMO_ADMIN_USER:admin}
-    admin-password: ${CARDDEMO_ADMIN_PASSWORD:admin123}
+    admin-password: ${CARDDEMO_ADMIN_PASSWORD:}
     user-username: ${CARDDEMO_USER_USER:user}
-    user-password: ${CARDDEMO_USER_PASSWORD:user123}
+    user-password: ${CARDDEMO_USER_PASSWORD:}
 
 server:
   port: ${PORT:8080}
