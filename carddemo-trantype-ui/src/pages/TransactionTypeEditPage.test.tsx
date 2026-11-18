@@ -139,6 +139,7 @@ describe('TransactionTypeEditPage (CTTU)', () => {
     await userEvent.click(btn('F4=Delete'));
     expect(info()).toHaveTextContent(MSG.PROMPT_DELETE_CONFIRM);
     expect(btn('Enter=Process')).toBeDisabled();
+    (document.activeElement as HTMLElement | null)?.blur();
     await userEvent.keyboard('{Enter}');
     expect(error()).toHaveTextContent(MSG.INVALID_KEY);
 
