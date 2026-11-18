@@ -128,6 +128,12 @@ export function TransactionTypeEditPage() {
         return;
       case 'F5':
         if (state === 'NOT_FOUND') {
+          const keyMsg = checkTypeCode(trType);
+          if (keyMsg) {
+            setError(keyMsg);
+            setKeyError(true);
+            return;
+          }
           setTrType(normalizeTypeCode(trType || '0'));
           setDesc('');
           setState('CREATE');
