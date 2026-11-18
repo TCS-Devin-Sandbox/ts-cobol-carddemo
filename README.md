@@ -396,3 +396,7 @@ These optional features make CardDemo an even more useful resource for customers
 
 Last updated: April 2025
 
+
+## Transaction-type (CTLI/CTTU) modernization
+
+PostgreSQL + Spring Boot + React rewrite of `app/app-transaction-type-db2/`: see [docs/MODERNIZATION-README.md](docs/MODERNIZATION-README.md).
