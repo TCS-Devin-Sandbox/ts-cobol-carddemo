@@ -10,9 +10,10 @@ Abbreviations: **IT** = `TransactionTypeApiIntegrationTest`, **ST** = `Transacti
 |---|---|---|---|
 | Backend unit (RT, ST, CT) | 43 | 43 | 0 |
 | Backend integration (IT, PostgreSQL 15 container) | 8 | 8 | 0 |
-| Frontend (VT, MessageLine, LP, EP, AP) | 32 | 32 | 0 |
+| Frontend (VT, MessageLine, LP, EP, AP) | 34 | 34 | 0 |
 | Frontend lint / typecheck / build | — | pass | — |
-| Manual smoke (docker compose + `mvn spring-boot:run` + curl) | 2 | 2 | 0 |
+| Manual smoke (docker compose + `mvn spring-boot:run` + curl) | 3 | 3 | 0 |
+| Browser E2E (testing agent, Chrome, real API + PostgreSQL) | 13 scenarios | 13 | 0 |
 
 ## 2. Scenario matrix
 
@@ -44,6 +45,8 @@ Abbreviations: **IT** = `TransactionTypeApiIntegrationTest`, **ST** = `Transacti
 | T24 | Non-admin rejection | CTLI-027, CTTU-018 | user role USER / no token | GET | 403 'Access restricted to administrators' / 401; UI redirects to login | as expected | IT nonAdminRejected, CT unauthenticatedIs401 / nonAdminIs403, AP | P |
 | T25 | Return-to-menu flow | CTLI-025, CTTU-016 | list / maintain page | F3 | to admin menu (CA00) with 'PF03 pressed. Exiting'; CTTU from list → back to list | as expected | LP validates…F2/F3, EP F3 tests, AP admin menu options 5 and 6 | P |
 | T26 | F2 Add | CTLI-024 | list | F2 | CTTU screen | as expected | LP F2 opens the add screen | P |
+| T28 | Key changed after not-found lookup | CTTU-005/009 | 08 not found | change key to 01 | back to key entry; F5 not offered until 01 is fetched (prevents upsert overwrite) | as expected | EP changing the key after a failed lookup | P |
+| T29 | Re-login with stale token | CTTU-018 | expired session stored | valid credentials | login request has no bearer; new session issued | as expected | AP login does not send a stale bearer token | P |
 | T27 | Message lines | CTLI-026 | — | — | info centred, error red | as expected | MessageLine.test | P |
 
 Not automated: REQ-CTLI-012 (filter change restarts at page 1) is covered by LP code path `enter()` → `load({page:1})`, verified by IT filters; REQ-CTLI-023 (F10 only when pending) is enforced by the disabled `F10=Save` button; REQ-CTLI-028 / CTTU-017 (DB unavailable) map to 500 `DB_ERROR` via `ApiExceptionHandler.dataAccess` (no automated test).
