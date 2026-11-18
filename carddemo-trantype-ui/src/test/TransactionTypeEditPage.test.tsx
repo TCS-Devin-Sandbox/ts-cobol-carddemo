@@ -199,4 +199,20 @@ describe('TransactionTypeEditPage (CTTU)', () => {
     await click('F3=Exit');
     expect(screen.getByTestId('location')).toHaveTextContent('/admin');
   });
+
+  it('F5 after not-found creates the searched key, not an edited one', async () => {
+    const save = vi.fn().mockResolvedValue({ trType: '42', description: 'NEW' });
+    setup({ save });
+    await userEvent.type(typeField(), '42');
+    await click('ENTER=Process');
+    await waitFor(() => expect(state()).toBe('DETAILS_NOT_FOUND'));
+    await userEvent.clear(typeField());
+    await userEvent.type(typeField(), '01');
+    await click('F5=Save');
+    expect(typeField()).toHaveValue('42');
+    await userEvent.type(descField(), 'NEW');
+    await click('ENTER=Process');
+    await click('F5=Save');
+    expect(save).toHaveBeenCalledWith('42', 'NEW', true);
+  });
 });

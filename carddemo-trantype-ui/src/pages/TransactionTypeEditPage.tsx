@@ -99,6 +99,7 @@ export function TransactionTypeEditPage() {
   const [typeInput, setTypeInput] = useState('');
   const [descInput, setDescInput] = useState('');
   const [old, setOld] = useState<TransactionType | null>(null);
+  const [searchedKey, setSearchedKey] = useState('');
   const [error, setError] = useState<string | null>(null);
   const [typeError, setTypeError] = useState(false);
   const [descError, setDescError] = useState(false);
@@ -112,6 +113,7 @@ export function TransactionTypeEditPage() {
     setTypeInput('');
     setDescInput('');
     setOld(null);
+    setSearchedKey('');
     setTypeError(false);
     setDescError(false);
     go('DETAILS_NOT_FETCHED', message);
@@ -119,6 +121,7 @@ export function TransactionTypeEditPage() {
 
   /** 9000-READ-TRANTYPE. */
   const read = async (key: string, message: string | null = null) => {
+    setSearchedKey(key);
     try {
       const found = await api.get(key);
       setOld(found);
@@ -233,6 +236,8 @@ export function TransactionTypeEditPage() {
         return;
       case 'F5':
         if (state === 'DETAILS_NOT_FOUND') {
+          // PF5 is handled before RECEIVE MAP: the searched key (TTUP-NEW-TTYP-TYPE) is kept, edits are discarded
+          setTypeInput(searchedKey);
           setTypeError(false);
           setDescInput('');
           go('CREATE_NEW_RECORD');
