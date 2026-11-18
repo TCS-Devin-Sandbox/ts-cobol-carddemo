@@ -1,10 +1,11 @@
-import { createContext, ReactNode, useCallback, useContext, useMemo, useState } from 'react';
-import { setAuthToken } from '../api/client';
+import { createContext, ReactNode, useCallback, useContext, useEffect, useMemo, useState } from 'react';
+import { setAuthToken, setUnauthorizedHandler } from '../api/client';
 
 export interface Session {
   token: string;
   userId: string;
   userType: 'A' | 'U';
+  expiresAt?: string;
 }
 
 interface AuthValue {
@@ -19,7 +20,12 @@ const AuthContext = createContext<AuthValue | null>(null);
 function restore(): Session | null {
   try {
     const raw = sessionStorage.getItem(STORAGE_KEY);
-    return raw ? (JSON.parse(raw) as Session) : null;
+    const s = raw ? (JSON.parse(raw) as Session) : null;
+    if (s?.expiresAt && Date.parse(s.expiresAt) <= Date.now()) {
+      sessionStorage.removeItem(STORAGE_KEY);
+      return null;
+    }
+    return s;
   } catch {
     return null;
   }
@@ -43,6 +49,11 @@ export function AuthProvider({ children, initial }: { children: ReactNode; initi
     sessionStorage.removeItem(STORAGE_KEY);
     setSession(null);
   }, []);
+
+  useEffect(() => {
+    setUnauthorizedHandler(signOut);
+    return () => setUnauthorizedHandler(null);
+  }, [signOut]);
 
   const value = useMemo(() => ({ session, signIn, signOut }), [session, signIn, signOut]);
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;

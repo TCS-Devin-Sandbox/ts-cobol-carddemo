@@ -19,7 +19,7 @@ export function LoginPage() {
     setError(null);
     try {
       const r = await login(userId, password);
-      signIn({ token: r.token, userId: r.userId, userType: r.userType });
+      signIn({ token: r.token, userId: r.userId, userType: r.userType, expiresAt: r.expiresAt });
       navigate('/admin');
     } catch (err) {
       setError((err as ApiError).message);

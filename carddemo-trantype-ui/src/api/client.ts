@@ -21,6 +21,18 @@ http.interceptors.request.use((config) => {
   return config;
 });
 
+let onUnauthorized: (() => void) | null = null;
+export const setUnauthorizedHandler = (handler: (() => void) | null) => {
+  onUnauthorized = handler;
+};
+
+http.interceptors.response.use(undefined, (error) => {
+  if (error instanceof AxiosError && error.response?.status === 401 && !error.config?.url?.startsWith('/api/auth/')) {
+    onUnauthorized?.();
+  }
+  return Promise.reject(error);
+});
+
 /** Normalizes any axios failure to the API's {code, message} error body. */
 export function toApiError(error: unknown): ApiError {
   if (error instanceof AxiosError && error.response?.data && typeof error.response.data === 'object') {
