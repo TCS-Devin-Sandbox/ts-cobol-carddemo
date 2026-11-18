@@ -44,7 +44,7 @@ public final class TransactionTypeEdits {
         checkTypeCode(value).ifPresent(msg -> {
             throw new FieldEditException(msg);
         });
-        return String.format("%02d", Integer.parseInt(value.trim()));
+        return String.format(java.util.Locale.ROOT, "%02d", Integer.parseInt(value.trim()));
     }
 
     /** Returns the edit message for a description, or empty when valid. */

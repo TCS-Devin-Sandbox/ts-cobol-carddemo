@@ -17,7 +17,7 @@ export const http = axios.create({
 });
 
 http.interceptors.request.use((config) => {
-  if (authToken) config.headers.Authorization = `Bearer ${authToken}`;
+  if (authToken && !config.url?.startsWith('/api/auth/')) config.headers.Authorization = `Bearer ${authToken}`;
   return config;
 });
 
