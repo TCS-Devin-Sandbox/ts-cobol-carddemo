@@ -204,6 +204,28 @@ CardDemo includes several optional modules that extend the base functionality:
   - User access: Use userid USER0001 with password PASSWORD
 - **Batch Functions**: See the "Running Batch Jobs" section below
 
+## Modernized Transaction Type Maintenance (CTLI/CTTU)
+
+The DB2 transaction-type screens `CTLI` (COTRTLIC) and `CTTU` (COTRTUPC) from `app/app-transaction-type-db2/` are reimplemented as a Spring Boot 3 + PostgreSQL 15 API and a React 18 UI.
+
+| Path | Content |
+|---|---|
+| `docs/` | discovery, requirements/RTM, schema mapping, target spec, test plan, deviations |
+| `db/migration/` | Flyway migrations (`V1__create_tables.sql`, `V2__seed_data.sql`) |
+| `carddemo-trantype-api/` | Spring Boot API (Java 17, Maven) |
+| `carddemo-trantype-ui/` | React + TypeScript UI (Vite, MUI) |
+| `docker-compose.yml` | local PostgreSQL 15 |
+
+Quick start:
+
+```sh
+docker compose up -d postgres
+(cd carddemo-trantype-api && mvn spring-boot:run)      # http://localhost:8080
+(cd carddemo-trantype-ui && npm install && npm run dev) # http://localhost:5173, sign on as admin/admin123
+```
+
+Tests: `mvn test` in `carddemo-trantype-api` (unit + Testcontainers integration, needs Docker) and `npm test` in `carddemo-trantype-ui`.
+
 ## Running Batch Jobs
 
 Execute the following JCLs in sequence to run the full batch process:
