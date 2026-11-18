@@ -1,6 +1,7 @@
 package com.carddemo.trantype.validation;
 
 import com.carddemo.trantype.service.SourceMessages;
+import java.util.Locale;
 import java.util.regex.Pattern;
 
 /** CTTU 1210-EDIT-TRANTYPE / 1245-EDIT-NUM-REQD. */
@@ -28,6 +29,6 @@ public final class TranTypeCodes {
 
     /** Zero-pads a valid code to two digits ({@code 5} becomes {@code 05}). */
     public static String normalise(String raw) {
-        return String.format("%02d", Integer.parseInt(raw.trim()));
+        return String.format(Locale.ROOT, "%02d", Integer.parseInt(raw.trim()));
     }
 }

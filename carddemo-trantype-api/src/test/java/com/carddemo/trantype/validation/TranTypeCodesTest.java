@@ -33,4 +33,15 @@ class TranTypeCodesTest {
         assertThat(TranTypeCodes.validate(input)).isNull();
         assertThat(TranTypeCodes.normalise(input)).isEqualTo(expected);
     }
+
+    @Test
+    void normaliseIgnoresDefaultLocale() {
+        java.util.Locale original = java.util.Locale.getDefault();
+        try {
+            java.util.Locale.setDefault(java.util.Locale.forLanguageTag("ar-EG"));
+            assertThat(TranTypeCodes.normalise("5")).isEqualTo("05");
+        } finally {
+            java.util.Locale.setDefault(original);
+        }
+    }
 }
