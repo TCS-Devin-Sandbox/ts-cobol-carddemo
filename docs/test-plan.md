@@ -6,9 +6,9 @@ Expected results are taken from the COBOL literals and SQLCODE branches (`docs/d
 
 | Suite | Command | Tool | Result |
 |---|---|---|---|
-| API unit | `cd carddemo-trantype-api && ./mvnw verify` (surefire) | JUnit 5 + Mockito, `@WebMvcTest` | 46 run, 0 failed |
+| API unit | `cd carddemo-trantype-api && ./mvnw verify` (surefire) | JUnit 5 + Mockito, `@WebMvcTest` | 48 run, 0 failed |
 | API integration | same (failsafe, `*IT`) | `@SpringBootTest` + Testcontainers `postgres:15-alpine`, Flyway V1+V2 | 14 run, 0 failed |
-| UI component | `cd carddemo-trantype-ui && npm test` | Vitest + React Testing Library (jsdom) | 40 run, 0 failed |
+| UI component | `cd carddemo-trantype-ui && npm test` | Vitest + React Testing Library (jsdom) | 42 run, 0 failed |
 | UI type-check / build | `npm run build` | tsc + Vite | success |
 | Migration smoke | `psql` on PostgreSQL 15: V1, V2, `DELETE … WHERE tr_type='01'` | PostgreSQL 15 | 7 + 18 rows; delete rejected by `fk_trc_type_code` |
 | Stack smoke | `docker compose up -d`, `./mvnw spring-boot:run`, `npm run dev`, curl via Vite proxy (csrf → login → list → delete 01 → get 99) | curl | 200 page of 7; 409 `CHILD_RECORDS_EXIST`; 404 'No record found for this key in database' |
@@ -33,6 +33,7 @@ Test names: `UT:` = `TransactionTypeServiceTest` / `TranTypeCodesTest`, `MVC:` =
 | TC-012 | REQ-CTLI-013 | page loaded | select `X` + ENTER | 'Action code selected is invalid' | as expected | UI "rejects invalid action code and more than one action" | Pass |
 | TC-013 | REQ-CTLI-014 | page loaded | `U` row 1 + `D` row 2 | 'Please select only 1 action' | as expected | UI same test | Pass |
 | TC-014 | REQ-CTLI-015 | page loaded | `D` row 7 + ENTER | info 'Delete HIGHLIGHTED row ? Press F10 to confirm', filters disabled, no delete yet | as expected | UI "delete requires F10 confirmation…" | Pass |
+| TC-015a | REQ-CTLI-015, -024 | pending `D` | clear/change the select, F10 | processed as ENTER; nothing deleted | as expected | UI "F10 after the pending action was cleared or changed does not delete" | Pass |
 | TC-015 | REQ-CTLI-016 | type without categories | F10 / `DELETE` | 204; 'HIGHLIGHTED row deleted.Hit Enter to continue'; page 1; second delete 404 'Delete failed with message:' | as expected | IT deleteWithoutChildren; UT deleteExistingRow, deleteMissingRowFails; UI "delete requires F10…" | Pass |
 | TC-016 | REQ-CTLI-017, REQ-EDGE-004 | type 01 has 5 categories | delete 01 | 409 −532 'Please delete associated child records first:'; CTLI line 'Please delete associated child records first: SQLCODE: -532'; row and children kept | as expected | IT deleteWithChildrenRejectedAndRowKept; MVC foreignKeyViolationMapsToChildRecordsMessage; UI "delete with children shows -532 message"; UI messages test | Pass |
 | TC-017 | REQ-CTLI-018 | page loaded | `U` row 2 + ENTER | only row 2 description editable; 'Update HIGHLIGHTED row. Press F10 to save' | as expected | UI "inline update validates then saves…" | Pass |
@@ -50,6 +51,7 @@ Test names: `UT:` = `TransactionTypeServiceTest` / `TranTypeCodesTest`, `MVC:` =
 | TC-033 | REQ-CTTU-003 | seed | key `01` + ENTER | PURCHASE shown; key protected, desc editable; ENTER/F3/F4/F12 | as expected | UI "existing key shows details…"; IT getExistingAndMissing | Pass |
 | TC-034 | REQ-CTTU-004, REQ-EDGE-009 | seed | key `42`/`99` + ENTER | 404 'No record found for this key in database'; info 'Press F05 to add. F12 to cancel'; ENTER/F3/F5/F12 | as expected | IT getExistingAndMissing; UT getMissingKeyIsNotFound; UI "non-existent key then add via F5" | Pass |
 | TC-035 | REQ-CTTU-005 | not-found state | F5 | 'Enter new transaction type details.'; key protected | as expected | UI "non-existent key then add via F5" | Pass |
+| TC-035a | REQ-CTTU-005 | not-found 42, key edited to 01 | F5 | create uses searched key 42 (PF5 handled before RECEIVE MAP) | as expected | UI "F5 after not-found creates the searched key…" | Pass |
 | TC-036 | REQ-CTTU-006 | show / create | blank, `PURCHASE*` | 'Transaction Desc must be supplied.' / '…can have numbers or alphabets only.'; info 'Update transaction type details shown.' | as expected | UI "edit: no change, invalid…", "non-existent key then add…" | Pass |
 | TC-037 | REQ-CTTU-007 | show 01 | `purchase ` + ENTER | 'No change detected with respect to values fetched.' | as expected | UI "edit: no change…" | Pass |
 | TC-038 | REQ-CTTU-008 | show 01 | `PURCHASES` + ENTER | 'Changes validated.Press F5 to save'; all protected; ENTER/F3/F5/F12 | as expected | UI "edit: no change…" | Pass |
@@ -67,6 +69,7 @@ Test names: `UT:` = `TransactionTypeServiceTest` / `TranTypeCodesTest`, `MVC:` =
 | TC-052 | REQ-SEC-001 | anonymous | list call / page; wrong password | 401; redirect to `/login`; 'Wrong Password. Try again ...'; CSRF required | as expected | AuthSessionIT sessionLoginFlow; MVC anonymousIsUnauthorized, missingCsrfTokenIsForbidden; UI "anonymous user is redirected…", "sign-on shows wrong password message" | Pass |
 | TC-060 | REQ-NFR-008 | — | `./mvnw verify`, `npm test`, `npm run build` | all green | all green | CI-equivalent local run | Pass |
 | TC-061 | REQ-NFR-007 | empty DB | Flyway start | 7 types, 18 categories, FK RESTRICT | as expected | IT seedDataLoadedByFlyway; migration smoke | Pass |
+| TC-062a | REQ-NFR-003 | cursor beyond remaining rows | forward from `50`, page 2 | page 1 (D-07) | as expected | UT forwardFromCursorWithNoRemainingRowsRestartsAtFirstPage | Pass |
 | TC-062 | REQ-NFR-003 | — | size=8 | 400 (max 7); no OFFSET queries | as expected | UT sizeAboveSevenRejected | Pass |
 | TC-063 | REQ-NFR-001, -002, -004 | full stack | curl through Vite proxy | session login, JSON contract, status codes per §3.3 | as expected | stack smoke (manual) | Pass |
 

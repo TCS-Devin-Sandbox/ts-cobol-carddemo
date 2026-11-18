@@ -94,7 +94,7 @@ Conventions: **API** = `carddemo-trantype-api`; **UI** = `carddemo-trantype-ui`;
 
 ## 6. Requirements Traceability Matrix (RTM)
 
-Test-case IDs refer to `docs/test-plan.md`; status reflects the run recorded there (API 46 unit + 14 integration, UI 40 component tests, all passing).
+Test-case IDs refer to `docs/test-plan.md`; status reflects the run recorded there (API 48 unit + 14 integration, UI 42 component tests, all passing).
 
 | REQ ID | Source | API element | UI element | Test cases | Status |
 |---|---|---|---|---|---|
