@@ -16,7 +16,7 @@ npm run build       # type-check + production bundle in dist/
 npm run dev         # http://localhost:5173, proxies /api to http://localhost:8080 (override with API_URL)
 ```
 
-Sign on with `admin` / `admin123` (ADMIN) to reach the admin menu; option 5 opens the list (CTLI), option 6 the maintenance screen (CTTU). `user` / `user123` demonstrates non-admin rejection.
+With the API running under the `local` profile, sign on with `admin` / `admin123` (ADMIN) to reach the admin menu; option 5 opens the list (CTLI), option 6 the maintenance screen (CTTU). `user` / `user123` demonstrates non-admin rejection.
 
 ## Routes
 

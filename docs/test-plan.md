@@ -6,12 +6,12 @@ Expected results are taken from the COBOL literals and SQLCODE branches (`docs/d
 
 | Suite | Command | Tool | Result |
 |---|---|---|---|
-| API unit | `cd carddemo-trantype-api && ./mvnw verify` (surefire) | JUnit 5 + Mockito, `@WebMvcTest` | 48 run, 0 failed |
+| API unit | `cd carddemo-trantype-api && ./mvnw verify` (surefire) | JUnit 5 + Mockito, `@WebMvcTest` | 49 run, 0 failed |
 | API integration | same (failsafe, `*IT`) | `@SpringBootTest` + Testcontainers `postgres:15-alpine`, Flyway V1+V2 | 14 run, 0 failed |
 | UI component | `cd carddemo-trantype-ui && npm test` | Vitest + React Testing Library (jsdom) | 42 run, 0 failed |
 | UI type-check / build | `npm run build` | tsc + Vite | success |
 | Migration smoke | `psql` on PostgreSQL 15: V1, V2, `DELETE … WHERE tr_type='01'` | PostgreSQL 15 | 7 + 18 rows; delete rejected by `fk_trc_type_code` |
-| Stack smoke | `docker compose up -d`, `./mvnw spring-boot:run`, `npm run dev`, curl via Vite proxy (csrf → login → list → delete 01 → get 99) | curl | 200 page of 7; 409 `CHILD_RECORDS_EXIST`; 404 'No record found for this key in database' |
+| Stack smoke | `docker compose up -d`, `./mvnw spring-boot:run -Dspring-boot.run.profiles=local`, `npm run dev`, curl via Vite proxy (csrf → login → list → delete 01 → get 99) | curl | 200 page of 7; 409 `CHILD_RECORDS_EXIST`; 404 'No record found for this key in database' |
 
 Test names: `UT:` = `TransactionTypeServiceTest` / `TranTypeCodesTest`, `MVC:` = `TransactionTypeControllerTest`, `IT:` = `TransactionTypeApiIT` / `AuthSessionIT`, `UI:` = Vitest test titles (`TransactionTypeListPage.test.tsx`, `TransactionTypeEditPage.test.tsx`, `AdminAndAuth.test.tsx`, `messages.test.ts`).
 
@@ -67,6 +67,7 @@ Test names: `UT:` = `TransactionTypeServiceTest` / `TranTypeCodesTest`, `MVC:` =
 | TC-050 | REQ-NAV-001 | admin signed on | option 5 / 9 | list page / 'Please enter a valid option number...' | as expected | UI "lists options 5 and 6…", "rejects invalid option" | Pass |
 | TC-051 | REQ-SEC-001, REQ-EDGE-008 | user role USER | list call / page | 403 'Access restricted to administrators'; UI shows access denied | as expected | IT nonAdminAndAnonymousRejected, AuthSessionIT; MVC nonAdminIsForbidden; UI "non-admin user is rejected" | Pass |
 | TC-052 | REQ-SEC-001 | anonymous | list call / page; wrong password | 401; redirect to `/login`; 'Wrong Password. Try again ...'; CSRF required | as expected | AuthSessionIT sessionLoginFlow; MVC anonymousIsUnauthorized, missingCsrfTokenIsForbidden; UI "anonymous user is redirected…", "sign-on shows wrong password message" | Pass |
+| TC-053 | REQ-SEC-001 | no `local` profile, passwords unset | start API | start-up fails: 'carddemo.security.admin-password (CARDDEMO_ADMIN_PASSWORD) must be set…'; `local` profile starts with admin/admin123 | as expected | UT SecurityConfigTest; manual `java -jar` with and without `SPRING_PROFILES_ACTIVE=local` | Pass |
 | TC-060 | REQ-NFR-008 | — | `./mvnw verify`, `npm test`, `npm run build` | all green | all green | CI-equivalent local run | Pass |
 | TC-061 | REQ-NFR-007 | empty DB | Flyway start | 7 types, 18 categories, FK RESTRICT | as expected | IT seedDataLoadedByFlyway; migration smoke | Pass |
 | TC-062a | REQ-NFR-003 | cursor beyond remaining rows | forward from `50`, page 2 | page 1 (D-07) | as expected | UT forwardFromCursorWithNoRemainingRowsRestartsAtFirstPage | Pass |

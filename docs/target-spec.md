@@ -20,7 +20,7 @@ Pseudo-conversational CICS state (COMMAREA) becomes: list paging keys (`cursor`,
 - `GET /api/auth/csrf` → `{token, headerName}` and sets `XSRF-TOKEN` cookie; all state-changing calls send `X-XSRF-TOKEN` (axios does this automatically).
 - `POST /api/auth/login` `{username, password}` → 200 `{username, roles}` | 401 `{code:"UNAUTHORIZED", message:"Wrong Password. Try again ..."}`.
 - `POST /api/auth/logout` → 204. `GET /api/auth/me` → 200 `{username, roles}` | 401.
-- Users: in-memory, configured by properties (`carddemo.security.admin-*`, `carddemo.security.user-*`), passwords BCrypt-hashed at start-up. Role `ADMIN` ≙ CardDemo user type `A`; role `USER` ≙ type `U`.
+- Users: in-memory, configured by properties (`carddemo.security.admin-*`, `carddemo.security.user-*`), passwords BCrypt-hashed at start-up. Passwords are mandatory (start-up fails when empty); the `local` profile alone provides development defaults. Role `ADMIN` ≙ CardDemo user type `A`; role `USER` ≙ type `U`.
 - `/api/transaction-types/**` requires `ROLE_ADMIN`: anonymous → 401 `UNAUTHORIZED` 'Please sign on to use this function'; authenticated non-admin → 403 `FORBIDDEN` 'Access restricted to administrators'.
 
 ## 3. REST API (OpenAPI 3.0)
@@ -246,5 +246,5 @@ State machine (`TTUP-CHANGE-ACTION` → TypeScript union): `NOT_FETCHED` → (EN
 
 ## 5. Build / run
 
-- API: `cd carddemo-trantype-api && mvn verify` (Testcontainers needs Docker). Run: `docker compose up -d` (repo root `docker-compose.yml`, PostgreSQL 15) then `mvn spring-boot:run`.
+- API: `cd carddemo-trantype-api && mvn verify` (Testcontainers needs Docker). Run: `docker compose up -d` (repo root `docker-compose.yml`, PostgreSQL 15) then `./mvnw spring-boot:run -Dspring-boot.run.profiles=local`.
 - UI: `cd carddemo-trantype-ui && npm ci && npm test && npm run build`; dev: `npm run dev` (Vite on 5173, proxy `/api` → 8080).

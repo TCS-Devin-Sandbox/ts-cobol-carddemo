@@ -94,7 +94,7 @@ Conventions: **API** = `carddemo-trantype-api`; **UI** = `carddemo-trantype-ui`;
 
 ## 6. Requirements Traceability Matrix (RTM)
 
-Test-case IDs refer to `docs/test-plan.md`; status reflects the run recorded there (API 48 unit + 14 integration, UI 42 component tests, all passing).
+Test-case IDs refer to `docs/test-plan.md`; status reflects the run recorded there (API 49 unit + 14 integration, UI 42 component tests, all passing).
 
 | REQ ID | Source | API element | UI element | Test cases | Status |
 |---|---|---|---|---|---|
@@ -142,6 +142,6 @@ Test-case IDs refer to `docs/test-plan.md`; status reflects the run recorded the
 | REQ-CTTU-017 | 3391 | — | button visibility | TC-046 | Pass |
 | REQ-CTTU-018 | 3300 | — | field disabled/readOnly | TC-046 | Pass |
 | REQ-NAV-001 | COADM02Y | — | AdminMenuPage options 5/6 | TC-050 | Pass |
-| REQ-SEC-001 | sign-on | 401/403 | login / access denied | TC-051, TC-052 | Pass |
+| REQ-SEC-001 | sign-on | 401/403 | login / access denied | TC-051, TC-052, TC-053 | Pass |
 | REQ-NFR-001..005, -007, -008 | — | all | all | TC-060..TC-063 | Pass |
 | REQ-NFR-006 | — | list/get | — | — | Not measured (no load test; single-row PK / 8-row keyset queries) |

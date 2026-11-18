@@ -17,10 +17,10 @@ Spring Boot 3 / Java 17 REST API replacing CICS transactions **CTLI** (`COTRTLIC
 
 ```bash
 docker compose -f ../docker-compose.yml up -d   # PostgreSQL 15 on localhost:5432 (db/user/password: carddemo)
-./mvnw spring-boot:run                          # http://localhost:8080, Flyway applies ../db/migration V1 + V2
+./mvnw spring-boot:run -Dspring-boot.run.profiles=local   # http://localhost:8080, Flyway applies ../db/migration V1 + V2
 ```
 
-Configuration (environment variables): `DB_URL`, `DB_USER`, `DB_PASSWORD`, `PORT`, `CARDDEMO_ADMIN_USER` / `CARDDEMO_ADMIN_PASSWORD` (default `admin` / `admin123`, role ADMIN), `CARDDEMO_USER_USER` / `CARDDEMO_USER_PASSWORD` (default `user` / `user123`, role USER). Change the defaults outside local development.
+Configuration (environment variables): `DB_URL`, `DB_USER`, `DB_PASSWORD`, `PORT`, `CARDDEMO_ADMIN_USER` / `CARDDEMO_ADMIN_PASSWORD` (role ADMIN), `CARDDEMO_USER_USER` / `CARDDEMO_USER_PASSWORD` (role USER). The passwords are required: without them the API refuses to start. The `local` profile (`SPRING_PROFILES_ACTIVE=local`) supplies development defaults `admin` / `admin123` and `user` / `user123`; do not use it outside local development.
 
 Flyway migrations are not duplicated: the build copies `../db/migration/*.sql` to `classpath:db/migration`.
 
