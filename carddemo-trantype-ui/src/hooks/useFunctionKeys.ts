@@ -8,6 +8,7 @@ export function useFunctionKeys(handlers: KeyHandlers) {
   ref.current = handlers;
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
+      if (e.key === 'Enter' && e.target instanceof HTMLButtonElement) return;
       const handler = ref.current[e.key as keyof KeyHandlers];
       if (handler) {
         e.preventDefault();
