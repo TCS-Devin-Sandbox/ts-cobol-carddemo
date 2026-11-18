@@ -40,6 +40,7 @@ export class ApiError extends Error {
 }
 
 const SESSION_KEY = 'carddemo.session';
+const LOGIN_URL = '/api/auth/login';
 
 export function getSession(): Session | null {
   const raw = sessionStorage.getItem(SESSION_KEY);
@@ -54,7 +55,7 @@ export function setSession(session: Session | null): void {
 async function request<T>(method: string, url: string, body?: unknown): Promise<T> {
   const headers: Record<string, string> = { Accept: 'application/json' };
   const session = getSession();
-  if (session) headers.Authorization = `Bearer ${session.token}`;
+  if (session && url !== LOGIN_URL) headers.Authorization = `Bearer ${session.token}`;
   if (body !== undefined) headers['Content-Type'] = 'application/json';
   const res = await fetch(url, { method, headers, body: body === undefined ? undefined : JSON.stringify(body) });
   if (res.status === 204) return undefined as T;
@@ -69,7 +70,7 @@ const BASE = '/api/transaction-types';
 
 export const api = {
   login: (username: string, password: string) =>
-    request<Session>('POST', '/api/auth/login', { username, password }),
+    request<Session>('POST', LOGIN_URL, { username, password }),
   list: (q: PageQuery) => {
     const params = new URLSearchParams();
     Object.entries(q).forEach(([k, v]) => {

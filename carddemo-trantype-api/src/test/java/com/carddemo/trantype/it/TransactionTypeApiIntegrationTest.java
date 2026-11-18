@@ -18,6 +18,7 @@ import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.TestPropertySource;
 import org.testcontainers.containers.PostgreSQLContainer;
 import org.testcontainers.junit.jupiter.Container;
@@ -26,6 +27,7 @@ import org.testcontainers.junit.jupiter.Testcontainers;
 /** End-to-end against PostgreSQL 15 with the Flyway migrations and seed data from db/migration. */
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @Testcontainers
+@ActiveProfiles("dev")
 @TestPropertySource(properties = "spring.flyway.clean-disabled=false")
 class TransactionTypeApiIntegrationTest {
 

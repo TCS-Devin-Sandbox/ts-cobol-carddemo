@@ -149,7 +149,10 @@ export function TransactionTypeEditPage() {
         <TextField
           label="Transaction Type"
           value={trType}
-          onChange={(e) => setTrType(e.target.value)}
+          onChange={(e) => {
+            setTrType(e.target.value);
+            if (state !== 'NOT_FETCHED') go('NOT_FETCHED');
+          }}
           disabled={!KEY_ENTRY.includes(state)}
           inputProps={{ maxLength: 2, inputMode: 'numeric' }}
           autoFocus

@@ -12,6 +12,7 @@ export function LoginPage() {
 
   const submit = async (e: FormEvent) => {
     e.preventDefault();
+    setSession(null);
     try {
       const session = await api.login(username, password);
       if (!session.roles.includes('ADMIN')) {

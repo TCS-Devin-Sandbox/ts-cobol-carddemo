@@ -220,7 +220,7 @@ Quick start:
 
 ```sh
 docker compose up -d postgres
-(cd carddemo-trantype-api && mvn spring-boot:run)      # http://localhost:8080
+(cd carddemo-trantype-api && SPRING_PROFILES_ACTIVE=dev mvn spring-boot:run)  # http://localhost:8080, dev-only credentials
 (cd carddemo-trantype-ui && npm install && npm run dev) # http://localhost:5173, sign on as admin/admin123
 ```
 

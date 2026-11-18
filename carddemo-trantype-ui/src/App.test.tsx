@@ -26,6 +26,17 @@ describe('routing and admin guard', () => {
     expect(await screen.findByRole('alert')).toHaveTextContent('Access restricted to administrators');
   });
 
+  it('login does not send a stale bearer token', async () => {
+    setSession({ token: 'expired', username: 'admin', roles: ['ADMIN'] });
+    const fetch = mockFetch(() => ({ status: 200, body: { token: 't', username: 'admin', roles: ['ADMIN'] } }));
+    render(<MemoryRouter initialEntries={['/login']}><App /></MemoryRouter>);
+    await userEvent.type(screen.getByLabelText('User ID'), 'admin');
+    await userEvent.type(screen.getByLabelText('Password'), 'admin123');
+    await userEvent.click(screen.getByText('Sign on'));
+    await screen.findByText('5. Transaction Type List/Update (Db2)');
+    expect((fetch.mock.calls[0][1]!.headers as Record<string, string>).Authorization).toBeUndefined();
+  });
+
   it('admin login shows admin menu options 5 and 6', async () => {
     mockFetch(() => ({ status: 200, body: { token: 't', username: 'admin', roles: ['ADMIN'] } }));
     render(<MemoryRouter initialEntries={['/login']}><App /></MemoryRouter>);

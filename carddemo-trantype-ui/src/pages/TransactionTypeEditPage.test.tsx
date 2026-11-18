@@ -59,6 +59,18 @@ describe('TransactionTypeEditPage (CTTU)', () => {
     expect(put[0]).toBe('/api/transaction-types/08');
   });
 
+  it('changing the key after a failed lookup requires a new lookup', async () => {
+    mockFetch(() => ({ status: 404, body: { code: 'NOT_FOUND', message: 'No record found for this key in database' } }));
+    renderPage();
+    await userEvent.type(screen.getByLabelText('Transaction Type'), '8');
+    await userEvent.click(screen.getByText('ENTER=Process'));
+    await waitFor(() => expect(screen.getByText('F5=Save')).toBeInTheDocument());
+    await userEvent.clear(screen.getByLabelText('Transaction Type'));
+    await userEvent.type(screen.getByLabelText('Transaction Type'), '01');
+    expect(info()).toHaveTextContent('Enter transaction type to be maintained');
+    expect(screen.queryByText('F5=Save')).not.toBeInTheDocument();
+  });
+
   it('edits an existing record, detects no change, and cancels with F12', async () => {
     mockFetch(() => ({ status: 200, body: { trType: '01', trDescription: 'PURCHASE' } }));
     renderPage();

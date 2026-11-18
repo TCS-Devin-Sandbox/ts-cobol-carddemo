@@ -88,7 +88,11 @@ public class SecurityConfig {
 
     @Bean
     SecretKey jwtKey(SecurityProperties props) {
-        return new SecretKeySpec(props.jwtSecret().getBytes(StandardCharsets.UTF_8), "HmacSHA256");
+        String secret = props.jwtSecret();
+        if (secret == null || secret.getBytes(StandardCharsets.UTF_8).length < 32) {
+            throw new IllegalStateException("carddemo.security.jwt-secret (JWT_SECRET) must be at least 32 bytes");
+        }
+        return new SecretKeySpec(secret.getBytes(StandardCharsets.UTF_8), "HmacSHA256");
     }
 
     @Bean
