@@ -195,4 +195,18 @@ describe('TransactionTypeListPage (CTLI)', () => {
     setup(vi.fn().mockRejectedValue(apiError(500, 'INTERNAL_ERROR', 'Error accessing: TRANSACTION_TYPE table. SQLCODE:', -1)));
     await waitFor(() => expect(err()).toHaveTextContent('Error accessing: TRANSACTION_TYPE table. SQLCODE:'));
   });
+
+  it('F10 after the pending action was cleared or changed does not delete', async () => {
+    const remove = vi.fn().mockResolvedValue(undefined);
+    setup(undefined, { remove });
+    await screen.findByText('PURCHASE');
+    await userEvent.type(screen.getByLabelText('Select row 1'), 'D');
+    await click('ENTER');
+    expect(info()).toHaveTextContent('Delete HIGHLIGHTED row ? Press F10 to confirm');
+    await userEvent.clear(screen.getByLabelText('Select row 1'));
+    await userEvent.type(screen.getByLabelText('Select row 1'), 'U');
+    await click('F10=Save');
+    expect(remove).not.toHaveBeenCalled();
+    expect(info()).toHaveTextContent('Update HIGHLIGHTED row. Press F10 to save');
+  });
 });

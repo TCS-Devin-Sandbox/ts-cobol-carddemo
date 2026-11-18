@@ -175,7 +175,11 @@ export function TransactionTypeListPage() {
   };
 
   const f10 = async () => {
-    if (!pending || filtersChanged()) {
+    const selected = selects.map((v, i) => ({ code: v.trim().toUpperCase(), index: i })).filter((a) => a.code !== '');
+    const selectionUnchanged =
+      !!pending && selected.length === 1 && selected[0].index === pending.index && selected[0].code === pending.kind;
+    // 0000-MAIN: F10 acts only on the confirmed action; any filter or row-selection change is processed as ENTER
+    if (!pending || filtersChanged() || !selectionUnchanged) {
       enter();
       return;
     }
