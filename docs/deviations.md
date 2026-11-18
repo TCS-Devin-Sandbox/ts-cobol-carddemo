@@ -1,0 +1,19 @@
+# Deviations from the COBOL source
+
+| # | Area | COBOL behaviour | Modern behaviour | Reason / impact |
+|---|---|---|---|---|
+| D1 | PF keys | 3270 AID keys ENTER, F2, F3, F4, F5, F7, F8, F10, F12; any other key → ENTER (CTLI) or 'Invalid key pressed' (CTTU) | Buttons labelled `F2=Add`, `F3=Exit`, ...; buttons render only in the states where the source shows the key (3391-SETUP-PFKEY-ATTRS), so 'Invalid key pressed' cannot occur in the UI | Web has no AID keys; same set of actions |
+| D2 | COMMAREA | First/last key, screen number, next-page flag, filters and pending action stored in COMMAREA across pseudo-conversational RETURNs | Stateless REST: client sends `cursor`, `direction`, `page`, filters; server returns `firstKey`, `lastKey`, `nextCursor`, `hasNext`, `hasPrev`, `pageNumber`. Pending U/D confirmation is UI state | No server session; same keyset semantics (`>=` forward with lookahead, `<` DESC backward) |
+| D3 | Page number | `WS-CA-SCREEN-NUM PIC 9(1)` wraps after page 9 | Unbounded integer; `hasPrev=false` forces page 1 | Source defect not reproduced |
+| D4 | CTTU upsert | 9600 issues UPDATE, and on SQLCODE +100 INSERT | `PUT /{trType}` keeps the upsert (200 updated / 201 inserted). An explicit `POST` create is added and returns 409 on duplicate key | REST needs an explicit create; upsert preserved for CTTU save |
+| D5 | Duplicate key message | No −803 branch; insert failures fall to `WHEN OTHER` 'Error inserting record into: TRANSACTION_TYPE Table. SQLCODE:' + code + SQLERRM | 409 `DUPLICATE_KEY` 'Error inserting record into: TRANSACTION_TYPE Table. SQLCODE:-803' (no SQLERRM text) | DB2 SQLERRM text has no PostgreSQL equivalent |
+| D6 | SQL error texts | Messages append SQLCODE and DSNTIAC/SQLERRM text | Fixed literal + DB2-equivalent SQLCODE (−532, −803, +100); other failures 500 `DB_ERROR` with SQLSTATE | Vendor text differs; prefix literals preserved |
+| D7 | 3270 attributes | UNPROT/PROT/ASKIP, IC, BRT, DRK, FSET, colour, underline; `*` written into blank required fields | HTML: enabled/disabled inputs, `autoFocus`, `maxLength`, `inputMode=numeric`, `pattern`, red bold error line; no `*` marker | See target-spec §3 attribute table |
+| D8 | Description > 50 | Impossible on a 50-byte field | 400 'Transaction Desc must not exceed 50 characters.' (new literal) | JSON input is unbounded |
+| D9 | F8 on last page | First press: info 'Type U to update, D to delete any record'; later presses ERRMSG 'No more pages to display' | Always 'No more pages to display' | Simplification; no data impact |
+| D10 | CTLI update re-validation | ENTER after U re-checks change; row action and confirmation share one screen | U immediately enables the description; ENTER shows the confirm prompt; F10 validates (blank / characters / no change) then PATCHes | Same messages, fewer round trips |
+| D11 | Concurrency | DB2 locks within a single pseudo-conversational task; −911 messages | Same: single-statement transactions, lock failures → 409 `LOCK_ERROR` with the −911 literal; last writer wins | No optimistic locking was added (source has none) |
+| D12 | Security | Admin menu (COADM01C) is the only entry; no check inside CTLI/CTTU | JWT bearer; every endpoint requires role ADMIN (401/403) | Defence in depth |
+| D13 | Description filter | `LIKE TRIM(:filter)` with DB2 collation | PostgreSQL `LIKE '%x%'` (case-sensitive), `%`/`_` not escaped, same as source | Identical for seed data |
+| D14 | VSAM synchronisation | TRANEXTR (DSNTIAUL) extracts DB2 tables to VSAM-compatible files for the base application | **Out of scope**: API writes PostgreSQL only; no extract is produced | Divergence risk until a replacement extract exists |
+| D15 | ABEND handling | ABEND-ROUTINE sends abend data and abends the task | Unhandled errors → 500 `{"code","message"}`; logged | Web error model |

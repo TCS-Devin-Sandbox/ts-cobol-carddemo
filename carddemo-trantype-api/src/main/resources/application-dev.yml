@@ -1,0 +1,4 @@
+# Local development only (activate with SPRING_PROFILES_ACTIVE=dev). Never enable on shared environments.
+JWT_SECRET: local-dev-only-secret-change-me-0123456789abcdef
+ADMIN_PASSWORD: admin123
+USER_PASSWORD: user123
