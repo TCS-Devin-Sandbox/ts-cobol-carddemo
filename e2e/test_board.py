@@ -65,6 +65,11 @@ def test_04_approve_reject_comment_show_on_card_and_totals(board):
     expect(board.get_by_test_id("total-RULE")).to_contain_text("RULE (10): 1 approved, 0 rejected, 0 commented, 9 undecided")
     expect(board.get_by_test_id("total-QUIRK")).to_contain_text("QUIRK (6): 0 approved, 1 rejected, 0 commented, 5 undecided")
     expect(board.get_by_test_id("total-HOLE")).to_contain_text("HOLE (9): 0 approved, 0 rejected, 1 commented, 9 undecided")
+    # a comment typed but not saved is kept when the card is approved
+    card(board, "INT-Q01").get_by_label("Comment on INT-Q01", exact=True).click()
+    board.keyboard.type("draft note")
+    card(board, "INT-Q01").get_by_role("button", name="Approve INT-Q01").click()
+    expect(card(board, "INT-Q01").get_by_test_id("state")).to_have_text(f'APPROVED by {REVIEWER} - comment: "draft note"')
 
 
 def test_05_decision_without_reviewer_is_refused(board):

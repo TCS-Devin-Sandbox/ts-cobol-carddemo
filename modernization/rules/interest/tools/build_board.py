@@ -225,7 +225,7 @@ function act(id,what,el){
   if(!who){err.textContent='Enter a reviewer name first - decision not recorded.';el.classList.add('flag');rev.focus();return}
   err.textContent='';el.classList.remove('flag');
   const s=state[id]||{decision:'',comment:'',reviewer:'',at:''};
-  if(what==='comment'){s.comment=el.querySelector('textarea').value.trim()}else{s.decision=what==='approve'?'APPROVED':'REJECTED'}
+  s.comment=el.querySelector('textarea').value.trim();if(what!=='comment'){s.decision=what==='approve'?'APPROVED':'REJECTED'}
   s.reviewer=who;s.at=new Date().toISOString();state[id]=s;save();paint();
 }
 function paint(){
