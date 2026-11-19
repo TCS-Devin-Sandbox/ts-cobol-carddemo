@@ -280,10 +280,14 @@ def render(m, raw):
     const M=JSON.parse(document.getElementById('manifest').textContent);
     const tabs=[...document.querySelectorAll('[role=tab]')];
     function activate(t){tabs.forEach(b=>{const on=b===t;b.setAttribute('aria-selected',on);b.tabIndex=on?0:-1;document.getElementById(b.getAttribute('aria-controls')).hidden=!on;});}
-    tabs.forEach((b,i)=>{b.onclick=()=>activate(b);b.onkeydown=e=>{let n;if(e.key==='ArrowRight')n=(i+1)%tabs.length;if(e.key==='ArrowLeft')n=(i+tabs.length-1)%tabs.length;if(e.key==='Home')n=0;if(e.key==='End')n=tabs.length-1;if(n!==undefined){e.preventDefault();activate(tabs[n]);tabs[n].focus();}};});
-    document.querySelectorAll('a[href^="#"]').forEach(a=>a.onclick=()=>{const b=tabs.find(b=>b.getAttribute('aria-controls')===a.hash.slice(1));if(b)activate(b);});
+    function syncHash(){let id='';try{id=decodeURIComponent(location.hash.slice(1));}catch{}const target=document.getElementById(id),panel=target?.closest('[role=tabpanel]');const tab=tabs.find(b=>b.getAttribute('aria-controls')===panel?.id)||tabs[0];activate(tab);if(panel){for(let p=target.parentElement;p&&p!==panel;p=p.parentElement){if(p.tagName==='DETAILS')p.open=true;}target.scrollIntoView();}}
+    function selectTab(tab){const hash='#'+tab.getAttribute('aria-controls');if(location.hash!==hash)history.pushState(null,'',hash);syncHash();}
+    tabs.forEach((b,i)=>{b.onclick=()=>selectTab(b);b.onkeydown=e=>{let n;if(e.key==='ArrowRight')n=(i+1)%tabs.length;if(e.key==='ArrowLeft')n=(i+tabs.length-1)%tabs.length;if(e.key==='Home')n=0;if(e.key==='End')n=tabs.length-1;if(n!==undefined){e.preventDefault();selectTab(tabs[n]);tabs[n].focus();}};});
+    window.addEventListener('hashchange',syncHash);
+    window.addEventListener('popstate',syncHash);
     Object.entries(M.counts).filter(([k])=>!k.includes('evidence')&&!/\.\d/.test(k)).forEach(([k,n])=>{const e=document.createElement('span');e.className='count';e.dataset.count=n;e.dataset.countKey=k;e.textContent=k+': '+n;document.getElementById('counts').append(e);});
     for(const key of ['edges','outside_dependencies']){const status=document.getElementById(key+'-status'),search=document.getElementById(key+'-search'),tbody=document.querySelector('#'+key+'-table tbody');function draw(){tbody.replaceChildren();const rows=M[key].filter(r=>(status.value==='ALL'||r.status===status.value)&&JSON.stringify(r).toLowerCase().includes(search.value.toLowerCase()));for(const r of rows){const tr=document.createElement('tr');for(const v of [r.status,JSON.stringify(Object.fromEntries(Object.entries(r).filter(([k])=>!['status','evidence'].includes(k)))),r.evidence.join('\n')]){const td=document.createElement('td');td.textContent=v;tr.append(td);}tbody.append(tr);}const result=document.getElementById(key+'-result');result.textContent=rows.length+' matching records';result.dataset.count=rows.length;}status.onchange=draw;search.oninput=draw;draw();}
+    syncHash();
     </script></html>'''
 
 

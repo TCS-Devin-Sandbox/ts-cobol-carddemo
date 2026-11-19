@@ -15,9 +15,10 @@ const {chromium} = require(process.env.PLAYWRIGHT_CORE || 'playwright-core');
   assert.deepEqual(await page.$eval('#manifest',e=>JSON.parse(e.textContent)),m);
   for(const c of await page.$$eval('[data-count-key]',es=>es.map(e=>[e.dataset.countKey,Number(e.dataset.count)]))) assert.equal(c[1],m.counts[c[0]]);
   const tabs=await page.$$('[role=tab]');
-  for(const t of tabs){await t.click();assert.equal(await t.getAttribute('aria-selected'),'true');}
+  for(const t of tabs){await t.click();assert.equal(await t.getAttribute('aria-selected'),'true');assert.equal(await page.evaluate(()=>location.hash),'#'+await t.getAttribute('aria-controls'));}
   await tabs[0].focus();await page.keyboard.press('ArrowRight');assert.equal(await tabs[1].getAttribute('aria-selected'),'true');
   await page.keyboard.press('Enter');
+  assert.equal(await page.evaluate(()=>location.hash),'#in_scope');
   for(const key of ['edges','outside_dependencies']){
     await page.click('#tab-'+key);
     for(const status of ['PROVEN','CANDIDATE','ALL']){
@@ -30,9 +31,30 @@ const {chromium} = require(process.env.PLAYWRIGHT_CORE || 'playwright-core');
   }
   await page.click('#tab-overview');await page.click('summary');assert.equal(await page.$eval('details',e=>e.open),true);
   await page.click('a[href="#open_asks"]');assert.equal(await page.$eval('#open_asks',e=>e.hidden),false);
+  await page.reload();
+  assert.equal(await page.$eval('#tab-open_asks',e=>e.getAttribute('aria-selected')),'true');
+  assert.equal(await page.$eval('#open_asks',e=>e.hidden),false);
+  assert.ok(Math.abs(await page.$eval('#open_asks',e=>e.getBoundingClientRect().top))<2);
+  await page.click('#tab-edges');
+  await page.goBack();
+  await page.waitForFunction(()=>document.querySelector('#tab-open_asks').getAttribute('aria-selected')==='true');
+  assert.equal(await page.evaluate(()=>location.hash),'#open_asks');
+  await page.goForward();
+  await page.waitForFunction(()=>document.querySelector('#tab-edges').getAttribute('aria-selected')==='true');
+  await page.evaluate(()=>{location.hash='outside_dependencies-search';});
+  await page.waitForFunction(()=>!document.querySelector('#outside_dependencies').hidden);
+  await page.reload();
+  assert.equal(await page.$eval('#tab-outside_dependencies',e=>e.getAttribute('aria-selected')),'true');
+  assert.ok(Math.abs(await page.$eval('#outside_dependencies-search',e=>e.getBoundingClientRect().top))<2);
+  await page.evaluate(()=>{location.hash='';});
+  await page.waitForFunction(()=>!document.querySelector('#overview').hidden);
+  await page.evaluate(()=>{location.hash='missing-panel';});
+  await page.waitForFunction(()=>location.hash==='#missing-panel'&&!document.querySelector('#overview').hidden);
+  await page.evaluate(()=>{location.hash='%E0%A4%A';});
+  await page.waitForFunction(()=>location.hash==='#%E0%A4%A'&&!document.querySelector('#overview').hidden);
   await page.click('#tab-overview');assert.equal(await page.locator('svg').count(),7);
   assert.deepEqual(errors,[]);assert.deepEqual(requests,[]);
   await page.screenshot({path:path.join(dir,'verified-overview.png'),fullPage:true});
   await browser.close();
-  console.log('PASS: embedded manifest, counts, 8 tabs, keyboard, status/text/empty filters, details, anchors, 7 SVG diagrams; 0 console errors; 0 external requests.');
+  console.log('PASS: embedded manifest, counts, 8 tabs, keyboard/hash sync, reload #open_asks, back/forward navigation, nested-element hash/reload/scroll, cleared/unknown/malformed hashes, status/text/empty filters, details, anchors, 7 SVG diagrams; 0 console errors; 0 external requests.');
 })().catch(e=>{console.error(e);process.exit(1);});
