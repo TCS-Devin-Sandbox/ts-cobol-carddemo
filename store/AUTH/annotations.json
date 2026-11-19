@@ -1,0 +1,189 @@
+{
+  "meta": {
+    "module": "AUTH",
+    "skill": "dynamic-call-resolution",
+    "updated_at": "2026-11-19T08:28:09+00:00"
+  },
+  "dynamic_calls": [
+    {
+      "site": "app/app-authorization-ims-db2-mq/cbl/COPAUS0C.cbl:322",
+      "program": "COPAUS0C",
+      "construct": "CICS-XCTL",
+      "variable": "CDEMO-TO-PROGRAM",
+      "status": "resolved",
+      "targets": [
+        {
+          "name": "COPAUS1C",
+          "basis": "derived",
+          "in_inventory": true,
+          "evidence": [
+            "app/app-authorization-ims-db2-mq/cbl/COPAUS0C.cbl:316",
+            "app/app-authorization-ims-db2-mq/cbl/COPAUS0C.cbl:34",
+            "app/app-authorization-ims-db2-mq/cbl/COPAUS0C.cbl:322-325"
+          ],
+          "reasoning": "The XCTL at 322-325 sits in the same WHEN 'S' branch as MOVE WS-PGM-AUTH-DTL TO CDEMO-TO-PROGRAM (316); the four statements between them (317-320) do not write CDEMO-TO-PROGRAM. WS-PGM-AUTH-DTL is VALUE 'COPAUS1C' (34) and nothing in the program writes it or its group WS-VARIABLES (32)."
+        }
+      ],
+      "traversal": [
+        "COPAUS0C.cbl:322-325 EXEC CICS XCTL PROGRAM(CDEMO-TO-PROGRAM) COMMAREA(CARDDEMO-COMMAREA)",
+        "COPAUS0C.cbl:316 MOVE WS-PGM-AUTH-DTL TO CDEMO-TO-PROGRAM - same WHEN 'S'/'s' branch (314-315), immediately before the XCTL",
+        "COPAUS0C.cbl:317-320 MOVEs/SET to CDEMO-FROM-TRANID, CDEMO-FROM-PROGRAM, CDEMO-PGM-CONTEXT only",
+        "COPAUS0C.cbl:34 05 WS-PGM-AUTH-DTL PIC X(08) VALUE 'COPAUS1C' - read-only: no statement writes it or WS-VARIABLES (32)",
+        "COPAUS0C.cbl:200 MOVE DFHCOMMAREA(1:EIBCALEN) TO CARDDEMO-COMMAREA - overwritten at 316 before this XCTL, so the caller's bytes 16..24 never reach it"
+      ],
+      "excluded_candidates": {
+        "names": [
+          "COMEN01C",
+          "COPAUS0C",
+          "COSGN00C"
+        ],
+        "evidence": [
+          "app/app-authorization-ims-db2-mq/cbl/COPAUS0C.cbl:192",
+          "app/app-authorization-ims-db2-mq/cbl/COPAUS0C.cbl:236",
+          "app/app-authorization-ims-db2-mq/cbl/COPAUS0C.cbl:669",
+          "app/app-authorization-ims-db2-mq/cbl/COPAUS0C.cbl:316"
+        ],
+        "reasoning": "The writers at 192 (EIBCALEN = 0 branch), 236 (PF3 branch) and 669 (inside RETURN-TO-PREV-SCREEN) are all overwritten by the MOVE at 316 on the only path that reaches this XCTL."
+      },
+      "closed_by_reasoning": [
+        {
+          "kinds": [
+            "layout-mismatch"
+          ],
+          "tracer_open_end": "layout-mismatch CDEMO-TO-PROGRAM (COPAUS0C DFHCOMMAREA, COPAUS0C.cbl:172)",
+          "evidence": [
+            "app/app-authorization-ims-db2-mq/cbl/COPAUS0C.cbl:200",
+            "app/app-authorization-ims-db2-mq/cbl/COPAUS0C.cbl:316",
+            "app/app-authorization-ims-db2-mq/cbl/COPAUS0C.cbl:322-325"
+          ],
+          "reasoning": "Whatever the caller placed in bytes 16..24 of the COMMAREA (copied in at 200) is replaced by the MOVE at 316 before the XCTL at 322 executes; the incoming value cannot be the target of this site.",
+          "residual": "none for this site"
+        }
+      ],
+      "open_ends": []
+    },
+    {
+      "site": "app/app-authorization-ims-db2-mq/cbl/COPAUS0C.cbl:674",
+      "program": "COPAUS0C",
+      "construct": "CICS-XCTL",
+      "variable": "CDEMO-TO-PROGRAM",
+      "status": "resolved",
+      "targets": [
+        {
+          "name": "COMEN01C",
+          "basis": "derived",
+          "in_inventory": false,
+          "reasoning": "RETURN-TO-PREV-SCREEN (665-677) is performed from one place only, line 237 (PF3), and the statement before it is MOVE WS-PGM-MENU TO CDEMO-TO-PROGRAM (236). WS-PGM-MENU is VALUE 'COMEN01C' (35) with no writer. The program has no GO TO, no PERFORM THRU and no SECTION, and the paragraph before 665 is only entered by PERFORM, so the paragraph is not reached by fall-through. COMEN01C is not in this module's scan; the estate catalogue places it in module CARDDEMO (app/cbl/COMEN01C.cbl). Cites: app/app-authorization-ims-db2-mq/cbl/COPAUS0C.cbl:665-677, app/app-authorization-ims-db2-mq/cbl/COPAUS0C.cbl:236-237, app/app-authorization-ims-db2-mq/cbl/COPAUS0C.cbl:35."
+        }
+      ],
+      "traversal": [
+        "COPAUS0C.cbl:674-677 EXEC CICS XCTL PROGRAM(CDEMO-TO-PROGRAM) COMMAREA(CARDDEMO-COMMAREA) in RETURN-TO-PREV-SCREEN (665)",
+        "COPAUS0C.cbl:237 PERFORM RETURN-TO-PREV-SCREEN - the only PERFORM of the paragraph (WHEN DFHPF3)",
+        "COPAUS0C.cbl:236 MOVE WS-PGM-MENU TO CDEMO-TO-PROGRAM - the statement before that PERFORM",
+        "COPAUS0C.cbl:35 05 WS-PGM-MENU PIC X(08) VALUE 'COMEN01C' - read-only: no statement writes it or WS-VARIABLES (32)",
+        "COPAUS0C.cbl:668-670 IF CDEMO-TO-PROGRAM = LOW-VALUES OR SPACES MOVE 'COSGN00C' - false on this path, the field holds 'COMEN01C'",
+        "COPAUS0C.cbl:671-673 MOVEs to CDEMO-FROM-TRANID, CDEMO-FROM-PROGRAM, CDEMO-PGM-CONTEXT only"
+      ],
+      "excluded_candidates": {
+        "names": [
+          "COPAUS0C",
+          "COPAUS1C",
+          "COSGN00C"
+        ],
+        "evidence": [
+          "app/app-authorization-ims-db2-mq/cbl/COPAUS0C.cbl:192",
+          "app/app-authorization-ims-db2-mq/cbl/COPAUS0C.cbl:316",
+          "app/app-authorization-ims-db2-mq/cbl/COPAUS0C.cbl:668-670",
+          "app/app-authorization-ims-db2-mq/cbl/COPAUS0C.cbl:236-237"
+        ],
+        "reasoning": "192 runs only in the EIBCALEN = 0 branch and 316 only in PROCESS-ENTER-KEY, which XCTLs away at 322; neither path performs RETURN-TO-PREV-SCREEN. The COSGN00C fallback at 669 needs CDEMO-TO-PROGRAM blank, which 236 rules out on the only path into the paragraph."
+      },
+      "closed_by_reasoning": [
+        {
+          "kinds": [
+            "layout-mismatch"
+          ],
+          "tracer_open_end": "layout-mismatch CDEMO-TO-PROGRAM (COPAUS0C DFHCOMMAREA, COPAUS0C.cbl:172)",
+          "evidence": [
+            "app/app-authorization-ims-db2-mq/cbl/COPAUS0C.cbl:200",
+            "app/app-authorization-ims-db2-mq/cbl/COPAUS0C.cbl:236-237",
+            "app/app-authorization-ims-db2-mq/cbl/COPAUS0C.cbl:674-677"
+          ],
+          "reasoning": "The COMMAREA bytes copied in at 200 are replaced by the MOVE at 236 on the only path that performs the paragraph holding this XCTL; the incoming value cannot be the target of this site.",
+          "residual": "COMEN01C's source is outside this module's scan (module CARDDEMO in the estate catalogue)"
+        }
+      ],
+      "open_ends": []
+    },
+    {
+      "site": "app/app-authorization-ims-db2-mq/cbl/COPAUS1C.cbl:248",
+      "program": "COPAUS1C",
+      "construct": "CICS-LINK",
+      "variable": "WS-PGM-AUTH-FRAUD",
+      "status": "resolved",
+      "targets": [
+        {
+          "name": "COPAUS2C",
+          "basis": "deterministic",
+          "in_inventory": true,
+          "evidence": [
+            "app/app-authorization-ims-db2-mq/cbl/COPAUS1C.cbl:35",
+            "app/app-authorization-ims-db2-mq/cbl/COPAUS1C.cbl:248-252"
+          ],
+          "reasoning": "WS-PGM-AUTH-FRAUD PIC X(08) VALUE 'COPAUS2C' (35); spot-checked: no statement writes it or WS-VARIABLES (32)."
+        }
+      ],
+      "traversal": [
+        "COPAUS1C.cbl:248-252 EXEC CICS LINK PROGRAM(WS-PGM-AUTH-FRAUD) COMMAREA(WS-FRAUD-DATA) NOHANDLE",
+        "COPAUS1C.cbl:35 05 WS-PGM-AUTH-FRAUD PIC X(08) VALUE 'COPAUS2C' - no writer"
+      ],
+      "open_ends": []
+    },
+    {
+      "site": "app/app-authorization-ims-db2-mq/cbl/COPAUS1C.cbl:367",
+      "program": "COPAUS1C",
+      "construct": "CICS-XCTL",
+      "variable": "CDEMO-TO-PROGRAM",
+      "status": "resolved",
+      "targets": [
+        {
+          "name": "COPAUS0C",
+          "basis": "derived",
+          "in_inventory": true,
+          "evidence": [
+            "app/app-authorization-ims-db2-mq/cbl/COPAUS1C.cbl:360-370",
+            "app/app-authorization-ims-db2-mq/cbl/COPAUS1C.cbl:168-169",
+            "app/app-authorization-ims-db2-mq/cbl/COPAUS1C.cbl:185-186",
+            "app/app-authorization-ims-db2-mq/cbl/COPAUS1C.cbl:34"
+          ],
+          "reasoning": "RETURN-TO-PREV-SCREEN (360-370) is performed at 169 and 186 only, each time directly after MOVE WS-PGM-AUTH-SMRY TO CDEMO-TO-PROGRAM (168, 185). WS-PGM-AUTH-SMRY is VALUE 'COPAUS0C' (34) with no writer. The paragraph itself (362-365) does not write CDEMO-TO-PROGRAM, and the program has no GO TO, PERFORM THRU or SECTION, and the paragraph before 360 is only entered by PERFORM."
+        }
+      ],
+      "traversal": [
+        "COPAUS1C.cbl:367-370 EXEC CICS XCTL PROGRAM(CDEMO-TO-PROGRAM) COMMAREA(CARDDEMO-COMMAREA) in RETURN-TO-PREV-SCREEN (360)",
+        "COPAUS1C.cbl:169 PERFORM RETURN-TO-PREV-SCREEN (EIBCALEN = 0) after 168 MOVE WS-PGM-AUTH-SMRY TO CDEMO-TO-PROGRAM",
+        "COPAUS1C.cbl:186 PERFORM RETURN-TO-PREV-SCREEN (WHEN DFHPF3) after 185 MOVE WS-PGM-AUTH-SMRY TO CDEMO-TO-PROGRAM",
+        "COPAUS1C.cbl:34 05 WS-PGM-AUTH-SMRY PIC X(08) VALUE 'COPAUS0C' - read-only: no statement writes it or WS-VARIABLES (32)",
+        "COPAUS1C.cbl:362-365 MOVEs/SET to CDEMO-FROM-TRANID, CDEMO-FROM-PROGRAM, CDEMO-PGM-CONTEXT only",
+        "COPAUS1C.cbl:171 MOVE DFHCOMMAREA(1:EIBCALEN) TO CARDDEMO-COMMAREA - overwritten at 185 on the PF3 path; not executed on the EIBCALEN = 0 path"
+      ],
+      "closed_by_reasoning": [
+        {
+          "kinds": [
+            "layout-mismatch"
+          ],
+          "tracer_open_end": "layout-mismatch CDEMO-TO-PROGRAM (COPAUS1C DFHCOMMAREA, COPAUS1C.cbl:152)",
+          "evidence": [
+            "app/app-authorization-ims-db2-mq/cbl/COPAUS1C.cbl:171",
+            "app/app-authorization-ims-db2-mq/cbl/COPAUS1C.cbl:168-169",
+            "app/app-authorization-ims-db2-mq/cbl/COPAUS1C.cbl:185-186",
+            "app/app-authorization-ims-db2-mq/cbl/COPAUS1C.cbl:367-370"
+          ],
+          "reasoning": "Both paths into the paragraph holding this XCTL set CDEMO-TO-PROGRAM from WS-PGM-AUTH-SMRY immediately before the PERFORM, so the COMMAREA bytes copied in at 171 cannot be the target of this site.",
+          "residual": "none for this site"
+        }
+      ],
+      "open_ends": []
+    }
+  ]
+}
