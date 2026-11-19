@@ -1,0 +1,28 @@
+== i01-baseline
+event=intake run=70cbce7b-89de-48fb-a9e2-55559233c5c0 accounts=2 xrefs=2 balances=2 rates=15
+event=run-completed run=70cbce7b-89de-48fb-a9e2-55559233c5c0 rc=0
+exit=0
+== i02-tie-half-cent
+event=intake run=00ad5f6e-a6d1-4e66-9288-a5f752005dd0 accounts=2 xrefs=2 balances=2 rates=15
+event=run-completed run=00ad5f6e-a6d1-4e66-9288-a5f752005dd0 rc=0
+exit=0
+== i03-zero-rate-skipped
+event=intake run=2a027fbf-b14a-48dc-b534-e500ce0a921d accounts=1 xrefs=1 balances=2 rates=15
+event=run-completed run=2a027fbf-b14a-48dc-b534-e500ce0a921d rc=0
+exit=0
+== i04-default-group-fallback
+event=intake run=e0adb9a7-8dd5-45bc-86b0-e1399ab8763f accounts=1 xrefs=1 balances=1 rates=15
+event=run-completed run=e0adb9a7-8dd5-45bc-86b0-e1399ab8763f rc=0
+exit=0
+== i05-multi-category
+event=intake run=8ebe1fa1-91f6-463e-985b-8cf87fd81f25 accounts=1 xrefs=1 balances=2 rates=15
+event=run-completed run=8ebe1fa1-91f6-463e-985b-8cf87fd81f25 rc=0
+exit=0
+== i06-negative-balance
+event=intake run=c86a4962-eb7d-47af-aa56-343df78e0b1b accounts=1 xrefs=1 balances=1 rates=15
+event=run-completed run=c86a4962-eb7d-47af-aa56-343df78e0b1b rc=0
+exit=0
+== i07-nontie-rounding
+event=intake run=5195c062-2be9-47d4-aee2-449ce9ec8f98 accounts=2 xrefs=2 balances=2 rates=15
+event=run-completed run=5195c062-2be9-47d4-aee2-449ce9ec8f98 rc=0
+exit=0
