@@ -1,0 +1,1490 @@
+{
+ "meta": {
+  "module": "CARDDEMO",
+  "skill": "dynamic-call-resolution",
+  "updated_at": "2026-11-19T08:28:44Z"
+ },
+ "dynamic_calls": [
+  {
+   "site": "app/cbl/COACTUPC.cbl:956",
+   "program": "COACTUPC",
+   "construct": "CICS-XCTL",
+   "variable": "CDEMO-TO-PROGRAM",
+   "traversal": [
+    "app/cbl/COACTUPC.cbl:956 EXEC CICS XCTL PROGRAM(CDEMO-TO-PROGRAM)",
+    "app/cpy/COCOM01Y.cpy:24 [DET definition] 10 CDEMO-TO-PROGRAM PIC X(08) \u2014 WORKING-STORAGE, bytes 16..24 of CARDDEMO-COMMAREA",
+    "app/cbl/COACTUPC.cbl:888 [DET move-item] MOVE DFHCOMMAREA(1:LENGTH OF CARDDEMO-COMMAREA) TO CARDDEMO-COMMAREA (CARDDEMO-COMMAREA encloses CDEMO-TO-PROGRAM)",
+    "app/cbl/COACTUPC.cbl:854 [GEN layout-mismatch] CDEMO-TO-PROGRAM occupies bytes 16..24 of CARDDEMO-COMMAREA but DFHCOMMAREA has no field on exactly those bytes",
+    "app/cbl/COACTUPC.cbl:939 [DET move-item] MOVE LIT-MENUPGM TO CDEMO-TO-PROGRAM",
+    "app/cbl/COACTUPC.cbl:557 [DET definition] 05 LIT-MENUPGM PIC X(8) \u2014 WORKING-STORAGE, bytes 80..88 of WS-LITERALS",
+    "app/cbl/COACTUPC.cbl:557 [DET value-clause] VALUE 'COMEN01C'",
+    "app/cbl/COACTUPC.cbl:941 [DET move-item] MOVE CDEMO-FROM-PROGRAM TO CDEMO-TO-PROGRAM",
+    "app/cpy/COCOM01Y.cpy:22 [DET definition] 10 CDEMO-FROM-PROGRAM PIC X(08) \u2014 WORKING-STORAGE, bytes 4..12 of CARDDEMO-COMMAREA",
+    "app/cbl/COACTUPC.cbl:888 [DET move-item] MOVE DFHCOMMAREA(1:LENGTH OF CARDDEMO-COMMAREA) TO CARDDEMO-COMMAREA (CARDDEMO-COMMAREA encloses CDEMO-FROM-PROGRAM)",
+    "app/cbl/COACTUPC.cbl:854 [GEN layout-mismatch] CDEMO-FROM-PROGRAM occupies bytes 4..12 of CARDDEMO-COMMAREA but DFHCOMMAREA has no field on exactly those bytes",
+    "app/cbl/COACTUPC.cbl:945 [DET move-item] MOVE LIT-THISPGM TO CDEMO-FROM-PROGRAM",
+    "app/cbl/COACTUPC.cbl:533 [DET definition] 05 LIT-THISPGM PIC X(8) \u2014 WORKING-STORAGE, bytes 0..8 of WS-LITERALS",
+    "app/cbl/COACTUPC.cbl:533 [DET value-clause] VALUE 'COACTUPC'"
+   ],
+   "status": "partial",
+   "targets": [
+    {
+     "name": "COACTUPC",
+     "basis": "deterministic",
+     "in_inventory": true,
+     "evidence": [
+      "app/cbl/COACTUPC.cbl:533"
+     ],
+     "reasoning": "tracer candidate, unchanged: VALUE clause of LIT-THISPGM"
+    },
+    {
+     "name": "COMEN01C",
+     "basis": "deterministic",
+     "in_inventory": true,
+     "evidence": [
+      "app/cbl/COACTUPC.cbl:557"
+     ],
+     "reasoning": "tracer candidate, unchanged: VALUE clause of LIT-MENUPGM"
+    }
+   ],
+   "open_ends": [
+    {
+     "kind": "layout-mismatch",
+     "class": "GEN",
+     "source": "app/cbl/COACTUPC.cbl:854",
+     "request": "Map bytes 16..24 of DFHCOMMAREA to the field(s) that produce CDEMO-TO-PROGRAM. Not closed by reasoning: CDEMO-TO-PROGRAM is copied from the inbound DFHCOMMAREA, whose content is whatever the program or pseudo-conversational RETURN that passed control put there at run time; the scanned source of COACTUPC proves only the literal candidates listed, so any further target stays open. Evidence that would settle it: a CICS trace/auxtrace of this transaction, or confirmation from the application owner of every program that passes control to COACTUPC with a COMMAREA."
+    },
+    {
+     "kind": "layout-mismatch",
+     "class": "GEN",
+     "source": "app/cbl/COACTUPC.cbl:854",
+     "request": "Map bytes 4..12 of DFHCOMMAREA to the field(s) that produce CDEMO-FROM-PROGRAM. Not closed by reasoning: CDEMO-FROM-PROGRAM is copied from the inbound DFHCOMMAREA, whose content is whatever the program or pseudo-conversational RETURN that passed control put there at run time; the scanned source of COACTUPC proves only the literal candidates listed, so any further target stays open. Evidence that would settle it: a CICS trace/auxtrace of this transaction, or confirmation from the application owner of every program that passes control to COACTUPC with a COMMAREA."
+    }
+   ]
+  },
+  {
+   "site": "app/cbl/COACTVWC.cbl:349",
+   "program": "COACTVWC",
+   "construct": "CICS-XCTL",
+   "variable": "CDEMO-TO-PROGRAM",
+   "traversal": [
+    "app/cbl/COACTVWC.cbl:349 EXEC CICS XCTL PROGRAM(CDEMO-TO-PROGRAM)",
+    "app/cpy/COCOM01Y.cpy:24 [DET definition] 10 CDEMO-TO-PROGRAM PIC X(08) \u2014 WORKING-STORAGE, bytes 16..24 of CARDDEMO-COMMAREA",
+    "app/cbl/COACTVWC.cbl:288 [DET move-item] MOVE DFHCOMMAREA(1:LENGTH OF CARDDEMO-COMMAREA) TO CARDDEMO-COMMAREA (CARDDEMO-COMMAREA encloses CDEMO-TO-PROGRAM)",
+    "app/cbl/COACTVWC.cbl:257 [GEN layout-mismatch] CDEMO-TO-PROGRAM occupies bytes 16..24 of CARDDEMO-COMMAREA but DFHCOMMAREA has no field on exactly those bytes",
+    "app/cbl/COACTVWC.cbl:336 [DET move-item] MOVE LIT-MENUPGM TO CDEMO-TO-PROGRAM",
+    "app/cbl/COACTVWC.cbl:167 [DET definition] 05 LIT-MENUPGM PIC X(8) \u2014 WORKING-STORAGE, bytes 80..88 of WS-LITERALS",
+    "app/cbl/COACTVWC.cbl:167 [DET value-clause] VALUE 'COMEN01C'",
+    "app/cbl/COACTVWC.cbl:338 [DET move-item] MOVE CDEMO-FROM-PROGRAM TO CDEMO-TO-PROGRAM",
+    "app/cpy/COCOM01Y.cpy:22 [DET definition] 10 CDEMO-FROM-PROGRAM PIC X(08) \u2014 WORKING-STORAGE, bytes 4..12 of CARDDEMO-COMMAREA",
+    "app/cbl/COACTVWC.cbl:288 [DET move-item] MOVE DFHCOMMAREA(1:LENGTH OF CARDDEMO-COMMAREA) TO CARDDEMO-COMMAREA (CARDDEMO-COMMAREA encloses CDEMO-FROM-PROGRAM)",
+    "app/cbl/COACTVWC.cbl:257 [GEN layout-mismatch] CDEMO-FROM-PROGRAM occupies bytes 4..12 of CARDDEMO-COMMAREA but DFHCOMMAREA has no field on exactly those bytes",
+    "app/cbl/COACTVWC.cbl:342 [DET move-item] MOVE LIT-THISPGM TO CDEMO-FROM-PROGRAM",
+    "app/cbl/COACTVWC.cbl:143 [DET definition] 05 LIT-THISPGM PIC X(8) \u2014 WORKING-STORAGE, bytes 0..8 of WS-LITERALS",
+    "app/cbl/COACTVWC.cbl:143 [DET value-clause] VALUE 'COACTVWC'"
+   ],
+   "status": "partial",
+   "targets": [
+    {
+     "name": "COACTVWC",
+     "basis": "deterministic",
+     "in_inventory": true,
+     "evidence": [
+      "app/cbl/COACTVWC.cbl:143"
+     ],
+     "reasoning": "tracer candidate, unchanged: VALUE clause of LIT-THISPGM"
+    },
+    {
+     "name": "COMEN01C",
+     "basis": "deterministic",
+     "in_inventory": true,
+     "evidence": [
+      "app/cbl/COACTVWC.cbl:167"
+     ],
+     "reasoning": "tracer candidate, unchanged: VALUE clause of LIT-MENUPGM"
+    }
+   ],
+   "open_ends": [
+    {
+     "kind": "layout-mismatch",
+     "class": "GEN",
+     "source": "app/cbl/COACTVWC.cbl:257",
+     "request": "Map bytes 16..24 of DFHCOMMAREA to the field(s) that produce CDEMO-TO-PROGRAM. Not closed by reasoning: CDEMO-TO-PROGRAM is copied from the inbound DFHCOMMAREA, whose content is whatever the program or pseudo-conversational RETURN that passed control put there at run time; the scanned source of COACTVWC proves only the literal candidates listed, so any further target stays open. Evidence that would settle it: a CICS trace/auxtrace of this transaction, or confirmation from the application owner of every program that passes control to COACTVWC with a COMMAREA."
+    },
+    {
+     "kind": "layout-mismatch",
+     "class": "GEN",
+     "source": "app/cbl/COACTVWC.cbl:257",
+     "request": "Map bytes 4..12 of DFHCOMMAREA to the field(s) that produce CDEMO-FROM-PROGRAM. Not closed by reasoning: CDEMO-FROM-PROGRAM is copied from the inbound DFHCOMMAREA, whose content is whatever the program or pseudo-conversational RETURN that passed control put there at run time; the scanned source of COACTVWC proves only the literal candidates listed, so any further target stays open. Evidence that would settle it: a CICS trace/auxtrace of this transaction, or confirmation from the application owner of every program that passes control to COACTVWC with a COMMAREA."
+    }
+   ]
+  },
+  {
+   "site": "app/cbl/COADM01C.cbl:145",
+   "program": "COADM01C",
+   "construct": "CICS-XCTL",
+   "variable": "CDEMO-ADMIN-OPT-PGMNAME",
+   "traversal": [
+    "app/cbl/COADM01C.cbl:145 EXEC CICS XCTL PROGRAM(CDEMO-ADMIN-OPT-PGMNAME)",
+    "app/cpy/COADM02Y.cpy:59 [DET definition] 15 CDEMO-ADMIN-OPT-PGMNAME PIC X(08) \u2014 WORKING-STORAGE, bytes 39..47 of CARDDEMO-ADMIN-MENU-OPTIONS",
+    "app/cpy/COADM02Y.cpy:56 [DET table-element] CDEMO-ADMIN-OPT-PGMNAME is an element of CDEMO-ADMIN-OPT OCCURS 9",
+    "app/cpy/COADM02Y.cpy:24 [GEN table-values-partial] CDEMO-ADMIN-OPT OCCURS 9 but CDEMO-ADMIN-OPTIONS-DATA only initialises 6 occurrence(s)",
+    "app/cpy/COADM02Y.cpy:24 [DET table-slice] CDEMO-ADMIN-OPTIONS REDEFINES CDEMO-ADMIN-OPTIONS-DATA (18 VALUE entries) \u2192 CDEMO-ADMIN-OPT-PGMNAME(1..9) = 'COUSR00C', 'COUSR01C', 'COUSR02C', 'COUSR03C', 'COTRTLIC', 'COTRTUPC', '', '', ''"
+   ],
+   "targets": [
+    {
+     "name": "COTRTLIC",
+     "basis": "deterministic",
+     "in_inventory": false,
+     "evidence": [],
+     "reasoning": "tracer candidate, unchanged: occurrence of CDEMO-ADMIN-OPT-PGMNAME in CDEMO-ADMIN-OPTIONS-DATA [cites: app/cpy/COADM02Y.cpy:24]"
+    },
+    {
+     "name": "COTRTUPC",
+     "basis": "deterministic",
+     "in_inventory": false,
+     "evidence": [],
+     "reasoning": "tracer candidate, unchanged: occurrence of CDEMO-ADMIN-OPT-PGMNAME in CDEMO-ADMIN-OPTIONS-DATA [cites: app/cpy/COADM02Y.cpy:24]"
+    },
+    {
+     "name": "COUSR00C",
+     "basis": "deterministic",
+     "in_inventory": true,
+     "evidence": [
+      "app/cpy/COADM02Y.cpy:24"
+     ],
+     "reasoning": "tracer candidate, unchanged: occurrence of CDEMO-ADMIN-OPT-PGMNAME in CDEMO-ADMIN-OPTIONS-DATA"
+    },
+    {
+     "name": "COUSR01C",
+     "basis": "deterministic",
+     "in_inventory": true,
+     "evidence": [
+      "app/cpy/COADM02Y.cpy:24"
+     ],
+     "reasoning": "tracer candidate, unchanged: occurrence of CDEMO-ADMIN-OPT-PGMNAME in CDEMO-ADMIN-OPTIONS-DATA"
+    },
+    {
+     "name": "COUSR02C",
+     "basis": "deterministic",
+     "in_inventory": true,
+     "evidence": [
+      "app/cpy/COADM02Y.cpy:24"
+     ],
+     "reasoning": "tracer candidate, unchanged: occurrence of CDEMO-ADMIN-OPT-PGMNAME in CDEMO-ADMIN-OPTIONS-DATA"
+    },
+    {
+     "name": "COUSR03C",
+     "basis": "deterministic",
+     "in_inventory": true,
+     "evidence": [
+      "app/cpy/COADM02Y.cpy:24"
+     ],
+     "reasoning": "tracer candidate, unchanged: occurrence of CDEMO-ADMIN-OPT-PGMNAME in CDEMO-ADMIN-OPTIONS-DATA"
+    }
+   ],
+   "status": "resolved",
+   "closed_by_reasoning": [
+    {
+     "kinds": [
+      "table-values-partial"
+     ],
+     "tracer_open_end": "table-values-partial CDEMO-ADMIN-OPT-PGMNAME (app/cbl/COADM01C.cbl:145)",
+     "evidence": [
+      "app/cpy/COADM02Y.cpy:22",
+      "app/cpy/COADM02Y.cpy:26-53",
+      "app/cpy/COADM02Y.cpy:55-56",
+      "app/cbl/COADM01C.cbl:131-141"
+     ],
+     "reasoning": "CDEMO-ADMIN-OPT-COUNT is VALUE 6 with no writer in the scanned source (only read at COADM01C.cbl:132 and :232); PROCESS-ENTER-KEY sets the error flag when WS-OPTION is not numeric, zero or greater than that count, and the XCTL sits under IF NOT ERR-FLG-ON, so the subscript is 1..6 and only the 6 initialised occurrences can supply a name; occurrences 7-9 of the OCCURS 9 are never selected.",
+     "residual": "targets with in_inventory false (source not in the scanned inputs) remain artifact requests; the name is proven, the program behind it is not scanned"
+    }
+   ],
+   "open_ends": []
+  },
+  {
+   "site": "app/cbl/COADM01C.cbl:168",
+   "program": "COADM01C",
+   "construct": "CICS-XCTL",
+   "variable": "CDEMO-TO-PROGRAM",
+   "traversal": [
+    "app/cbl/COADM01C.cbl:168 EXEC CICS XCTL PROGRAM(CDEMO-TO-PROGRAM)",
+    "app/cpy/COCOM01Y.cpy:24 [DET definition] 10 CDEMO-TO-PROGRAM PIC X(08) \u2014 WORKING-STORAGE, bytes 16..24 of CARDDEMO-COMMAREA",
+    "app/cbl/COADM01C.cbl:90 [DET move-item] MOVE DFHCOMMAREA(1:EIBCALEN) TO CARDDEMO-COMMAREA (CARDDEMO-COMMAREA encloses CDEMO-TO-PROGRAM)",
+    "app/cbl/COADM01C.cbl:67 [GEN layout-mismatch] CDEMO-TO-PROGRAM occupies bytes 16..24 of CARDDEMO-COMMAREA but DFHCOMMAREA has no field on exactly those bytes",
+    "app/cbl/COADM01C.cbl:101 [DET move-literal] MOVE 'COSGN00C' TO CDEMO-TO-PROGRAM",
+    "app/cbl/COADM01C.cbl:166 [DET move-literal] MOVE 'COSGN00C' TO CDEMO-TO-PROGRAM"
+   ],
+   "status": "partial",
+   "targets": [
+    {
+     "name": "COSGN00C",
+     "basis": "deterministic",
+     "in_inventory": true,
+     "evidence": [
+      "app/cbl/COADM01C.cbl:101",
+      "app/cbl/COADM01C.cbl:166"
+     ],
+     "reasoning": "tracer candidate, unchanged: MOVE literal to CDEMO-TO-PROGRAM; MOVE literal to CDEMO-TO-PROGRAM"
+    }
+   ],
+   "open_ends": [
+    {
+     "kind": "layout-mismatch",
+     "class": "GEN",
+     "source": "app/cbl/COADM01C.cbl:67",
+     "request": "Map bytes 16..24 of DFHCOMMAREA to the field(s) that produce CDEMO-TO-PROGRAM. Not closed by reasoning: CDEMO-TO-PROGRAM is copied from the inbound DFHCOMMAREA, whose content is whatever the program or pseudo-conversational RETURN that passed control put there at run time; the scanned source of COADM01C proves only the literal candidates listed, so any further target stays open. Evidence that would settle it: a CICS trace/auxtrace of this transaction, or confirmation from the application owner of every program that passes control to COADM01C with a COMMAREA."
+    }
+   ]
+  },
+  {
+   "site": "app/cbl/COBIL00C.cbl:281",
+   "program": "COBIL00C",
+   "construct": "CICS-XCTL",
+   "variable": "CDEMO-TO-PROGRAM",
+   "traversal": [
+    "app/cbl/COBIL00C.cbl:281 EXEC CICS XCTL PROGRAM(CDEMO-TO-PROGRAM)",
+    "app/cpy/COCOM01Y.cpy:24 [DET definition] 10 CDEMO-TO-PROGRAM PIC X(08) \u2014 WORKING-STORAGE, bytes 16..24 of CARDDEMO-COMMAREA",
+    "app/cbl/COBIL00C.cbl:108 [DET move-literal] MOVE 'COSGN00C' TO CDEMO-TO-PROGRAM",
+    "app/cbl/COBIL00C.cbl:111 [DET move-item] MOVE DFHCOMMAREA(1:EIBCALEN) TO CARDDEMO-COMMAREA (CARDDEMO-COMMAREA encloses CDEMO-TO-PROGRAM)",
+    "app/cbl/COBIL00C.cbl:91 [GEN layout-mismatch] CDEMO-TO-PROGRAM occupies bytes 16..24 of CARDDEMO-COMMAREA but DFHCOMMAREA has no field on exactly those bytes",
+    "app/cbl/COBIL00C.cbl:130 [DET move-literal] MOVE 'COMEN01C' TO CDEMO-TO-PROGRAM",
+    "app/cbl/COBIL00C.cbl:132 [DET move-item] MOVE CDEMO-FROM-PROGRAM TO CDEMO-TO-PROGRAM",
+    "app/cpy/COCOM01Y.cpy:22 [DET definition] 10 CDEMO-FROM-PROGRAM PIC X(08) \u2014 WORKING-STORAGE, bytes 4..12 of CARDDEMO-COMMAREA",
+    "app/cbl/COBIL00C.cbl:111 [DET move-item] MOVE DFHCOMMAREA(1:EIBCALEN) TO CARDDEMO-COMMAREA (CARDDEMO-COMMAREA encloses CDEMO-FROM-PROGRAM)",
+    "app/cbl/COBIL00C.cbl:91 [GEN layout-mismatch] CDEMO-FROM-PROGRAM occupies bytes 4..12 of CARDDEMO-COMMAREA but DFHCOMMAREA has no field on exactly those bytes",
+    "app/cbl/COBIL00C.cbl:279 [DET move-item] MOVE WS-PGMNAME TO CDEMO-FROM-PROGRAM",
+    "app/cbl/COBIL00C.cbl:37 [DET definition] 05 WS-PGMNAME PIC X(08) \u2014 WORKING-STORAGE, bytes 0..8 of WS-VARIABLES",
+    "app/cbl/COBIL00C.cbl:37 [DET value-clause] VALUE 'COBIL00C'",
+    "app/cbl/COBIL00C.cbl:276 [DET move-literal] MOVE 'COSGN00C' TO CDEMO-TO-PROGRAM"
+   ],
+   "status": "partial",
+   "targets": [
+    {
+     "name": "COBIL00C",
+     "basis": "deterministic",
+     "in_inventory": true,
+     "evidence": [
+      "app/cbl/COBIL00C.cbl:37"
+     ],
+     "reasoning": "tracer candidate, unchanged: VALUE clause of WS-PGMNAME"
+    },
+    {
+     "name": "COMEN01C",
+     "basis": "deterministic",
+     "in_inventory": true,
+     "evidence": [
+      "app/cbl/COBIL00C.cbl:130"
+     ],
+     "reasoning": "tracer candidate, unchanged: MOVE literal to CDEMO-TO-PROGRAM"
+    },
+    {
+     "name": "COSGN00C",
+     "basis": "deterministic",
+     "in_inventory": true,
+     "evidence": [
+      "app/cbl/COBIL00C.cbl:108",
+      "app/cbl/COBIL00C.cbl:276"
+     ],
+     "reasoning": "tracer candidate, unchanged: MOVE literal to CDEMO-TO-PROGRAM; MOVE literal to CDEMO-TO-PROGRAM"
+    }
+   ],
+   "open_ends": [
+    {
+     "kind": "layout-mismatch",
+     "class": "GEN",
+     "source": "app/cbl/COBIL00C.cbl:91",
+     "request": "Map bytes 16..24 of DFHCOMMAREA to the field(s) that produce CDEMO-TO-PROGRAM. Not closed by reasoning: CDEMO-TO-PROGRAM is copied from the inbound DFHCOMMAREA, whose content is whatever the program or pseudo-conversational RETURN that passed control put there at run time; the scanned source of COBIL00C proves only the literal candidates listed, so any further target stays open. Evidence that would settle it: a CICS trace/auxtrace of this transaction, or confirmation from the application owner of every program that passes control to COBIL00C with a COMMAREA."
+    },
+    {
+     "kind": "layout-mismatch",
+     "class": "GEN",
+     "source": "app/cbl/COBIL00C.cbl:91",
+     "request": "Map bytes 4..12 of DFHCOMMAREA to the field(s) that produce CDEMO-FROM-PROGRAM. Not closed by reasoning: CDEMO-FROM-PROGRAM is copied from the inbound DFHCOMMAREA, whose content is whatever the program or pseudo-conversational RETURN that passed control put there at run time; the scanned source of COBIL00C proves only the literal candidates listed, so any further target stays open. Evidence that would settle it: a CICS trace/auxtrace of this transaction, or confirmation from the application owner of every program that passes control to COBIL00C with a COMMAREA."
+    }
+   ]
+  },
+  {
+   "site": "app/cbl/COCRDLIC.cbl:402",
+   "program": "COCRDLIC",
+   "construct": "CICS-XCTL",
+   "variable": "LIT-MENUPGM",
+   "traversal": [
+    "app/cbl/COCRDLIC.cbl:402 EXEC CICS XCTL PROGRAM(LIT-MENUPGM)",
+    "app/cbl/COCRDLIC.cbl:187 [DET definition] 05 LIT-MENUPGM PIC X(8) \u2014 WORKING-STORAGE, bytes 28..36 of WS-CONSTANTS",
+    "app/cbl/COCRDLIC.cbl:187 [DET value-clause] VALUE 'COMEN01C'"
+   ],
+   "status": "resolved",
+   "targets": [
+    {
+     "name": "COMEN01C",
+     "basis": "deterministic",
+     "in_inventory": true,
+     "evidence": [
+      "app/cbl/COCRDLIC.cbl:187"
+     ],
+     "reasoning": "tracer candidate, unchanged: VALUE clause of LIT-MENUPGM"
+    }
+   ],
+   "open_ends": []
+  },
+  {
+   "site": "app/cbl/COCRDLIC.cbl:538",
+   "program": "COCRDLIC",
+   "construct": "CICS-XCTL",
+   "variable": "CCARD-NEXT-PROG",
+   "traversal": [
+    "app/cbl/COCRDLIC.cbl:538 EXEC CICS XCTL PROGRAM(CCARD-NEXT-PROG)",
+    "app/cpy/CVCRD01Y.cpy:21 [DET definition] 10 CCARD-NEXT-PROG PIC X(8) \u2014 WORKING-STORAGE, bytes 5..13 of CC-WORK-AREAS",
+    "app/cbl/COCRDLIC.cbl:428 [DET move-item] MOVE LIT-THISPGM TO CCARD-NEXT-PROG",
+    "app/cbl/COCRDLIC.cbl:179 [DET definition] 05 LIT-THISPGM PIC X(8) \u2014 WORKING-STORAGE, bytes 2..10 of WS-CONSTANTS",
+    "app/cbl/COCRDLIC.cbl:179 [DET value-clause] VALUE 'COCRDLIC'",
+    "app/cbl/COCRDLIC.cbl:526 [DET move-item] MOVE LIT-CARDDTLPGM TO CCARD-NEXT-PROG",
+    "app/cbl/COCRDLIC.cbl:195 [DET definition] 05 LIT-CARDDTLPGM PIC X(8) \u2014 WORKING-STORAGE, bytes 54..62 of WS-CONSTANTS",
+    "app/cbl/COCRDLIC.cbl:195 [DET value-clause] VALUE 'COCRDSLC'",
+    "app/cbl/COCRDLIC.cbl:554 [DET move-item] MOVE LIT-CARDUPDPGM TO CCARD-NEXT-PROG",
+    "app/cbl/COCRDLIC.cbl:203 [DET definition] 05 LIT-CARDUPDPGM PIC X(8) \u2014 WORKING-STORAGE, bytes 80..88 of WS-CONSTANTS",
+    "app/cbl/COCRDLIC.cbl:203 [DET value-clause] VALUE 'COCRDUPC'",
+    "app/cbl/COCRDLIC.cbl:592 [DET move-item] MOVE LIT-THISPGM TO CCARD-NEXT-PROG",
+    "app/cbl/COCRDLIC.cbl:179 [DET cycle] LIT-THISPGM already traced above",
+    "app/cbl/COCRDLIC.cbl:600 [DET move-item] MOVE LIT-THISPGM TO CCARD-NEXT-PROG",
+    "app/cbl/COCRDLIC.cbl:179 [DET cycle] LIT-THISPGM already traced above"
+   ],
+   "status": "resolved",
+   "targets": [
+    {
+     "name": "COCRDLIC",
+     "basis": "deterministic",
+     "in_inventory": true,
+     "evidence": [
+      "app/cbl/COCRDLIC.cbl:179"
+     ],
+     "reasoning": "tracer candidate, unchanged: VALUE clause of LIT-THISPGM"
+    },
+    {
+     "name": "COCRDSLC",
+     "basis": "deterministic",
+     "in_inventory": true,
+     "evidence": [
+      "app/cbl/COCRDLIC.cbl:195"
+     ],
+     "reasoning": "tracer candidate, unchanged: VALUE clause of LIT-CARDDTLPGM"
+    },
+    {
+     "name": "COCRDUPC",
+     "basis": "deterministic",
+     "in_inventory": true,
+     "evidence": [
+      "app/cbl/COCRDLIC.cbl:203"
+     ],
+     "reasoning": "tracer candidate, unchanged: VALUE clause of LIT-CARDUPDPGM"
+    }
+   ],
+   "open_ends": []
+  },
+  {
+   "site": "app/cbl/COCRDLIC.cbl:566",
+   "program": "COCRDLIC",
+   "construct": "CICS-XCTL",
+   "variable": "CCARD-NEXT-PROG",
+   "traversal": [
+    "app/cbl/COCRDLIC.cbl:566 EXEC CICS XCTL PROGRAM(CCARD-NEXT-PROG)",
+    "app/cpy/CVCRD01Y.cpy:21 [DET definition] 10 CCARD-NEXT-PROG PIC X(8) \u2014 WORKING-STORAGE, bytes 5..13 of CC-WORK-AREAS",
+    "app/cbl/COCRDLIC.cbl:428 [DET move-item] MOVE LIT-THISPGM TO CCARD-NEXT-PROG",
+    "app/cbl/COCRDLIC.cbl:179 [DET definition] 05 LIT-THISPGM PIC X(8) \u2014 WORKING-STORAGE, bytes 2..10 of WS-CONSTANTS",
+    "app/cbl/COCRDLIC.cbl:179 [DET value-clause] VALUE 'COCRDLIC'",
+    "app/cbl/COCRDLIC.cbl:526 [DET move-item] MOVE LIT-CARDDTLPGM TO CCARD-NEXT-PROG",
+    "app/cbl/COCRDLIC.cbl:195 [DET definition] 05 LIT-CARDDTLPGM PIC X(8) \u2014 WORKING-STORAGE, bytes 54..62 of WS-CONSTANTS",
+    "app/cbl/COCRDLIC.cbl:195 [DET value-clause] VALUE 'COCRDSLC'",
+    "app/cbl/COCRDLIC.cbl:554 [DET move-item] MOVE LIT-CARDUPDPGM TO CCARD-NEXT-PROG",
+    "app/cbl/COCRDLIC.cbl:203 [DET definition] 05 LIT-CARDUPDPGM PIC X(8) \u2014 WORKING-STORAGE, bytes 80..88 of WS-CONSTANTS",
+    "app/cbl/COCRDLIC.cbl:203 [DET value-clause] VALUE 'COCRDUPC'",
+    "app/cbl/COCRDLIC.cbl:592 [DET move-item] MOVE LIT-THISPGM TO CCARD-NEXT-PROG",
+    "app/cbl/COCRDLIC.cbl:179 [DET cycle] LIT-THISPGM already traced above",
+    "app/cbl/COCRDLIC.cbl:600 [DET move-item] MOVE LIT-THISPGM TO CCARD-NEXT-PROG",
+    "app/cbl/COCRDLIC.cbl:179 [DET cycle] LIT-THISPGM already traced above"
+   ],
+   "status": "resolved",
+   "targets": [
+    {
+     "name": "COCRDLIC",
+     "basis": "deterministic",
+     "in_inventory": true,
+     "evidence": [
+      "app/cbl/COCRDLIC.cbl:179"
+     ],
+     "reasoning": "tracer candidate, unchanged: VALUE clause of LIT-THISPGM"
+    },
+    {
+     "name": "COCRDSLC",
+     "basis": "deterministic",
+     "in_inventory": true,
+     "evidence": [
+      "app/cbl/COCRDLIC.cbl:195"
+     ],
+     "reasoning": "tracer candidate, unchanged: VALUE clause of LIT-CARDDTLPGM"
+    },
+    {
+     "name": "COCRDUPC",
+     "basis": "deterministic",
+     "in_inventory": true,
+     "evidence": [
+      "app/cbl/COCRDLIC.cbl:203"
+     ],
+     "reasoning": "tracer candidate, unchanged: VALUE clause of LIT-CARDUPDPGM"
+    }
+   ],
+   "open_ends": []
+  },
+  {
+   "site": "app/cbl/COCRDSLC.cbl:331",
+   "program": "COCRDSLC",
+   "construct": "CICS-XCTL",
+   "variable": "CDEMO-TO-PROGRAM",
+   "traversal": [
+    "app/cbl/COCRDSLC.cbl:331 EXEC CICS XCTL PROGRAM(CDEMO-TO-PROGRAM)",
+    "app/cpy/COCOM01Y.cpy:24 [DET definition] 10 CDEMO-TO-PROGRAM PIC X(08) \u2014 WORKING-STORAGE, bytes 16..24 of CARDDEMO-COMMAREA",
+    "app/cbl/COCRDSLC.cbl:274 [DET move-item] MOVE DFHCOMMAREA(1:LENGTH OF CARDDEMO-COMMAREA) TO CARDDEMO-COMMAREA (CARDDEMO-COMMAREA encloses CDEMO-TO-PROGRAM)",
+    "app/cbl/COCRDSLC.cbl:243 [GEN layout-mismatch] CDEMO-TO-PROGRAM occupies bytes 16..24 of CARDDEMO-COMMAREA but DFHCOMMAREA has no field on exactly those bytes",
+    "app/cbl/COCRDSLC.cbl:318 [DET move-item] MOVE LIT-MENUPGM TO CDEMO-TO-PROGRAM",
+    "app/cbl/COCRDSLC.cbl:179 [DET definition] 05 LIT-MENUPGM PIC X(8) \u2014 WORKING-STORAGE, bytes 53..61 of WS-LITERALS",
+    "app/cbl/COCRDSLC.cbl:179 [DET value-clause] VALUE 'COMEN01C'",
+    "app/cbl/COCRDSLC.cbl:320 [DET move-item] MOVE CDEMO-FROM-PROGRAM TO CDEMO-TO-PROGRAM",
+    "app/cpy/COCOM01Y.cpy:22 [DET definition] 10 CDEMO-FROM-PROGRAM PIC X(08) \u2014 WORKING-STORAGE, bytes 4..12 of CARDDEMO-COMMAREA",
+    "app/cbl/COCRDSLC.cbl:274 [DET move-item] MOVE DFHCOMMAREA(1:LENGTH OF CARDDEMO-COMMAREA) TO CARDDEMO-COMMAREA (CARDDEMO-COMMAREA encloses CDEMO-FROM-PROGRAM)",
+    "app/cbl/COCRDSLC.cbl:243 [GEN layout-mismatch] CDEMO-FROM-PROGRAM occupies bytes 4..12 of CARDDEMO-COMMAREA but DFHCOMMAREA has no field on exactly those bytes",
+    "app/cbl/COCRDSLC.cbl:324 [DET move-item] MOVE LIT-THISPGM TO CDEMO-FROM-PROGRAM",
+    "app/cbl/COCRDSLC.cbl:163 [DET definition] 05 LIT-THISPGM PIC X(8) \u2014 WORKING-STORAGE, bytes 0..8 of WS-LITERALS",
+    "app/cbl/COCRDSLC.cbl:163 [DET value-clause] VALUE 'COCRDSLC'"
+   ],
+   "status": "partial",
+   "targets": [
+    {
+     "name": "COCRDSLC",
+     "basis": "deterministic",
+     "in_inventory": true,
+     "evidence": [
+      "app/cbl/COCRDSLC.cbl:163"
+     ],
+     "reasoning": "tracer candidate, unchanged: VALUE clause of LIT-THISPGM"
+    },
+    {
+     "name": "COMEN01C",
+     "basis": "deterministic",
+     "in_inventory": true,
+     "evidence": [
+      "app/cbl/COCRDSLC.cbl:179"
+     ],
+     "reasoning": "tracer candidate, unchanged: VALUE clause of LIT-MENUPGM"
+    }
+   ],
+   "open_ends": [
+    {
+     "kind": "layout-mismatch",
+     "class": "GEN",
+     "source": "app/cbl/COCRDSLC.cbl:243",
+     "request": "Map bytes 16..24 of DFHCOMMAREA to the field(s) that produce CDEMO-TO-PROGRAM. Not closed by reasoning: CDEMO-TO-PROGRAM is copied from the inbound DFHCOMMAREA, whose content is whatever the program or pseudo-conversational RETURN that passed control put there at run time; the scanned source of COCRDSLC proves only the literal candidates listed, so any further target stays open. Evidence that would settle it: a CICS trace/auxtrace of this transaction, or confirmation from the application owner of every program that passes control to COCRDSLC with a COMMAREA."
+    },
+    {
+     "kind": "layout-mismatch",
+     "class": "GEN",
+     "source": "app/cbl/COCRDSLC.cbl:243",
+     "request": "Map bytes 4..12 of DFHCOMMAREA to the field(s) that produce CDEMO-FROM-PROGRAM. Not closed by reasoning: CDEMO-FROM-PROGRAM is copied from the inbound DFHCOMMAREA, whose content is whatever the program or pseudo-conversational RETURN that passed control put there at run time; the scanned source of COCRDSLC proves only the literal candidates listed, so any further target stays open. Evidence that would settle it: a CICS trace/auxtrace of this transaction, or confirmation from the application owner of every program that passes control to COCRDSLC with a COMMAREA."
+    }
+   ]
+  },
+  {
+   "site": "app/cbl/COCRDUPC.cbl:473",
+   "program": "COCRDUPC",
+   "construct": "CICS-XCTL",
+   "variable": "CDEMO-TO-PROGRAM",
+   "traversal": [
+    "app/cbl/COCRDUPC.cbl:473 EXEC CICS XCTL PROGRAM(CDEMO-TO-PROGRAM)",
+    "app/cpy/COCOM01Y.cpy:24 [DET definition] 10 CDEMO-TO-PROGRAM PIC X(08) \u2014 WORKING-STORAGE, bytes 16..24 of CARDDEMO-COMMAREA",
+    "app/cbl/COCRDUPC.cbl:396 [DET move-item] MOVE DFHCOMMAREA(1:LENGTH OF CARDDEMO-COMMAREA) TO CARDDEMO-COMMAREA (CARDDEMO-COMMAREA encloses CDEMO-TO-PROGRAM)",
+    "app/cbl/COCRDUPC.cbl:362 [GEN layout-mismatch] CDEMO-TO-PROGRAM occupies bytes 16..24 of CARDDEMO-COMMAREA but DFHCOMMAREA has no field on exactly those bytes",
+    "app/cbl/COCRDUPC.cbl:451 [DET move-item] MOVE LIT-MENUPGM TO CDEMO-TO-PROGRAM",
+    "app/cbl/COCRDUPC.cbl:235 [DET definition] 05 LIT-MENUPGM PIC X(8) \u2014 WORKING-STORAGE, bytes 53..61 of WS-LITERALS",
+    "app/cbl/COCRDUPC.cbl:235 [DET value-clause] VALUE 'COMEN01C'",
+    "app/cbl/COCRDUPC.cbl:453 [DET move-item] MOVE CDEMO-FROM-PROGRAM TO CDEMO-TO-PROGRAM",
+    "app/cpy/COCOM01Y.cpy:22 [DET definition] 10 CDEMO-FROM-PROGRAM PIC X(08) \u2014 WORKING-STORAGE, bytes 4..12 of CARDDEMO-COMMAREA",
+    "app/cbl/COCRDUPC.cbl:396 [DET move-item] MOVE DFHCOMMAREA(1:LENGTH OF CARDDEMO-COMMAREA) TO CARDDEMO-COMMAREA (CARDDEMO-COMMAREA encloses CDEMO-FROM-PROGRAM)",
+    "app/cbl/COCRDUPC.cbl:362 [GEN layout-mismatch] CDEMO-FROM-PROGRAM occupies bytes 4..12 of CARDDEMO-COMMAREA but DFHCOMMAREA has no field on exactly those bytes",
+    "app/cbl/COCRDUPC.cbl:457 [DET move-item] MOVE LIT-THISPGM TO CDEMO-FROM-PROGRAM",
+    "app/cbl/COCRDUPC.cbl:219 [DET definition] 05 LIT-THISPGM PIC X(8) \u2014 WORKING-STORAGE, bytes 0..8 of WS-LITERALS",
+    "app/cbl/COCRDUPC.cbl:219 [DET value-clause] VALUE 'COCRDUPC'"
+   ],
+   "status": "partial",
+   "targets": [
+    {
+     "name": "COCRDUPC",
+     "basis": "deterministic",
+     "in_inventory": true,
+     "evidence": [
+      "app/cbl/COCRDUPC.cbl:219"
+     ],
+     "reasoning": "tracer candidate, unchanged: VALUE clause of LIT-THISPGM"
+    },
+    {
+     "name": "COMEN01C",
+     "basis": "deterministic",
+     "in_inventory": true,
+     "evidence": [
+      "app/cbl/COCRDUPC.cbl:235"
+     ],
+     "reasoning": "tracer candidate, unchanged: VALUE clause of LIT-MENUPGM"
+    }
+   ],
+   "open_ends": [
+    {
+     "kind": "layout-mismatch",
+     "class": "GEN",
+     "source": "app/cbl/COCRDUPC.cbl:362",
+     "request": "Map bytes 16..24 of DFHCOMMAREA to the field(s) that produce CDEMO-TO-PROGRAM. Not closed by reasoning: CDEMO-TO-PROGRAM is copied from the inbound DFHCOMMAREA, whose content is whatever the program or pseudo-conversational RETURN that passed control put there at run time; the scanned source of COCRDUPC proves only the literal candidates listed, so any further target stays open. Evidence that would settle it: a CICS trace/auxtrace of this transaction, or confirmation from the application owner of every program that passes control to COCRDUPC with a COMMAREA."
+    },
+    {
+     "kind": "layout-mismatch",
+     "class": "GEN",
+     "source": "app/cbl/COCRDUPC.cbl:362",
+     "request": "Map bytes 4..12 of DFHCOMMAREA to the field(s) that produce CDEMO-FROM-PROGRAM. Not closed by reasoning: CDEMO-FROM-PROGRAM is copied from the inbound DFHCOMMAREA, whose content is whatever the program or pseudo-conversational RETURN that passed control put there at run time; the scanned source of COCRDUPC proves only the literal candidates listed, so any further target stays open. Evidence that would settle it: a CICS trace/auxtrace of this transaction, or confirmation from the application owner of every program that passes control to COCRDUPC with a COMMAREA."
+    }
+   ]
+  },
+  {
+   "site": "app/cbl/COMEN01C.cbl:156",
+   "program": "COMEN01C",
+   "construct": "CICS-XCTL",
+   "variable": "CDEMO-MENU-OPT-PGMNAME",
+   "traversal": [
+    "app/cbl/COMEN01C.cbl:156 EXEC CICS XCTL PROGRAM(CDEMO-MENU-OPT-PGMNAME)",
+    "app/cpy/COMEN02Y.cpy:97 [DET definition] 15 CDEMO-MENU-OPT-PGMNAME PIC X(08) \u2014 WORKING-STORAGE, bytes 39..47 of CARDDEMO-MAIN-MENU-OPTIONS",
+    "app/cpy/COMEN02Y.cpy:94 [DET table-element] CDEMO-MENU-OPT-PGMNAME is an element of CDEMO-MENU-OPT OCCURS 12",
+    "app/cpy/COMEN02Y.cpy:22 [GEN table-values-partial] CDEMO-MENU-OPT OCCURS 12 but CDEMO-MENU-OPTIONS-DATA only initialises 11 occurrence(s)",
+    "app/cpy/COMEN02Y.cpy:22 [DET table-slice] CDEMO-MENU-OPTIONS REDEFINES CDEMO-MENU-OPTIONS-DATA (44 VALUE entries) \u2192 CDEMO-MENU-OPT-PGMNAME(1..12) = 'COACTVWC', 'COACTUPC', 'COCRDLIC', 'COCRDSLC', 'COCRDUPC', 'COTRN00C', 'COTRN01C', 'COTRN02C', 'CORPT00C', 'COBIL00C', 'COPAUS0C', ''"
+   ],
+   "targets": [
+    {
+     "name": "COPAUS0C",
+     "basis": "derived",
+     "in_inventory": false,
+     "evidence": [],
+     "reasoning": "tracer candidate, unchanged: occurrence of CDEMO-MENU-OPT-PGMNAME in CDEMO-MENU-OPTIONS-DATA; this XCTL is under WHEN CDEMO-MENU-OPT-PGMNAME(WS-OPTION) = 'COPAUS0C' (COMEN01C.cbl:147) and only after EXEC CICS INQUIRE PROGRAM returns NORMAL (COMEN01C.cbl:148-152) [cites: app/cpy/COMEN02Y.cpy:22, app/cbl/COMEN01C.cbl:147-159]"
+    }
+   ],
+   "excluded_candidates": {
+    "names": [
+     "COACTUPC",
+     "COACTVWC",
+     "COBIL00C",
+     "COCRDLIC",
+     "COCRDSLC",
+     "COCRDUPC",
+     "CORPT00C",
+     "COTRN00C",
+     "COTRN01C",
+     "COTRN02C"
+    ],
+    "evidence": [
+     "app/cbl/COMEN01C.cbl:147-159"
+    ],
+    "reasoning": "this XCTL is under WHEN CDEMO-MENU-OPT-PGMNAME(WS-OPTION) = 'COPAUS0C' (COMEN01C.cbl:147) and only after EXEC CICS INQUIRE PROGRAM returns NORMAL (COMEN01C.cbl:148-152), so the other table rows cannot be the operand of this statement"
+   },
+   "status": "resolved",
+   "closed_by_reasoning": [
+    {
+     "kinds": [
+      "table-values-partial"
+     ],
+     "tracer_open_end": "table-values-partial CDEMO-MENU-OPT-PGMNAME (app/cbl/COMEN01C.cbl:156)",
+     "evidence": [
+      "app/cpy/COMEN02Y.cpy:21",
+      "app/cpy/COMEN02Y.cpy:25-90",
+      "app/cpy/COMEN02Y.cpy:93-98",
+      "app/cbl/COMEN01C.cbl:127-134",
+      "app/cbl/COMEN01C.cbl:145"
+     ],
+     "reasoning": "CDEMO-MENU-OPT-COUNT is VALUE 11 with no writer in the scanned source (only read at COMEN01C.cbl:128 and :265); PROCESS-ENTER-KEY sets the error flag when WS-OPTION is not numeric, zero or greater than that count, and both XCTLs sit under IF NOT ERR-FLG-ON, so the subscript is 1..11 and only the 11 initialised occurrences can supply a name; occurrence 12 of the OCCURS 12 is never selected.",
+     "residual": "targets with in_inventory false (source not in the scanned inputs) remain artifact requests; the name is proven, the program behind it is not scanned"
+    }
+   ],
+   "open_ends": []
+  },
+  {
+   "site": "app/cbl/COMEN01C.cbl:184",
+   "program": "COMEN01C",
+   "construct": "CICS-XCTL",
+   "variable": "CDEMO-MENU-OPT-PGMNAME",
+   "traversal": [
+    "app/cbl/COMEN01C.cbl:184 EXEC CICS XCTL PROGRAM(CDEMO-MENU-OPT-PGMNAME)",
+    "app/cpy/COMEN02Y.cpy:97 [DET definition] 15 CDEMO-MENU-OPT-PGMNAME PIC X(08) \u2014 WORKING-STORAGE, bytes 39..47 of CARDDEMO-MAIN-MENU-OPTIONS",
+    "app/cpy/COMEN02Y.cpy:94 [DET table-element] CDEMO-MENU-OPT-PGMNAME is an element of CDEMO-MENU-OPT OCCURS 12",
+    "app/cpy/COMEN02Y.cpy:22 [GEN table-values-partial] CDEMO-MENU-OPT OCCURS 12 but CDEMO-MENU-OPTIONS-DATA only initialises 11 occurrence(s)",
+    "app/cpy/COMEN02Y.cpy:22 [DET table-slice] CDEMO-MENU-OPTIONS REDEFINES CDEMO-MENU-OPTIONS-DATA (44 VALUE entries) \u2192 CDEMO-MENU-OPT-PGMNAME(1..12) = 'COACTVWC', 'COACTUPC', 'COCRDLIC', 'COCRDSLC', 'COCRDUPC', 'COTRN00C', 'COTRN01C', 'COTRN02C', 'CORPT00C', 'COBIL00C', 'COPAUS0C', ''"
+   ],
+   "targets": [
+    {
+     "name": "COACTUPC",
+     "basis": "derived",
+     "in_inventory": true,
+     "evidence": [
+      "app/cpy/COMEN02Y.cpy:22",
+      "app/cbl/COMEN01C.cbl:147",
+      "app/cbl/COMEN01C.cbl:169",
+      "app/cbl/COMEN01C.cbl:177-187"
+     ],
+     "reasoning": "tracer candidate, unchanged: occurrence of CDEMO-MENU-OPT-PGMNAME in CDEMO-MENU-OPTIONS-DATA; this XCTL is the WHEN OTHER branch (COMEN01C.cbl:177), reached only when the name is neither 'COPAUS0C' (COMEN01C.cbl:147) nor starts with 'DUMMY' (COMEN01C.cbl:169)"
+    },
+    {
+     "name": "COACTVWC",
+     "basis": "derived",
+     "in_inventory": true,
+     "evidence": [
+      "app/cpy/COMEN02Y.cpy:22",
+      "app/cbl/COMEN01C.cbl:147",
+      "app/cbl/COMEN01C.cbl:169",
+      "app/cbl/COMEN01C.cbl:177-187"
+     ],
+     "reasoning": "tracer candidate, unchanged: occurrence of CDEMO-MENU-OPT-PGMNAME in CDEMO-MENU-OPTIONS-DATA; this XCTL is the WHEN OTHER branch (COMEN01C.cbl:177), reached only when the name is neither 'COPAUS0C' (COMEN01C.cbl:147) nor starts with 'DUMMY' (COMEN01C.cbl:169)"
+    },
+    {
+     "name": "COBIL00C",
+     "basis": "derived",
+     "in_inventory": true,
+     "evidence": [
+      "app/cpy/COMEN02Y.cpy:22",
+      "app/cbl/COMEN01C.cbl:147",
+      "app/cbl/COMEN01C.cbl:169",
+      "app/cbl/COMEN01C.cbl:177-187"
+     ],
+     "reasoning": "tracer candidate, unchanged: occurrence of CDEMO-MENU-OPT-PGMNAME in CDEMO-MENU-OPTIONS-DATA; this XCTL is the WHEN OTHER branch (COMEN01C.cbl:177), reached only when the name is neither 'COPAUS0C' (COMEN01C.cbl:147) nor starts with 'DUMMY' (COMEN01C.cbl:169)"
+    },
+    {
+     "name": "COCRDLIC",
+     "basis": "derived",
+     "in_inventory": true,
+     "evidence": [
+      "app/cpy/COMEN02Y.cpy:22",
+      "app/cbl/COMEN01C.cbl:147",
+      "app/cbl/COMEN01C.cbl:169",
+      "app/cbl/COMEN01C.cbl:177-187"
+     ],
+     "reasoning": "tracer candidate, unchanged: occurrence of CDEMO-MENU-OPT-PGMNAME in CDEMO-MENU-OPTIONS-DATA; this XCTL is the WHEN OTHER branch (COMEN01C.cbl:177), reached only when the name is neither 'COPAUS0C' (COMEN01C.cbl:147) nor starts with 'DUMMY' (COMEN01C.cbl:169)"
+    },
+    {
+     "name": "COCRDSLC",
+     "basis": "derived",
+     "in_inventory": true,
+     "evidence": [
+      "app/cpy/COMEN02Y.cpy:22",
+      "app/cbl/COMEN01C.cbl:147",
+      "app/cbl/COMEN01C.cbl:169",
+      "app/cbl/COMEN01C.cbl:177-187"
+     ],
+     "reasoning": "tracer candidate, unchanged: occurrence of CDEMO-MENU-OPT-PGMNAME in CDEMO-MENU-OPTIONS-DATA; this XCTL is the WHEN OTHER branch (COMEN01C.cbl:177), reached only when the name is neither 'COPAUS0C' (COMEN01C.cbl:147) nor starts with 'DUMMY' (COMEN01C.cbl:169)"
+    },
+    {
+     "name": "COCRDUPC",
+     "basis": "derived",
+     "in_inventory": true,
+     "evidence": [
+      "app/cpy/COMEN02Y.cpy:22",
+      "app/cbl/COMEN01C.cbl:147",
+      "app/cbl/COMEN01C.cbl:169",
+      "app/cbl/COMEN01C.cbl:177-187"
+     ],
+     "reasoning": "tracer candidate, unchanged: occurrence of CDEMO-MENU-OPT-PGMNAME in CDEMO-MENU-OPTIONS-DATA; this XCTL is the WHEN OTHER branch (COMEN01C.cbl:177), reached only when the name is neither 'COPAUS0C' (COMEN01C.cbl:147) nor starts with 'DUMMY' (COMEN01C.cbl:169)"
+    },
+    {
+     "name": "CORPT00C",
+     "basis": "derived",
+     "in_inventory": true,
+     "evidence": [
+      "app/cpy/COMEN02Y.cpy:22",
+      "app/cbl/COMEN01C.cbl:147",
+      "app/cbl/COMEN01C.cbl:169",
+      "app/cbl/COMEN01C.cbl:177-187"
+     ],
+     "reasoning": "tracer candidate, unchanged: occurrence of CDEMO-MENU-OPT-PGMNAME in CDEMO-MENU-OPTIONS-DATA; this XCTL is the WHEN OTHER branch (COMEN01C.cbl:177), reached only when the name is neither 'COPAUS0C' (COMEN01C.cbl:147) nor starts with 'DUMMY' (COMEN01C.cbl:169)"
+    },
+    {
+     "name": "COTRN00C",
+     "basis": "derived",
+     "in_inventory": true,
+     "evidence": [
+      "app/cpy/COMEN02Y.cpy:22",
+      "app/cbl/COMEN01C.cbl:147",
+      "app/cbl/COMEN01C.cbl:169",
+      "app/cbl/COMEN01C.cbl:177-187"
+     ],
+     "reasoning": "tracer candidate, unchanged: occurrence of CDEMO-MENU-OPT-PGMNAME in CDEMO-MENU-OPTIONS-DATA; this XCTL is the WHEN OTHER branch (COMEN01C.cbl:177), reached only when the name is neither 'COPAUS0C' (COMEN01C.cbl:147) nor starts with 'DUMMY' (COMEN01C.cbl:169)"
+    },
+    {
+     "name": "COTRN01C",
+     "basis": "derived",
+     "in_inventory": true,
+     "evidence": [
+      "app/cpy/COMEN02Y.cpy:22",
+      "app/cbl/COMEN01C.cbl:147",
+      "app/cbl/COMEN01C.cbl:169",
+      "app/cbl/COMEN01C.cbl:177-187"
+     ],
+     "reasoning": "tracer candidate, unchanged: occurrence of CDEMO-MENU-OPT-PGMNAME in CDEMO-MENU-OPTIONS-DATA; this XCTL is the WHEN OTHER branch (COMEN01C.cbl:177), reached only when the name is neither 'COPAUS0C' (COMEN01C.cbl:147) nor starts with 'DUMMY' (COMEN01C.cbl:169)"
+    },
+    {
+     "name": "COTRN02C",
+     "basis": "derived",
+     "in_inventory": true,
+     "evidence": [
+      "app/cpy/COMEN02Y.cpy:22",
+      "app/cbl/COMEN01C.cbl:147",
+      "app/cbl/COMEN01C.cbl:169",
+      "app/cbl/COMEN01C.cbl:177-187"
+     ],
+     "reasoning": "tracer candidate, unchanged: occurrence of CDEMO-MENU-OPT-PGMNAME in CDEMO-MENU-OPTIONS-DATA; this XCTL is the WHEN OTHER branch (COMEN01C.cbl:177), reached only when the name is neither 'COPAUS0C' (COMEN01C.cbl:147) nor starts with 'DUMMY' (COMEN01C.cbl:169)"
+    }
+   ],
+   "excluded_candidates": {
+    "names": [
+     "COPAUS0C"
+    ],
+    "evidence": [
+     "app/cbl/COMEN01C.cbl:147",
+     "app/cbl/COMEN01C.cbl:169",
+     "app/cbl/COMEN01C.cbl:177-187"
+    ],
+    "reasoning": "this XCTL is the WHEN OTHER branch (COMEN01C.cbl:177), reached only when the name is neither 'COPAUS0C' (COMEN01C.cbl:147) nor starts with 'DUMMY' (COMEN01C.cbl:169), so the other table rows cannot be the operand of this statement"
+   },
+   "status": "resolved",
+   "closed_by_reasoning": [
+    {
+     "kinds": [
+      "table-values-partial"
+     ],
+     "tracer_open_end": "table-values-partial CDEMO-MENU-OPT-PGMNAME (app/cbl/COMEN01C.cbl:184)",
+     "evidence": [
+      "app/cpy/COMEN02Y.cpy:21",
+      "app/cpy/COMEN02Y.cpy:25-90",
+      "app/cpy/COMEN02Y.cpy:93-98",
+      "app/cbl/COMEN01C.cbl:127-134",
+      "app/cbl/COMEN01C.cbl:145"
+     ],
+     "reasoning": "CDEMO-MENU-OPT-COUNT is VALUE 11 with no writer in the scanned source (only read at COMEN01C.cbl:128 and :265); PROCESS-ENTER-KEY sets the error flag when WS-OPTION is not numeric, zero or greater than that count, and both XCTLs sit under IF NOT ERR-FLG-ON, so the subscript is 1..11 and only the 11 initialised occurrences can supply a name; occurrence 12 of the OCCURS 12 is never selected.",
+     "residual": "targets with in_inventory false (source not in the scanned inputs) remain artifact requests; the name is proven, the program behind it is not scanned"
+    }
+   ],
+   "open_ends": []
+  },
+  {
+   "site": "app/cbl/COMEN01C.cbl:201",
+   "program": "COMEN01C",
+   "construct": "CICS-XCTL",
+   "variable": "CDEMO-TO-PROGRAM",
+   "traversal": [
+    "app/cbl/COMEN01C.cbl:201 EXEC CICS XCTL PROGRAM(CDEMO-TO-PROGRAM)",
+    "app/cpy/COCOM01Y.cpy:24 [DET definition] 10 CDEMO-TO-PROGRAM PIC X(08) \u2014 WORKING-STORAGE, bytes 16..24 of CARDDEMO-COMMAREA",
+    "app/cbl/COMEN01C.cbl:86 [DET move-item] MOVE DFHCOMMAREA(1:EIBCALEN) TO CARDDEMO-COMMAREA (CARDDEMO-COMMAREA encloses CDEMO-TO-PROGRAM)",
+    "app/cbl/COMEN01C.cbl:67 [GEN layout-mismatch] CDEMO-TO-PROGRAM occupies bytes 16..24 of CARDDEMO-COMMAREA but DFHCOMMAREA has no field on exactly those bytes",
+    "app/cbl/COMEN01C.cbl:97 [DET move-literal] MOVE 'COSGN00C' TO CDEMO-TO-PROGRAM",
+    "app/cbl/COMEN01C.cbl:199 [DET move-literal] MOVE 'COSGN00C' TO CDEMO-TO-PROGRAM"
+   ],
+   "status": "partial",
+   "targets": [
+    {
+     "name": "COSGN00C",
+     "basis": "deterministic",
+     "in_inventory": true,
+     "evidence": [
+      "app/cbl/COMEN01C.cbl:97",
+      "app/cbl/COMEN01C.cbl:199"
+     ],
+     "reasoning": "tracer candidate, unchanged: MOVE literal to CDEMO-TO-PROGRAM; MOVE literal to CDEMO-TO-PROGRAM"
+    }
+   ],
+   "open_ends": [
+    {
+     "kind": "layout-mismatch",
+     "class": "GEN",
+     "source": "app/cbl/COMEN01C.cbl:67",
+     "request": "Map bytes 16..24 of DFHCOMMAREA to the field(s) that produce CDEMO-TO-PROGRAM. Not closed by reasoning: CDEMO-TO-PROGRAM is copied from the inbound DFHCOMMAREA, whose content is whatever the program or pseudo-conversational RETURN that passed control put there at run time; the scanned source of COMEN01C proves only the literal candidates listed, so any further target stays open. Evidence that would settle it: a CICS trace/auxtrace of this transaction, or confirmation from the application owner of every program that passes control to COMEN01C with a COMMAREA."
+    }
+   ]
+  },
+  {
+   "site": "app/cbl/CORPT00C.cbl:548",
+   "program": "CORPT00C",
+   "construct": "CICS-XCTL",
+   "variable": "CDEMO-TO-PROGRAM",
+   "traversal": [
+    "app/cbl/CORPT00C.cbl:548 EXEC CICS XCTL PROGRAM(CDEMO-TO-PROGRAM)",
+    "app/cpy/COCOM01Y.cpy:24 [DET definition] 10 CDEMO-TO-PROGRAM PIC X(08) \u2014 WORKING-STORAGE, bytes 16..24 of CARDDEMO-COMMAREA",
+    "app/cbl/CORPT00C.cbl:173 [DET move-literal] MOVE 'COSGN00C' TO CDEMO-TO-PROGRAM",
+    "app/cbl/CORPT00C.cbl:176 [DET move-item] MOVE DFHCOMMAREA(1:EIBCALEN) TO CARDDEMO-COMMAREA (CARDDEMO-COMMAREA encloses CDEMO-TO-PROGRAM)",
+    "app/cbl/CORPT00C.cbl:155 [GEN layout-mismatch] CDEMO-TO-PROGRAM occupies bytes 16..24 of CARDDEMO-COMMAREA but DFHCOMMAREA has no field on exactly those bytes",
+    "app/cbl/CORPT00C.cbl:188 [DET move-literal] MOVE 'COMEN01C' TO CDEMO-TO-PROGRAM",
+    "app/cbl/CORPT00C.cbl:543 [DET move-literal] MOVE 'COSGN00C' TO CDEMO-TO-PROGRAM"
+   ],
+   "status": "partial",
+   "targets": [
+    {
+     "name": "COMEN01C",
+     "basis": "deterministic",
+     "in_inventory": true,
+     "evidence": [
+      "app/cbl/CORPT00C.cbl:188"
+     ],
+     "reasoning": "tracer candidate, unchanged: MOVE literal to CDEMO-TO-PROGRAM"
+    },
+    {
+     "name": "COSGN00C",
+     "basis": "deterministic",
+     "in_inventory": true,
+     "evidence": [
+      "app/cbl/CORPT00C.cbl:173",
+      "app/cbl/CORPT00C.cbl:543"
+     ],
+     "reasoning": "tracer candidate, unchanged: MOVE literal to CDEMO-TO-PROGRAM; MOVE literal to CDEMO-TO-PROGRAM"
+    }
+   ],
+   "open_ends": [
+    {
+     "kind": "layout-mismatch",
+     "class": "GEN",
+     "source": "app/cbl/CORPT00C.cbl:155",
+     "request": "Map bytes 16..24 of DFHCOMMAREA to the field(s) that produce CDEMO-TO-PROGRAM. Not closed by reasoning: CDEMO-TO-PROGRAM is copied from the inbound DFHCOMMAREA, whose content is whatever the program or pseudo-conversational RETURN that passed control put there at run time; the scanned source of CORPT00C proves only the literal candidates listed, so any further target stays open. Evidence that would settle it: a CICS trace/auxtrace of this transaction, or confirmation from the application owner of every program that passes control to CORPT00C with a COMMAREA."
+    }
+   ]
+  },
+  {
+   "site": "app/cbl/COTRN00C.cbl:192",
+   "program": "COTRN00C",
+   "construct": "CICS-XCTL",
+   "variable": "CDEMO-TO-PROGRAM",
+   "traversal": [
+    "app/cbl/COTRN00C.cbl:192 EXEC CICS XCTL PROGRAM(CDEMO-TO-PROGRAM)",
+    "app/cpy/COCOM01Y.cpy:24 [DET definition] 10 CDEMO-TO-PROGRAM PIC X(08) \u2014 WORKING-STORAGE, bytes 16..24 of CARDDEMO-COMMAREA",
+    "app/cbl/COTRN00C.cbl:108 [DET move-literal] MOVE 'COSGN00C' TO CDEMO-TO-PROGRAM",
+    "app/cbl/COTRN00C.cbl:111 [DET move-item] MOVE DFHCOMMAREA(1:EIBCALEN) TO CARDDEMO-COMMAREA (CARDDEMO-COMMAREA encloses CDEMO-TO-PROGRAM)",
+    "app/cbl/COTRN00C.cbl:87 [GEN layout-mismatch] CDEMO-TO-PROGRAM occupies bytes 16..24 of CARDDEMO-COMMAREA but DFHCOMMAREA has no field on exactly those bytes",
+    "app/cbl/COTRN00C.cbl:123 [DET move-literal] MOVE 'COMEN01C' TO CDEMO-TO-PROGRAM",
+    "app/cbl/COTRN00C.cbl:188 [DET move-literal] MOVE 'COTRN01C' TO CDEMO-TO-PROGRAM",
+    "app/cbl/COTRN00C.cbl:513 [DET move-literal] MOVE 'COSGN00C' TO CDEMO-TO-PROGRAM"
+   ],
+   "status": "partial",
+   "targets": [
+    {
+     "name": "COMEN01C",
+     "basis": "deterministic",
+     "in_inventory": true,
+     "evidence": [
+      "app/cbl/COTRN00C.cbl:123"
+     ],
+     "reasoning": "tracer candidate, unchanged: MOVE literal to CDEMO-TO-PROGRAM"
+    },
+    {
+     "name": "COSGN00C",
+     "basis": "deterministic",
+     "in_inventory": true,
+     "evidence": [
+      "app/cbl/COTRN00C.cbl:108",
+      "app/cbl/COTRN00C.cbl:513"
+     ],
+     "reasoning": "tracer candidate, unchanged: MOVE literal to CDEMO-TO-PROGRAM; MOVE literal to CDEMO-TO-PROGRAM"
+    },
+    {
+     "name": "COTRN01C",
+     "basis": "deterministic",
+     "in_inventory": true,
+     "evidence": [
+      "app/cbl/COTRN00C.cbl:188"
+     ],
+     "reasoning": "tracer candidate, unchanged: MOVE literal to CDEMO-TO-PROGRAM"
+    }
+   ],
+   "open_ends": [
+    {
+     "kind": "layout-mismatch",
+     "class": "GEN",
+     "source": "app/cbl/COTRN00C.cbl:87",
+     "request": "Map bytes 16..24 of DFHCOMMAREA to the field(s) that produce CDEMO-TO-PROGRAM. Not closed by reasoning: CDEMO-TO-PROGRAM is copied from the inbound DFHCOMMAREA, whose content is whatever the program or pseudo-conversational RETURN that passed control put there at run time; the scanned source of COTRN00C proves only the literal candidates listed, so any further target stays open. Evidence that would settle it: a CICS trace/auxtrace of this transaction, or confirmation from the application owner of every program that passes control to COTRN00C with a COMMAREA."
+    }
+   ]
+  },
+  {
+   "site": "app/cbl/COTRN00C.cbl:518",
+   "program": "COTRN00C",
+   "construct": "CICS-XCTL",
+   "variable": "CDEMO-TO-PROGRAM",
+   "traversal": [
+    "app/cbl/COTRN00C.cbl:518 EXEC CICS XCTL PROGRAM(CDEMO-TO-PROGRAM)",
+    "app/cpy/COCOM01Y.cpy:24 [DET definition] 10 CDEMO-TO-PROGRAM PIC X(08) \u2014 WORKING-STORAGE, bytes 16..24 of CARDDEMO-COMMAREA",
+    "app/cbl/COTRN00C.cbl:108 [DET move-literal] MOVE 'COSGN00C' TO CDEMO-TO-PROGRAM",
+    "app/cbl/COTRN00C.cbl:111 [DET move-item] MOVE DFHCOMMAREA(1:EIBCALEN) TO CARDDEMO-COMMAREA (CARDDEMO-COMMAREA encloses CDEMO-TO-PROGRAM)",
+    "app/cbl/COTRN00C.cbl:87 [GEN layout-mismatch] CDEMO-TO-PROGRAM occupies bytes 16..24 of CARDDEMO-COMMAREA but DFHCOMMAREA has no field on exactly those bytes",
+    "app/cbl/COTRN00C.cbl:123 [DET move-literal] MOVE 'COMEN01C' TO CDEMO-TO-PROGRAM",
+    "app/cbl/COTRN00C.cbl:188 [DET move-literal] MOVE 'COTRN01C' TO CDEMO-TO-PROGRAM",
+    "app/cbl/COTRN00C.cbl:513 [DET move-literal] MOVE 'COSGN00C' TO CDEMO-TO-PROGRAM"
+   ],
+   "status": "partial",
+   "targets": [
+    {
+     "name": "COMEN01C",
+     "basis": "deterministic",
+     "in_inventory": true,
+     "evidence": [
+      "app/cbl/COTRN00C.cbl:123"
+     ],
+     "reasoning": "tracer candidate, unchanged: MOVE literal to CDEMO-TO-PROGRAM"
+    },
+    {
+     "name": "COSGN00C",
+     "basis": "deterministic",
+     "in_inventory": true,
+     "evidence": [
+      "app/cbl/COTRN00C.cbl:108",
+      "app/cbl/COTRN00C.cbl:513"
+     ],
+     "reasoning": "tracer candidate, unchanged: MOVE literal to CDEMO-TO-PROGRAM; MOVE literal to CDEMO-TO-PROGRAM"
+    },
+    {
+     "name": "COTRN01C",
+     "basis": "deterministic",
+     "in_inventory": true,
+     "evidence": [
+      "app/cbl/COTRN00C.cbl:188"
+     ],
+     "reasoning": "tracer candidate, unchanged: MOVE literal to CDEMO-TO-PROGRAM"
+    }
+   ],
+   "open_ends": [
+    {
+     "kind": "layout-mismatch",
+     "class": "GEN",
+     "source": "app/cbl/COTRN00C.cbl:87",
+     "request": "Map bytes 16..24 of DFHCOMMAREA to the field(s) that produce CDEMO-TO-PROGRAM. Not closed by reasoning: CDEMO-TO-PROGRAM is copied from the inbound DFHCOMMAREA, whose content is whatever the program or pseudo-conversational RETURN that passed control put there at run time; the scanned source of COTRN00C proves only the literal candidates listed, so any further target stays open. Evidence that would settle it: a CICS trace/auxtrace of this transaction, or confirmation from the application owner of every program that passes control to COTRN00C with a COMMAREA."
+    }
+   ]
+  },
+  {
+   "site": "app/cbl/COTRN01C.cbl:205",
+   "program": "COTRN01C",
+   "construct": "CICS-XCTL",
+   "variable": "CDEMO-TO-PROGRAM",
+   "traversal": [
+    "app/cbl/COTRN01C.cbl:205 EXEC CICS XCTL PROGRAM(CDEMO-TO-PROGRAM)",
+    "app/cpy/COCOM01Y.cpy:24 [DET definition] 10 CDEMO-TO-PROGRAM PIC X(08) \u2014 WORKING-STORAGE, bytes 16..24 of CARDDEMO-COMMAREA",
+    "app/cbl/COTRN01C.cbl:95 [DET move-literal] MOVE 'COSGN00C' TO CDEMO-TO-PROGRAM",
+    "app/cbl/COTRN01C.cbl:98 [DET move-item] MOVE DFHCOMMAREA(1:EIBCALEN) TO CARDDEMO-COMMAREA (CARDDEMO-COMMAREA encloses CDEMO-TO-PROGRAM)",
+    "app/cbl/COTRN01C.cbl:78 [GEN layout-mismatch] CDEMO-TO-PROGRAM occupies bytes 16..24 of CARDDEMO-COMMAREA but DFHCOMMAREA has no field on exactly those bytes",
+    "app/cbl/COTRN01C.cbl:117 [DET move-literal] MOVE 'COMEN01C' TO CDEMO-TO-PROGRAM",
+    "app/cbl/COTRN01C.cbl:119 [DET move-item] MOVE CDEMO-FROM-PROGRAM TO CDEMO-TO-PROGRAM",
+    "app/cpy/COCOM01Y.cpy:22 [DET definition] 10 CDEMO-FROM-PROGRAM PIC X(08) \u2014 WORKING-STORAGE, bytes 4..12 of CARDDEMO-COMMAREA",
+    "app/cbl/COTRN01C.cbl:98 [DET move-item] MOVE DFHCOMMAREA(1:EIBCALEN) TO CARDDEMO-COMMAREA (CARDDEMO-COMMAREA encloses CDEMO-FROM-PROGRAM)",
+    "app/cbl/COTRN01C.cbl:78 [GEN layout-mismatch] CDEMO-FROM-PROGRAM occupies bytes 4..12 of CARDDEMO-COMMAREA but DFHCOMMAREA has no field on exactly those bytes",
+    "app/cbl/COTRN01C.cbl:203 [DET move-item] MOVE WS-PGMNAME TO CDEMO-FROM-PROGRAM",
+    "app/cbl/COTRN01C.cbl:36 [DET definition] 05 WS-PGMNAME PIC X(08) \u2014 WORKING-STORAGE, bytes 0..8 of WS-VARIABLES",
+    "app/cbl/COTRN01C.cbl:36 [DET value-clause] VALUE 'COTRN01C'",
+    "app/cbl/COTRN01C.cbl:126 [DET move-literal] MOVE 'COTRN00C' TO CDEMO-TO-PROGRAM",
+    "app/cbl/COTRN01C.cbl:200 [DET move-literal] MOVE 'COSGN00C' TO CDEMO-TO-PROGRAM"
+   ],
+   "status": "partial",
+   "targets": [
+    {
+     "name": "COMEN01C",
+     "basis": "deterministic",
+     "in_inventory": true,
+     "evidence": [
+      "app/cbl/COTRN01C.cbl:117"
+     ],
+     "reasoning": "tracer candidate, unchanged: MOVE literal to CDEMO-TO-PROGRAM"
+    },
+    {
+     "name": "COSGN00C",
+     "basis": "deterministic",
+     "in_inventory": true,
+     "evidence": [
+      "app/cbl/COTRN01C.cbl:95",
+      "app/cbl/COTRN01C.cbl:200"
+     ],
+     "reasoning": "tracer candidate, unchanged: MOVE literal to CDEMO-TO-PROGRAM; MOVE literal to CDEMO-TO-PROGRAM"
+    },
+    {
+     "name": "COTRN00C",
+     "basis": "deterministic",
+     "in_inventory": true,
+     "evidence": [
+      "app/cbl/COTRN01C.cbl:126"
+     ],
+     "reasoning": "tracer candidate, unchanged: MOVE literal to CDEMO-TO-PROGRAM"
+    },
+    {
+     "name": "COTRN01C",
+     "basis": "deterministic",
+     "in_inventory": true,
+     "evidence": [
+      "app/cbl/COTRN01C.cbl:36"
+     ],
+     "reasoning": "tracer candidate, unchanged: VALUE clause of WS-PGMNAME"
+    }
+   ],
+   "open_ends": [
+    {
+     "kind": "layout-mismatch",
+     "class": "GEN",
+     "source": "app/cbl/COTRN01C.cbl:78",
+     "request": "Map bytes 16..24 of DFHCOMMAREA to the field(s) that produce CDEMO-TO-PROGRAM. Not closed by reasoning: CDEMO-TO-PROGRAM is copied from the inbound DFHCOMMAREA, whose content is whatever the program or pseudo-conversational RETURN that passed control put there at run time; the scanned source of COTRN01C proves only the literal candidates listed, so any further target stays open. Evidence that would settle it: a CICS trace/auxtrace of this transaction, or confirmation from the application owner of every program that passes control to COTRN01C with a COMMAREA."
+    },
+    {
+     "kind": "layout-mismatch",
+     "class": "GEN",
+     "source": "app/cbl/COTRN01C.cbl:78",
+     "request": "Map bytes 4..12 of DFHCOMMAREA to the field(s) that produce CDEMO-FROM-PROGRAM. Not closed by reasoning: CDEMO-FROM-PROGRAM is copied from the inbound DFHCOMMAREA, whose content is whatever the program or pseudo-conversational RETURN that passed control put there at run time; the scanned source of COTRN01C proves only the literal candidates listed, so any further target stays open. Evidence that would settle it: a CICS trace/auxtrace of this transaction, or confirmation from the application owner of every program that passes control to COTRN01C with a COMMAREA."
+    }
+   ]
+  },
+  {
+   "site": "app/cbl/COTRN02C.cbl:508",
+   "program": "COTRN02C",
+   "construct": "CICS-XCTL",
+   "variable": "CDEMO-TO-PROGRAM",
+   "traversal": [
+    "app/cbl/COTRN02C.cbl:508 EXEC CICS XCTL PROGRAM(CDEMO-TO-PROGRAM)",
+    "app/cpy/COCOM01Y.cpy:24 [DET definition] 10 CDEMO-TO-PROGRAM PIC X(08) \u2014 WORKING-STORAGE, bytes 16..24 of CARDDEMO-COMMAREA",
+    "app/cbl/COTRN02C.cbl:116 [DET move-literal] MOVE 'COSGN00C' TO CDEMO-TO-PROGRAM",
+    "app/cbl/COTRN02C.cbl:119 [DET move-item] MOVE DFHCOMMAREA(1:EIBCALEN) TO CARDDEMO-COMMAREA (CARDDEMO-COMMAREA encloses CDEMO-TO-PROGRAM)",
+    "app/cbl/COTRN02C.cbl:99 [GEN layout-mismatch] CDEMO-TO-PROGRAM occupies bytes 16..24 of CARDDEMO-COMMAREA but DFHCOMMAREA has no field on exactly those bytes",
+    "app/cbl/COTRN02C.cbl:138 [DET move-literal] MOVE 'COMEN01C' TO CDEMO-TO-PROGRAM",
+    "app/cbl/COTRN02C.cbl:140 [DET move-item] MOVE CDEMO-FROM-PROGRAM TO CDEMO-TO-PROGRAM",
+    "app/cpy/COCOM01Y.cpy:22 [DET definition] 10 CDEMO-FROM-PROGRAM PIC X(08) \u2014 WORKING-STORAGE, bytes 4..12 of CARDDEMO-COMMAREA",
+    "app/cbl/COTRN02C.cbl:119 [DET move-item] MOVE DFHCOMMAREA(1:EIBCALEN) TO CARDDEMO-COMMAREA (CARDDEMO-COMMAREA encloses CDEMO-FROM-PROGRAM)",
+    "app/cbl/COTRN02C.cbl:99 [GEN layout-mismatch] CDEMO-FROM-PROGRAM occupies bytes 4..12 of CARDDEMO-COMMAREA but DFHCOMMAREA has no field on exactly those bytes",
+    "app/cbl/COTRN02C.cbl:506 [DET move-item] MOVE WS-PGMNAME TO CDEMO-FROM-PROGRAM",
+    "app/cbl/COTRN02C.cbl:36 [DET definition] 05 WS-PGMNAME PIC X(08) \u2014 WORKING-STORAGE, bytes 0..8 of WS-VARIABLES",
+    "app/cbl/COTRN02C.cbl:36 [DET value-clause] VALUE 'COTRN02C'",
+    "app/cbl/COTRN02C.cbl:503 [DET move-literal] MOVE 'COSGN00C' TO CDEMO-TO-PROGRAM"
+   ],
+   "status": "partial",
+   "targets": [
+    {
+     "name": "COMEN01C",
+     "basis": "deterministic",
+     "in_inventory": true,
+     "evidence": [
+      "app/cbl/COTRN02C.cbl:138"
+     ],
+     "reasoning": "tracer candidate, unchanged: MOVE literal to CDEMO-TO-PROGRAM"
+    },
+    {
+     "name": "COSGN00C",
+     "basis": "deterministic",
+     "in_inventory": true,
+     "evidence": [
+      "app/cbl/COTRN02C.cbl:116",
+      "app/cbl/COTRN02C.cbl:503"
+     ],
+     "reasoning": "tracer candidate, unchanged: MOVE literal to CDEMO-TO-PROGRAM; MOVE literal to CDEMO-TO-PROGRAM"
+    },
+    {
+     "name": "COTRN02C",
+     "basis": "deterministic",
+     "in_inventory": true,
+     "evidence": [
+      "app/cbl/COTRN02C.cbl:36"
+     ],
+     "reasoning": "tracer candidate, unchanged: VALUE clause of WS-PGMNAME"
+    }
+   ],
+   "open_ends": [
+    {
+     "kind": "layout-mismatch",
+     "class": "GEN",
+     "source": "app/cbl/COTRN02C.cbl:99",
+     "request": "Map bytes 16..24 of DFHCOMMAREA to the field(s) that produce CDEMO-TO-PROGRAM. Not closed by reasoning: CDEMO-TO-PROGRAM is copied from the inbound DFHCOMMAREA, whose content is whatever the program or pseudo-conversational RETURN that passed control put there at run time; the scanned source of COTRN02C proves only the literal candidates listed, so any further target stays open. Evidence that would settle it: a CICS trace/auxtrace of this transaction, or confirmation from the application owner of every program that passes control to COTRN02C with a COMMAREA."
+    },
+    {
+     "kind": "layout-mismatch",
+     "class": "GEN",
+     "source": "app/cbl/COTRN02C.cbl:99",
+     "request": "Map bytes 4..12 of DFHCOMMAREA to the field(s) that produce CDEMO-FROM-PROGRAM. Not closed by reasoning: CDEMO-FROM-PROGRAM is copied from the inbound DFHCOMMAREA, whose content is whatever the program or pseudo-conversational RETURN that passed control put there at run time; the scanned source of COTRN02C proves only the literal candidates listed, so any further target stays open. Evidence that would settle it: a CICS trace/auxtrace of this transaction, or confirmation from the application owner of every program that passes control to COTRN02C with a COMMAREA."
+    }
+   ]
+  },
+  {
+   "site": "app/cbl/COUSR00C.cbl:196",
+   "program": "COUSR00C",
+   "construct": "CICS-XCTL",
+   "variable": "CDEMO-TO-PROGRAM",
+   "traversal": [
+    "app/cbl/COUSR00C.cbl:196 EXEC CICS XCTL PROGRAM(CDEMO-TO-PROGRAM)",
+    "app/cpy/COCOM01Y.cpy:24 [DET definition] 10 CDEMO-TO-PROGRAM PIC X(08) \u2014 WORKING-STORAGE, bytes 16..24 of CARDDEMO-COMMAREA",
+    "app/cbl/COUSR00C.cbl:111 [DET move-literal] MOVE 'COSGN00C' TO CDEMO-TO-PROGRAM",
+    "app/cbl/COUSR00C.cbl:114 [DET move-item] MOVE DFHCOMMAREA(1:EIBCALEN) TO CARDDEMO-COMMAREA (CARDDEMO-COMMAREA encloses CDEMO-TO-PROGRAM)",
+    "app/cbl/COUSR00C.cbl:90 [GEN layout-mismatch] CDEMO-TO-PROGRAM occupies bytes 16..24 of CARDDEMO-COMMAREA but DFHCOMMAREA has no field on exactly those bytes",
+    "app/cbl/COUSR00C.cbl:126 [DET move-literal] MOVE 'COADM01C' TO CDEMO-TO-PROGRAM",
+    "app/cbl/COUSR00C.cbl:192 [DET move-literal] MOVE 'COUSR02C' TO CDEMO-TO-PROGRAM",
+    "app/cbl/COUSR00C.cbl:202 [DET move-literal] MOVE 'COUSR03C' TO CDEMO-TO-PROGRAM",
+    "app/cbl/COUSR00C.cbl:509 [DET move-literal] MOVE 'COSGN00C' TO CDEMO-TO-PROGRAM"
+   ],
+   "status": "partial",
+   "targets": [
+    {
+     "name": "COADM01C",
+     "basis": "deterministic",
+     "in_inventory": true,
+     "evidence": [
+      "app/cbl/COUSR00C.cbl:126"
+     ],
+     "reasoning": "tracer candidate, unchanged: MOVE literal to CDEMO-TO-PROGRAM"
+    },
+    {
+     "name": "COSGN00C",
+     "basis": "deterministic",
+     "in_inventory": true,
+     "evidence": [
+      "app/cbl/COUSR00C.cbl:111",
+      "app/cbl/COUSR00C.cbl:509"
+     ],
+     "reasoning": "tracer candidate, unchanged: MOVE literal to CDEMO-TO-PROGRAM; MOVE literal to CDEMO-TO-PROGRAM"
+    },
+    {
+     "name": "COUSR02C",
+     "basis": "deterministic",
+     "in_inventory": true,
+     "evidence": [
+      "app/cbl/COUSR00C.cbl:192"
+     ],
+     "reasoning": "tracer candidate, unchanged: MOVE literal to CDEMO-TO-PROGRAM"
+    },
+    {
+     "name": "COUSR03C",
+     "basis": "deterministic",
+     "in_inventory": true,
+     "evidence": [
+      "app/cbl/COUSR00C.cbl:202"
+     ],
+     "reasoning": "tracer candidate, unchanged: MOVE literal to CDEMO-TO-PROGRAM"
+    }
+   ],
+   "open_ends": [
+    {
+     "kind": "layout-mismatch",
+     "class": "GEN",
+     "source": "app/cbl/COUSR00C.cbl:90",
+     "request": "Map bytes 16..24 of DFHCOMMAREA to the field(s) that produce CDEMO-TO-PROGRAM. Not closed by reasoning: CDEMO-TO-PROGRAM is copied from the inbound DFHCOMMAREA, whose content is whatever the program or pseudo-conversational RETURN that passed control put there at run time; the scanned source of COUSR00C proves only the literal candidates listed, so any further target stays open. Evidence that would settle it: a CICS trace/auxtrace of this transaction, or confirmation from the application owner of every program that passes control to COUSR00C with a COMMAREA."
+    }
+   ]
+  },
+  {
+   "site": "app/cbl/COUSR00C.cbl:206",
+   "program": "COUSR00C",
+   "construct": "CICS-XCTL",
+   "variable": "CDEMO-TO-PROGRAM",
+   "traversal": [
+    "app/cbl/COUSR00C.cbl:206 EXEC CICS XCTL PROGRAM(CDEMO-TO-PROGRAM)",
+    "app/cpy/COCOM01Y.cpy:24 [DET definition] 10 CDEMO-TO-PROGRAM PIC X(08) \u2014 WORKING-STORAGE, bytes 16..24 of CARDDEMO-COMMAREA",
+    "app/cbl/COUSR00C.cbl:111 [DET move-literal] MOVE 'COSGN00C' TO CDEMO-TO-PROGRAM",
+    "app/cbl/COUSR00C.cbl:114 [DET move-item] MOVE DFHCOMMAREA(1:EIBCALEN) TO CARDDEMO-COMMAREA (CARDDEMO-COMMAREA encloses CDEMO-TO-PROGRAM)",
+    "app/cbl/COUSR00C.cbl:90 [GEN layout-mismatch] CDEMO-TO-PROGRAM occupies bytes 16..24 of CARDDEMO-COMMAREA but DFHCOMMAREA has no field on exactly those bytes",
+    "app/cbl/COUSR00C.cbl:126 [DET move-literal] MOVE 'COADM01C' TO CDEMO-TO-PROGRAM",
+    "app/cbl/COUSR00C.cbl:192 [DET move-literal] MOVE 'COUSR02C' TO CDEMO-TO-PROGRAM",
+    "app/cbl/COUSR00C.cbl:202 [DET move-literal] MOVE 'COUSR03C' TO CDEMO-TO-PROGRAM",
+    "app/cbl/COUSR00C.cbl:509 [DET move-literal] MOVE 'COSGN00C' TO CDEMO-TO-PROGRAM"
+   ],
+   "status": "partial",
+   "targets": [
+    {
+     "name": "COADM01C",
+     "basis": "deterministic",
+     "in_inventory": true,
+     "evidence": [
+      "app/cbl/COUSR00C.cbl:126"
+     ],
+     "reasoning": "tracer candidate, unchanged: MOVE literal to CDEMO-TO-PROGRAM"
+    },
+    {
+     "name": "COSGN00C",
+     "basis": "deterministic",
+     "in_inventory": true,
+     "evidence": [
+      "app/cbl/COUSR00C.cbl:111",
+      "app/cbl/COUSR00C.cbl:509"
+     ],
+     "reasoning": "tracer candidate, unchanged: MOVE literal to CDEMO-TO-PROGRAM; MOVE literal to CDEMO-TO-PROGRAM"
+    },
+    {
+     "name": "COUSR02C",
+     "basis": "deterministic",
+     "in_inventory": true,
+     "evidence": [
+      "app/cbl/COUSR00C.cbl:192"
+     ],
+     "reasoning": "tracer candidate, unchanged: MOVE literal to CDEMO-TO-PROGRAM"
+    },
+    {
+     "name": "COUSR03C",
+     "basis": "deterministic",
+     "in_inventory": true,
+     "evidence": [
+      "app/cbl/COUSR00C.cbl:202"
+     ],
+     "reasoning": "tracer candidate, unchanged: MOVE literal to CDEMO-TO-PROGRAM"
+    }
+   ],
+   "open_ends": [
+    {
+     "kind": "layout-mismatch",
+     "class": "GEN",
+     "source": "app/cbl/COUSR00C.cbl:90",
+     "request": "Map bytes 16..24 of DFHCOMMAREA to the field(s) that produce CDEMO-TO-PROGRAM. Not closed by reasoning: CDEMO-TO-PROGRAM is copied from the inbound DFHCOMMAREA, whose content is whatever the program or pseudo-conversational RETURN that passed control put there at run time; the scanned source of COUSR00C proves only the literal candidates listed, so any further target stays open. Evidence that would settle it: a CICS trace/auxtrace of this transaction, or confirmation from the application owner of every program that passes control to COUSR00C with a COMMAREA."
+    }
+   ]
+  },
+  {
+   "site": "app/cbl/COUSR00C.cbl:514",
+   "program": "COUSR00C",
+   "construct": "CICS-XCTL",
+   "variable": "CDEMO-TO-PROGRAM",
+   "traversal": [
+    "app/cbl/COUSR00C.cbl:514 EXEC CICS XCTL PROGRAM(CDEMO-TO-PROGRAM)",
+    "app/cpy/COCOM01Y.cpy:24 [DET definition] 10 CDEMO-TO-PROGRAM PIC X(08) \u2014 WORKING-STORAGE, bytes 16..24 of CARDDEMO-COMMAREA",
+    "app/cbl/COUSR00C.cbl:111 [DET move-literal] MOVE 'COSGN00C' TO CDEMO-TO-PROGRAM",
+    "app/cbl/COUSR00C.cbl:114 [DET move-item] MOVE DFHCOMMAREA(1:EIBCALEN) TO CARDDEMO-COMMAREA (CARDDEMO-COMMAREA encloses CDEMO-TO-PROGRAM)",
+    "app/cbl/COUSR00C.cbl:90 [GEN layout-mismatch] CDEMO-TO-PROGRAM occupies bytes 16..24 of CARDDEMO-COMMAREA but DFHCOMMAREA has no field on exactly those bytes",
+    "app/cbl/COUSR00C.cbl:126 [DET move-literal] MOVE 'COADM01C' TO CDEMO-TO-PROGRAM",
+    "app/cbl/COUSR00C.cbl:192 [DET move-literal] MOVE 'COUSR02C' TO CDEMO-TO-PROGRAM",
+    "app/cbl/COUSR00C.cbl:202 [DET move-literal] MOVE 'COUSR03C' TO CDEMO-TO-PROGRAM",
+    "app/cbl/COUSR00C.cbl:509 [DET move-literal] MOVE 'COSGN00C' TO CDEMO-TO-PROGRAM"
+   ],
+   "status": "partial",
+   "targets": [
+    {
+     "name": "COADM01C",
+     "basis": "deterministic",
+     "in_inventory": true,
+     "evidence": [
+      "app/cbl/COUSR00C.cbl:126"
+     ],
+     "reasoning": "tracer candidate, unchanged: MOVE literal to CDEMO-TO-PROGRAM"
+    },
+    {
+     "name": "COSGN00C",
+     "basis": "deterministic",
+     "in_inventory": true,
+     "evidence": [
+      "app/cbl/COUSR00C.cbl:111",
+      "app/cbl/COUSR00C.cbl:509"
+     ],
+     "reasoning": "tracer candidate, unchanged: MOVE literal to CDEMO-TO-PROGRAM; MOVE literal to CDEMO-TO-PROGRAM"
+    },
+    {
+     "name": "COUSR02C",
+     "basis": "deterministic",
+     "in_inventory": true,
+     "evidence": [
+      "app/cbl/COUSR00C.cbl:192"
+     ],
+     "reasoning": "tracer candidate, unchanged: MOVE literal to CDEMO-TO-PROGRAM"
+    },
+    {
+     "name": "COUSR03C",
+     "basis": "deterministic",
+     "in_inventory": true,
+     "evidence": [
+      "app/cbl/COUSR00C.cbl:202"
+     ],
+     "reasoning": "tracer candidate, unchanged: MOVE literal to CDEMO-TO-PROGRAM"
+    }
+   ],
+   "open_ends": [
+    {
+     "kind": "layout-mismatch",
+     "class": "GEN",
+     "source": "app/cbl/COUSR00C.cbl:90",
+     "request": "Map bytes 16..24 of DFHCOMMAREA to the field(s) that produce CDEMO-TO-PROGRAM. Not closed by reasoning: CDEMO-TO-PROGRAM is copied from the inbound DFHCOMMAREA, whose content is whatever the program or pseudo-conversational RETURN that passed control put there at run time; the scanned source of COUSR00C proves only the literal candidates listed, so any further target stays open. Evidence that would settle it: a CICS trace/auxtrace of this transaction, or confirmation from the application owner of every program that passes control to COUSR00C with a COMMAREA."
+    }
+   ]
+  },
+  {
+   "site": "app/cbl/COUSR01C.cbl:175",
+   "program": "COUSR01C",
+   "construct": "CICS-XCTL",
+   "variable": "CDEMO-TO-PROGRAM",
+   "traversal": [
+    "app/cbl/COUSR01C.cbl:175 EXEC CICS XCTL PROGRAM(CDEMO-TO-PROGRAM)",
+    "app/cpy/COCOM01Y.cpy:24 [DET definition] 10 CDEMO-TO-PROGRAM PIC X(08) \u2014 WORKING-STORAGE, bytes 16..24 of CARDDEMO-COMMAREA",
+    "app/cbl/COUSR01C.cbl:79 [DET move-literal] MOVE 'COSGN00C' TO CDEMO-TO-PROGRAM",
+    "app/cbl/COUSR01C.cbl:82 [DET move-item] MOVE DFHCOMMAREA(1:EIBCALEN) TO CARDDEMO-COMMAREA (CARDDEMO-COMMAREA encloses CDEMO-TO-PROGRAM)",
+    "app/cbl/COUSR01C.cbl:63 [GEN layout-mismatch] CDEMO-TO-PROGRAM occupies bytes 16..24 of CARDDEMO-COMMAREA but DFHCOMMAREA has no field on exactly those bytes",
+    "app/cbl/COUSR01C.cbl:94 [DET move-literal] MOVE 'COADM01C' TO CDEMO-TO-PROGRAM",
+    "app/cbl/COUSR01C.cbl:168 [DET move-literal] MOVE 'COSGN00C' TO CDEMO-TO-PROGRAM"
+   ],
+   "status": "partial",
+   "targets": [
+    {
+     "name": "COADM01C",
+     "basis": "deterministic",
+     "in_inventory": true,
+     "evidence": [
+      "app/cbl/COUSR01C.cbl:94"
+     ],
+     "reasoning": "tracer candidate, unchanged: MOVE literal to CDEMO-TO-PROGRAM"
+    },
+    {
+     "name": "COSGN00C",
+     "basis": "deterministic",
+     "in_inventory": true,
+     "evidence": [
+      "app/cbl/COUSR01C.cbl:79",
+      "app/cbl/COUSR01C.cbl:168"
+     ],
+     "reasoning": "tracer candidate, unchanged: MOVE literal to CDEMO-TO-PROGRAM; MOVE literal to CDEMO-TO-PROGRAM"
+    }
+   ],
+   "open_ends": [
+    {
+     "kind": "layout-mismatch",
+     "class": "GEN",
+     "source": "app/cbl/COUSR01C.cbl:63",
+     "request": "Map bytes 16..24 of DFHCOMMAREA to the field(s) that produce CDEMO-TO-PROGRAM. Not closed by reasoning: CDEMO-TO-PROGRAM is copied from the inbound DFHCOMMAREA, whose content is whatever the program or pseudo-conversational RETURN that passed control put there at run time; the scanned source of COUSR01C proves only the literal candidates listed, so any further target stays open. Evidence that would settle it: a CICS trace/auxtrace of this transaction, or confirmation from the application owner of every program that passes control to COUSR01C with a COMMAREA."
+    }
+   ]
+  },
+  {
+   "site": "app/cbl/COUSR02C.cbl:258",
+   "program": "COUSR02C",
+   "construct": "CICS-XCTL",
+   "variable": "CDEMO-TO-PROGRAM",
+   "traversal": [
+    "app/cbl/COUSR02C.cbl:258 EXEC CICS XCTL PROGRAM(CDEMO-TO-PROGRAM)",
+    "app/cpy/COCOM01Y.cpy:24 [DET definition] 10 CDEMO-TO-PROGRAM PIC X(08) \u2014 WORKING-STORAGE, bytes 16..24 of CARDDEMO-COMMAREA",
+    "app/cbl/COUSR02C.cbl:91 [DET move-literal] MOVE 'COSGN00C' TO CDEMO-TO-PROGRAM",
+    "app/cbl/COUSR02C.cbl:94 [DET move-item] MOVE DFHCOMMAREA(1:EIBCALEN) TO CARDDEMO-COMMAREA (CARDDEMO-COMMAREA encloses CDEMO-TO-PROGRAM)",
+    "app/cbl/COUSR02C.cbl:74 [GEN layout-mismatch] CDEMO-TO-PROGRAM occupies bytes 16..24 of CARDDEMO-COMMAREA but DFHCOMMAREA has no field on exactly those bytes",
+    "app/cbl/COUSR02C.cbl:114 [DET move-literal] MOVE 'COADM01C' TO CDEMO-TO-PROGRAM",
+    "app/cbl/COUSR02C.cbl:116 [DET move-item] MOVE CDEMO-FROM-PROGRAM TO CDEMO-TO-PROGRAM",
+    "app/cpy/COCOM01Y.cpy:22 [DET definition] 10 CDEMO-FROM-PROGRAM PIC X(08) \u2014 WORKING-STORAGE, bytes 4..12 of CARDDEMO-COMMAREA",
+    "app/cbl/COUSR02C.cbl:94 [DET move-item] MOVE DFHCOMMAREA(1:EIBCALEN) TO CARDDEMO-COMMAREA (CARDDEMO-COMMAREA encloses CDEMO-FROM-PROGRAM)",
+    "app/cbl/COUSR02C.cbl:74 [GEN layout-mismatch] CDEMO-FROM-PROGRAM occupies bytes 4..12 of CARDDEMO-COMMAREA but DFHCOMMAREA has no field on exactly those bytes",
+    "app/cbl/COUSR02C.cbl:256 [DET move-item] MOVE WS-PGMNAME TO CDEMO-FROM-PROGRAM",
+    "app/cbl/COUSR02C.cbl:36 [DET definition] 05 WS-PGMNAME PIC X(08) \u2014 WORKING-STORAGE, bytes 0..8 of WS-VARIABLES",
+    "app/cbl/COUSR02C.cbl:36 [DET value-clause] VALUE 'COUSR02C'",
+    "app/cbl/COUSR02C.cbl:125 [DET move-literal] MOVE 'COADM01C' TO CDEMO-TO-PROGRAM",
+    "app/cbl/COUSR02C.cbl:253 [DET move-literal] MOVE 'COSGN00C' TO CDEMO-TO-PROGRAM"
+   ],
+   "status": "partial",
+   "targets": [
+    {
+     "name": "COADM01C",
+     "basis": "deterministic",
+     "in_inventory": true,
+     "evidence": [
+      "app/cbl/COUSR02C.cbl:114",
+      "app/cbl/COUSR02C.cbl:125"
+     ],
+     "reasoning": "tracer candidate, unchanged: MOVE literal to CDEMO-TO-PROGRAM; MOVE literal to CDEMO-TO-PROGRAM"
+    },
+    {
+     "name": "COSGN00C",
+     "basis": "deterministic",
+     "in_inventory": true,
+     "evidence": [
+      "app/cbl/COUSR02C.cbl:91",
+      "app/cbl/COUSR02C.cbl:253"
+     ],
+     "reasoning": "tracer candidate, unchanged: MOVE literal to CDEMO-TO-PROGRAM; MOVE literal to CDEMO-TO-PROGRAM"
+    },
+    {
+     "name": "COUSR02C",
+     "basis": "deterministic",
+     "in_inventory": true,
+     "evidence": [
+      "app/cbl/COUSR02C.cbl:36"
+     ],
+     "reasoning": "tracer candidate, unchanged: VALUE clause of WS-PGMNAME"
+    }
+   ],
+   "open_ends": [
+    {
+     "kind": "layout-mismatch",
+     "class": "GEN",
+     "source": "app/cbl/COUSR02C.cbl:74",
+     "request": "Map bytes 16..24 of DFHCOMMAREA to the field(s) that produce CDEMO-TO-PROGRAM. Not closed by reasoning: CDEMO-TO-PROGRAM is copied from the inbound DFHCOMMAREA, whose content is whatever the program or pseudo-conversational RETURN that passed control put there at run time; the scanned source of COUSR02C proves only the literal candidates listed, so any further target stays open. Evidence that would settle it: a CICS trace/auxtrace of this transaction, or confirmation from the application owner of every program that passes control to COUSR02C with a COMMAREA."
+    },
+    {
+     "kind": "layout-mismatch",
+     "class": "GEN",
+     "source": "app/cbl/COUSR02C.cbl:74",
+     "request": "Map bytes 4..12 of DFHCOMMAREA to the field(s) that produce CDEMO-FROM-PROGRAM. Not closed by reasoning: CDEMO-FROM-PROGRAM is copied from the inbound DFHCOMMAREA, whose content is whatever the program or pseudo-conversational RETURN that passed control put there at run time; the scanned source of COUSR02C proves only the literal candidates listed, so any further target stays open. Evidence that would settle it: a CICS trace/auxtrace of this transaction, or confirmation from the application owner of every program that passes control to COUSR02C with a COMMAREA."
+    }
+   ]
+  },
+  {
+   "site": "app/cbl/COUSR03C.cbl:205",
+   "program": "COUSR03C",
+   "construct": "CICS-XCTL",
+   "variable": "CDEMO-TO-PROGRAM",
+   "traversal": [
+    "app/cbl/COUSR03C.cbl:205 EXEC CICS XCTL PROGRAM(CDEMO-TO-PROGRAM)",
+    "app/cpy/COCOM01Y.cpy:24 [DET definition] 10 CDEMO-TO-PROGRAM PIC X(08) \u2014 WORKING-STORAGE, bytes 16..24 of CARDDEMO-COMMAREA",
+    "app/cbl/COUSR03C.cbl:91 [DET move-literal] MOVE 'COSGN00C' TO CDEMO-TO-PROGRAM",
+    "app/cbl/COUSR03C.cbl:94 [DET move-item] MOVE DFHCOMMAREA(1:EIBCALEN) TO CARDDEMO-COMMAREA (CARDDEMO-COMMAREA encloses CDEMO-TO-PROGRAM)",
+    "app/cbl/COUSR03C.cbl:74 [GEN layout-mismatch] CDEMO-TO-PROGRAM occupies bytes 16..24 of CARDDEMO-COMMAREA but DFHCOMMAREA has no field on exactly those bytes",
+    "app/cbl/COUSR03C.cbl:113 [DET move-literal] MOVE 'COADM01C' TO CDEMO-TO-PROGRAM",
+    "app/cbl/COUSR03C.cbl:115 [DET move-item] MOVE CDEMO-FROM-PROGRAM TO CDEMO-TO-PROGRAM",
+    "app/cpy/COCOM01Y.cpy:22 [DET definition] 10 CDEMO-FROM-PROGRAM PIC X(08) \u2014 WORKING-STORAGE, bytes 4..12 of CARDDEMO-COMMAREA",
+    "app/cbl/COUSR03C.cbl:94 [DET move-item] MOVE DFHCOMMAREA(1:EIBCALEN) TO CARDDEMO-COMMAREA (CARDDEMO-COMMAREA encloses CDEMO-FROM-PROGRAM)",
+    "app/cbl/COUSR03C.cbl:74 [GEN layout-mismatch] CDEMO-FROM-PROGRAM occupies bytes 4..12 of CARDDEMO-COMMAREA but DFHCOMMAREA has no field on exactly those bytes",
+    "app/cbl/COUSR03C.cbl:203 [DET move-item] MOVE WS-PGMNAME TO CDEMO-FROM-PROGRAM",
+    "app/cbl/COUSR03C.cbl:36 [DET definition] 05 WS-PGMNAME PIC X(08) \u2014 WORKING-STORAGE, bytes 0..8 of WS-VARIABLES",
+    "app/cbl/COUSR03C.cbl:36 [DET value-clause] VALUE 'COUSR03C'",
+    "app/cbl/COUSR03C.cbl:124 [DET move-literal] MOVE 'COADM01C' TO CDEMO-TO-PROGRAM",
+    "app/cbl/COUSR03C.cbl:200 [DET move-literal] MOVE 'COSGN00C' TO CDEMO-TO-PROGRAM"
+   ],
+   "status": "partial",
+   "targets": [
+    {
+     "name": "COADM01C",
+     "basis": "deterministic",
+     "in_inventory": true,
+     "evidence": [
+      "app/cbl/COUSR03C.cbl:113",
+      "app/cbl/COUSR03C.cbl:124"
+     ],
+     "reasoning": "tracer candidate, unchanged: MOVE literal to CDEMO-TO-PROGRAM; MOVE literal to CDEMO-TO-PROGRAM"
+    },
+    {
+     "name": "COSGN00C",
+     "basis": "deterministic",
+     "in_inventory": true,
+     "evidence": [
+      "app/cbl/COUSR03C.cbl:91",
+      "app/cbl/COUSR03C.cbl:200"
+     ],
+     "reasoning": "tracer candidate, unchanged: MOVE literal to CDEMO-TO-PROGRAM; MOVE literal to CDEMO-TO-PROGRAM"
+    },
+    {
+     "name": "COUSR03C",
+     "basis": "deterministic",
+     "in_inventory": true,
+     "evidence": [
+      "app/cbl/COUSR03C.cbl:36"
+     ],
+     "reasoning": "tracer candidate, unchanged: VALUE clause of WS-PGMNAME"
+    }
+   ],
+   "open_ends": [
+    {
+     "kind": "layout-mismatch",
+     "class": "GEN",
+     "source": "app/cbl/COUSR03C.cbl:74",
+     "request": "Map bytes 16..24 of DFHCOMMAREA to the field(s) that produce CDEMO-TO-PROGRAM. Not closed by reasoning: CDEMO-TO-PROGRAM is copied from the inbound DFHCOMMAREA, whose content is whatever the program or pseudo-conversational RETURN that passed control put there at run time; the scanned source of COUSR03C proves only the literal candidates listed, so any further target stays open. Evidence that would settle it: a CICS trace/auxtrace of this transaction, or confirmation from the application owner of every program that passes control to COUSR03C with a COMMAREA."
+    },
+    {
+     "kind": "layout-mismatch",
+     "class": "GEN",
+     "source": "app/cbl/COUSR03C.cbl:74",
+     "request": "Map bytes 4..12 of DFHCOMMAREA to the field(s) that produce CDEMO-FROM-PROGRAM. Not closed by reasoning: CDEMO-FROM-PROGRAM is copied from the inbound DFHCOMMAREA, whose content is whatever the program or pseudo-conversational RETURN that passed control put there at run time; the scanned source of COUSR03C proves only the literal candidates listed, so any further target stays open. Evidence that would settle it: a CICS trace/auxtrace of this transaction, or confirmation from the application owner of every program that passes control to COUSR03C with a COMMAREA."
+    }
+   ]
+  }
+ ]
+}

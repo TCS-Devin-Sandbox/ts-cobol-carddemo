@@ -1,0 +1,44 @@
+{
+ "meta": {
+  "module": "CARDDEMO",
+  "skill": "module-classification",
+  "updated_at": "2026-11-19T08:28:59Z"
+ },
+ "members": [
+  {
+   "name": "CBFEECAL",
+   "artifact": "unresolved-target",
+   "module": null,
+   "binding": {
+    "kind": "unknown",
+    "product": null,
+    "component": null,
+    "confidence": null,
+    "evidence": [
+     "app/cbl/CBFEEDRV.cbl:101"
+    ],
+    "reasoning": "named only by the call in CBFEEDRV; no source member, build step, load library, CSD definition or estate-catalog entry declares it, so nothing scanned says what it is",
+    "confirmed": null
+   },
+   "request": "Provide the source member of CBFEECAL, or a load-module listing of the library FEECALC's STEPLIB resolves it from, or state which application or product owns it."
+  },
+  {
+   "name": "COTRTUPC",
+   "artifact": "unresolved-target",
+   "module": null,
+   "binding": {
+    "kind": "unknown",
+    "product": null,
+    "component": null,
+    "confidence": null,
+    "evidence": [
+     "app/cbl/COADM01C.cbl:145",
+     "app/cpy/COADM02Y.cpy:53"
+    ],
+    "reasoning": "named only as admin-menu option 6 in COADM02Y and reached by the XCTL in COADM01C; no source member, CSD definition or estate-catalog entry declares it, so nothing scanned says what it is",
+    "confirmed": null
+   },
+   "request": "Provide the source member of COTRTUPC and its CSD DEFINE PROGRAM, or state which application owns it."
+  }
+ ]
+}
