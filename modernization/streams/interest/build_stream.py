@@ -39,6 +39,20 @@ def direction(modes):
     return 'RW' if 'I-O' in modes else 'W' if any(x in modes for x in ('OUTPUT', 'EXTEND')) else 'R'
 
 
+def estate_cics_files():
+    bindings = {}
+    for path in sorted((ROOT / 'app').rglob('*')):
+        if path.suffix.lower() != '.csd':
+            continue
+        text = path.read_text()
+        for block in re.finditer(r'\bDEFINE\s+FILE\(([^)]+)\)(.*?)(?=\bDEFINE\b|\Z)', text, re.I | re.S):
+            dsn = re.search(r'\bDSNAME\(([^)]+)\)', block.group(2), re.I)
+            if dsn:
+                source = str(path.relative_to(ROOT)) + ':' + str(text[:block.start()].count('\n') + 1)
+                bindings.setdefault(block.group(1).upper(), []).append({'attrs': {'DSNAME': dsn.group(1)}, 'source': source})
+    return bindings
+
+
 def build():
     conn = load('store/CARDDEMO/connections.json')
     jobs = load('store/CARDDEMO/jobs.json')['jobs']
@@ -119,6 +133,7 @@ def build():
                             status=status, evidence=sorted(set(e for e in evidence if e)), **extra))
 
     coverage = []
+    estate_files = estate_cics_files()
     for module in MODULES:
         prefix = 'store/' + module + '/'
         c = load(prefix + 'connections.json')
@@ -156,21 +171,28 @@ def build():
                     [s['source']] + [u['source'] for u in utility] + ([bound[0]['source']] if bound else []),
                     step=s['step'], basis='OPEN/utility evidence' if proven else 'Allocation only; R/W possibilities, execution and direction not proven')
         for resource in c['cics']['files']:
-            csd = resource.get('csd') or {}
-            dsn = csd.get('attrs', {}).get('DSNAME', '')
-            if base(dsn) not in scope_ds:
-                continue
-            for u in resource['uses']:
-                dr = 'W' if u['command'] in ('WRITE', 'REWRITE', 'DELETE') else 'R'
-                add(module, 'CICS program', u['program'], dsn, dr,
-                    'PROVEN' if u.get('resolution') == 'constant' else 'CANDIDATE', [u['source'], csd['source']], command=u['command'])
-                for tx in online['transactions']:
-                    reach = next((p for p in tx['programs'] if p['id'] == u['program']), None)
-                    if reach:
-                        add(module, 'CICS transaction', tx['transid'], dsn, dr,
-                            'PROVEN' if reach['certainty'] == 'proven' else 'CANDIDATE',
-                            [u['source'], csd['source'], tx['definition'].get('source'), reach.get('source')],
-                            via=u['program'], basis='Entry/closure certainty; not proof of runtime overlap')
+            local_csd = resource.get('csd') or {}
+            bindings = {b['source']: b for b in estate_files.get(resource['name'], [])}
+            if local_csd.get('attrs', {}).get('DSNAME'):
+                bindings[local_csd['source']] = local_csd
+            for csd in bindings.values():
+                dsn = csd['attrs']['DSNAME']
+                if base(dsn) not in scope_ds:
+                    continue
+                foreign_binding = csd['source'] != local_csd.get('source')
+                binding_basis = 'CSD binding comes from another module: ' + csd['source'] + '; deployment in this module region is unproven' if foreign_binding else 'Module CSD binding: ' + csd['source']
+                for u in resource['uses']:
+                    dr = 'W' if u['command'] in ('WRITE', 'REWRITE', 'DELETE') else 'R'
+                    add(module, 'CICS program', u['program'], dsn, dr,
+                        'PROVEN' if not foreign_binding and u.get('resolution') == 'constant' else 'CANDIDATE',
+                        [u['source'], csd['source']], command=u['command'], basis=binding_basis)
+                    for tx in online['transactions']:
+                        reach = next((p for p in tx['programs'] if p['id'] == u['program']), None)
+                        if reach:
+                            add(module, 'CICS transaction', tx['transid'], dsn, dr,
+                                'PROVEN' if not foreign_binding and reach['certainty'] == 'proven' else 'CANDIDATE',
+                                [u['source'], csd['source'], tx['definition'].get('source'), reach.get('source')],
+                                via=u['program'], basis=binding_basis + '; entry/closure certainty is not proof of runtime overlap')
     add('CARDDEMO', 'job', 'COMBTRAN', 'AWS.M2.CARDDEMO.SYSTRAN', 'R', 'PROVEN',
         ['app/jcl/COMBTRAN.jcl:21-30', 'app/scheduler/CardDemo.controlm:72-78'], step='STEP05R', generation='0', basis='Concatenated SORTIN; GDG roll from prior job (+1)')
     outside = sorted({json.dumps(x, sort_keys=True): x for x in outside}.values(), key=lambda x: (x['module'], x['kind'], x['name'], x['dataset'], x['direction'], str(x['evidence'])))

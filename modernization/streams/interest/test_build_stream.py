@@ -19,6 +19,12 @@ class StreamTest(unittest.TestCase):
         self.assertIn('naming convention', path_edge['basis'])
         path_dataset = next(x for x in m['in_scope']['datasets'] if x['dd'] == 'XREFFIL1')
         self.assertEqual((path_dataset['direction'], path_dataset['record_layout']), ('R', 'CVACT03Y'))
+        for module, program in [('AUTH', 'COPAUA0C'), ('AUTH', 'COPAUS0C'), ('VSAMMQ', 'COACCT01')]:
+            row = next(x for x in m['outside_dependencies'] if x['module'] == module and x['name'] == program
+                       and x['dataset'] == 'AWS.M2.CARDDEMO.ACCTDATA.VSAM.KSDS')
+            self.assertEqual((row['direction'], row['status']), ('R', 'CANDIDATE'))
+            self.assertIn('app/csd/CARDDEMO.CSD:1', row['evidence'])
+            self.assertIn('another module', row['basis'])
         bindings = [x for x in m['edges'] if x['kind'] == 'load-binding']
         self.assertEqual(len(bindings), 2)
         self.assertEqual(bindings[0]['status'], 'PROVEN')

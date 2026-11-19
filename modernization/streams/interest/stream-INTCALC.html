@@ -1475,6 +1475,154 @@
   ],
   "outside_dependencies": [
     {
+      "module": "AUTH",
+      "kind": "CICS program",
+      "name": "COPAUA0C",
+      "dataset": "AWS.M2.CARDDEMO.ACCTDATA.VSAM.KSDS",
+      "direction": "R",
+      "status": "CANDIDATE",
+      "evidence": [
+        "app/app-authorization-ims-db2-mq/cbl/COPAUA0C.cbl:525",
+        "app/csd/CARDDEMO.CSD:1"
+      ],
+      "command": "READ",
+      "basis": "CSD binding comes from another module: app/csd/CARDDEMO.CSD:1; deployment in this module region is unproven"
+    },
+    {
+      "module": "AUTH",
+      "kind": "CICS program",
+      "name": "COPAUA0C",
+      "dataset": "AWS.M2.CARDDEMO.CARDXREF.VSAM.KSDS",
+      "direction": "R",
+      "status": "CANDIDATE",
+      "evidence": [
+        "app/app-authorization-ims-db2-mq/cbl/COPAUA0C.cbl:477",
+        "app/csd/CARDDEMO.CSD:37"
+      ],
+      "command": "READ",
+      "basis": "CSD binding comes from another module: app/csd/CARDDEMO.CSD:37; deployment in this module region is unproven"
+    },
+    {
+      "module": "AUTH",
+      "kind": "CICS program",
+      "name": "COPAUS0C",
+      "dataset": "AWS.M2.CARDDEMO.ACCTDATA.VSAM.KSDS",
+      "direction": "R",
+      "status": "CANDIDATE",
+      "evidence": [
+        "app/app-authorization-ims-db2-mq/cbl/COPAUS0C.cbl:869",
+        "app/csd/CARDDEMO.CSD:1"
+      ],
+      "command": "READ",
+      "basis": "CSD binding comes from another module: app/csd/CARDDEMO.CSD:1; deployment in this module region is unproven"
+    },
+    {
+      "module": "AUTH",
+      "kind": "CICS program",
+      "name": "COPAUS0C",
+      "dataset": "AWS.M2.CARDDEMO.CARDXREF.VSAM.AIX.PATH",
+      "direction": "R",
+      "status": "CANDIDATE",
+      "evidence": [
+        "app/app-authorization-ims-db2-mq/cbl/COPAUS0C.cbl:818",
+        "app/csd/CARDDEMO.CSD:63"
+      ],
+      "command": "READ",
+      "basis": "CSD binding comes from another module: app/csd/CARDDEMO.CSD:63; deployment in this module region is unproven"
+    },
+    {
+      "module": "AUTH",
+      "kind": "CICS transaction",
+      "name": "CP00",
+      "dataset": "AWS.M2.CARDDEMO.ACCTDATA.VSAM.KSDS",
+      "direction": "R",
+      "status": "CANDIDATE",
+      "evidence": [
+        "app/app-authorization-ims-db2-mq/cbl/COPAUA0C.cbl:525",
+        "app/app-authorization-ims-db2-mq/csd/CRDDEMO2.csd:59",
+        "app/csd/CARDDEMO.CSD:1"
+      ],
+      "via": "COPAUA0C",
+      "basis": "CSD binding comes from another module: app/csd/CARDDEMO.CSD:1; deployment in this module region is unproven; entry/closure certainty is not proof of runtime overlap"
+    },
+    {
+      "module": "AUTH",
+      "kind": "CICS transaction",
+      "name": "CP00",
+      "dataset": "AWS.M2.CARDDEMO.CARDXREF.VSAM.KSDS",
+      "direction": "R",
+      "status": "CANDIDATE",
+      "evidence": [
+        "app/app-authorization-ims-db2-mq/cbl/COPAUA0C.cbl:477",
+        "app/app-authorization-ims-db2-mq/csd/CRDDEMO2.csd:59",
+        "app/csd/CARDDEMO.CSD:37"
+      ],
+      "via": "COPAUA0C",
+      "basis": "CSD binding comes from another module: app/csd/CARDDEMO.CSD:37; deployment in this module region is unproven; entry/closure certainty is not proof of runtime overlap"
+    },
+    {
+      "module": "AUTH",
+      "kind": "CICS transaction",
+      "name": "CPVD",
+      "dataset": "AWS.M2.CARDDEMO.ACCTDATA.VSAM.KSDS",
+      "direction": "R",
+      "status": "CANDIDATE",
+      "evidence": [
+        "app/app-authorization-ims-db2-mq/cbl/COPAUS0C.cbl:869",
+        "app/app-authorization-ims-db2-mq/cbl/COPAUS1C.cbl:367",
+        "app/app-authorization-ims-db2-mq/csd/CRDDEMO2.csd:39",
+        "app/csd/CARDDEMO.CSD:1"
+      ],
+      "via": "COPAUS0C",
+      "basis": "CSD binding comes from another module: app/csd/CARDDEMO.CSD:1; deployment in this module region is unproven; entry/closure certainty is not proof of runtime overlap"
+    },
+    {
+      "module": "AUTH",
+      "kind": "CICS transaction",
+      "name": "CPVD",
+      "dataset": "AWS.M2.CARDDEMO.CARDXREF.VSAM.AIX.PATH",
+      "direction": "R",
+      "status": "CANDIDATE",
+      "evidence": [
+        "app/app-authorization-ims-db2-mq/cbl/COPAUS0C.cbl:818",
+        "app/app-authorization-ims-db2-mq/cbl/COPAUS1C.cbl:367",
+        "app/app-authorization-ims-db2-mq/csd/CRDDEMO2.csd:39",
+        "app/csd/CARDDEMO.CSD:63"
+      ],
+      "via": "COPAUS0C",
+      "basis": "CSD binding comes from another module: app/csd/CARDDEMO.CSD:63; deployment in this module region is unproven; entry/closure certainty is not proof of runtime overlap"
+    },
+    {
+      "module": "AUTH",
+      "kind": "CICS transaction",
+      "name": "CPVS",
+      "dataset": "AWS.M2.CARDDEMO.ACCTDATA.VSAM.KSDS",
+      "direction": "R",
+      "status": "CANDIDATE",
+      "evidence": [
+        "app/app-authorization-ims-db2-mq/cbl/COPAUS0C.cbl:869",
+        "app/app-authorization-ims-db2-mq/csd/CRDDEMO2.csd:49",
+        "app/csd/CARDDEMO.CSD:1"
+      ],
+      "via": "COPAUS0C",
+      "basis": "CSD binding comes from another module: app/csd/CARDDEMO.CSD:1; deployment in this module region is unproven; entry/closure certainty is not proof of runtime overlap"
+    },
+    {
+      "module": "AUTH",
+      "kind": "CICS transaction",
+      "name": "CPVS",
+      "dataset": "AWS.M2.CARDDEMO.CARDXREF.VSAM.AIX.PATH",
+      "direction": "R",
+      "status": "CANDIDATE",
+      "evidence": [
+        "app/app-authorization-ims-db2-mq/cbl/COPAUS0C.cbl:818",
+        "app/app-authorization-ims-db2-mq/csd/CRDDEMO2.csd:49",
+        "app/csd/CARDDEMO.CSD:63"
+      ],
+      "via": "COPAUS0C",
+      "basis": "CSD binding comes from another module: app/csd/CARDDEMO.CSD:63; deployment in this module region is unproven; entry/closure certainty is not proof of runtime overlap"
+    },
+    {
       "module": "CARDDEMO",
       "kind": "CICS program",
       "name": "COACTUPC",
@@ -1485,7 +1633,8 @@
         "app/cbl/COACTUPC.cbl:3703",
         "app/csd/CARDDEMO.CSD:1"
       ],
-      "command": "READ"
+      "command": "READ",
+      "basis": "Module CSD binding: app/csd/CARDDEMO.CSD:1"
     },
     {
       "module": "CARDDEMO",
@@ -1498,7 +1647,8 @@
         "app/cbl/COACTUPC.cbl:3894",
         "app/csd/CARDDEMO.CSD:1"
       ],
-      "command": "READ"
+      "command": "READ",
+      "basis": "Module CSD binding: app/csd/CARDDEMO.CSD:1"
     },
     {
       "module": "CARDDEMO",
@@ -1511,7 +1661,8 @@
         "app/cbl/COACTUPC.cbl:4065",
         "app/csd/CARDDEMO.CSD:1"
       ],
-      "command": "REWRITE"
+      "command": "REWRITE",
+      "basis": "Module CSD binding: app/csd/CARDDEMO.CSD:1"
     },
     {
       "module": "CARDDEMO",
@@ -1524,7 +1675,8 @@
         "app/cbl/COACTUPC.cbl:3654",
         "app/csd/CARDDEMO.CSD:63"
       ],
-      "command": "READ"
+      "command": "READ",
+      "basis": "Module CSD binding: app/csd/CARDDEMO.CSD:63"
     },
     {
       "module": "CARDDEMO",
@@ -1537,7 +1689,8 @@
         "app/cbl/COACTVWC.cbl:776",
         "app/csd/CARDDEMO.CSD:1"
       ],
-      "command": "READ"
+      "command": "READ",
+      "basis": "Module CSD binding: app/csd/CARDDEMO.CSD:1"
     },
     {
       "module": "CARDDEMO",
@@ -1550,7 +1703,8 @@
         "app/cbl/COACTVWC.cbl:727",
         "app/csd/CARDDEMO.CSD:63"
       ],
-      "command": "READ"
+      "command": "READ",
+      "basis": "Module CSD binding: app/csd/CARDDEMO.CSD:63"
     },
     {
       "module": "CARDDEMO",
@@ -1563,7 +1717,8 @@
         "app/cbl/COBIL00C.cbl:345",
         "app/csd/CARDDEMO.CSD:1"
       ],
-      "command": "READ"
+      "command": "READ",
+      "basis": "Module CSD binding: app/csd/CARDDEMO.CSD:1"
     },
     {
       "module": "CARDDEMO",
@@ -1576,7 +1731,8 @@
         "app/cbl/COBIL00C.cbl:379",
         "app/csd/CARDDEMO.CSD:1"
       ],
-      "command": "REWRITE"
+      "command": "REWRITE",
+      "basis": "Module CSD binding: app/csd/CARDDEMO.CSD:1"
     },
     {
       "module": "CARDDEMO",
@@ -1589,7 +1745,8 @@
         "app/cbl/COBIL00C.cbl:410",
         "app/csd/CARDDEMO.CSD:63"
       ],
-      "command": "READ"
+      "command": "READ",
+      "basis": "Module CSD binding: app/csd/CARDDEMO.CSD:63"
     },
     {
       "module": "CARDDEMO",
@@ -1602,7 +1759,8 @@
         "app/cbl/COTRN02C.cbl:578",
         "app/csd/CARDDEMO.CSD:63"
       ],
-      "command": "READ"
+      "command": "READ",
+      "basis": "Module CSD binding: app/csd/CARDDEMO.CSD:63"
     },
     {
       "module": "CARDDEMO",
@@ -1615,7 +1773,8 @@
         "app/cbl/COTRN02C.cbl:611",
         "app/csd/CARDDEMO.CSD:37"
       ],
-      "command": "READ"
+      "command": "READ",
+      "basis": "Module CSD binding: app/csd/CARDDEMO.CSD:37"
     },
     {
       "module": "CARDDEMO",
@@ -1631,7 +1790,7 @@
         "app/csd/CARDDEMO.CSD:327"
       ],
       "via": "COACTUPC",
-      "basis": "Entry/closure certainty; not proof of runtime overlap"
+      "basis": "Module CSD binding: app/csd/CARDDEMO.CSD:1; entry/closure certainty is not proof of runtime overlap"
     },
     {
       "module": "CARDDEMO",
@@ -1647,7 +1806,7 @@
         "app/csd/CARDDEMO.CSD:327"
       ],
       "via": "COACTUPC",
-      "basis": "Entry/closure certainty; not proof of runtime overlap"
+      "basis": "Module CSD binding: app/csd/CARDDEMO.CSD:1; entry/closure certainty is not proof of runtime overlap"
     },
     {
       "module": "CARDDEMO",
@@ -1663,7 +1822,7 @@
         "app/csd/CARDDEMO.CSD:327"
       ],
       "via": "COACTVWC",
-      "basis": "Entry/closure certainty; not proof of runtime overlap"
+      "basis": "Module CSD binding: app/csd/CARDDEMO.CSD:1; entry/closure certainty is not proof of runtime overlap"
     },
     {
       "module": "CARDDEMO",
@@ -1679,7 +1838,7 @@
         "app/csd/CARDDEMO.CSD:327"
       ],
       "via": "COBIL00C",
-      "basis": "Entry/closure certainty; not proof of runtime overlap"
+      "basis": "Module CSD binding: app/csd/CARDDEMO.CSD:1; entry/closure certainty is not proof of runtime overlap"
     },
     {
       "module": "CARDDEMO",
@@ -1695,7 +1854,7 @@
         "app/csd/CARDDEMO.CSD:327"
       ],
       "via": "COACTUPC",
-      "basis": "Entry/closure certainty; not proof of runtime overlap"
+      "basis": "Module CSD binding: app/csd/CARDDEMO.CSD:1; entry/closure certainty is not proof of runtime overlap"
     },
     {
       "module": "CARDDEMO",
@@ -1711,7 +1870,7 @@
         "app/csd/CARDDEMO.CSD:327"
       ],
       "via": "COBIL00C",
-      "basis": "Entry/closure certainty; not proof of runtime overlap"
+      "basis": "Module CSD binding: app/csd/CARDDEMO.CSD:1; entry/closure certainty is not proof of runtime overlap"
     },
     {
       "module": "CARDDEMO",
@@ -1727,7 +1886,7 @@
         "app/csd/CARDDEMO.CSD:63"
       ],
       "via": "COACTUPC",
-      "basis": "Entry/closure certainty; not proof of runtime overlap"
+      "basis": "Module CSD binding: app/csd/CARDDEMO.CSD:63; entry/closure certainty is not proof of runtime overlap"
     },
     {
       "module": "CARDDEMO",
@@ -1743,7 +1902,7 @@
         "app/csd/CARDDEMO.CSD:63"
       ],
       "via": "COACTVWC",
-      "basis": "Entry/closure certainty; not proof of runtime overlap"
+      "basis": "Module CSD binding: app/csd/CARDDEMO.CSD:63; entry/closure certainty is not proof of runtime overlap"
     },
     {
       "module": "CARDDEMO",
@@ -1759,7 +1918,7 @@
         "app/csd/CARDDEMO.CSD:63"
       ],
       "via": "COBIL00C",
-      "basis": "Entry/closure certainty; not proof of runtime overlap"
+      "basis": "Module CSD binding: app/csd/CARDDEMO.CSD:63; entry/closure certainty is not proof of runtime overlap"
     },
     {
       "module": "CARDDEMO",
@@ -1775,7 +1934,7 @@
         "app/csd/CARDDEMO.CSD:63"
       ],
       "via": "COTRN02C",
-      "basis": "Entry/closure certainty; not proof of runtime overlap"
+      "basis": "Module CSD binding: app/csd/CARDDEMO.CSD:63; entry/closure certainty is not proof of runtime overlap"
     },
     {
       "module": "CARDDEMO",
@@ -1791,7 +1950,7 @@
         "app/csd/CARDDEMO.CSD:37"
       ],
       "via": "COTRN02C",
-      "basis": "Entry/closure certainty; not proof of runtime overlap"
+      "basis": "Module CSD binding: app/csd/CARDDEMO.CSD:37; entry/closure certainty is not proof of runtime overlap"
     },
     {
       "module": "CARDDEMO",
@@ -1806,7 +1965,7 @@
         "app/csd/CARDDEMO.CSD:306"
       ],
       "via": "COACTUPC",
-      "basis": "Entry/closure certainty; not proof of runtime overlap"
+      "basis": "Module CSD binding: app/csd/CARDDEMO.CSD:1; entry/closure certainty is not proof of runtime overlap"
     },
     {
       "module": "CARDDEMO",
@@ -1821,7 +1980,7 @@
         "app/csd/CARDDEMO.CSD:306"
       ],
       "via": "COACTUPC",
-      "basis": "Entry/closure certainty; not proof of runtime overlap"
+      "basis": "Module CSD binding: app/csd/CARDDEMO.CSD:1; entry/closure certainty is not proof of runtime overlap"
     },
     {
       "module": "CARDDEMO",
@@ -1837,7 +1996,7 @@
         "app/csd/CARDDEMO.CSD:306"
       ],
       "via": "COACTVWC",
-      "basis": "Entry/closure certainty; not proof of runtime overlap"
+      "basis": "Module CSD binding: app/csd/CARDDEMO.CSD:1; entry/closure certainty is not proof of runtime overlap"
     },
     {
       "module": "CARDDEMO",
@@ -1853,7 +2012,7 @@
         "app/csd/CARDDEMO.CSD:306"
       ],
       "via": "COBIL00C",
-      "basis": "Entry/closure certainty; not proof of runtime overlap"
+      "basis": "Module CSD binding: app/csd/CARDDEMO.CSD:1; entry/closure certainty is not proof of runtime overlap"
     },
     {
       "module": "CARDDEMO",
@@ -1868,7 +2027,7 @@
         "app/csd/CARDDEMO.CSD:306"
       ],
       "via": "COACTUPC",
-      "basis": "Entry/closure certainty; not proof of runtime overlap"
+      "basis": "Module CSD binding: app/csd/CARDDEMO.CSD:1; entry/closure certainty is not proof of runtime overlap"
     },
     {
       "module": "CARDDEMO",
@@ -1884,7 +2043,7 @@
         "app/csd/CARDDEMO.CSD:306"
       ],
       "via": "COBIL00C",
-      "basis": "Entry/closure certainty; not proof of runtime overlap"
+      "basis": "Module CSD binding: app/csd/CARDDEMO.CSD:1; entry/closure certainty is not proof of runtime overlap"
     },
     {
       "module": "CARDDEMO",
@@ -1899,7 +2058,7 @@
         "app/csd/CARDDEMO.CSD:63"
       ],
       "via": "COACTUPC",
-      "basis": "Entry/closure certainty; not proof of runtime overlap"
+      "basis": "Module CSD binding: app/csd/CARDDEMO.CSD:63; entry/closure certainty is not proof of runtime overlap"
     },
     {
       "module": "CARDDEMO",
@@ -1915,7 +2074,7 @@
         "app/csd/CARDDEMO.CSD:63"
       ],
       "via": "COACTVWC",
-      "basis": "Entry/closure certainty; not proof of runtime overlap"
+      "basis": "Module CSD binding: app/csd/CARDDEMO.CSD:63; entry/closure certainty is not proof of runtime overlap"
     },
     {
       "module": "CARDDEMO",
@@ -1931,7 +2090,7 @@
         "app/csd/CARDDEMO.CSD:63"
       ],
       "via": "COBIL00C",
-      "basis": "Entry/closure certainty; not proof of runtime overlap"
+      "basis": "Module CSD binding: app/csd/CARDDEMO.CSD:63; entry/closure certainty is not proof of runtime overlap"
     },
     {
       "module": "CARDDEMO",
@@ -1947,7 +2106,7 @@
         "app/csd/CARDDEMO.CSD:63"
       ],
       "via": "COTRN02C",
-      "basis": "Entry/closure certainty; not proof of runtime overlap"
+      "basis": "Module CSD binding: app/csd/CARDDEMO.CSD:63; entry/closure certainty is not proof of runtime overlap"
     },
     {
       "module": "CARDDEMO",
@@ -1963,7 +2122,7 @@
         "app/csd/CARDDEMO.CSD:37"
       ],
       "via": "COTRN02C",
-      "basis": "Entry/closure certainty; not proof of runtime overlap"
+      "basis": "Module CSD binding: app/csd/CARDDEMO.CSD:37; entry/closure certainty is not proof of runtime overlap"
     },
     {
       "module": "CARDDEMO",
@@ -1979,7 +2138,7 @@
         "app/csd/CARDDEMO.CSD:317"
       ],
       "via": "COACTUPC",
-      "basis": "Entry/closure certainty; not proof of runtime overlap"
+      "basis": "Module CSD binding: app/csd/CARDDEMO.CSD:1; entry/closure certainty is not proof of runtime overlap"
     },
     {
       "module": "CARDDEMO",
@@ -1995,7 +2154,7 @@
         "app/csd/CARDDEMO.CSD:317"
       ],
       "via": "COACTUPC",
-      "basis": "Entry/closure certainty; not proof of runtime overlap"
+      "basis": "Module CSD binding: app/csd/CARDDEMO.CSD:1; entry/closure certainty is not proof of runtime overlap"
     },
     {
       "module": "CARDDEMO",
@@ -2010,7 +2169,7 @@
         "app/csd/CARDDEMO.CSD:317"
       ],
       "via": "COACTVWC",
-      "basis": "Entry/closure certainty; not proof of runtime overlap"
+      "basis": "Module CSD binding: app/csd/CARDDEMO.CSD:1; entry/closure certainty is not proof of runtime overlap"
     },
     {
       "module": "CARDDEMO",
@@ -2026,7 +2185,7 @@
         "app/csd/CARDDEMO.CSD:317"
       ],
       "via": "COBIL00C",
-      "basis": "Entry/closure certainty; not proof of runtime overlap"
+      "basis": "Module CSD binding: app/csd/CARDDEMO.CSD:1; entry/closure certainty is not proof of runtime overlap"
     },
     {
       "module": "CARDDEMO",
@@ -2042,7 +2201,7 @@
         "app/csd/CARDDEMO.CSD:317"
       ],
       "via": "COACTUPC",
-      "basis": "Entry/closure certainty; not proof of runtime overlap"
+      "basis": "Module CSD binding: app/csd/CARDDEMO.CSD:1; entry/closure certainty is not proof of runtime overlap"
     },
     {
       "module": "CARDDEMO",
@@ -2058,7 +2217,7 @@
         "app/csd/CARDDEMO.CSD:317"
       ],
       "via": "COBIL00C",
-      "basis": "Entry/closure certainty; not proof of runtime overlap"
+      "basis": "Module CSD binding: app/csd/CARDDEMO.CSD:1; entry/closure certainty is not proof of runtime overlap"
     },
     {
       "module": "CARDDEMO",
@@ -2074,7 +2233,7 @@
         "app/csd/CARDDEMO.CSD:63"
       ],
       "via": "COACTUPC",
-      "basis": "Entry/closure certainty; not proof of runtime overlap"
+      "basis": "Module CSD binding: app/csd/CARDDEMO.CSD:63; entry/closure certainty is not proof of runtime overlap"
     },
     {
       "module": "CARDDEMO",
@@ -2089,7 +2248,7 @@
         "app/csd/CARDDEMO.CSD:63"
       ],
       "via": "COACTVWC",
-      "basis": "Entry/closure certainty; not proof of runtime overlap"
+      "basis": "Module CSD binding: app/csd/CARDDEMO.CSD:63; entry/closure certainty is not proof of runtime overlap"
     },
     {
       "module": "CARDDEMO",
@@ -2105,7 +2264,7 @@
         "app/csd/CARDDEMO.CSD:63"
       ],
       "via": "COBIL00C",
-      "basis": "Entry/closure certainty; not proof of runtime overlap"
+      "basis": "Module CSD binding: app/csd/CARDDEMO.CSD:63; entry/closure certainty is not proof of runtime overlap"
     },
     {
       "module": "CARDDEMO",
@@ -2121,7 +2280,7 @@
         "app/csd/CARDDEMO.CSD:63"
       ],
       "via": "COTRN02C",
-      "basis": "Entry/closure certainty; not proof of runtime overlap"
+      "basis": "Module CSD binding: app/csd/CARDDEMO.CSD:63; entry/closure certainty is not proof of runtime overlap"
     },
     {
       "module": "CARDDEMO",
@@ -2137,7 +2296,7 @@
         "app/csd/CARDDEMO.CSD:37"
       ],
       "via": "COTRN02C",
-      "basis": "Entry/closure certainty; not proof of runtime overlap"
+      "basis": "Module CSD binding: app/csd/CARDDEMO.CSD:37; entry/closure certainty is not proof of runtime overlap"
     },
     {
       "module": "CARDDEMO",
@@ -2153,7 +2312,7 @@
         "app/csd/CARDDEMO.CSD:337"
       ],
       "via": "COACTUPC",
-      "basis": "Entry/closure certainty; not proof of runtime overlap"
+      "basis": "Module CSD binding: app/csd/CARDDEMO.CSD:1; entry/closure certainty is not proof of runtime overlap"
     },
     {
       "module": "CARDDEMO",
@@ -2169,7 +2328,7 @@
         "app/csd/CARDDEMO.CSD:337"
       ],
       "via": "COACTUPC",
-      "basis": "Entry/closure certainty; not proof of runtime overlap"
+      "basis": "Module CSD binding: app/csd/CARDDEMO.CSD:1; entry/closure certainty is not proof of runtime overlap"
     },
     {
       "module": "CARDDEMO",
@@ -2185,7 +2344,7 @@
         "app/csd/CARDDEMO.CSD:337"
       ],
       "via": "COACTVWC",
-      "basis": "Entry/closure certainty; not proof of runtime overlap"
+      "basis": "Module CSD binding: app/csd/CARDDEMO.CSD:1; entry/closure certainty is not proof of runtime overlap"
     },
     {
       "module": "CARDDEMO",
@@ -2200,7 +2359,7 @@
         "app/csd/CARDDEMO.CSD:337"
       ],
       "via": "COBIL00C",
-      "basis": "Entry/closure certainty; not proof of runtime overlap"
+      "basis": "Module CSD binding: app/csd/CARDDEMO.CSD:1; entry/closure certainty is not proof of runtime overlap"
     },
     {
       "module": "CARDDEMO",
@@ -2216,7 +2375,7 @@
         "app/csd/CARDDEMO.CSD:337"
       ],
       "via": "COACTUPC",
-      "basis": "Entry/closure certainty; not proof of runtime overlap"
+      "basis": "Module CSD binding: app/csd/CARDDEMO.CSD:1; entry/closure certainty is not proof of runtime overlap"
     },
     {
       "module": "CARDDEMO",
@@ -2231,7 +2390,7 @@
         "app/csd/CARDDEMO.CSD:337"
       ],
       "via": "COBIL00C",
-      "basis": "Entry/closure certainty; not proof of runtime overlap"
+      "basis": "Module CSD binding: app/csd/CARDDEMO.CSD:1; entry/closure certainty is not proof of runtime overlap"
     },
     {
       "module": "CARDDEMO",
@@ -2247,7 +2406,7 @@
         "app/csd/CARDDEMO.CSD:63"
       ],
       "via": "COACTUPC",
-      "basis": "Entry/closure certainty; not proof of runtime overlap"
+      "basis": "Module CSD binding: app/csd/CARDDEMO.CSD:63; entry/closure certainty is not proof of runtime overlap"
     },
     {
       "module": "CARDDEMO",
@@ -2263,7 +2422,7 @@
         "app/csd/CARDDEMO.CSD:63"
       ],
       "via": "COACTVWC",
-      "basis": "Entry/closure certainty; not proof of runtime overlap"
+      "basis": "Module CSD binding: app/csd/CARDDEMO.CSD:63; entry/closure certainty is not proof of runtime overlap"
     },
     {
       "module": "CARDDEMO",
@@ -2278,7 +2437,7 @@
         "app/csd/CARDDEMO.CSD:63"
       ],
       "via": "COBIL00C",
-      "basis": "Entry/closure certainty; not proof of runtime overlap"
+      "basis": "Module CSD binding: app/csd/CARDDEMO.CSD:63; entry/closure certainty is not proof of runtime overlap"
     },
     {
       "module": "CARDDEMO",
@@ -2294,7 +2453,7 @@
         "app/csd/CARDDEMO.CSD:63"
       ],
       "via": "COTRN02C",
-      "basis": "Entry/closure certainty; not proof of runtime overlap"
+      "basis": "Module CSD binding: app/csd/CARDDEMO.CSD:63; entry/closure certainty is not proof of runtime overlap"
     },
     {
       "module": "CARDDEMO",
@@ -2310,7 +2469,7 @@
         "app/csd/CARDDEMO.CSD:37"
       ],
       "via": "COTRN02C",
-      "basis": "Entry/closure certainty; not proof of runtime overlap"
+      "basis": "Module CSD binding: app/csd/CARDDEMO.CSD:37; entry/closure certainty is not proof of runtime overlap"
     },
     {
       "module": "CARDDEMO",
@@ -2326,7 +2485,7 @@
         "app/csd/CARDDEMO.CSD:378"
       ],
       "via": "COACTUPC",
-      "basis": "Entry/closure certainty; not proof of runtime overlap"
+      "basis": "Module CSD binding: app/csd/CARDDEMO.CSD:1; entry/closure certainty is not proof of runtime overlap"
     },
     {
       "module": "CARDDEMO",
@@ -2342,7 +2501,7 @@
         "app/csd/CARDDEMO.CSD:378"
       ],
       "via": "COACTUPC",
-      "basis": "Entry/closure certainty; not proof of runtime overlap"
+      "basis": "Module CSD binding: app/csd/CARDDEMO.CSD:1; entry/closure certainty is not proof of runtime overlap"
     },
     {
       "module": "CARDDEMO",
@@ -2358,7 +2517,7 @@
         "app/csd/CARDDEMO.CSD:378"
       ],
       "via": "COACTVWC",
-      "basis": "Entry/closure certainty; not proof of runtime overlap"
+      "basis": "Module CSD binding: app/csd/CARDDEMO.CSD:1; entry/closure certainty is not proof of runtime overlap"
     },
     {
       "module": "CARDDEMO",
@@ -2374,7 +2533,7 @@
         "app/csd/CARDDEMO.CSD:378"
       ],
       "via": "COBIL00C",
-      "basis": "Entry/closure certainty; not proof of runtime overlap"
+      "basis": "Module CSD binding: app/csd/CARDDEMO.CSD:1; entry/closure certainty is not proof of runtime overlap"
     },
     {
       "module": "CARDDEMO",
@@ -2390,7 +2549,7 @@
         "app/csd/CARDDEMO.CSD:378"
       ],
       "via": "COACTUPC",
-      "basis": "Entry/closure certainty; not proof of runtime overlap"
+      "basis": "Module CSD binding: app/csd/CARDDEMO.CSD:1; entry/closure certainty is not proof of runtime overlap"
     },
     {
       "module": "CARDDEMO",
@@ -2406,7 +2565,7 @@
         "app/csd/CARDDEMO.CSD:378"
       ],
       "via": "COBIL00C",
-      "basis": "Entry/closure certainty; not proof of runtime overlap"
+      "basis": "Module CSD binding: app/csd/CARDDEMO.CSD:1; entry/closure certainty is not proof of runtime overlap"
     },
     {
       "module": "CARDDEMO",
@@ -2422,7 +2581,7 @@
         "app/csd/CARDDEMO.CSD:63"
       ],
       "via": "COACTUPC",
-      "basis": "Entry/closure certainty; not proof of runtime overlap"
+      "basis": "Module CSD binding: app/csd/CARDDEMO.CSD:63; entry/closure certainty is not proof of runtime overlap"
     },
     {
       "module": "CARDDEMO",
@@ -2438,7 +2597,7 @@
         "app/csd/CARDDEMO.CSD:63"
       ],
       "via": "COACTVWC",
-      "basis": "Entry/closure certainty; not proof of runtime overlap"
+      "basis": "Module CSD binding: app/csd/CARDDEMO.CSD:63; entry/closure certainty is not proof of runtime overlap"
     },
     {
       "module": "CARDDEMO",
@@ -2454,7 +2613,7 @@
         "app/csd/CARDDEMO.CSD:63"
       ],
       "via": "COBIL00C",
-      "basis": "Entry/closure certainty; not proof of runtime overlap"
+      "basis": "Module CSD binding: app/csd/CARDDEMO.CSD:63; entry/closure certainty is not proof of runtime overlap"
     },
     {
       "module": "CARDDEMO",
@@ -2470,7 +2629,7 @@
         "app/csd/CARDDEMO.CSD:63"
       ],
       "via": "COTRN02C",
-      "basis": "Entry/closure certainty; not proof of runtime overlap"
+      "basis": "Module CSD binding: app/csd/CARDDEMO.CSD:63; entry/closure certainty is not proof of runtime overlap"
     },
     {
       "module": "CARDDEMO",
@@ -2486,7 +2645,7 @@
         "app/csd/CARDDEMO.CSD:378"
       ],
       "via": "COTRN02C",
-      "basis": "Entry/closure certainty; not proof of runtime overlap"
+      "basis": "Module CSD binding: app/csd/CARDDEMO.CSD:37; entry/closure certainty is not proof of runtime overlap"
     },
     {
       "module": "CARDDEMO",
@@ -2502,7 +2661,7 @@
         "app/csd/CARDDEMO.CSD:347"
       ],
       "via": "COACTUPC",
-      "basis": "Entry/closure certainty; not proof of runtime overlap"
+      "basis": "Module CSD binding: app/csd/CARDDEMO.CSD:1; entry/closure certainty is not proof of runtime overlap"
     },
     {
       "module": "CARDDEMO",
@@ -2518,7 +2677,7 @@
         "app/csd/CARDDEMO.CSD:347"
       ],
       "via": "COACTUPC",
-      "basis": "Entry/closure certainty; not proof of runtime overlap"
+      "basis": "Module CSD binding: app/csd/CARDDEMO.CSD:1; entry/closure certainty is not proof of runtime overlap"
     },
     {
       "module": "CARDDEMO",
@@ -2534,7 +2693,7 @@
         "app/csd/CARDDEMO.CSD:347"
       ],
       "via": "COACTVWC",
-      "basis": "Entry/closure certainty; not proof of runtime overlap"
+      "basis": "Module CSD binding: app/csd/CARDDEMO.CSD:1; entry/closure certainty is not proof of runtime overlap"
     },
     {
       "module": "CARDDEMO",
@@ -2550,7 +2709,7 @@
         "app/csd/CARDDEMO.CSD:347"
       ],
       "via": "COBIL00C",
-      "basis": "Entry/closure certainty; not proof of runtime overlap"
+      "basis": "Module CSD binding: app/csd/CARDDEMO.CSD:1; entry/closure certainty is not proof of runtime overlap"
     },
     {
       "module": "CARDDEMO",
@@ -2566,7 +2725,7 @@
         "app/csd/CARDDEMO.CSD:347"
       ],
       "via": "COACTUPC",
-      "basis": "Entry/closure certainty; not proof of runtime overlap"
+      "basis": "Module CSD binding: app/csd/CARDDEMO.CSD:1; entry/closure certainty is not proof of runtime overlap"
     },
     {
       "module": "CARDDEMO",
@@ -2582,7 +2741,7 @@
         "app/csd/CARDDEMO.CSD:347"
       ],
       "via": "COBIL00C",
-      "basis": "Entry/closure certainty; not proof of runtime overlap"
+      "basis": "Module CSD binding: app/csd/CARDDEMO.CSD:1; entry/closure certainty is not proof of runtime overlap"
     },
     {
       "module": "CARDDEMO",
@@ -2598,7 +2757,7 @@
         "app/csd/CARDDEMO.CSD:63"
       ],
       "via": "COACTUPC",
-      "basis": "Entry/closure certainty; not proof of runtime overlap"
+      "basis": "Module CSD binding: app/csd/CARDDEMO.CSD:63; entry/closure certainty is not proof of runtime overlap"
     },
     {
       "module": "CARDDEMO",
@@ -2614,7 +2773,7 @@
         "app/csd/CARDDEMO.CSD:63"
       ],
       "via": "COACTVWC",
-      "basis": "Entry/closure certainty; not proof of runtime overlap"
+      "basis": "Module CSD binding: app/csd/CARDDEMO.CSD:63; entry/closure certainty is not proof of runtime overlap"
     },
     {
       "module": "CARDDEMO",
@@ -2630,7 +2789,7 @@
         "app/csd/CARDDEMO.CSD:63"
       ],
       "via": "COBIL00C",
-      "basis": "Entry/closure certainty; not proof of runtime overlap"
+      "basis": "Module CSD binding: app/csd/CARDDEMO.CSD:63; entry/closure certainty is not proof of runtime overlap"
     },
     {
       "module": "CARDDEMO",
@@ -2646,7 +2805,7 @@
         "app/csd/CARDDEMO.CSD:63"
       ],
       "via": "COTRN02C",
-      "basis": "Entry/closure certainty; not proof of runtime overlap"
+      "basis": "Module CSD binding: app/csd/CARDDEMO.CSD:63; entry/closure certainty is not proof of runtime overlap"
     },
     {
       "module": "CARDDEMO",
@@ -2662,7 +2821,7 @@
         "app/csd/CARDDEMO.CSD:37"
       ],
       "via": "COTRN02C",
-      "basis": "Entry/closure certainty; not proof of runtime overlap"
+      "basis": "Module CSD binding: app/csd/CARDDEMO.CSD:37; entry/closure certainty is not proof of runtime overlap"
     },
     {
       "module": "CARDDEMO",
@@ -2678,7 +2837,7 @@
         "app/csd/CARDDEMO.CSD:357"
       ],
       "via": "COACTUPC",
-      "basis": "Entry/closure certainty; not proof of runtime overlap"
+      "basis": "Module CSD binding: app/csd/CARDDEMO.CSD:1; entry/closure certainty is not proof of runtime overlap"
     },
     {
       "module": "CARDDEMO",
@@ -2694,7 +2853,7 @@
         "app/csd/CARDDEMO.CSD:357"
       ],
       "via": "COACTUPC",
-      "basis": "Entry/closure certainty; not proof of runtime overlap"
+      "basis": "Module CSD binding: app/csd/CARDDEMO.CSD:1; entry/closure certainty is not proof of runtime overlap"
     },
     {
       "module": "CARDDEMO",
@@ -2710,7 +2869,7 @@
         "app/csd/CARDDEMO.CSD:357"
       ],
       "via": "COACTVWC",
-      "basis": "Entry/closure certainty; not proof of runtime overlap"
+      "basis": "Module CSD binding: app/csd/CARDDEMO.CSD:1; entry/closure certainty is not proof of runtime overlap"
     },
     {
       "module": "CARDDEMO",
@@ -2726,7 +2885,7 @@
         "app/csd/CARDDEMO.CSD:357"
       ],
       "via": "COBIL00C",
-      "basis": "Entry/closure certainty; not proof of runtime overlap"
+      "basis": "Module CSD binding: app/csd/CARDDEMO.CSD:1; entry/closure certainty is not proof of runtime overlap"
     },
     {
       "module": "CARDDEMO",
@@ -2742,7 +2901,7 @@
         "app/csd/CARDDEMO.CSD:357"
       ],
       "via": "COACTUPC",
-      "basis": "Entry/closure certainty; not proof of runtime overlap"
+      "basis": "Module CSD binding: app/csd/CARDDEMO.CSD:1; entry/closure certainty is not proof of runtime overlap"
     },
     {
       "module": "CARDDEMO",
@@ -2758,7 +2917,7 @@
         "app/csd/CARDDEMO.CSD:357"
       ],
       "via": "COBIL00C",
-      "basis": "Entry/closure certainty; not proof of runtime overlap"
+      "basis": "Module CSD binding: app/csd/CARDDEMO.CSD:1; entry/closure certainty is not proof of runtime overlap"
     },
     {
       "module": "CARDDEMO",
@@ -2774,7 +2933,7 @@
         "app/csd/CARDDEMO.CSD:63"
       ],
       "via": "COACTUPC",
-      "basis": "Entry/closure certainty; not proof of runtime overlap"
+      "basis": "Module CSD binding: app/csd/CARDDEMO.CSD:63; entry/closure certainty is not proof of runtime overlap"
     },
     {
       "module": "CARDDEMO",
@@ -2790,7 +2949,7 @@
         "app/csd/CARDDEMO.CSD:63"
       ],
       "via": "COACTVWC",
-      "basis": "Entry/closure certainty; not proof of runtime overlap"
+      "basis": "Module CSD binding: app/csd/CARDDEMO.CSD:63; entry/closure certainty is not proof of runtime overlap"
     },
     {
       "module": "CARDDEMO",
@@ -2806,7 +2965,7 @@
         "app/csd/CARDDEMO.CSD:63"
       ],
       "via": "COBIL00C",
-      "basis": "Entry/closure certainty; not proof of runtime overlap"
+      "basis": "Module CSD binding: app/csd/CARDDEMO.CSD:63; entry/closure certainty is not proof of runtime overlap"
     },
     {
       "module": "CARDDEMO",
@@ -2822,7 +2981,7 @@
         "app/csd/CARDDEMO.CSD:63"
       ],
       "via": "COTRN02C",
-      "basis": "Entry/closure certainty; not proof of runtime overlap"
+      "basis": "Module CSD binding: app/csd/CARDDEMO.CSD:63; entry/closure certainty is not proof of runtime overlap"
     },
     {
       "module": "CARDDEMO",
@@ -2838,7 +2997,7 @@
         "app/csd/CARDDEMO.CSD:37"
       ],
       "via": "COTRN02C",
-      "basis": "Entry/closure certainty; not proof of runtime overlap"
+      "basis": "Module CSD binding: app/csd/CARDDEMO.CSD:37; entry/closure certainty is not proof of runtime overlap"
     },
     {
       "module": "CARDDEMO",
@@ -2854,7 +3013,7 @@
         "app/csd/CARDDEMO.CSD:367"
       ],
       "via": "COACTUPC",
-      "basis": "Entry/closure certainty; not proof of runtime overlap"
+      "basis": "Module CSD binding: app/csd/CARDDEMO.CSD:1; entry/closure certainty is not proof of runtime overlap"
     },
     {
       "module": "CARDDEMO",
@@ -2870,7 +3029,7 @@
         "app/csd/CARDDEMO.CSD:367"
       ],
       "via": "COACTUPC",
-      "basis": "Entry/closure certainty; not proof of runtime overlap"
+      "basis": "Module CSD binding: app/csd/CARDDEMO.CSD:1; entry/closure certainty is not proof of runtime overlap"
     },
     {
       "module": "CARDDEMO",
@@ -2886,7 +3045,7 @@
         "app/csd/CARDDEMO.CSD:367"
       ],
       "via": "COACTVWC",
-      "basis": "Entry/closure certainty; not proof of runtime overlap"
+      "basis": "Module CSD binding: app/csd/CARDDEMO.CSD:1; entry/closure certainty is not proof of runtime overlap"
     },
     {
       "module": "CARDDEMO",
@@ -2902,7 +3061,7 @@
         "app/csd/CARDDEMO.CSD:367"
       ],
       "via": "COBIL00C",
-      "basis": "Entry/closure certainty; not proof of runtime overlap"
+      "basis": "Module CSD binding: app/csd/CARDDEMO.CSD:1; entry/closure certainty is not proof of runtime overlap"
     },
     {
       "module": "CARDDEMO",
@@ -2918,7 +3077,7 @@
         "app/csd/CARDDEMO.CSD:367"
       ],
       "via": "COACTUPC",
-      "basis": "Entry/closure certainty; not proof of runtime overlap"
+      "basis": "Module CSD binding: app/csd/CARDDEMO.CSD:1; entry/closure certainty is not proof of runtime overlap"
     },
     {
       "module": "CARDDEMO",
@@ -2934,7 +3093,7 @@
         "app/csd/CARDDEMO.CSD:367"
       ],
       "via": "COBIL00C",
-      "basis": "Entry/closure certainty; not proof of runtime overlap"
+      "basis": "Module CSD binding: app/csd/CARDDEMO.CSD:1; entry/closure certainty is not proof of runtime overlap"
     },
     {
       "module": "CARDDEMO",
@@ -2950,7 +3109,7 @@
         "app/csd/CARDDEMO.CSD:63"
       ],
       "via": "COACTUPC",
-      "basis": "Entry/closure certainty; not proof of runtime overlap"
+      "basis": "Module CSD binding: app/csd/CARDDEMO.CSD:63; entry/closure certainty is not proof of runtime overlap"
     },
     {
       "module": "CARDDEMO",
@@ -2966,7 +3125,7 @@
         "app/csd/CARDDEMO.CSD:63"
       ],
       "via": "COACTVWC",
-      "basis": "Entry/closure certainty; not proof of runtime overlap"
+      "basis": "Module CSD binding: app/csd/CARDDEMO.CSD:63; entry/closure certainty is not proof of runtime overlap"
     },
     {
       "module": "CARDDEMO",
@@ -2982,7 +3141,7 @@
         "app/csd/CARDDEMO.CSD:63"
       ],
       "via": "COBIL00C",
-      "basis": "Entry/closure certainty; not proof of runtime overlap"
+      "basis": "Module CSD binding: app/csd/CARDDEMO.CSD:63; entry/closure certainty is not proof of runtime overlap"
     },
     {
       "module": "CARDDEMO",
@@ -2998,7 +3157,7 @@
         "app/csd/CARDDEMO.CSD:63"
       ],
       "via": "COTRN02C",
-      "basis": "Entry/closure certainty; not proof of runtime overlap"
+      "basis": "Module CSD binding: app/csd/CARDDEMO.CSD:63; entry/closure certainty is not proof of runtime overlap"
     },
     {
       "module": "CARDDEMO",
@@ -3014,7 +3173,7 @@
         "app/csd/CARDDEMO.CSD:37"
       ],
       "via": "COTRN02C",
-      "basis": "Entry/closure certainty; not proof of runtime overlap"
+      "basis": "Module CSD binding: app/csd/CARDDEMO.CSD:37; entry/closure certainty is not proof of runtime overlap"
     },
     {
       "module": "CARDDEMO",
@@ -3030,7 +3189,7 @@
         "app/csd/CARDDEMO.CSD:399"
       ],
       "via": "COACTUPC",
-      "basis": "Entry/closure certainty; not proof of runtime overlap"
+      "basis": "Module CSD binding: app/csd/CARDDEMO.CSD:1; entry/closure certainty is not proof of runtime overlap"
     },
     {
       "module": "CARDDEMO",
@@ -3046,7 +3205,7 @@
         "app/csd/CARDDEMO.CSD:399"
       ],
       "via": "COACTUPC",
-      "basis": "Entry/closure certainty; not proof of runtime overlap"
+      "basis": "Module CSD binding: app/csd/CARDDEMO.CSD:1; entry/closure certainty is not proof of runtime overlap"
     },
     {
       "module": "CARDDEMO",
@@ -3062,7 +3221,7 @@
         "app/csd/CARDDEMO.CSD:399"
       ],
       "via": "COACTVWC",
-      "basis": "Entry/closure certainty; not proof of runtime overlap"
+      "basis": "Module CSD binding: app/csd/CARDDEMO.CSD:1; entry/closure certainty is not proof of runtime overlap"
     },
     {
       "module": "CARDDEMO",
@@ -3078,7 +3237,7 @@
         "app/csd/CARDDEMO.CSD:399"
       ],
       "via": "COBIL00C",
-      "basis": "Entry/closure certainty; not proof of runtime overlap"
+      "basis": "Module CSD binding: app/csd/CARDDEMO.CSD:1; entry/closure certainty is not proof of runtime overlap"
     },
     {
       "module": "CARDDEMO",
@@ -3094,7 +3253,7 @@
         "app/csd/CARDDEMO.CSD:399"
       ],
       "via": "COACTUPC",
-      "basis": "Entry/closure certainty; not proof of runtime overlap"
+      "basis": "Module CSD binding: app/csd/CARDDEMO.CSD:1; entry/closure certainty is not proof of runtime overlap"
     },
     {
       "module": "CARDDEMO",
@@ -3110,7 +3269,7 @@
         "app/csd/CARDDEMO.CSD:399"
       ],
       "via": "COBIL00C",
-      "basis": "Entry/closure certainty; not proof of runtime overlap"
+      "basis": "Module CSD binding: app/csd/CARDDEMO.CSD:1; entry/closure certainty is not proof of runtime overlap"
     },
     {
       "module": "CARDDEMO",
@@ -3126,7 +3285,7 @@
         "app/csd/CARDDEMO.CSD:63"
       ],
       "via": "COACTUPC",
-      "basis": "Entry/closure certainty; not proof of runtime overlap"
+      "basis": "Module CSD binding: app/csd/CARDDEMO.CSD:63; entry/closure certainty is not proof of runtime overlap"
     },
     {
       "module": "CARDDEMO",
@@ -3142,7 +3301,7 @@
         "app/csd/CARDDEMO.CSD:63"
       ],
       "via": "COACTVWC",
-      "basis": "Entry/closure certainty; not proof of runtime overlap"
+      "basis": "Module CSD binding: app/csd/CARDDEMO.CSD:63; entry/closure certainty is not proof of runtime overlap"
     },
     {
       "module": "CARDDEMO",
@@ -3158,7 +3317,7 @@
         "app/csd/CARDDEMO.CSD:63"
       ],
       "via": "COBIL00C",
-      "basis": "Entry/closure certainty; not proof of runtime overlap"
+      "basis": "Module CSD binding: app/csd/CARDDEMO.CSD:63; entry/closure certainty is not proof of runtime overlap"
     },
     {
       "module": "CARDDEMO",
@@ -3174,7 +3333,7 @@
         "app/csd/CARDDEMO.CSD:63"
       ],
       "via": "COTRN02C",
-      "basis": "Entry/closure certainty; not proof of runtime overlap"
+      "basis": "Module CSD binding: app/csd/CARDDEMO.CSD:63; entry/closure certainty is not proof of runtime overlap"
     },
     {
       "module": "CARDDEMO",
@@ -3190,7 +3349,7 @@
         "app/csd/CARDDEMO.CSD:399"
       ],
       "via": "COTRN02C",
-      "basis": "Entry/closure certainty; not proof of runtime overlap"
+      "basis": "Module CSD binding: app/csd/CARDDEMO.CSD:37; entry/closure certainty is not proof of runtime overlap"
     },
     {
       "module": "CARDDEMO",
@@ -3206,7 +3365,7 @@
         "app/csd/CARDDEMO.CSD:409"
       ],
       "via": "COACTUPC",
-      "basis": "Entry/closure certainty; not proof of runtime overlap"
+      "basis": "Module CSD binding: app/csd/CARDDEMO.CSD:1; entry/closure certainty is not proof of runtime overlap"
     },
     {
       "module": "CARDDEMO",
@@ -3222,7 +3381,7 @@
         "app/csd/CARDDEMO.CSD:409"
       ],
       "via": "COACTUPC",
-      "basis": "Entry/closure certainty; not proof of runtime overlap"
+      "basis": "Module CSD binding: app/csd/CARDDEMO.CSD:1; entry/closure certainty is not proof of runtime overlap"
     },
     {
       "module": "CARDDEMO",
@@ -3238,7 +3397,7 @@
         "app/csd/CARDDEMO.CSD:409"
       ],
       "via": "COACTVWC",
-      "basis": "Entry/closure certainty; not proof of runtime overlap"
+      "basis": "Module CSD binding: app/csd/CARDDEMO.CSD:1; entry/closure certainty is not proof of runtime overlap"
     },
     {
       "module": "CARDDEMO",
@@ -3254,7 +3413,7 @@
         "app/csd/CARDDEMO.CSD:409"
       ],
       "via": "COBIL00C",
-      "basis": "Entry/closure certainty; not proof of runtime overlap"
+      "basis": "Module CSD binding: app/csd/CARDDEMO.CSD:1; entry/closure certainty is not proof of runtime overlap"
     },
     {
       "module": "CARDDEMO",
@@ -3270,7 +3429,7 @@
         "app/csd/CARDDEMO.CSD:409"
       ],
       "via": "COACTUPC",
-      "basis": "Entry/closure certainty; not proof of runtime overlap"
+      "basis": "Module CSD binding: app/csd/CARDDEMO.CSD:1; entry/closure certainty is not proof of runtime overlap"
     },
     {
       "module": "CARDDEMO",
@@ -3286,7 +3445,7 @@
         "app/csd/CARDDEMO.CSD:409"
       ],
       "via": "COBIL00C",
-      "basis": "Entry/closure certainty; not proof of runtime overlap"
+      "basis": "Module CSD binding: app/csd/CARDDEMO.CSD:1; entry/closure certainty is not proof of runtime overlap"
     },
     {
       "module": "CARDDEMO",
@@ -3302,7 +3461,7 @@
         "app/csd/CARDDEMO.CSD:63"
       ],
       "via": "COACTUPC",
-      "basis": "Entry/closure certainty; not proof of runtime overlap"
+      "basis": "Module CSD binding: app/csd/CARDDEMO.CSD:63; entry/closure certainty is not proof of runtime overlap"
     },
     {
       "module": "CARDDEMO",
@@ -3318,7 +3477,7 @@
         "app/csd/CARDDEMO.CSD:63"
       ],
       "via": "COACTVWC",
-      "basis": "Entry/closure certainty; not proof of runtime overlap"
+      "basis": "Module CSD binding: app/csd/CARDDEMO.CSD:63; entry/closure certainty is not proof of runtime overlap"
     },
     {
       "module": "CARDDEMO",
@@ -3334,7 +3493,7 @@
         "app/csd/CARDDEMO.CSD:63"
       ],
       "via": "COBIL00C",
-      "basis": "Entry/closure certainty; not proof of runtime overlap"
+      "basis": "Module CSD binding: app/csd/CARDDEMO.CSD:63; entry/closure certainty is not proof of runtime overlap"
     },
     {
       "module": "CARDDEMO",
@@ -3350,7 +3509,7 @@
         "app/csd/CARDDEMO.CSD:63"
       ],
       "via": "COTRN02C",
-      "basis": "Entry/closure certainty; not proof of runtime overlap"
+      "basis": "Module CSD binding: app/csd/CARDDEMO.CSD:63; entry/closure certainty is not proof of runtime overlap"
     },
     {
       "module": "CARDDEMO",
@@ -3366,7 +3525,7 @@
         "app/csd/CARDDEMO.CSD:409"
       ],
       "via": "COTRN02C",
-      "basis": "Entry/closure certainty; not proof of runtime overlap"
+      "basis": "Module CSD binding: app/csd/CARDDEMO.CSD:37; entry/closure certainty is not proof of runtime overlap"
     },
     {
       "module": "CARDDEMO",
@@ -3382,7 +3541,7 @@
         "app/csd/CARDDEMO.CSD:419"
       ],
       "via": "COACTUPC",
-      "basis": "Entry/closure certainty; not proof of runtime overlap"
+      "basis": "Module CSD binding: app/csd/CARDDEMO.CSD:1; entry/closure certainty is not proof of runtime overlap"
     },
     {
       "module": "CARDDEMO",
@@ -3398,7 +3557,7 @@
         "app/csd/CARDDEMO.CSD:419"
       ],
       "via": "COACTUPC",
-      "basis": "Entry/closure certainty; not proof of runtime overlap"
+      "basis": "Module CSD binding: app/csd/CARDDEMO.CSD:1; entry/closure certainty is not proof of runtime overlap"
     },
     {
       "module": "CARDDEMO",
@@ -3414,7 +3573,7 @@
         "app/csd/CARDDEMO.CSD:419"
       ],
       "via": "COACTVWC",
-      "basis": "Entry/closure certainty; not proof of runtime overlap"
+      "basis": "Module CSD binding: app/csd/CARDDEMO.CSD:1; entry/closure certainty is not proof of runtime overlap"
     },
     {
       "module": "CARDDEMO",
@@ -3430,7 +3589,7 @@
         "app/csd/CARDDEMO.CSD:419"
       ],
       "via": "COBIL00C",
-      "basis": "Entry/closure certainty; not proof of runtime overlap"
+      "basis": "Module CSD binding: app/csd/CARDDEMO.CSD:1; entry/closure certainty is not proof of runtime overlap"
     },
     {
       "module": "CARDDEMO",
@@ -3446,7 +3605,7 @@
         "app/csd/CARDDEMO.CSD:419"
       ],
       "via": "COACTUPC",
-      "basis": "Entry/closure certainty; not proof of runtime overlap"
+      "basis": "Module CSD binding: app/csd/CARDDEMO.CSD:1; entry/closure certainty is not proof of runtime overlap"
     },
     {
       "module": "CARDDEMO",
@@ -3462,7 +3621,7 @@
         "app/csd/CARDDEMO.CSD:419"
       ],
       "via": "COBIL00C",
-      "basis": "Entry/closure certainty; not proof of runtime overlap"
+      "basis": "Module CSD binding: app/csd/CARDDEMO.CSD:1; entry/closure certainty is not proof of runtime overlap"
     },
     {
       "module": "CARDDEMO",
@@ -3478,7 +3637,7 @@
         "app/csd/CARDDEMO.CSD:63"
       ],
       "via": "COACTUPC",
-      "basis": "Entry/closure certainty; not proof of runtime overlap"
+      "basis": "Module CSD binding: app/csd/CARDDEMO.CSD:63; entry/closure certainty is not proof of runtime overlap"
     },
     {
       "module": "CARDDEMO",
@@ -3494,7 +3653,7 @@
         "app/csd/CARDDEMO.CSD:63"
       ],
       "via": "COACTVWC",
-      "basis": "Entry/closure certainty; not proof of runtime overlap"
+      "basis": "Module CSD binding: app/csd/CARDDEMO.CSD:63; entry/closure certainty is not proof of runtime overlap"
     },
     {
       "module": "CARDDEMO",
@@ -3510,7 +3669,7 @@
         "app/csd/CARDDEMO.CSD:63"
       ],
       "via": "COBIL00C",
-      "basis": "Entry/closure certainty; not proof of runtime overlap"
+      "basis": "Module CSD binding: app/csd/CARDDEMO.CSD:63; entry/closure certainty is not proof of runtime overlap"
     },
     {
       "module": "CARDDEMO",
@@ -3526,7 +3685,7 @@
         "app/csd/CARDDEMO.CSD:63"
       ],
       "via": "COTRN02C",
-      "basis": "Entry/closure certainty; not proof of runtime overlap"
+      "basis": "Module CSD binding: app/csd/CARDDEMO.CSD:63; entry/closure certainty is not proof of runtime overlap"
     },
     {
       "module": "CARDDEMO",
@@ -3542,7 +3701,7 @@
         "app/csd/CARDDEMO.CSD:419"
       ],
       "via": "COTRN02C",
-      "basis": "Entry/closure certainty; not proof of runtime overlap"
+      "basis": "Module CSD binding: app/csd/CARDDEMO.CSD:37; entry/closure certainty is not proof of runtime overlap"
     },
     {
       "module": "CARDDEMO",
@@ -3558,7 +3717,7 @@
         "app/csd/CARDDEMO.CSD:429"
       ],
       "via": "COACTUPC",
-      "basis": "Entry/closure certainty; not proof of runtime overlap"
+      "basis": "Module CSD binding: app/csd/CARDDEMO.CSD:1; entry/closure certainty is not proof of runtime overlap"
     },
     {
       "module": "CARDDEMO",
@@ -3574,7 +3733,7 @@
         "app/csd/CARDDEMO.CSD:429"
       ],
       "via": "COACTUPC",
-      "basis": "Entry/closure certainty; not proof of runtime overlap"
+      "basis": "Module CSD binding: app/csd/CARDDEMO.CSD:1; entry/closure certainty is not proof of runtime overlap"
     },
     {
       "module": "CARDDEMO",
@@ -3590,7 +3749,7 @@
         "app/csd/CARDDEMO.CSD:429"
       ],
       "via": "COACTVWC",
-      "basis": "Entry/closure certainty; not proof of runtime overlap"
+      "basis": "Module CSD binding: app/csd/CARDDEMO.CSD:1; entry/closure certainty is not proof of runtime overlap"
     },
     {
       "module": "CARDDEMO",
@@ -3606,7 +3765,7 @@
         "app/csd/CARDDEMO.CSD:429"
       ],
       "via": "COBIL00C",
-      "basis": "Entry/closure certainty; not proof of runtime overlap"
+      "basis": "Module CSD binding: app/csd/CARDDEMO.CSD:1; entry/closure certainty is not proof of runtime overlap"
     },
     {
       "module": "CARDDEMO",
@@ -3622,7 +3781,7 @@
         "app/csd/CARDDEMO.CSD:429"
       ],
       "via": "COACTUPC",
-      "basis": "Entry/closure certainty; not proof of runtime overlap"
+      "basis": "Module CSD binding: app/csd/CARDDEMO.CSD:1; entry/closure certainty is not proof of runtime overlap"
     },
     {
       "module": "CARDDEMO",
@@ -3638,7 +3797,7 @@
         "app/csd/CARDDEMO.CSD:429"
       ],
       "via": "COBIL00C",
-      "basis": "Entry/closure certainty; not proof of runtime overlap"
+      "basis": "Module CSD binding: app/csd/CARDDEMO.CSD:1; entry/closure certainty is not proof of runtime overlap"
     },
     {
       "module": "CARDDEMO",
@@ -3654,7 +3813,7 @@
         "app/csd/CARDDEMO.CSD:63"
       ],
       "via": "COACTUPC",
-      "basis": "Entry/closure certainty; not proof of runtime overlap"
+      "basis": "Module CSD binding: app/csd/CARDDEMO.CSD:63; entry/closure certainty is not proof of runtime overlap"
     },
     {
       "module": "CARDDEMO",
@@ -3670,7 +3829,7 @@
         "app/csd/CARDDEMO.CSD:63"
       ],
       "via": "COACTVWC",
-      "basis": "Entry/closure certainty; not proof of runtime overlap"
+      "basis": "Module CSD binding: app/csd/CARDDEMO.CSD:63; entry/closure certainty is not proof of runtime overlap"
     },
     {
       "module": "CARDDEMO",
@@ -3686,7 +3845,7 @@
         "app/csd/CARDDEMO.CSD:63"
       ],
       "via": "COBIL00C",
-      "basis": "Entry/closure certainty; not proof of runtime overlap"
+      "basis": "Module CSD binding: app/csd/CARDDEMO.CSD:63; entry/closure certainty is not proof of runtime overlap"
     },
     {
       "module": "CARDDEMO",
@@ -3702,7 +3861,7 @@
         "app/csd/CARDDEMO.CSD:63"
       ],
       "via": "COTRN02C",
-      "basis": "Entry/closure certainty; not proof of runtime overlap"
+      "basis": "Module CSD binding: app/csd/CARDDEMO.CSD:63; entry/closure certainty is not proof of runtime overlap"
     },
     {
       "module": "CARDDEMO",
@@ -3718,7 +3877,7 @@
         "app/csd/CARDDEMO.CSD:429"
       ],
       "via": "COTRN02C",
-      "basis": "Entry/closure certainty; not proof of runtime overlap"
+      "basis": "Module CSD binding: app/csd/CARDDEMO.CSD:37; entry/closure certainty is not proof of runtime overlap"
     },
     {
       "module": "CARDDEMO",
@@ -3734,7 +3893,7 @@
         "app/csd/CARDDEMO.CSD:439"
       ],
       "via": "COACTUPC",
-      "basis": "Entry/closure certainty; not proof of runtime overlap"
+      "basis": "Module CSD binding: app/csd/CARDDEMO.CSD:1; entry/closure certainty is not proof of runtime overlap"
     },
     {
       "module": "CARDDEMO",
@@ -3750,7 +3909,7 @@
         "app/csd/CARDDEMO.CSD:439"
       ],
       "via": "COACTUPC",
-      "basis": "Entry/closure certainty; not proof of runtime overlap"
+      "basis": "Module CSD binding: app/csd/CARDDEMO.CSD:1; entry/closure certainty is not proof of runtime overlap"
     },
     {
       "module": "CARDDEMO",
@@ -3766,7 +3925,7 @@
         "app/csd/CARDDEMO.CSD:439"
       ],
       "via": "COACTVWC",
-      "basis": "Entry/closure certainty; not proof of runtime overlap"
+      "basis": "Module CSD binding: app/csd/CARDDEMO.CSD:1; entry/closure certainty is not proof of runtime overlap"
     },
     {
       "module": "CARDDEMO",
@@ -3782,7 +3941,7 @@
         "app/csd/CARDDEMO.CSD:439"
       ],
       "via": "COBIL00C",
-      "basis": "Entry/closure certainty; not proof of runtime overlap"
+      "basis": "Module CSD binding: app/csd/CARDDEMO.CSD:1; entry/closure certainty is not proof of runtime overlap"
     },
     {
       "module": "CARDDEMO",
@@ -3798,7 +3957,7 @@
         "app/csd/CARDDEMO.CSD:439"
       ],
       "via": "COACTUPC",
-      "basis": "Entry/closure certainty; not proof of runtime overlap"
+      "basis": "Module CSD binding: app/csd/CARDDEMO.CSD:1; entry/closure certainty is not proof of runtime overlap"
     },
     {
       "module": "CARDDEMO",
@@ -3814,7 +3973,7 @@
         "app/csd/CARDDEMO.CSD:439"
       ],
       "via": "COBIL00C",
-      "basis": "Entry/closure certainty; not proof of runtime overlap"
+      "basis": "Module CSD binding: app/csd/CARDDEMO.CSD:1; entry/closure certainty is not proof of runtime overlap"
     },
     {
       "module": "CARDDEMO",
@@ -3830,7 +3989,7 @@
         "app/csd/CARDDEMO.CSD:63"
       ],
       "via": "COACTUPC",
-      "basis": "Entry/closure certainty; not proof of runtime overlap"
+      "basis": "Module CSD binding: app/csd/CARDDEMO.CSD:63; entry/closure certainty is not proof of runtime overlap"
     },
     {
       "module": "CARDDEMO",
@@ -3846,7 +4005,7 @@
         "app/csd/CARDDEMO.CSD:63"
       ],
       "via": "COACTVWC",
-      "basis": "Entry/closure certainty; not proof of runtime overlap"
+      "basis": "Module CSD binding: app/csd/CARDDEMO.CSD:63; entry/closure certainty is not proof of runtime overlap"
     },
     {
       "module": "CARDDEMO",
@@ -3862,7 +4021,7 @@
         "app/csd/CARDDEMO.CSD:63"
       ],
       "via": "COBIL00C",
-      "basis": "Entry/closure certainty; not proof of runtime overlap"
+      "basis": "Module CSD binding: app/csd/CARDDEMO.CSD:63; entry/closure certainty is not proof of runtime overlap"
     },
     {
       "module": "CARDDEMO",
@@ -3877,7 +4036,7 @@
         "app/csd/CARDDEMO.CSD:63"
       ],
       "via": "COTRN02C",
-      "basis": "Entry/closure certainty; not proof of runtime overlap"
+      "basis": "Module CSD binding: app/csd/CARDDEMO.CSD:63; entry/closure certainty is not proof of runtime overlap"
     },
     {
       "module": "CARDDEMO",
@@ -3892,7 +4051,7 @@
         "app/csd/CARDDEMO.CSD:439"
       ],
       "via": "COTRN02C",
-      "basis": "Entry/closure certainty; not proof of runtime overlap"
+      "basis": "Module CSD binding: app/csd/CARDDEMO.CSD:37; entry/closure certainty is not proof of runtime overlap"
     },
     {
       "module": "CARDDEMO",
@@ -3908,7 +4067,7 @@
         "app/csd/CARDDEMO.CSD:449"
       ],
       "via": "COACTUPC",
-      "basis": "Entry/closure certainty; not proof of runtime overlap"
+      "basis": "Module CSD binding: app/csd/CARDDEMO.CSD:1; entry/closure certainty is not proof of runtime overlap"
     },
     {
       "module": "CARDDEMO",
@@ -3924,7 +4083,7 @@
         "app/csd/CARDDEMO.CSD:449"
       ],
       "via": "COACTUPC",
-      "basis": "Entry/closure certainty; not proof of runtime overlap"
+      "basis": "Module CSD binding: app/csd/CARDDEMO.CSD:1; entry/closure certainty is not proof of runtime overlap"
     },
     {
       "module": "CARDDEMO",
@@ -3940,7 +4099,7 @@
         "app/csd/CARDDEMO.CSD:449"
       ],
       "via": "COACTVWC",
-      "basis": "Entry/closure certainty; not proof of runtime overlap"
+      "basis": "Module CSD binding: app/csd/CARDDEMO.CSD:1; entry/closure certainty is not proof of runtime overlap"
     },
     {
       "module": "CARDDEMO",
@@ -3956,7 +4115,7 @@
         "app/csd/CARDDEMO.CSD:449"
       ],
       "via": "COBIL00C",
-      "basis": "Entry/closure certainty; not proof of runtime overlap"
+      "basis": "Module CSD binding: app/csd/CARDDEMO.CSD:1; entry/closure certainty is not proof of runtime overlap"
     },
     {
       "module": "CARDDEMO",
@@ -3972,7 +4131,7 @@
         "app/csd/CARDDEMO.CSD:449"
       ],
       "via": "COACTUPC",
-      "basis": "Entry/closure certainty; not proof of runtime overlap"
+      "basis": "Module CSD binding: app/csd/CARDDEMO.CSD:1; entry/closure certainty is not proof of runtime overlap"
     },
     {
       "module": "CARDDEMO",
@@ -3988,7 +4147,7 @@
         "app/csd/CARDDEMO.CSD:449"
       ],
       "via": "COBIL00C",
-      "basis": "Entry/closure certainty; not proof of runtime overlap"
+      "basis": "Module CSD binding: app/csd/CARDDEMO.CSD:1; entry/closure certainty is not proof of runtime overlap"
     },
     {
       "module": "CARDDEMO",
@@ -4004,7 +4163,7 @@
         "app/csd/CARDDEMO.CSD:63"
       ],
       "via": "COACTUPC",
-      "basis": "Entry/closure certainty; not proof of runtime overlap"
+      "basis": "Module CSD binding: app/csd/CARDDEMO.CSD:63; entry/closure certainty is not proof of runtime overlap"
     },
     {
       "module": "CARDDEMO",
@@ -4020,7 +4179,7 @@
         "app/csd/CARDDEMO.CSD:63"
       ],
       "via": "COACTVWC",
-      "basis": "Entry/closure certainty; not proof of runtime overlap"
+      "basis": "Module CSD binding: app/csd/CARDDEMO.CSD:63; entry/closure certainty is not proof of runtime overlap"
     },
     {
       "module": "CARDDEMO",
@@ -4036,7 +4195,7 @@
         "app/csd/CARDDEMO.CSD:63"
       ],
       "via": "COBIL00C",
-      "basis": "Entry/closure certainty; not proof of runtime overlap"
+      "basis": "Module CSD binding: app/csd/CARDDEMO.CSD:63; entry/closure certainty is not proof of runtime overlap"
     },
     {
       "module": "CARDDEMO",
@@ -4052,7 +4211,7 @@
         "app/csd/CARDDEMO.CSD:63"
       ],
       "via": "COTRN02C",
-      "basis": "Entry/closure certainty; not proof of runtime overlap"
+      "basis": "Module CSD binding: app/csd/CARDDEMO.CSD:63; entry/closure certainty is not proof of runtime overlap"
     },
     {
       "module": "CARDDEMO",
@@ -4068,7 +4227,7 @@
         "app/csd/CARDDEMO.CSD:449"
       ],
       "via": "COTRN02C",
-      "basis": "Entry/closure certainty; not proof of runtime overlap"
+      "basis": "Module CSD binding: app/csd/CARDDEMO.CSD:37; entry/closure certainty is not proof of runtime overlap"
     },
     {
       "module": "CARDDEMO",
@@ -4084,7 +4243,7 @@
         "app/csd/CARDDEMO.CSD:459"
       ],
       "via": "COACTUPC",
-      "basis": "Entry/closure certainty; not proof of runtime overlap"
+      "basis": "Module CSD binding: app/csd/CARDDEMO.CSD:1; entry/closure certainty is not proof of runtime overlap"
     },
     {
       "module": "CARDDEMO",
@@ -4100,7 +4259,7 @@
         "app/csd/CARDDEMO.CSD:459"
       ],
       "via": "COACTUPC",
-      "basis": "Entry/closure certainty; not proof of runtime overlap"
+      "basis": "Module CSD binding: app/csd/CARDDEMO.CSD:1; entry/closure certainty is not proof of runtime overlap"
     },
     {
       "module": "CARDDEMO",
@@ -4116,7 +4275,7 @@
         "app/csd/CARDDEMO.CSD:459"
       ],
       "via": "COACTVWC",
-      "basis": "Entry/closure certainty; not proof of runtime overlap"
+      "basis": "Module CSD binding: app/csd/CARDDEMO.CSD:1; entry/closure certainty is not proof of runtime overlap"
     },
     {
       "module": "CARDDEMO",
@@ -4132,7 +4291,7 @@
         "app/csd/CARDDEMO.CSD:459"
       ],
       "via": "COBIL00C",
-      "basis": "Entry/closure certainty; not proof of runtime overlap"
+      "basis": "Module CSD binding: app/csd/CARDDEMO.CSD:1; entry/closure certainty is not proof of runtime overlap"
     },
     {
       "module": "CARDDEMO",
@@ -4148,7 +4307,7 @@
         "app/csd/CARDDEMO.CSD:459"
       ],
       "via": "COACTUPC",
-      "basis": "Entry/closure certainty; not proof of runtime overlap"
+      "basis": "Module CSD binding: app/csd/CARDDEMO.CSD:1; entry/closure certainty is not proof of runtime overlap"
     },
     {
       "module": "CARDDEMO",
@@ -4164,7 +4323,7 @@
         "app/csd/CARDDEMO.CSD:459"
       ],
       "via": "COBIL00C",
-      "basis": "Entry/closure certainty; not proof of runtime overlap"
+      "basis": "Module CSD binding: app/csd/CARDDEMO.CSD:1; entry/closure certainty is not proof of runtime overlap"
     },
     {
       "module": "CARDDEMO",
@@ -4180,7 +4339,7 @@
         "app/csd/CARDDEMO.CSD:63"
       ],
       "via": "COACTUPC",
-      "basis": "Entry/closure certainty; not proof of runtime overlap"
+      "basis": "Module CSD binding: app/csd/CARDDEMO.CSD:63; entry/closure certainty is not proof of runtime overlap"
     },
     {
       "module": "CARDDEMO",
@@ -4196,7 +4355,7 @@
         "app/csd/CARDDEMO.CSD:63"
       ],
       "via": "COACTVWC",
-      "basis": "Entry/closure certainty; not proof of runtime overlap"
+      "basis": "Module CSD binding: app/csd/CARDDEMO.CSD:63; entry/closure certainty is not proof of runtime overlap"
     },
     {
       "module": "CARDDEMO",
@@ -4212,7 +4371,7 @@
         "app/csd/CARDDEMO.CSD:63"
       ],
       "via": "COBIL00C",
-      "basis": "Entry/closure certainty; not proof of runtime overlap"
+      "basis": "Module CSD binding: app/csd/CARDDEMO.CSD:63; entry/closure certainty is not proof of runtime overlap"
     },
     {
       "module": "CARDDEMO",
@@ -4228,7 +4387,7 @@
         "app/csd/CARDDEMO.CSD:63"
       ],
       "via": "COTRN02C",
-      "basis": "Entry/closure certainty; not proof of runtime overlap"
+      "basis": "Module CSD binding: app/csd/CARDDEMO.CSD:63; entry/closure certainty is not proof of runtime overlap"
     },
     {
       "module": "CARDDEMO",
@@ -4244,7 +4403,7 @@
         "app/csd/CARDDEMO.CSD:459"
       ],
       "via": "COTRN02C",
-      "basis": "Entry/closure certainty; not proof of runtime overlap"
+      "basis": "Module CSD binding: app/csd/CARDDEMO.CSD:37; entry/closure certainty is not proof of runtime overlap"
     },
     {
       "module": "CARDDEMO",
@@ -4260,7 +4419,7 @@
         "app/csd/CARDDEMO.CSD:469"
       ],
       "via": "COACTUPC",
-      "basis": "Entry/closure certainty; not proof of runtime overlap"
+      "basis": "Module CSD binding: app/csd/CARDDEMO.CSD:1; entry/closure certainty is not proof of runtime overlap"
     },
     {
       "module": "CARDDEMO",
@@ -4276,7 +4435,7 @@
         "app/csd/CARDDEMO.CSD:469"
       ],
       "via": "COACTUPC",
-      "basis": "Entry/closure certainty; not proof of runtime overlap"
+      "basis": "Module CSD binding: app/csd/CARDDEMO.CSD:1; entry/closure certainty is not proof of runtime overlap"
     },
     {
       "module": "CARDDEMO",
@@ -4292,7 +4451,7 @@
         "app/csd/CARDDEMO.CSD:469"
       ],
       "via": "COACTVWC",
-      "basis": "Entry/closure certainty; not proof of runtime overlap"
+      "basis": "Module CSD binding: app/csd/CARDDEMO.CSD:1; entry/closure certainty is not proof of runtime overlap"
     },
     {
       "module": "CARDDEMO",
@@ -4308,7 +4467,7 @@
         "app/csd/CARDDEMO.CSD:469"
       ],
       "via": "COBIL00C",
-      "basis": "Entry/closure certainty; not proof of runtime overlap"
+      "basis": "Module CSD binding: app/csd/CARDDEMO.CSD:1; entry/closure certainty is not proof of runtime overlap"
     },
     {
       "module": "CARDDEMO",
@@ -4324,7 +4483,7 @@
         "app/csd/CARDDEMO.CSD:469"
       ],
       "via": "COACTUPC",
-      "basis": "Entry/closure certainty; not proof of runtime overlap"
+      "basis": "Module CSD binding: app/csd/CARDDEMO.CSD:1; entry/closure certainty is not proof of runtime overlap"
     },
     {
       "module": "CARDDEMO",
@@ -4340,7 +4499,7 @@
         "app/csd/CARDDEMO.CSD:469"
       ],
       "via": "COBIL00C",
-      "basis": "Entry/closure certainty; not proof of runtime overlap"
+      "basis": "Module CSD binding: app/csd/CARDDEMO.CSD:1; entry/closure certainty is not proof of runtime overlap"
     },
     {
       "module": "CARDDEMO",
@@ -4356,7 +4515,7 @@
         "app/csd/CARDDEMO.CSD:63"
       ],
       "via": "COACTUPC",
-      "basis": "Entry/closure certainty; not proof of runtime overlap"
+      "basis": "Module CSD binding: app/csd/CARDDEMO.CSD:63; entry/closure certainty is not proof of runtime overlap"
     },
     {
       "module": "CARDDEMO",
@@ -4372,7 +4531,7 @@
         "app/csd/CARDDEMO.CSD:63"
       ],
       "via": "COACTVWC",
-      "basis": "Entry/closure certainty; not proof of runtime overlap"
+      "basis": "Module CSD binding: app/csd/CARDDEMO.CSD:63; entry/closure certainty is not proof of runtime overlap"
     },
     {
       "module": "CARDDEMO",
@@ -4388,7 +4547,7 @@
         "app/csd/CARDDEMO.CSD:63"
       ],
       "via": "COBIL00C",
-      "basis": "Entry/closure certainty; not proof of runtime overlap"
+      "basis": "Module CSD binding: app/csd/CARDDEMO.CSD:63; entry/closure certainty is not proof of runtime overlap"
     },
     {
       "module": "CARDDEMO",
@@ -4404,7 +4563,7 @@
         "app/csd/CARDDEMO.CSD:63"
       ],
       "via": "COTRN02C",
-      "basis": "Entry/closure certainty; not proof of runtime overlap"
+      "basis": "Module CSD binding: app/csd/CARDDEMO.CSD:63; entry/closure certainty is not proof of runtime overlap"
     },
     {
       "module": "CARDDEMO",
@@ -4420,7 +4579,7 @@
         "app/csd/CARDDEMO.CSD:469"
       ],
       "via": "COTRN02C",
-      "basis": "Entry/closure certainty; not proof of runtime overlap"
+      "basis": "Module CSD binding: app/csd/CARDDEMO.CSD:37; entry/closure certainty is not proof of runtime overlap"
     },
     {
       "module": "CARDDEMO",
@@ -4436,7 +4595,7 @@
         "app/csd/CARDDEMO.CSD:479"
       ],
       "via": "COACTUPC",
-      "basis": "Entry/closure certainty; not proof of runtime overlap"
+      "basis": "Module CSD binding: app/csd/CARDDEMO.CSD:1; entry/closure certainty is not proof of runtime overlap"
     },
     {
       "module": "CARDDEMO",
@@ -4452,7 +4611,7 @@
         "app/csd/CARDDEMO.CSD:479"
       ],
       "via": "COACTUPC",
-      "basis": "Entry/closure certainty; not proof of runtime overlap"
+      "basis": "Module CSD binding: app/csd/CARDDEMO.CSD:1; entry/closure certainty is not proof of runtime overlap"
     },
     {
       "module": "CARDDEMO",
@@ -4468,7 +4627,7 @@
         "app/csd/CARDDEMO.CSD:479"
       ],
       "via": "COACTVWC",
-      "basis": "Entry/closure certainty; not proof of runtime overlap"
+      "basis": "Module CSD binding: app/csd/CARDDEMO.CSD:1; entry/closure certainty is not proof of runtime overlap"
     },
     {
       "module": "CARDDEMO",
@@ -4484,7 +4643,7 @@
         "app/csd/CARDDEMO.CSD:479"
       ],
       "via": "COBIL00C",
-      "basis": "Entry/closure certainty; not proof of runtime overlap"
+      "basis": "Module CSD binding: app/csd/CARDDEMO.CSD:1; entry/closure certainty is not proof of runtime overlap"
     },
     {
       "module": "CARDDEMO",
@@ -4500,7 +4659,7 @@
         "app/csd/CARDDEMO.CSD:479"
       ],
       "via": "COACTUPC",
-      "basis": "Entry/closure certainty; not proof of runtime overlap"
+      "basis": "Module CSD binding: app/csd/CARDDEMO.CSD:1; entry/closure certainty is not proof of runtime overlap"
     },
     {
       "module": "CARDDEMO",
@@ -4516,7 +4675,7 @@
         "app/csd/CARDDEMO.CSD:479"
       ],
       "via": "COBIL00C",
-      "basis": "Entry/closure certainty; not proof of runtime overlap"
+      "basis": "Module CSD binding: app/csd/CARDDEMO.CSD:1; entry/closure certainty is not proof of runtime overlap"
     },
     {
       "module": "CARDDEMO",
@@ -4532,7 +4691,7 @@
         "app/csd/CARDDEMO.CSD:63"
       ],
       "via": "COACTUPC",
-      "basis": "Entry/closure certainty; not proof of runtime overlap"
+      "basis": "Module CSD binding: app/csd/CARDDEMO.CSD:63; entry/closure certainty is not proof of runtime overlap"
     },
     {
       "module": "CARDDEMO",
@@ -4548,7 +4707,7 @@
         "app/csd/CARDDEMO.CSD:63"
       ],
       "via": "COACTVWC",
-      "basis": "Entry/closure certainty; not proof of runtime overlap"
+      "basis": "Module CSD binding: app/csd/CARDDEMO.CSD:63; entry/closure certainty is not proof of runtime overlap"
     },
     {
       "module": "CARDDEMO",
@@ -4564,7 +4723,7 @@
         "app/csd/CARDDEMO.CSD:63"
       ],
       "via": "COBIL00C",
-      "basis": "Entry/closure certainty; not proof of runtime overlap"
+      "basis": "Module CSD binding: app/csd/CARDDEMO.CSD:63; entry/closure certainty is not proof of runtime overlap"
     },
     {
       "module": "CARDDEMO",
@@ -4580,7 +4739,7 @@
         "app/csd/CARDDEMO.CSD:63"
       ],
       "via": "COTRN02C",
-      "basis": "Entry/closure certainty; not proof of runtime overlap"
+      "basis": "Module CSD binding: app/csd/CARDDEMO.CSD:63; entry/closure certainty is not proof of runtime overlap"
     },
     {
       "module": "CARDDEMO",
@@ -4596,7 +4755,7 @@
         "app/csd/CARDDEMO.CSD:479"
       ],
       "via": "COTRN02C",
-      "basis": "Entry/closure certainty; not proof of runtime overlap"
+      "basis": "Module CSD binding: app/csd/CARDDEMO.CSD:37; entry/closure certainty is not proof of runtime overlap"
     },
     {
       "module": "CARDDEMO",
@@ -5121,6 +5280,35 @@
         "app/cbl/CBTRN03C.cbl:414",
         "app/jcl/TRANREPT.jcl:67"
       ]
+    },
+    {
+      "module": "VSAMMQ",
+      "kind": "CICS program",
+      "name": "COACCT01",
+      "dataset": "AWS.M2.CARDDEMO.ACCTDATA.VSAM.KSDS",
+      "direction": "R",
+      "status": "CANDIDATE",
+      "evidence": [
+        "app/app-vsam-mq/cbl/COACCT01.cbl:396",
+        "app/csd/CARDDEMO.CSD:1"
+      ],
+      "command": "READ",
+      "basis": "CSD binding comes from another module: app/csd/CARDDEMO.CSD:1; deployment in this module region is unproven"
+    },
+    {
+      "module": "VSAMMQ",
+      "kind": "CICS transaction",
+      "name": "CDRA",
+      "dataset": "AWS.M2.CARDDEMO.ACCTDATA.VSAM.KSDS",
+      "direction": "R",
+      "status": "CANDIDATE",
+      "evidence": [
+        "app/app-vsam-mq/cbl/COACCT01.cbl:396",
+        "app/app-vsam-mq/csd/CRDDEMOM.csd:17",
+        "app/csd/CARDDEMO.CSD:1"
+      ],
+      "via": "COACCT01",
+      "basis": "CSD binding comes from another module: app/csd/CARDDEMO.CSD:1; deployment in this module region is unproven; entry/closure certainty is not proof of runtime overlap"
     }
   ],
   "module_coverage": [
@@ -5561,7 +5749,7 @@
     "in_scope.datasets": 6,
     "edges": 11,
     "setup_jobs": 5,
-    "outside_dependencies": 237,
+    "outside_dependencies": 249,
     "module_coverage": 4,
     "scheduler.jobs": 5,
     "scheduler.edges": 4,
