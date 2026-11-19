@@ -1,0 +1,76 @@
+{
+  "meta": {
+    "module": "VSAMMQ",
+    "generated_at": "2026-11-19T08:27:42Z",
+    "tool": "mftb 0.2.1",
+    "inputs": [
+      "programs.json",
+      "jobs.json"
+    ]
+  },
+  "author": "agent",
+  "summary": {
+    "subjects": 2,
+    "written": 2,
+    "unknown": 0,
+    "by_kind": {
+      "program": 2,
+      "jcl": 0,
+      "proc": 0
+    },
+    "with_key_points": 2,
+    "overviews": 1,
+    "overviews_written": 1
+  },
+  "overviews": [
+    {
+      "kind": "module",
+      "name": "VSAMMQ",
+      "key_points": [
+        "Serves two MQ request/reply inquiries from CICS: account details read from the VSAM account file (transaction CDRA) and the system date and time (transaction CDRD).",
+        "Read-only towards account data: the only file command is a READ of ACCTDAT; everything else it produces is a reply or error message on an MQ queue."
+      ],
+      "basis": [
+        "app/app-vsam-mq/cbl/COACCT01.cbl:391-428",
+        "app/app-vsam-mq/cbl/CODATE01.cbl:339-366",
+        "app/app-vsam-mq/csd/CRDDEMOM.csd:17-36"
+      ],
+      "written_by": "agent"
+    }
+  ],
+  "descriptions": [
+    {
+      "kind": "program",
+      "name": "COACCT01",
+      "path": "app/app-vsam-mq/cbl/COACCT01.cbl",
+      "description": "Answers MQ account inquiries: reads an INQA request with an account id, reads the account from CICS file ACCTDAT and puts the account details on the reply queue.",
+      "key_points": [
+        "Started with an MQ trigger message: RETRIEVE INTO(MQTM) supplies the input queue name; the reply queue is the literal CARD.DEMO.REPLY.ACCT and errors go to CARD.DEMO.ERROR.",
+        "For function INQA with a non-zero key it reads ACCTDAT by account id and replies with status, balance, limits, dates and group id; a not-found key or any other request gets an 'INVALID REQUEST PARAMETERS' reply.",
+        "Loops MQGET under syncpoint, taking a CICS SYNCPOINT before each further get, until no message is left, then closes the queues and returns."
+      ],
+      "basis": [
+        "app/app-vsam-mq/cbl/COACCT01.cbl:176-218",
+        "app/app-vsam-mq/cbl/COACCT01.cbl:289-331",
+        "app/app-vsam-mq/cbl/COACCT01.cbl:333-462"
+      ],
+      "written_by": "agent"
+    },
+    {
+      "kind": "program",
+      "name": "CODATE01",
+      "path": "app/app-vsam-mq/cbl/CODATE01.cbl",
+      "description": "Answers MQ system date inquiries: for each request message it takes the CICS date and time and puts 'SYSTEM DATE / SYSTEM TIME' on the reply queue.",
+      "key_points": [
+        "Started with an MQ trigger message: RETRIEVE INTO(MQTM) supplies the input queue name; the reply queue is the literal CARD.DEMO.REPLY.DATE and errors go to CARD.DEMO.ERROR.",
+        "Each request is answered from EXEC CICS ASKTIME / FORMATTIME (MM-DD-YYYY and time); the request content is not examined and no file is read."
+      ],
+      "basis": [
+        "app/app-vsam-mq/cbl/CODATE01.cbl:136-166",
+        "app/app-vsam-mq/cbl/CODATE01.cbl:238-245",
+        "app/app-vsam-mq/cbl/CODATE01.cbl:283-366"
+      ],
+      "written_by": "agent"
+    }
+  ]
+}
