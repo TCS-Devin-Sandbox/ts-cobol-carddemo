@@ -195,6 +195,10 @@ def build():
                                 via=u['program'], basis=binding_basis + '; entry/closure certainty is not proof of runtime overlap')
     add('CARDDEMO', 'job', 'COMBTRAN', 'AWS.M2.CARDDEMO.SYSTRAN', 'R', 'PROVEN',
         ['app/jcl/COMBTRAN.jcl:21-30', 'app/scheduler/CardDemo.controlm:72-78'], step='STEP05R', generation='0', basis='Concatenated SORTIN; GDG roll from prior job (+1)')
+    proven_jobs = {(x['module'], x['name'], x.get('step'), x['dataset']) for x in outside
+                   if x['kind'] == 'job' and x['status'] == 'PROVEN'}
+    outside = [x for x in outside if not (x['kind'] == 'job' and x['status'] == 'CANDIDATE'
+               and (x['module'], x['name'], x.get('step'), x['dataset']) in proven_jobs)]
     outside = sorted({json.dumps(x, sort_keys=True): x for x in outside}.values(), key=lambda x: (x['module'], x['kind'], x['name'], x['dataset'], x['direction'], str(x['evidence'])))
     sched_path = 'app/scheduler/CardDemo.controlm'
     folder = next(f for f in ET.fromstring(read(sched_path)).iter('FOLDER') if f.attrib['FOLDER_NAME'] == TABLE)

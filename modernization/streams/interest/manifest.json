@@ -3998,19 +3998,6 @@
     {
       "module": "CARDDEMO",
       "kind": "job",
-      "name": "COMBTRAN",
-      "dataset": "AWS.M2.CARDDEMO.SYSTRAN",
-      "direction": "RW",
-      "status": "CANDIDATE",
-      "evidence": [
-        "app/jcl/COMBTRAN.jcl:25"
-      ],
-      "step": "STEP05R",
-      "basis": "Allocation only; R/W possibilities, execution and direction not proven"
-    },
-    {
-      "module": "CARDDEMO",
-      "kind": "job",
       "name": "CREASTMT",
       "dataset": "AWS.M2.CARDDEMO.ACCTDATA.VSAM.KSDS",
       "direction": "R",
@@ -4904,7 +4891,7 @@
     "in_scope.datasets": 6,
     "edges": 11,
     "setup_jobs": 5,
-    "outside_dependencies": 249,
+    "outside_dependencies": 248,
     "module_coverage": 4,
     "scheduler.jobs": 5,
     "scheduler.edges": 4,

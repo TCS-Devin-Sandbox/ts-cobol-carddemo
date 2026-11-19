@@ -14,6 +14,10 @@ class StreamTest(unittest.TestCase):
         self.assertEqual({x['module'] for x in m['module_coverage']}, set(stream.MODULES))
         self.assertTrue(any(x['name'] == 'COMBTRAN' and x['generation'] == '0'
                             for x in m['outside_dependencies'] if 'generation' in x))
+        consumers = [x for x in m['outside_dependencies'] if x['kind'] == 'job' and x['name'] == 'COMBTRAN'
+                     and x.get('step') == 'STEP05R' and x['dataset'] == 'AWS.M2.CARDDEMO.SYSTRAN']
+        self.assertEqual(len(consumers), 1)
+        self.assertEqual((consumers[0]['direction'], consumers[0]['status']), ('R', 'PROVEN'))
         path_edge = next(x for x in m['edges'] if x.get('dd') == 'XREFFIL1')
         self.assertEqual((path_edge['direction'], path_edge['status']), ('R', 'PROVEN'))
         self.assertIn('naming convention', path_edge['basis'])
