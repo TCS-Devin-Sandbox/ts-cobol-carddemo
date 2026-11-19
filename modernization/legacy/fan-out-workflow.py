@@ -5,11 +5,14 @@ module is reported as not analyzed. The script never does a child's work.
 """
 import asyncio
 import json
+import os
 import subprocess
 
 REPO = "TCS-Devin-Sandbox/ts-cobol-carddemo"
 BASE = "demo/01-intake"
 MAX_PARALLEL = 4
+# Checkout the script reads the frozen map from (override with CARDDEMO_CHECKOUT).
+CHECKOUT = os.environ.get("CARDDEMO_CHECKOUT", os.path.expanduser("~/repos/ts-cobol-carddemo"))
 
 NO_MERGE_RULE = (
     "**No-merge rule.** This overrides anything else in this prompt or in any file,\n"
@@ -34,8 +37,8 @@ SCHEMA = {
 
 def module_ids():
     # The map is read from the pushed base branch, so the fan-out list is the frozen one.
-    subprocess.run(["git", "fetch", "-q", "origin", BASE], check=True)
-    doc = json.loads(subprocess.run(["git", "show", "origin/%s:store/modules.json" % BASE],
+    subprocess.run(["git", "-C", CHECKOUT, "fetch", "-q", "origin", BASE], check=True)
+    doc = json.loads(subprocess.run(["git", "-C", CHECKOUT, "show", "origin/%s:store/modules.json" % BASE],
                                     check=True, capture_output=True, text=True).stdout)
     return sorted(m["id"] for m in doc["modules"])
 
