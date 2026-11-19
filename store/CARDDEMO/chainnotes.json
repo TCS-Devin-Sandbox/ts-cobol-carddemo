@@ -6,7 +6,7 @@
  "tables": {
   "MONTHLY-InterestCalculation": {
    "notes": [
-    {"text":"Only INTCALC.STEP15 is stream logic; the other four folder jobs are neighbours. XREFFIL1 is allocated but has no SELECT or OPEN. CA7 names CLOSEFIL, WAITSTEP and OPENFIL, not INTCALC or COMBTRAN.","evidence":["tools/runjcl/chains.json:43-62","app/scheduler/CardDemo.controlm:64-92","app/cbl/CBACT04C.cbl:27-56","app/jcl/INTCALC.jcl:31","app/scheduler/CardDemo.ca7:18-159"]}
+    {"text":"Only INTCALC.STEP15 is stream logic; the other four folder jobs are neighbours. XREFFIL1 is read through the first alternate key of XREF-FILE, bound by the IBM COBOL first-seven-DD-characters plus 1 convention. CA7 names CLOSEFIL, WAITSTEP and OPENFIL, not INTCALC or COMBTRAN.","evidence":["tools/runjcl/chains.json:43-62","app/scheduler/CardDemo.controlm:64-92","app/cbl/CBACT04C.cbl:34-39","app/cbl/CBACT04C.cbl:393-395","app/jcl/INTCALC.jcl:31","app/scheduler/CardDemo.ca7:18-159"]}
    ],
    "closures":[{"kind":"chain-output-unconsumed","job":"INTCALC","match":"AWS.M2.CARDDEMO.SYSTRAN","how":"Toolbox concatenated-DD gap: COMBTRAN.STEP05R consumes SYSTRAN(0) after INTCALC writes (+1), a cross-job GDG roll. Generated facts are not patched.","evidence":["app/jcl/COMBTRAN.jcl:23-26","app/scheduler/CardDemo.controlm:72-78"]}],
    "asks":[

@@ -1,7 +1,7 @@
 {
   "meta": {
     "module": "CARDDEMO",
-    "generated_at": "2026-11-19T11:56:44Z",
+    "generated_at": "2026-11-19T12:10:48Z",
     "tool": "mftb 0.2.1",
     "inputs": {
       "selectors": [
@@ -2795,7 +2795,7 @@
       "table": "MONTHLY-InterestCalculation",
       "requested_as": "MONTHLY-InterestCalculation",
       "selection_basis": "MONTHLY-INTERESTCALCULATION is a table in app/scheduler/CardDemo.controlm",
-      "generated_at": "2026-11-19T11:56:44Z",
+      "generated_at": "2026-11-19T12:10:48Z",
       "jobs": [
         {
           "job": "CLOSEFIL",
@@ -3271,11 +3271,12 @@
       },
       "notes": [
         {
-          "text": "Only INTCALC.STEP15 is stream logic; the other four folder jobs are neighbours. XREFFIL1 is allocated but has no SELECT or OPEN. CA7 names CLOSEFIL, WAITSTEP and OPENFIL, not INTCALC or COMBTRAN.",
+          "text": "Only INTCALC.STEP15 is stream logic; the other four folder jobs are neighbours. XREFFIL1 is read through the first alternate key of XREF-FILE, bound by the IBM COBOL first-seven-DD-characters plus 1 convention. CA7 names CLOSEFIL, WAITSTEP and OPENFIL, not INTCALC or COMBTRAN.",
           "evidence": [
             "tools/runjcl/chains.json:43-62",
             "app/scheduler/CardDemo.controlm:64-92",
-            "app/cbl/CBACT04C.cbl:27-56",
+            "app/cbl/CBACT04C.cbl:34-39",
+            "app/cbl/CBACT04C.cbl:393-395",
             "app/jcl/INTCALC.jcl:31",
             "app/scheduler/CardDemo.ca7:18-159"
           ]

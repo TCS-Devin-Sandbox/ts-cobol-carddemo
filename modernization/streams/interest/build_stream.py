@@ -54,9 +54,15 @@ def build():
         if not dd['dsn'] or dd['name'] == 'STEPLIB':
             continue
         f = files.get(dd['name'])
+        alternate_path = dd['name'] == 'XREFFIL1'
+        if alternate_path:
+            f = files['XREFFILE']
         definition = next((d for d in conn['datasets'] if base(d['dsn']) == base(dd['dsn'])), {})
         ev = [dd['source']]
         layout = layouts.get(dd['name'])
+        if alternate_path:
+            layout = layouts['XREFFILE']
+            ev += ['app/cbl/CBACT04C.cbl:34-39', 'app/cbl/CBACT04C.cbl:393-395', 'app/jcl/XREFFILE.jcl:72-92']
         if f:
             ev += [f['source'], 'app/cbl/CBACT04C.cbl:61-92'] + [s['source'] for s in f['op_sites'] if s['op'] in ('OPEN', 'READ', 'WRITE', 'REWRITE')]
         item = fact(dsn=base(dd['dsn']), dd=dd['name'], disp=dd['disp'],
@@ -77,15 +83,16 @@ def build():
             cp = 'app/cpy/' + layout['name'] + '.cpy'
             cev = [f"app/cbl/CBACT04C.cbl:{layout['line']}", cite(cp, '01 ')]
             item['evidence'] += cev
-            copies.append(fact(name=layout['name'], path=cp, fd=f['file'], records=f['records'],
-                               placement='WORKING-STORAGE; moved to/from FD record, not an FD COPY',
-                               record_length=f['record_length'], evidence=cev + ev))
+            if not alternate_path:
+                copies.append(fact(name=layout['name'], path=cp, fd=f['file'], records=f['records'],
+                                   placement='WORKING-STORAGE; moved to/from FD record, not an FD COPY',
+                                   record_length=f['record_length'], evidence=cev + ev))
             d = item['direction']
             for mode in ('R', 'W'):
                 if mode in d:
                     edges.append(fact(kind='data', source=item['dsn'] if mode == 'R' else 'CBACT04C',
                                       target='CBACT04C' if mode == 'R' else item['dsn'], direction=mode,
-                                      dd=dd['name'], status='PROVEN', basis='SELECT binding and OPEN mode', evidence=list(ev)))
+                                      dd=dd['name'], status='PROVEN', basis='IBM COBOL alternate-index DD naming convention: first seven characters of XREFFILE + 1 = XREFFIL1 for the first alternate key; READ KEY IS FD-XREF-ACCT-ID uses the AIX path' if alternate_path else 'SELECT binding and OPEN mode', evidence=list(ev)))
         datasets.append(item)
     edges += [fact(kind='exec', source='INTCALC.STEP15', target='load-module:CBACT04C', status='PROVEN',
                    evidence=[step['source']]),
@@ -190,7 +197,7 @@ def build():
         ('Stream versus folder', 'Five scheduled jobs', 'INTCALC plus setup jobs', 'Only INTCALC.STEP15 is stream logic; four neighbours remain outside.', ['app/scheduler/CardDemo.controlm:64-92','tools/runjcl/chains.json:43-62']),
         ('SYSTRAN consumer', 'chain-output-unconsumed (closed by skill)', 'Output only', 'COMBTRAN.STEP05R reads SYSTRAN(0), rolling the previous job (+1).', ['app/jcl/COMBTRAN.jcl:23-26','app/jcl/INTCALC.jcl:37-40']),
         ('Data directions', 'OPEN-mode directions, with DISP fallback', 'Undirected dotted data edges', 'ACCTFILE RW; TCATBALF/XREFFILE/DISCGRP R; TRANSACT W.', ['app/cbl/CBACT04C.cbl:234-309','docs/chain-graph.md:112-119']),
-        ('XREFFIL1', 'DISP SHR fallback read', 'No program data edge', 'Allocated AIX PATH, not SELECTed or opened; no data edge asserted.', ['app/jcl/INTCALC.jcl:31','app/cbl/CBACT04C.cbl:27-56']),
+        ('XREFFIL1', 'DISP SHR fallback read', 'DD allocation view', 'Read via AIX path for the first alternate key; IBM COBOL naming convention binds XREFFILE to XREFFIL1.', ['app/jcl/INTCALC.jcl:31-32','app/cbl/CBACT04C.cbl:34-39','app/cbl/CBACT04C.cbl:393-395','app/jcl/XREFFILE.jcl:72-92']),
         ('Cycle date', 'Literal PARM', 'No date semantics', '2022071800 fixed, used in transaction ID; replacement policy unknown.', ['app/jcl/INTCALC.jcl:22','app/cbl/CBACT04C.cbl:476-480']),
         ('Restart', 'MAXRERUN=5 resubmission intent', 'No restart guarantee', 'Partial update recovery not proven safe.', ['app/scheduler/CardDemo.controlm:70','app/cbl/CBACT04C.cbl:350-356']),
         ('CA7 coverage', 'CA7 CARDDEMO is separate from monthly folder', 'Harness is scheduler-independent', 'CA7 lists CLOSEFIL/WAITSTEP/OPENFIL; no INTCALC or COMBTRAN in supplied export.', ['app/scheduler/CardDemo.ca7:1-571']),
@@ -260,9 +267,7 @@ def render(m, raw):
             body = '<p>One stream: INTCALC → STEP15 → CBACT04C. Setup and four scheduler neighbours are not stream logic. COMBTRAN is an outside-stream consumer. Posting is outside scope.</p><a href="#open_asks">Review unresolved evidence requests</a><h3>Scheduler order · solid = PROVEN</h3>'+diagram([j['job'] for j in m['scheduler']['jobs']], 'scheduler')
             body += '<h3>Data flow · solid = PROVEN / dashed = CANDIDATE</h3>'
             for d in m['in_scope']['datasets']:
-                if d['direction'] == 'NOT_OPENED':
-                    body += '<p>XREFFIL1: allocation only, no data-flow edge.</p>'
-                else:
+                if d['direction'] != 'NOT_OPENED':
                     labels = [d['dd'], 'CBACT04C'] if d['direction'] == 'R' else ['CBACT04C', d['dd']]
                     body += diagram(labels, 'data-'+d['dd'])
                     if d['direction']=='RW':

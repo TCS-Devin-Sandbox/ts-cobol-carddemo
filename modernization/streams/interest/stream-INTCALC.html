@@ -1,6 +1,6 @@
 <!doctype html><html lang="en"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>INTCALC · Interest stream</title><style>
     :root{font:16px system-ui;color:#e7edf7;background:#0c1424}body{max-width:1250px;margin:auto;padding:32px}h1{font-size:38px;margin-bottom:8px}h2{color:#84d8cd}header{border-left:5px solid #84d8cd;padding-left:24px;margin-bottom:28px}code{overflow-wrap:anywhere}button,input,select{font:inherit;padding:9px;border-radius:6px;border:1px solid #52627b;background:#14243a;color:inherit}button[aria-selected=true]{background:#84d8cd;color:#102030}button:focus-visible,a:focus-visible{outline:3px solid #f4bd61}nav{display:flex;flex-wrap:wrap;gap:8px}section{margin-top:24px;padding:24px;background:#142035;border-radius:12px}a{color:#84d8cd}pre{white-space:pre-wrap;overflow-wrap:anywhere;font:13px/1.6 monospace}details{margin:20px 0}summary{cursor:pointer}table{border-collapse:collapse;width:100%;font-size:13px}td,th{padding:12px;text-align:left;border-bottom:1px solid #344259;vertical-align:top}td{overflow-wrap:anywhere;max-width:700px}.scroll{overflow:auto}svg{display:block;width:100%;max-height:125px}svg rect{fill:#203c51;stroke:#84d8cd}svg text{fill:#e7edf7;font:14px system-ui}svg path{stroke:#84d8cd;fill:none;stroke-width:2}svg marker path{fill:#84d8cd}#counts{display:flex;gap:10px;flex-wrap:wrap}.count{padding:10px;background:#203047;border-radius:5px}.muted{color:#aab9cd}
-    </style><header><p class="muted">LEGACY ESTATE / STREAM 02</p><h1>Monthly interest · INTCALC</h1><p>Baseline demo/01-intake<br><code>41519206b887cd0123ea850b46a96cdc9baa69af</code></p><p>Evidence-led scope, not a migration design. Static proof is not runtime assurance.</p></header><nav role="tablist" aria-label="Stream views"><button role="tab" id="tab-overview" aria-controls="overview" aria-selected="true" tabindex="0">Overview</button><button role="tab" id="tab-in_scope" aria-controls="in_scope" aria-selected="false" tabindex="-1">In scope</button><button role="tab" id="tab-edges" aria-controls="edges" aria-selected="false" tabindex="-1">Edges</button><button role="tab" id="tab-setup_jobs" aria-controls="setup_jobs" aria-selected="false" tabindex="-1">Setup</button><button role="tab" id="tab-outside_dependencies" aria-controls="outside_dependencies" aria-selected="false" tabindex="-1">Outside dependencies</button><button role="tab" id="tab-scheduler" aria-controls="scheduler" aria-selected="false" tabindex="-1">Scheduler</button><button role="tab" id="tab-discrepancies" aria-controls="discrepancies" aria-selected="false" tabindex="-1">Discrepancies</button><button role="tab" id="tab-open_asks" aria-controls="open_asks" aria-selected="false" tabindex="-1">Open asks</button></nav><section role="tabpanel" aria-labelledby="tab-overview" id="overview"><h2>Overview</h2><p>One stream: INTCALC → STEP15 → CBACT04C. Setup and four scheduler neighbours are not stream logic. COMBTRAN is an outside-stream consumer. Posting is outside scope.</p><a href="#open_asks">Review unresolved evidence requests</a><h3>Scheduler order · solid = PROVEN</h3><svg role="img" aria-label="scheduler" viewBox="0 0 900 110"><defs><marker id="arrow-scheduler" markerWidth="8" markerHeight="8" refX="7" refY="3" orient="auto"><path d="M0 0 L7 3 L0 6 Z"/></marker></defs><rect x="15" y="35" width="155" height="48" rx="8"/><text x="92" y="64" text-anchor="middle">CLOSEFIL</text><rect x="195" y="35" width="155" height="48" rx="8"/><text x="272" y="64" text-anchor="middle">INTCALC</text><path d="M170 59 H195" marker-end="url(#arrow-scheduler)" /><rect x="375" y="35" width="155" height="48" rx="8"/><text x="452" y="64" text-anchor="middle">COMBTRAN</text><path d="M350 59 H375" marker-end="url(#arrow-scheduler)" /><rect x="555" y="35" width="155" height="48" rx="8"/><text x="632" y="64" text-anchor="middle">WAITSTEP</text><path d="M530 59 H555" marker-end="url(#arrow-scheduler)" /><rect x="735" y="35" width="155" height="48" rx="8"/><text x="812" y="64" text-anchor="middle">OPENFIL</text><path d="M710 59 H735" marker-end="url(#arrow-scheduler)" /></svg><h3>Data flow · solid = PROVEN / dashed = CANDIDATE</h3><svg role="img" aria-label="data-TCATBALF" viewBox="0 0 720 110"><defs><marker id="arrow-data-TCATBALF" markerWidth="8" markerHeight="8" refX="7" refY="3" orient="auto"><path d="M0 0 L7 3 L0 6 Z"/></marker></defs><rect x="15" y="35" width="155" height="48" rx="8"/><text x="92" y="64" text-anchor="middle">TCATBALF</text><rect x="195" y="35" width="155" height="48" rx="8"/><text x="272" y="64" text-anchor="middle">CBACT04C</text><path d="M170 59 H195" marker-end="url(#arrow-data-TCATBALF)" /></svg><svg role="img" aria-label="data-XREFFILE" viewBox="0 0 720 110"><defs><marker id="arrow-data-XREFFILE" markerWidth="8" markerHeight="8" refX="7" refY="3" orient="auto"><path d="M0 0 L7 3 L0 6 Z"/></marker></defs><rect x="15" y="35" width="155" height="48" rx="8"/><text x="92" y="64" text-anchor="middle">XREFFILE</text><rect x="195" y="35" width="155" height="48" rx="8"/><text x="272" y="64" text-anchor="middle">CBACT04C</text><path d="M170 59 H195" marker-end="url(#arrow-data-XREFFILE)" /></svg><p>XREFFIL1: allocation only, no data-flow edge.</p><svg role="img" aria-label="data-ACCTFILE" viewBox="0 0 720 110"><defs><marker id="arrow-data-ACCTFILE" markerWidth="8" markerHeight="8" refX="7" refY="3" orient="auto"><path d="M0 0 L7 3 L0 6 Z"/></marker></defs><rect x="15" y="35" width="155" height="48" rx="8"/><text x="92" y="64" text-anchor="middle">CBACT04C</text><rect x="195" y="35" width="155" height="48" rx="8"/><text x="272" y="64" text-anchor="middle">ACCTFILE</text><path d="M170 59 H195" marker-end="url(#arrow-data-ACCTFILE)" /></svg><svg role="img" aria-label="read-ACCTFILE" viewBox="0 0 720 110"><defs><marker id="arrow-read-ACCTFILE" markerWidth="8" markerHeight="8" refX="7" refY="3" orient="auto"><path d="M0 0 L7 3 L0 6 Z"/></marker></defs><rect x="15" y="35" width="155" height="48" rx="8"/><text x="92" y="64" text-anchor="middle">ACCTFILE</text><rect x="195" y="35" width="155" height="48" rx="8"/><text x="272" y="64" text-anchor="middle">CBACT04C</text><path d="M170 59 H195" marker-end="url(#arrow-read-ACCTFILE)" /></svg><svg role="img" aria-label="data-DISCGRP" viewBox="0 0 720 110"><defs><marker id="arrow-data-DISCGRP" markerWidth="8" markerHeight="8" refX="7" refY="3" orient="auto"><path d="M0 0 L7 3 L0 6 Z"/></marker></defs><rect x="15" y="35" width="155" height="48" rx="8"/><text x="92" y="64" text-anchor="middle">DISCGRP</text><rect x="195" y="35" width="155" height="48" rx="8"/><text x="272" y="64" text-anchor="middle">CBACT04C</text><path d="M170 59 H195" marker-end="url(#arrow-data-DISCGRP)" /></svg><svg role="img" aria-label="data-TRANSACT" viewBox="0 0 720 110"><defs><marker id="arrow-data-TRANSACT" markerWidth="8" markerHeight="8" refX="7" refY="3" orient="auto"><path d="M0 0 L7 3 L0 6 Z"/></marker></defs><rect x="15" y="35" width="155" height="48" rx="8"/><text x="92" y="64" text-anchor="middle">CBACT04C</text><rect x="195" y="35" width="155" height="48" rx="8"/><text x="272" y="64" text-anchor="middle">TRANSACT</text><path d="M170 59 H195" marker-end="url(#arrow-data-TRANSACT)" /></svg><div id="counts"></div><details><summary>Toolbox issues and module coverage</summary><pre>{
+    </style><header><p class="muted">LEGACY ESTATE / STREAM 02</p><h1>Monthly interest · INTCALC</h1><p>Baseline demo/01-intake<br><code>41519206b887cd0123ea850b46a96cdc9baa69af</code></p><p>Evidence-led scope, not a migration design. Static proof is not runtime assurance.</p></header><nav role="tablist" aria-label="Stream views"><button role="tab" id="tab-overview" aria-controls="overview" aria-selected="true" tabindex="0">Overview</button><button role="tab" id="tab-in_scope" aria-controls="in_scope" aria-selected="false" tabindex="-1">In scope</button><button role="tab" id="tab-edges" aria-controls="edges" aria-selected="false" tabindex="-1">Edges</button><button role="tab" id="tab-setup_jobs" aria-controls="setup_jobs" aria-selected="false" tabindex="-1">Setup</button><button role="tab" id="tab-outside_dependencies" aria-controls="outside_dependencies" aria-selected="false" tabindex="-1">Outside dependencies</button><button role="tab" id="tab-scheduler" aria-controls="scheduler" aria-selected="false" tabindex="-1">Scheduler</button><button role="tab" id="tab-discrepancies" aria-controls="discrepancies" aria-selected="false" tabindex="-1">Discrepancies</button><button role="tab" id="tab-open_asks" aria-controls="open_asks" aria-selected="false" tabindex="-1">Open asks</button></nav><section role="tabpanel" aria-labelledby="tab-overview" id="overview"><h2>Overview</h2><p>One stream: INTCALC → STEP15 → CBACT04C. Setup and four scheduler neighbours are not stream logic. COMBTRAN is an outside-stream consumer. Posting is outside scope.</p><a href="#open_asks">Review unresolved evidence requests</a><h3>Scheduler order · solid = PROVEN</h3><svg role="img" aria-label="scheduler" viewBox="0 0 900 110"><defs><marker id="arrow-scheduler" markerWidth="8" markerHeight="8" refX="7" refY="3" orient="auto"><path d="M0 0 L7 3 L0 6 Z"/></marker></defs><rect x="15" y="35" width="155" height="48" rx="8"/><text x="92" y="64" text-anchor="middle">CLOSEFIL</text><rect x="195" y="35" width="155" height="48" rx="8"/><text x="272" y="64" text-anchor="middle">INTCALC</text><path d="M170 59 H195" marker-end="url(#arrow-scheduler)" /><rect x="375" y="35" width="155" height="48" rx="8"/><text x="452" y="64" text-anchor="middle">COMBTRAN</text><path d="M350 59 H375" marker-end="url(#arrow-scheduler)" /><rect x="555" y="35" width="155" height="48" rx="8"/><text x="632" y="64" text-anchor="middle">WAITSTEP</text><path d="M530 59 H555" marker-end="url(#arrow-scheduler)" /><rect x="735" y="35" width="155" height="48" rx="8"/><text x="812" y="64" text-anchor="middle">OPENFIL</text><path d="M710 59 H735" marker-end="url(#arrow-scheduler)" /></svg><h3>Data flow · solid = PROVEN / dashed = CANDIDATE</h3><svg role="img" aria-label="data-TCATBALF" viewBox="0 0 720 110"><defs><marker id="arrow-data-TCATBALF" markerWidth="8" markerHeight="8" refX="7" refY="3" orient="auto"><path d="M0 0 L7 3 L0 6 Z"/></marker></defs><rect x="15" y="35" width="155" height="48" rx="8"/><text x="92" y="64" text-anchor="middle">TCATBALF</text><rect x="195" y="35" width="155" height="48" rx="8"/><text x="272" y="64" text-anchor="middle">CBACT04C</text><path d="M170 59 H195" marker-end="url(#arrow-data-TCATBALF)" /></svg><svg role="img" aria-label="data-XREFFILE" viewBox="0 0 720 110"><defs><marker id="arrow-data-XREFFILE" markerWidth="8" markerHeight="8" refX="7" refY="3" orient="auto"><path d="M0 0 L7 3 L0 6 Z"/></marker></defs><rect x="15" y="35" width="155" height="48" rx="8"/><text x="92" y="64" text-anchor="middle">XREFFILE</text><rect x="195" y="35" width="155" height="48" rx="8"/><text x="272" y="64" text-anchor="middle">CBACT04C</text><path d="M170 59 H195" marker-end="url(#arrow-data-XREFFILE)" /></svg><svg role="img" aria-label="data-XREFFIL1" viewBox="0 0 720 110"><defs><marker id="arrow-data-XREFFIL1" markerWidth="8" markerHeight="8" refX="7" refY="3" orient="auto"><path d="M0 0 L7 3 L0 6 Z"/></marker></defs><rect x="15" y="35" width="155" height="48" rx="8"/><text x="92" y="64" text-anchor="middle">XREFFIL1</text><rect x="195" y="35" width="155" height="48" rx="8"/><text x="272" y="64" text-anchor="middle">CBACT04C</text><path d="M170 59 H195" marker-end="url(#arrow-data-XREFFIL1)" /></svg><svg role="img" aria-label="data-ACCTFILE" viewBox="0 0 720 110"><defs><marker id="arrow-data-ACCTFILE" markerWidth="8" markerHeight="8" refX="7" refY="3" orient="auto"><path d="M0 0 L7 3 L0 6 Z"/></marker></defs><rect x="15" y="35" width="155" height="48" rx="8"/><text x="92" y="64" text-anchor="middle">CBACT04C</text><rect x="195" y="35" width="155" height="48" rx="8"/><text x="272" y="64" text-anchor="middle">ACCTFILE</text><path d="M170 59 H195" marker-end="url(#arrow-data-ACCTFILE)" /></svg><svg role="img" aria-label="read-ACCTFILE" viewBox="0 0 720 110"><defs><marker id="arrow-read-ACCTFILE" markerWidth="8" markerHeight="8" refX="7" refY="3" orient="auto"><path d="M0 0 L7 3 L0 6 Z"/></marker></defs><rect x="15" y="35" width="155" height="48" rx="8"/><text x="92" y="64" text-anchor="middle">ACCTFILE</text><rect x="195" y="35" width="155" height="48" rx="8"/><text x="272" y="64" text-anchor="middle">CBACT04C</text><path d="M170 59 H195" marker-end="url(#arrow-read-ACCTFILE)" /></svg><svg role="img" aria-label="data-DISCGRP" viewBox="0 0 720 110"><defs><marker id="arrow-data-DISCGRP" markerWidth="8" markerHeight="8" refX="7" refY="3" orient="auto"><path d="M0 0 L7 3 L0 6 Z"/></marker></defs><rect x="15" y="35" width="155" height="48" rx="8"/><text x="92" y="64" text-anchor="middle">DISCGRP</text><rect x="195" y="35" width="155" height="48" rx="8"/><text x="272" y="64" text-anchor="middle">CBACT04C</text><path d="M170 59 H195" marker-end="url(#arrow-data-DISCGRP)" /></svg><svg role="img" aria-label="data-TRANSACT" viewBox="0 0 720 110"><defs><marker id="arrow-data-TRANSACT" markerWidth="8" markerHeight="8" refX="7" refY="3" orient="auto"><path d="M0 0 L7 3 L0 6 Z"/></marker></defs><rect x="15" y="35" width="155" height="48" rx="8"/><text x="92" y="64" text-anchor="middle">CBACT04C</text><rect x="195" y="35" width="155" height="48" rx="8"/><text x="272" y="64" text-anchor="middle">TRANSACT</text><path d="M170 59 H195" marker-end="url(#arrow-data-TRANSACT)" /></svg><div id="counts"></div><details><summary>Toolbox issues and module coverage</summary><pre>{
   &quot;toolbox_issues&quot;: [
     {
       &quot;topic&quot;: &quot;Concatenated SORTIN dropped&quot;,
@@ -271,10 +271,10 @@
       &quot;dd&quot;: &quot;XREFFIL1&quot;,
       &quot;disp&quot;: &quot;SHR&quot;,
       &quot;generation&quot;: null,
-      &quot;direction&quot;: &quot;NOT_OPENED&quot;,
+      &quot;direction&quot;: &quot;R&quot;,
       &quot;organization&quot;: &quot;AIX path&quot;,
       &quot;record_length&quot;: 50,
-      &quot;record_layout&quot;: &quot;CVACT03Y (base record; path not opened)&quot;,
+      &quot;record_layout&quot;: &quot;CVACT03Y&quot;,
       &quot;definition&quot;: {
         &quot;job&quot;: &quot;XREFFILE&quot;,
         &quot;step&quot;: &quot;STEP25&quot;,
@@ -284,10 +284,16 @@
       },
       &quot;evidence&quot;: [
         &quot;app/jcl/INTCALC.jcl:31&quot;,
+        &quot;app/cbl/CBACT04C.cbl:34-39&quot;,
+        &quot;app/cbl/CBACT04C.cbl:393-395&quot;,
+        &quot;app/jcl/XREFFILE.jcl:72-92&quot;,
+        &quot;app/cbl/CBACT04C.cbl:34&quot;,
+        &quot;app/cbl/CBACT04C.cbl:61-92&quot;,
+        &quot;app/cbl/CBACT04C.cbl:254&quot;,
+        &quot;app/cbl/CBACT04C.cbl:394&quot;,
         &quot;app/jcl/XREFFILE.jcl:90&quot;,
-        &quot;app/cbl/CBACT04C.cbl:27-56&quot;,
-        &quot;app/jcl/XREFFILE.jcl:67-102&quot;,
-        &quot;app/cpy/CVACT03Y.cpy:1-10&quot;
+        &quot;app/cbl/CBACT04C.cbl:102&quot;,
+        &quot;app/cpy/CVACT03Y.cpy:4&quot;
       ]
     },
     {
@@ -746,11 +752,13 @@
   {
     &quot;topic&quot;: &quot;XREFFIL1&quot;,
     &quot;mftb_view&quot;: &quot;DISP SHR fallback read&quot;,
-    &quot;chain_graph_view&quot;: &quot;No program data edge&quot;,
-    &quot;source_decision&quot;: &quot;Allocated AIX PATH, not SELECTed or opened; no data edge asserted.&quot;,
+    &quot;chain_graph_view&quot;: &quot;DD allocation view&quot;,
+    &quot;source_decision&quot;: &quot;Read via AIX path for the first alternate key; IBM COBOL naming convention binds XREFFILE to XREFFIL1.&quot;,
     &quot;evidence&quot;: [
-      &quot;app/jcl/INTCALC.jcl:31&quot;,
-      &quot;app/cbl/CBACT04C.cbl:27-56&quot;
+      &quot;app/jcl/INTCALC.jcl:31-32&quot;,
+      &quot;app/cbl/CBACT04C.cbl:34-39&quot;,
+      &quot;app/cbl/CBACT04C.cbl:393-395&quot;,
+      &quot;app/jcl/XREFFILE.jcl:72-92&quot;
     ]
   },
   {
@@ -1069,10 +1077,10 @@
         "dd": "XREFFIL1",
         "disp": "SHR",
         "generation": null,
-        "direction": "NOT_OPENED",
+        "direction": "R",
         "organization": "AIX path",
         "record_length": 50,
-        "record_layout": "CVACT03Y (base record; path not opened)",
+        "record_layout": "CVACT03Y",
         "definition": {
           "job": "XREFFILE",
           "step": "STEP25",
@@ -1082,10 +1090,16 @@
         },
         "evidence": [
           "app/jcl/INTCALC.jcl:31",
+          "app/cbl/CBACT04C.cbl:34-39",
+          "app/cbl/CBACT04C.cbl:393-395",
+          "app/jcl/XREFFILE.jcl:72-92",
+          "app/cbl/CBACT04C.cbl:34",
+          "app/cbl/CBACT04C.cbl:61-92",
+          "app/cbl/CBACT04C.cbl:254",
+          "app/cbl/CBACT04C.cbl:394",
           "app/jcl/XREFFILE.jcl:90",
-          "app/cbl/CBACT04C.cbl:27-56",
-          "app/jcl/XREFFILE.jcl:67-102",
-          "app/cpy/CVACT03Y.cpy:1-10"
+          "app/cbl/CBACT04C.cbl:102",
+          "app/cpy/CVACT03Y.cpy:4"
         ]
       },
       {
@@ -1226,6 +1240,28 @@
         "app/cbl/CBACT04C.cbl:254",
         "app/cbl/CBACT04C.cbl:394",
         "app/jcl/XREFFILE.jcl:39",
+        "app/cbl/CBACT04C.cbl:102",
+        "app/cpy/CVACT03Y.cpy:4"
+      ]
+    },
+    {
+      "kind": "data",
+      "source": "AWS.M2.CARDDEMO.CARDXREF.VSAM.AIX.PATH",
+      "target": "CBACT04C",
+      "direction": "R",
+      "dd": "XREFFIL1",
+      "status": "PROVEN",
+      "basis": "IBM COBOL alternate-index DD naming convention: first seven characters of XREFFILE + 1 = XREFFIL1 for the first alternate key; READ KEY IS FD-XREF-ACCT-ID uses the AIX path",
+      "evidence": [
+        "app/jcl/INTCALC.jcl:31",
+        "app/cbl/CBACT04C.cbl:34-39",
+        "app/cbl/CBACT04C.cbl:393-395",
+        "app/jcl/XREFFILE.jcl:72-92",
+        "app/cbl/CBACT04C.cbl:34",
+        "app/cbl/CBACT04C.cbl:61-92",
+        "app/cbl/CBACT04C.cbl:254",
+        "app/cbl/CBACT04C.cbl:394",
+        "app/jcl/XREFFILE.jcl:90",
         "app/cbl/CBACT04C.cbl:102",
         "app/cpy/CVACT03Y.cpy:4"
       ]
@@ -5405,11 +5441,13 @@
     {
       "topic": "XREFFIL1",
       "mftb_view": "DISP SHR fallback read",
-      "chain_graph_view": "No program data edge",
-      "source_decision": "Allocated AIX PATH, not SELECTed or opened; no data edge asserted.",
+      "chain_graph_view": "DD allocation view",
+      "source_decision": "Read via AIX path for the first alternate key; IBM COBOL naming convention binds XREFFILE to XREFFIL1.",
       "evidence": [
-        "app/jcl/INTCALC.jcl:31",
-        "app/cbl/CBACT04C.cbl:27-56"
+        "app/jcl/INTCALC.jcl:31-32",
+        "app/cbl/CBACT04C.cbl:34-39",
+        "app/cbl/CBACT04C.cbl:393-395",
+        "app/jcl/XREFFILE.jcl:72-92"
       ]
     },
     {
@@ -5521,7 +5559,7 @@
     "in_scope.programs": 1,
     "in_scope.copybooks": 5,
     "in_scope.datasets": 6,
-    "edges": 10,
+    "edges": 11,
     "setup_jobs": 5,
     "outside_dependencies": 237,
     "module_coverage": 4,

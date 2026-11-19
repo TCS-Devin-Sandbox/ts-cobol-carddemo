@@ -232,10 +232,10 @@
         "dd": "XREFFIL1",
         "disp": "SHR",
         "generation": null,
-        "direction": "NOT_OPENED",
+        "direction": "R",
         "organization": "AIX path",
         "record_length": 50,
-        "record_layout": "CVACT03Y (base record; path not opened)",
+        "record_layout": "CVACT03Y",
         "definition": {
           "job": "XREFFILE",
           "step": "STEP25",
@@ -245,10 +245,16 @@
         },
         "evidence": [
           "app/jcl/INTCALC.jcl:31",
+          "app/cbl/CBACT04C.cbl:34-39",
+          "app/cbl/CBACT04C.cbl:393-395",
+          "app/jcl/XREFFILE.jcl:72-92",
+          "app/cbl/CBACT04C.cbl:34",
+          "app/cbl/CBACT04C.cbl:61-92",
+          "app/cbl/CBACT04C.cbl:254",
+          "app/cbl/CBACT04C.cbl:394",
           "app/jcl/XREFFILE.jcl:90",
-          "app/cbl/CBACT04C.cbl:27-56",
-          "app/jcl/XREFFILE.jcl:67-102",
-          "app/cpy/CVACT03Y.cpy:1-10"
+          "app/cbl/CBACT04C.cbl:102",
+          "app/cpy/CVACT03Y.cpy:4"
         ]
       },
       {
@@ -389,6 +395,28 @@
         "app/cbl/CBACT04C.cbl:254",
         "app/cbl/CBACT04C.cbl:394",
         "app/jcl/XREFFILE.jcl:39",
+        "app/cbl/CBACT04C.cbl:102",
+        "app/cpy/CVACT03Y.cpy:4"
+      ]
+    },
+    {
+      "kind": "data",
+      "source": "AWS.M2.CARDDEMO.CARDXREF.VSAM.AIX.PATH",
+      "target": "CBACT04C",
+      "direction": "R",
+      "dd": "XREFFIL1",
+      "status": "PROVEN",
+      "basis": "IBM COBOL alternate-index DD naming convention: first seven characters of XREFFILE + 1 = XREFFIL1 for the first alternate key; READ KEY IS FD-XREF-ACCT-ID uses the AIX path",
+      "evidence": [
+        "app/jcl/INTCALC.jcl:31",
+        "app/cbl/CBACT04C.cbl:34-39",
+        "app/cbl/CBACT04C.cbl:393-395",
+        "app/jcl/XREFFILE.jcl:72-92",
+        "app/cbl/CBACT04C.cbl:34",
+        "app/cbl/CBACT04C.cbl:61-92",
+        "app/cbl/CBACT04C.cbl:254",
+        "app/cbl/CBACT04C.cbl:394",
+        "app/jcl/XREFFILE.jcl:90",
         "app/cbl/CBACT04C.cbl:102",
         "app/cpy/CVACT03Y.cpy:4"
       ]
@@ -4568,11 +4596,13 @@
     {
       "topic": "XREFFIL1",
       "mftb_view": "DISP SHR fallback read",
-      "chain_graph_view": "No program data edge",
-      "source_decision": "Allocated AIX PATH, not SELECTed or opened; no data edge asserted.",
+      "chain_graph_view": "DD allocation view",
+      "source_decision": "Read via AIX path for the first alternate key; IBM COBOL naming convention binds XREFFILE to XREFFIL1.",
       "evidence": [
-        "app/jcl/INTCALC.jcl:31",
-        "app/cbl/CBACT04C.cbl:27-56"
+        "app/jcl/INTCALC.jcl:31-32",
+        "app/cbl/CBACT04C.cbl:34-39",
+        "app/cbl/CBACT04C.cbl:393-395",
+        "app/jcl/XREFFILE.jcl:72-92"
       ]
     },
     {
@@ -4684,7 +4714,7 @@
     "in_scope.programs": 1,
     "in_scope.copybooks": 5,
     "in_scope.datasets": 6,
-    "edges": 10,
+    "edges": 11,
     "setup_jobs": 5,
     "outside_dependencies": 237,
     "module_coverage": 4,

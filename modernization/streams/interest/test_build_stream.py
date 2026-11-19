@@ -14,7 +14,11 @@ class StreamTest(unittest.TestCase):
         self.assertEqual({x['module'] for x in m['module_coverage']}, set(stream.MODULES))
         self.assertTrue(any(x['name'] == 'COMBTRAN' and x['generation'] == '0'
                             for x in m['outside_dependencies'] if 'generation' in x))
-        self.assertFalse(any(x.get('dd') == 'XREFFIL1' for x in m['edges']))
+        path_edge = next(x for x in m['edges'] if x.get('dd') == 'XREFFIL1')
+        self.assertEqual((path_edge['direction'], path_edge['status']), ('R', 'PROVEN'))
+        self.assertIn('naming convention', path_edge['basis'])
+        path_dataset = next(x for x in m['in_scope']['datasets'] if x['dd'] == 'XREFFIL1')
+        self.assertEqual((path_dataset['direction'], path_dataset['record_layout']), ('R', 'CVACT03Y'))
         bindings = [x for x in m['edges'] if x['kind'] == 'load-binding']
         self.assertEqual(len(bindings), 2)
         self.assertEqual(bindings[0]['status'], 'PROVEN')
