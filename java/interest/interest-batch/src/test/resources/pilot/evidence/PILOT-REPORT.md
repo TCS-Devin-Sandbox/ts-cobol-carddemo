@@ -1,7 +1,7 @@
 # INT-01 pilot report
 
 Ticket: `modernization/design/tickets/01-pilot.md`. `modernization/design/tickets/README.md` names it as the Wave 1 pilot.
-Start: `origin/demo/04a-standards` @ `84ffae7`. Branch: `demo/05-pilot`. Code revision: `59ffbc2` (after review fixes; first candidate `dc456be`).
+Start: `origin/demo/04a-standards` @ `84ffae7`. Branch: `demo/05-pilot`. Code revision: `d99d984` (after two review rounds; earlier candidates `dc456be`, `59ffbc2`).
 Module: `java/interest/interest-batch` (the ticket's `interest-batch/` scope placed under `java/interest` as the prompt asks).
 Skills used: `interest-conversion-standards` (read before coding) and `carddemo-parity`. `interest-ticket-build`,
 `interest-ticket-verify` and `interest-pitfalls` are not on the starting branch, so this run is the pilot for the method below.
@@ -18,7 +18,7 @@ Skills used: `interest-conversion-standards` (read before coding) and `carddemo-
 ## Final-revision checks
 | Check | Result |
 |---|---|
-| `mvn -B clean verify` (Java 21, Testcontainers `postgres:15-alpine`) | BUILD SUCCESS: unit 36/36, integration 9/9 (`test-output.txt`) |
+| `mvn -B clean verify` (Java 21, Testcontainers `postgres:15-alpine`) | BUILD SUCCESS: unit 36/36, integration 10/10 (`test-output.txt`) |
 | Docker PostgreSQL 15 end-to-end, i01 | exit 0; SQL assertions pass (`i01-sql-assertions.txt`) |
 | compare.py i01-baseline | FAIL: 1 difference (rc.json only, see `parity-report.md`). Datasets and SYSOUT have 0 differences |
 | Legacy baseline `make parity CHAIN=interest` | 7/7 PASS |
@@ -131,3 +131,10 @@ Failures hit:
 | No ordinary fallback event | `event=rate-fallback dd=DISCGRP op=READ status=23` | `INT_R03_defaultFallbackUsesPaddedDefaultRow` |
 | Raw exception text in logs | non-pilot failures log exception type only | – |
 | Stale success artifacts on dir reuse / export failure | artifacts staged in `.staging-<run>`, old `rc.json` removed first, new one published last; export failure gives RC 12 | `INT_R10_failedRunIntoReusedOutputDirLeavesNoStaleSuccessArtifacts` |
+
+## Review round 2 (Devin Review on `af12006`), evidence rerun at `d99d984`
+| Finding | Decision | Test |
+|---|---|---|
+| `publish` deleted every file under `datasets/` and `sysout/` | fixed: only the three pilot files and `pilot-failure.json` are replaced | `INT_R10_failedRunIntoReusedOutputDirLeavesNoStaleSuccessArtifacts` (operator file kept) |
+| A cleanup error could stop the failure RC from being written | fixed: if publishing fails, RC 12 is still written to the output directory | `INT_R10_failureRcIsPublishedEvenWhenOldArtifactsCannotBeRemoved` |
+| An empty run does not validate the PARM | rejected: legacy CBACT04C reads PARM-DATE only when it builds a TRAN-ID, so with no balances it ends RC 0 whatever the PARM (INT-H02 OPEN) | – |

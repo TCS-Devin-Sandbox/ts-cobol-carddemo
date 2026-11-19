@@ -1,6 +1,6 @@
 # INT-01 pilot – per-case parity report (open this first)
 
-Candidate revision: `59ffbc2aef036c1756288de1daaa0c911f343ac5` (branch `demo/05-pilot`).
+Candidate revision: `d99d984577bc04f2ebc6aec7add0de2a1e4aedd4` (branch `demo/05-pilot`).
 Java 21 (OpenJDK 21), Spring Boot 3.3.5 / Spring Batch 5.1.2, PostgreSQL 15.20 (Docker `postgres:15`, port 5433).
 Legacy baseline rerun in this session: `make up && make build && make parity CHAIN=interest` -> 7/7 PASS.
 
@@ -42,7 +42,7 @@ From `PilotI01IT` (Testcontainers PostgreSQL 15) and `i01-field-slice.md`:
 - SYSTRAN T01–T13: 2 of 2 rows match the decoded golden. ACCTDATA A03/A09/A10 and whole records: 2 of 2 match,
   including the untouched account `00000002002`.
 - Interest cents matched: 4700 (10.00 + 37.00 = 47.00).
-- SQL on the Docker PostgreSQL 15 run `13197b52-…` (`i01-sql-assertions.txt`): 2 transaction rows
+- SQL on the Docker PostgreSQL 15 run `ec2f6b8c-…` (`i01-sql-assertions.txt`): 2 transaction rows
   `2022071800000001` / `…02`, amounts 10.00 / 37.00, sum 47.00, cards `4000000000002001` / `…2002`, both timestamps
   `2022-07-05-10.00.00.000000`. 1 delta: `00000002001` 1000.00 -> 1010.00 with cycle credit/debit 0.00.
   `00000002002` stays 2400.00 with 0 deltas (INT-Q02).
