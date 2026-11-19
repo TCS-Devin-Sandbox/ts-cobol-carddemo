@@ -1,7 +1,7 @@
 {
   "meta": {
     "module": "CARDDEMO",
-    "generated_at": "2026-11-19T08:31:41Z",
+    "generated_at": "2026-11-19T12:10:48Z",
     "tool": "mftb 0.2.1",
     "inputs": [
       "programs.json",
@@ -19,7 +19,7 @@
       "jcl": 39,
       "proc": 2
     },
-    "with_key_points": 0,
+    "with_key_points": 1,
     "overviews": 7,
     "overviews_written": 7
   },
@@ -120,13 +120,14 @@
       "kind": "chain",
       "name": "MONTHLY-InterestCalculation",
       "key_points": [
-        "Computes interest and fees from the transaction category balance file, then sorts the transaction backup together with the system-generated transactions and loads the combined file to the transaction master.",
-        "The CICS files are closed beforehand and reopened afterwards; the scheduler definitions describe its jobs as MONTHLY."
+        "Only INTCALC.STEP15 is in-scope stream logic; the four other folder jobs are scheduler neighbours.",
+        "COMBTRAN consumes SYSTRAN outside the stream; fixed cycle PARM, recovery and SDSF quiescence remain unproven."
       ],
       "basis": [
-        "app/scheduler/CardDemo.controlm:64-91",
-        "app/jcl/INTCALC.jcl:20-22",
-        "app/jcl/COMBTRAN.jcl:20-41"
+        "app/scheduler/CardDemo.controlm:64-92",
+        "tools/runjcl/chains.json:43-62",
+        "app/jcl/COMBTRAN.jcl:23-26",
+        "app/jcl/INTCALC.jcl:22-40"
       ],
       "written_by": "agent"
     }
@@ -171,9 +172,13 @@
       "name": "CBACT04C",
       "path": "app/cbl/CBACT04C.cbl",
       "description": "Batch interest calculator: processes the transaction category balance file and computes interest and fees.",
-      "key_points": [],
+      "key_points": [
+        "Truncates interest and updates accounts on account transitions; the final account is not updated at EOF."
+      ],
       "basis": [
-        "app/cbl/CBACT04C.cbl:1-23"
+        "app/cbl/CBACT04C.cbl:180-233",
+        "app/cbl/CBACT04C.cbl:350-356",
+        "app/cbl/CBACT04C.cbl:462-518"
       ],
       "written_by": "agent"
     },
@@ -326,11 +331,10 @@
       "kind": "program",
       "name": "COBSWAIT",
       "path": "app/cbl/COBSWAIT.cbl",
-      "description": "Batch utility: waits for the time given in its parameter (centiseconds), calling MVSWAIT.",
+      "description": "Reads a centisecond delay from SYSIN and calls MVSWAIT.",
       "key_points": [],
       "basis": [
-        "app/cbl/COBSWAIT.cbl:1-23",
-        "app/cbl/COBSWAIT.cbl:38"
+        "app/cbl/COBSWAIT.cbl:34-40"
       ],
       "written_by": "agent"
     },
@@ -549,7 +553,7 @@
       "kind": "jcl",
       "name": "CLOSEFIL",
       "path": "app/jcl/CLOSEFIL.jcl",
-      "description": "Closes the application's files in the CICS region through an SDSF step.",
+      "description": "Submits file control commands through SDSF; runtime quiescence is not proven.",
       "key_points": [],
       "basis": [
         "app/jcl/CLOSEFIL.jcl:20-35"
@@ -725,7 +729,7 @@
       "kind": "jcl",
       "name": "OPENFIL",
       "path": "app/jcl/OPENFIL.jcl",
-      "description": "Opens the application's files in the CICS region through an SDSF step.",
+      "description": "Submits file control commands through SDSF; runtime quiescence is not proven.",
       "key_points": [],
       "basis": [
         "app/jcl/OPENFIL.jcl:20-35"

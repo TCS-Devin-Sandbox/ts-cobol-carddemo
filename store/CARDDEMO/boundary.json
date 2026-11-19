@@ -1,33 +1,44 @@
 {
   "meta": {
     "module": "CARDDEMO",
-    "generated_at": "2026-11-19T08:31:41Z",
+    "generated_at": "2026-11-19T12:10:48Z",
     "tool": "mftb 0.2.1",
     "inputs": {
-      "estate": []
+      "estate": [
+        "AUTH",
+        "TRANTYPE",
+        "VSAMMQ"
+      ]
     }
   },
   "summary": {
-    "connections": 149,
+    "connections": 148,
     "by_category": {
       "data": 69,
       "online": 47,
       "interface": 1,
-      "code": 29,
+      "code": 28,
       "schedule": 3
     },
     "by_status": {
       "unknown": 27,
-      "must-establish": 98,
+      "must-establish": 97,
       "satisfied-in-drop": 24
     },
     "by_direction": {
       "both": 56,
-      "out": 52,
+      "out": 51,
       "in": 41
     },
-    "counterpart_modules": [],
-    "estate_modules": []
+    "counterpart_modules": [
+      "AUTH",
+      "TRANTYPE"
+    ],
+    "estate_modules": [
+      "AUTH",
+      "TRANTYPE",
+      "VSAMMQ"
+    ]
   },
   "slots": [
     {
@@ -119,7 +130,7 @@
       "provider": "module",
       "detector": true,
       "present": true,
-      "entries": 27
+      "entries": 26
     },
     {
       "category": "code",
@@ -761,14 +772,14 @@
       "category": "data",
       "provider": "dataset",
       "counterpart": {
-        "level": "estate",
+        "level": "module",
         "kind": "dataset",
         "name": "AWS.M2.CARDDEMO.LOADLIB",
-        "module": null
+        "module": "AUTH"
       },
       "direction": "in",
       "status": "must-establish",
-      "detail": "sequential (no catalog evidence): read here, produced outside the module",
+      "detail": "sequential (no catalog evidence): created here and read by AUTH, TRANTYPE",
       "evidence": [
         "app/jcl/CBEXPORT.jcl:44",
         "app/jcl/CBIMPORT.jcl:23",
@@ -2233,6 +2244,38 @@
       "category": "code",
       "provider": "module",
       "counterpart": {
+        "level": "module",
+        "kind": "module",
+        "name": "AUTH",
+        "module": "AUTH"
+      },
+      "direction": "out",
+      "status": "must-establish",
+      "detail": "1 program(s) owned by AUTH: COPAUS0C (via dynamic CICS-XCTL)",
+      "evidence": [
+        "app/cbl/COMEN01C.cbl:156"
+      ]
+    },
+    {
+      "category": "code",
+      "provider": "module",
+      "counterpart": {
+        "level": "module",
+        "kind": "module",
+        "name": "TRANTYPE",
+        "module": "TRANTYPE"
+      },
+      "direction": "out",
+      "status": "must-establish",
+      "detail": "2 program(s) owned by TRANTYPE: COTRTLIC, COTRTUPC (via dynamic CICS-XCTL)",
+      "evidence": [
+        "app/cbl/COADM01C.cbl:145"
+      ]
+    },
+    {
+      "category": "code",
+      "provider": "module",
+      "counterpart": {
         "level": "estate",
         "kind": "program",
         "name": "CBFEECAL",
@@ -2259,54 +2302,6 @@
       "detail": "COBDATFT: subprogram CALLed by 1 program(s) (via CALL)",
       "evidence": [
         "app/cbl/CBACT01C.cbl:231"
-      ]
-    },
-    {
-      "category": "code",
-      "provider": "module",
-      "counterpart": {
-        "level": "estate",
-        "kind": "program",
-        "name": "COPAUS0C",
-        "module": null
-      },
-      "direction": "out",
-      "status": "must-establish",
-      "detail": "COPAUS0C: CICS program / candidate of a dynamic call (name comes from data at run time) (via dynamic CICS-XCTL)",
-      "evidence": [
-        "app/cbl/COMEN01C.cbl:156"
-      ]
-    },
-    {
-      "category": "code",
-      "provider": "module",
-      "counterpart": {
-        "level": "estate",
-        "kind": "program",
-        "name": "COTRTLIC",
-        "module": null
-      },
-      "direction": "out",
-      "status": "must-establish",
-      "detail": "COTRTLIC: CICS program / candidate of a dynamic call (name comes from data at run time) (via dynamic CICS-XCTL)",
-      "evidence": [
-        "app/cbl/COADM01C.cbl:145"
-      ]
-    },
-    {
-      "category": "code",
-      "provider": "module",
-      "counterpart": {
-        "level": "estate",
-        "kind": "program",
-        "name": "COTRTUPC",
-        "module": null
-      },
-      "direction": "out",
-      "status": "must-establish",
-      "detail": "COTRTUPC: CICS program / candidate of a dynamic call (name comes from data at run time) (via dynamic CICS-XCTL)",
-      "evidence": [
-        "app/cbl/COADM01C.cbl:145"
       ]
     },
     {

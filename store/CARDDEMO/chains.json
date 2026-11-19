@@ -1,15 +1,10 @@
 {
   "meta": {
     "module": "CARDDEMO",
-    "generated_at": "2026-11-19T08:31:41Z",
+    "generated_at": "2026-11-19T12:10:48Z",
     "tool": "mftb 0.2.1",
     "inputs": {
       "selectors": [
-        "CARDDEMO",
-        "DAILY-TransactionBackup",
-        "WEEKLY-TransactionTypesDBRefresh",
-        "DisclosureGroupsRefresh",
-        "TransactionTypesDBRefresh",
         "MONTHLY-InterestCalculation"
       ]
     }
@@ -2800,7 +2795,7 @@
       "table": "MONTHLY-InterestCalculation",
       "requested_as": "MONTHLY-InterestCalculation",
       "selection_basis": "MONTHLY-INTERESTCALCULATION is a table in app/scheduler/CardDemo.controlm",
-      "generated_at": "2026-11-19T08:31:41Z",
+      "generated_at": "2026-11-19T12:10:48Z",
       "jobs": [
         {
           "job": "CLOSEFIL",
@@ -3274,7 +3269,19 @@
         ],
         "note": "batch (non-CICS) programs of the module no MONTHLY-InterestCalculation step runs or reaches statically"
       },
-      "notes": [],
+      "notes": [
+        {
+          "text": "Only INTCALC.STEP15 is stream logic; the other four folder jobs are neighbours. XREFFIL1 is read through the first alternate key of XREF-FILE, bound by the IBM COBOL first-seven-DD-characters plus 1 convention. CA7 names CLOSEFIL, WAITSTEP and OPENFIL, not INTCALC or COMBTRAN.",
+          "evidence": [
+            "tools/runjcl/chains.json:43-62",
+            "app/scheduler/CardDemo.controlm:64-92",
+            "app/cbl/CBACT04C.cbl:34-39",
+            "app/cbl/CBACT04C.cbl:393-395",
+            "app/jcl/INTCALC.jcl:31",
+            "app/scheduler/CardDemo.ca7:18-159"
+          ]
+        }
+      ],
       "asks": [
         {
           "kind": "chain-step-opaque",
@@ -3373,7 +3380,15 @@
             "app/jcl/INTCALC.jcl:37"
           ],
           "request": null,
-          "status": "open"
+          "status": "closed",
+          "closure": {
+            "by": "skill",
+            "how": "Toolbox concatenated-DD gap: COMBTRAN.STEP05R consumes SYSTRAN(0) after INTCALC writes (+1), a cross-job GDG roll. Generated facts are not patched.",
+            "evidence": [
+              "app/jcl/COMBTRAN.jcl:23-26",
+              "app/scheduler/CardDemo.controlm:72-78"
+            ]
+          }
         },
         {
           "kind": "chain-shared-dataset",
@@ -3384,6 +3399,45 @@
             "app/jcl/COMBTRAN.jcl:45"
           ],
           "request": null,
+          "status": "open"
+        },
+        {
+          "kind": "restart-semantics-unproven",
+          "severity": "medium",
+          "job": "INTCALC",
+          "message": "MAXRERUN=5 does not prove safety after partial ACCTDATA updates and SYSTRAN(+1) creation.",
+          "request": "Operations/application owner: provide restore, checkpoint, GDG cleanup and duplicate prevention procedure.",
+          "evidence": [
+            "app/scheduler/CardDemo.controlm:70",
+            "app/jcl/INTCALC.jcl:33-40",
+            "app/cbl/CBACT04C.cbl:350-356"
+          ],
+          "status": "open"
+        },
+        {
+          "kind": "chain-path-unproven",
+          "severity": "medium",
+          "job": "INTCALC",
+          "message": "PARM hard-codes 2022071800 and is used to build transaction IDs.",
+          "request": "Application/scheduler owner: provide cycle-date substitution policy and format.",
+          "evidence": [
+            "app/jcl/INTCALC.jcl:22",
+            "app/cbl/CBACT04C.cbl:476-480"
+          ],
+          "status": "open"
+        },
+        {
+          "kind": "chain-path-unproven",
+          "severity": "medium",
+          "job": "INTCALC",
+          "message": "Cross-folder and online exclusion is unproven; SDSF effects are opaque and WAITSTEP/OPENFIL both have JOBISN=4.",
+          "request": "Scheduler/CICS owner: supply production ordering, quiescence evidence and validated folder identifiers.",
+          "evidence": [
+            "app/scheduler/CardDemo.controlm:64-92",
+            "app/jcl/CLOSEFIL.jcl:22-32",
+            "app/jcl/OPENFIL.jcl:22-32",
+            "app/csd/CARDDEMO.CSD:1-17"
+          ],
           "status": "open"
         }
       ]

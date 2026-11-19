@@ -4,6 +4,17 @@
   "written_by": "batch-chain-analysis skill"
  },
  "tables": {
+  "MONTHLY-InterestCalculation": {
+   "notes": [
+    {"text":"Only INTCALC.STEP15 is stream logic; the other four folder jobs are neighbours. XREFFIL1 is read through the first alternate key of XREF-FILE, bound by the IBM COBOL first-seven-DD-characters plus 1 convention. CA7 names CLOSEFIL, WAITSTEP and OPENFIL, not INTCALC or COMBTRAN.","evidence":["tools/runjcl/chains.json:43-62","app/scheduler/CardDemo.controlm:64-92","app/cbl/CBACT04C.cbl:34-39","app/cbl/CBACT04C.cbl:393-395","app/jcl/INTCALC.jcl:31","app/scheduler/CardDemo.ca7:18-159"]}
+   ],
+   "closures":[{"kind":"chain-output-unconsumed","job":"INTCALC","match":"AWS.M2.CARDDEMO.SYSTRAN","how":"Toolbox concatenated-DD gap: COMBTRAN.STEP05R consumes SYSTRAN(0) after INTCALC writes (+1), a cross-job GDG roll. Generated facts are not patched.","evidence":["app/jcl/COMBTRAN.jcl:23-26","app/scheduler/CardDemo.controlm:72-78"]}],
+   "asks":[
+    {"kind":"restart-semantics-unproven","severity":"medium","job":"INTCALC","message":"MAXRERUN=5 does not prove safety after partial ACCTDATA updates and SYSTRAN(+1) creation.","request":"Operations/application owner: provide restore, checkpoint, GDG cleanup and duplicate prevention procedure.","evidence":["app/scheduler/CardDemo.controlm:70","app/jcl/INTCALC.jcl:33-40","app/cbl/CBACT04C.cbl:350-356"]},
+    {"kind":"chain-path-unproven","severity":"medium","job":"INTCALC","message":"PARM hard-codes 2022071800 and is used to build transaction IDs.","request":"Application/scheduler owner: provide cycle-date substitution policy and format.","evidence":["app/jcl/INTCALC.jcl:22","app/cbl/CBACT04C.cbl:476-480"]},
+    {"kind":"chain-path-unproven","severity":"medium","job":"INTCALC","message":"Cross-folder and online exclusion is unproven; SDSF effects are opaque and WAITSTEP/OPENFIL both have JOBISN=4.","request":"Scheduler/CICS owner: supply production ordering, quiescence evidence and validated folder identifiers.","evidence":["app/scheduler/CardDemo.controlm:64-92","app/jcl/CLOSEFIL.jcl:22-32","app/jcl/OPENFIL.jcl:22-32","app/csd/CARDDEMO.CSD:1-17"]}
+   ]
+  },
   "CARDDEMO": {
    "notes": [
     {
