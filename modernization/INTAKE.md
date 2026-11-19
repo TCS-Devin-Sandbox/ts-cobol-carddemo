@@ -171,7 +171,7 @@ Scanner results compared with the source line they cite. The source line is quot
 | 8 | Job step: POSTTRAN STEP15 EXEC PGM=CBTRN02C | `store/CARDDEMO/jobs.json` | `app/jcl/POSTTRAN.jcl:23` | `//STEP15 EXEC PGM=CBTRN02C` | agrees |
 | 9 | Job step: MNTTRDB2 STEP1 runs IKJEFT01, unwrapped to COBTUPDT | `store/TRANTYPE/jobs.json` | `app/app-transaction-type-db2/jcl/MNTTRDB2.jcl:21` | `//STEP1   EXEC PGM=IKJEFT01,REGION=0M` | agrees |
 | 10 | File: CBTRN02C SELECT DALYREJS-FILE ASSIGN TO DALYREJS, opened for output | `store/CARDDEMO/connections.json` | `app/cbl/CBTRN02C.cbl:46` | `SELECT DALYREJS-FILE ASSIGN TO DALYREJS` | agrees |
-| 11 | DD binding: POSTTRAN DD DALYREJS is GDG generation `AWS.M2.CARDDEMO.DALYREJS(+1)` | `store/CARDDEMO/connections.json` | `app/jcl/POSTTRAN.jcl:34` | `//DALYREJS DD DISP=(NEW,CATLG,DELETE), UNIT=SYSDA,` | DIFFERS |
+| 11 | DD binding: POSTTRAN DD DALYREJS is GDG generation `AWS.M2.CARDDEMO.DALYREJS(+1)` | `store/CARDDEMO/connections.json` | `app/jcl/POSTTRAN.jcl:34` | `//DALYREJS DD DISP=(NEW,CATLG,DELETE), UNIT=SYSDA, DCB=(RECFM=F,LRECL=430,BLKSIZE=0), SPACE=(CYL,(1,1),RLSE), DSN=AWS.M2.CARDDEMO.DALYREJS(+1)` | agrees |
 | 12 | Dataset: `AWS.M2.CARDDEMO.CARDDATA.VSAM.KSDS` is a VSAM KSDS defined by job CARDFILE (keys 16 0) | `store/CARDDEMO/connections.json` | `app/jcl/CARDFILE.jcl:50` | `DEFINE CLUSTER (NAME(AWS.M2.CARDDEMO.CARDDATA.VSAM.KSDS) -` | agrees |
 | 13 | Transaction: CA00 starts program COADM01C | `store/CARDDEMO/online.json` | `app/csd/CARDDEMO.CSD:327` | `DEFINE TRANSACTION(CA00) GROUP(CARDDEMO)` | agrees |
 | 14 | CICS file: COACTUPC updates ACCTDAT (REWRITE) | `store/CARDDEMO/connections.json` | `app/cbl/COACTUPC.cbl:4065` | `EXEC CICS` | agrees |
@@ -182,6 +182,10 @@ Scanner results compared with the source line they cite. The source line is quot
 | 19 | Scheduler: CA 7 table CARDDEMO orders job CBPAUP0J | `store/CARDDEMO/schedule.json` | `app/scheduler/CardDemo.ca7:43` | `JOB=CBPAUP0J SCHID=030      QTM=0100 LEADTM=0000 SUBMTM=` | agrees |
 | 20 | Copybook: COPAUA0C (AUTH) copies base copybook CVACT03Y | `store/AUTH/programs.json` | `app/app-authorization-ims-db2-mq/cbl/COPAUA0C.cbl:203` | `COPY CVACT03Y.` | agrees |
 | 21 | Dynamic call: CBTRNDYN CALL WS-PGM-NAME (operand is a data item) | `store/TRANTYPE/dyncalls.json` | `app/app-transaction-type-db2/cbl/CBTRNDYN.cbl:62` | `CALL WS-PGM-NAME` | agrees |
+| 22 | Scanner: copybook `CSSTRPFY` is copied by no program (no COPY recorded in any `programs.json`) | `store/CARDDEMO/programs.json` | `app/cbl/COACTVWC.cbl:913` | `COPY 'CSSTRPFY'` | DIFFERS |
+| 23 | Scanner: copybook `CSUTLDWY` is copied by no program (no COPY recorded in any `programs.json`) | `store/CARDDEMO/programs.json` | `app/cbl/COACTUPC.cbl:166` | `COPY 'CSUTLDWY'.` | DIFFERS |
+
+Rows marked DIFFERS: the scanner does not read `COPY 'NAME'` with the member name in quotes. `CSSTRPFY` is copied that way at `app/cbl/COACTUPC.cbl:4199`, `app/cbl/COACTVWC.cbl:913`, `app/cbl/COCRDLIC.cbl:1416`, `app/cbl/COCRDSLC.cbl:855` and `app/cbl/COCRDUPC.cbl:1528`, and `CSUTLDWY` at `app/cbl/COACTUPC.cbl:166`. These COPY edges are therefore missing from the scan results and from the copybook table of the call graph; the call graph lists both members as unreferenced with the text-search hit beside them. Nothing was added by hand.
 
 Row 2 needs a note: the scanner is right that line 21 is the IDENTIFICATION DIVISION header, but its ask says the member has no readable PROGRAM-ID. In the source, `PROGRAM-ID.` is on `app/cbl/COACTUPC.cbl:22` and the name `COACTUPC.` is on line 23. The same two-line form is in the other five members with this ask. The ask stays open below; this observation is for whoever owns it.
 

@@ -22,8 +22,10 @@ def src(cite):
     line = int(line.split("-")[0])
     lines = open(path, errors="replace").read().split("\n")
     text = lines[line - 1]
-    if path.lower().endswith((".jcl", ".prc")) and text[:72].rstrip().endswith(","):   # JCL continuation
-        text = text[:72].rstrip() + " " + lines[line][:72].replace("//", "", 1).strip()
+    text, nxt = text[:72].rstrip() if path.lower().endswith((".jcl", ".prc")) else text, line
+    while path.lower().endswith((".jcl", ".prc")) and text.endswith(",") and nxt < line + 4:   # JCL continuation
+        text += " " + lines[nxt][:72].replace("//", "", 1).strip()
+        nxt += 1
     return text
 
 
@@ -141,10 +143,13 @@ def cross_checks():
     out.append(("Copybook: COPAUA0C (AUTH) copies base copybook CVACT03Y", "store/AUTH/programs.json", x["cite"], r"COPY\s+CVACT03Y"))
     s = next(s for s in L("TRANTYPE", "dyncalls")["sites"] if s["program"] == "CBTRNDYN")
     out.append(("Dynamic call: CBTRNDYN CALL WS-PGM-NAME (operand is a data item)", "store/TRANTYPE/dyncalls.json", s["source"], r"CALL\s+WS-PGM-NAME"))
+    for u in g["unreferenced"]:     # scanner says "copied by no program"; a COPY of the quoted name in the source contradicts it
+        if u["kind"] == "cobol-copybook" and u.get("grep") and re.search(r"COPY\s+'%s'" % u["member"], src(u["grep"])):
+            out.append(("Scanner: copybook `%s` is copied by no program (no COPY recorded in any `programs.json`)" % u["member"], "store/CARDDEMO/programs.json", u["grep"], r"^(?!.*COPY\s+'%s')" % u["member"]))
     rows = []
     for i, (claim, store, cite, rx) in enumerate(out, 1):
         line = src(cite)
-        ok = bool(re.search(rx, line, re.I))
+        ok = bool(re.search(rx, clean(line), re.I))
         rows.append([i, claim, "`%s`" % store, "`%s`" % cite, "`%s`" % clean(line).replace("`", "'"), "agrees" if ok else "DIFFERS"])
     return rows
 
@@ -218,6 +223,7 @@ def write_intake():
          "## Scanner cross-check (Part C)", "",
          "Scanner results compared with the source line they cite. The source line is quoted as it stands at the baseline.", "",
          table(["#", "Scanner result", "From", "File and line", "Source line", "Check"], cross_checks()), "",
+         "Rows marked DIFFERS: the scanner does not read `COPY 'NAME'` with the member name in quotes. `CSSTRPFY` is copied that way at `app/cbl/COACTUPC.cbl:4199`, `app/cbl/COACTVWC.cbl:913`, `app/cbl/COCRDLIC.cbl:1416`, `app/cbl/COCRDSLC.cbl:855` and `app/cbl/COCRDUPC.cbl:1528`, and `CSUTLDWY` at `app/cbl/COACTUPC.cbl:166`. These COPY edges are therefore missing from the scan results and from the copybook table of the call graph; the call graph lists both members as unreferenced with the text-search hit beside them. Nothing was added by hand.", "",
          "Row 2 needs a note: the scanner is right that line 21 is the IDENTIFICATION DIVISION header, but its ask says the member has no readable PROGRAM-ID. In the source, `PROGRAM-ID.` is on `app/cbl/COACTUPC.cbl:22` and the name `COACTUPC.` is on line 23. The same two-line form is in the other five members with this ask. The ask stays open below; this observation is for whoever owns it.", "",
          "## Open questions (every catalogue ask)", "",
          "All %d asks of `store/catalog.json`, unchanged and unresolved. Owner is a placeholder until a person is named." % len(cat["asks"]), "",

@@ -661,7 +661,7 @@ Direction is reads, writes or updates (REWRITE, DELETE, SQL UPDATE/DELETE, DL/I 
 
 ## Programs sharing copybook layouts
 
-Copybooks copied by two or more programs. Every COPY statement is a static, cited fact, so all rows are PROVEN (static, cited file and line).
+Copybooks copied by two or more programs. Every COPY statement is a static, cited fact, so all rows are PROVEN (static, cited file and line). Known gap: the scanner does not read COPY with a quoted member name (COPY 'CSSTRPFY', COPY 'CSUTLDWY'); those copies are not in this table, see Unreferenced members and INTAKE.md.
 
 All 30 rows are PROVEN (static, cited file and line).
 
@@ -904,17 +904,17 @@ Programs with no PROVEN inbound edge from a job step, a transaction or another p
 
 ## Unreferenced members
 
-Catalogued members (copybooks, PROCs, control cards, IMS and SQL members, macros) that no scan result names.
+Catalogued members (copybooks, PROCs, control cards, IMS and SQL members, macros) that no scan result names. The last column is a plain text search of app/ for the member name: a hit means the source mentions the name where the scanner does not read it (for example assembler macro calls), not that the member is unused.
 
-| Member | Kind | Module | Source | Catalogued at |
-|---|---|---|---|---|
-| DBPAUTX0 | ims-dbd | AUTH | app/app-authorization-ims-db2-mq/ims/DBPAUTX0.dbd | app/app-authorization-ims-db2-mq/ims/DBPAUTX0.dbd:18 |
-| PSBPAUTL | ims-psb | AUTH | app/app-authorization-ims-db2-mq/ims/PSBPAUTL.psb | app/app-authorization-ims-db2-mq/ims/PSBPAUTL.psb:20 |
-| LISTCAT | sql-script | CARDDEMO | app/catlg/LISTCAT.txt | app/catlg/LISTCAT.txt:163 |
-| CSSTRPFY | cobol-copybook | CARDDEMO | app/cpy/CSSTRPFY.cpy | app/cpy/CSSTRPFY.cpy:21 |
-| CSUTLDWY | cobol-copybook | CARDDEMO | app/cpy/CSUTLDWY.cpy | app/cpy/CSUTLDWY.cpy:4 |
-| UNUSED1Y | cobol-copybook | CARDDEMO | app/cpy/UNUSED1Y.cpy | app/cpy/UNUSED1Y.cpy:1 |
-| ASMWAIT | assembler-macro | CARDDEMO | app/maclib/ASMWAIT.mac | app/maclib/ASMWAIT.mac:17 |
+| Member | Kind | Module | Source | Catalogued at | Name found elsewhere in app/ (plain text search, first hit) |
+|---|---|---|---|---|---|
+| DBPAUTX0 | ims-dbd | AUTH | app/app-authorization-ims-db2-mq/ims/DBPAUTX0.dbd | app/app-authorization-ims-db2-mq/ims/DBPAUTX0.dbd:18 | app/app-authorization-ims-db2-mq/ims/DBPAUTP0.dbd:31 |
+| PSBPAUTL | ims-psb | AUTH | app/app-authorization-ims-db2-mq/ims/PSBPAUTL.psb | app/app-authorization-ims-db2-mq/ims/PSBPAUTL.psb:20 | not found |
+| LISTCAT | sql-script | CARDDEMO | app/catlg/LISTCAT.txt | app/catlg/LISTCAT.txt:163 | not found |
+| CSSTRPFY | cobol-copybook | CARDDEMO | app/cpy/CSSTRPFY.cpy | app/cpy/CSSTRPFY.cpy:21 | app/cbl/COACTVWC.cbl:913 |
+| CSUTLDWY | cobol-copybook | CARDDEMO | app/cpy/CSUTLDWY.cpy | app/cpy/CSUTLDWY.cpy:4 | app/cbl/COACTUPC.cbl:166 |
+| UNUSED1Y | cobol-copybook | CARDDEMO | app/cpy/UNUSED1Y.cpy | app/cpy/UNUSED1Y.cpy:1 | not found |
+| ASMWAIT | assembler-macro | CARDDEMO | app/maclib/ASMWAIT.mac | app/maclib/ASMWAIT.mac:17 | app/asm/MVSWAIT.asm:23 |
 
 ## Disagreements with docs/chain-graph.md
 

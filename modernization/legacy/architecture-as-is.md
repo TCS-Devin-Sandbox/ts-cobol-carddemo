@@ -305,7 +305,7 @@ flowchart LR
 | AWS.M2.CARDDEMO.EXPORT.DATA | VSAM KSDS | CARDDEMO | batch | - | - | CBEXPORT | CBIMPORT | `app/jcl/CBEXPORT.jcl:30` | keys=4 28; organization=KSDS; recordsize=500 500 | 0 |
 | AWS.M2.CARDDEMO.TCATBALF.VSAM.KSDS | VSAM KSDS | CARDDEMO | batch | - | - | CBTRN02C | CBACT04C, CBTRN02C | `app/jcl/TCATBALF.jcl:36` | keys=17 0; organization=KSDS; recordsize=50 50 | 2 |
 | AWS.M2.CARDDEMO.TRANCATG.VSAM.KSDS | VSAM KSDS | CARDDEMO | batch (utility steps only: no program writes it) | - | - | - | CBTRN03C | `app/jcl/TRANCATG.jcl:36` | keys=6 0; organization=KSDS; recordsize=60 60 | 1 |
-| AWS.M2.CARDDEMO.TRANSACT.VSAM.KSDS | VSAM KSDS | CARDDEMO | shared (online and batch write) | COBIL00C, COTRN02C | COBIL00C, COTRN00C, COTRN01C, COTRN02C | CBTRN02C | CBEXPORT | `app/jcl/TRANFILE.jcl:49` | alternate_indexes=AWS.M2.CARDDEMO.TRANSACT.VSAM.AIX, AWS.M2.CARDDEMO.TRANSACT.VSAM.AIX; keys=16 0; organization=KSDS; recordsize=350 350 | 5 |
+| AWS.M2.CARDDEMO.TRANSACT.VSAM.KSDS | VSAM KSDS | CARDDEMO | shared (online and batch write) | COBIL00C, COTRN02C | COBIL00C, COTRN00C, COTRN01C, COTRN02C | CBTRN02C | CBEXPORT | `app/jcl/TRANFILE.jcl:49` | alternate_indexes=AWS.M2.CARDDEMO.TRANSACT.VSAM.AIX; keys=16 0; organization=KSDS; recordsize=350 350 | 5 |
 | AWS.M2.CARDDEMO.TRANTYPE.VSAM.KSDS | VSAM KSDS | CARDDEMO | batch (utility steps only: no program writes it) | - | - | - | CBTRN03C | `app/jcl/TRANTYPE.jcl:36` | keys=2 0; organization=KSDS; recordsize=60 60 | 1 |
 | AWS.M2.CARDDEMO.TRXFL.VSAM.KSDS | VSAM KSDS | CARDDEMO | batch (utility steps only: no program writes it) | - | - | - | CBSTM03B | `app/jcl/CREASTMT.JCL:29` | keys=32 0; organization=KSDS; recordsize=350 350 | 1 |
 | AWS.M2.CARDDEMO.USRSEC.VSAM.KSDS | VSAM KSDS | CARDDEMO | online | COUSR01C, COUSR02C, COUSR03C | COSGN00C, COUSR00C, COUSR02C, COUSR03C | - | - | `app/jcl/DUSRSECJ.jcl:64` | keys=8,0; organization=KSDS; recordsize=80,80 | 1 |
@@ -467,7 +467,7 @@ Stores touched by at least one online program and by at least one batch program 
 | AWS.M2.CARDDEMO.CARDDATA.VSAM.KSDS | VSAM KSDS | CARDDEMO | online | COCRDUPC | COCRDLIC, COCRDSLC, COCRDUPC | - | CBACT02C, CBEXPORT | `app/jcl/CARDFILE.jcl:50` | alternate_indexes=AWS.M2.CARDDEMO.CARDDATA.VSAM.AIX; keys=16 0; organization=KSDS; recordsize=150 150 | 1 |
 | AWS.M2.CARDDEMO.CARDXREF.VSAM.KSDS | VSAM KSDS | CARDDEMO | batch (utility steps only: no program writes it) | - | COPAUA0C, COTRN02C | - | CBACT03C, CBACT04C, CBEXPORT, CBSTM03B, CBTRN02C, CBTRN03C | `app/jcl/XREFFILE.jcl:39` | alternate_indexes=AWS.M2.CARDDEMO.CARDXREF.VSAM.AIX; keys=16 0; organization=KSDS; recordsize=50 50 | 1 |
 | AWS.M2.CARDDEMO.CUSTDATA.VSAM.KSDS | VSAM KSDS | CARDDEMO | online | COACTUPC | COACTUPC, COACTVWC, COPAUA0C, COPAUS0C | - | CBCUS01C, CBEXPORT, CBSTM03B | `app/jcl/CUSTFILE.jcl:46` | keys=9 0; organization=KSDS; recordsize=500 500 | 1 |
-| AWS.M2.CARDDEMO.TRANSACT.VSAM.KSDS | VSAM KSDS | CARDDEMO | shared (online and batch write) | COBIL00C, COTRN02C | COBIL00C, COTRN00C, COTRN01C, COTRN02C | CBTRN02C | CBEXPORT | `app/jcl/TRANFILE.jcl:49` | alternate_indexes=AWS.M2.CARDDEMO.TRANSACT.VSAM.AIX, AWS.M2.CARDDEMO.TRANSACT.VSAM.AIX; keys=16 0; organization=KSDS; recordsize=350 350 | 5 |
+| AWS.M2.CARDDEMO.TRANSACT.VSAM.KSDS | VSAM KSDS | CARDDEMO | shared (online and batch write) | COBIL00C, COTRN02C | COBIL00C, COTRN00C, COTRN01C, COTRN02C | CBTRN02C | CBEXPORT | `app/jcl/TRANFILE.jcl:49` | alternate_indexes=AWS.M2.CARDDEMO.TRANSACT.VSAM.AIX; keys=16 0; organization=KSDS; recordsize=350 350 | 5 |
 | AWS.M2.CARDDEMO.USRSEC.VSAM.KSDS | VSAM KSDS | CARDDEMO | online | COUSR01C, COUSR02C, COUSR03C | COSGN00C, COUSR00C, COUSR02C, COUSR03C | - | - | `app/jcl/DUSRSECJ.jcl:64` | keys=8,0; organization=KSDS; recordsize=80,80 | 1 |
 
 ## 6. Sub-applications under `app/app-*` and how they attach to the base
@@ -565,11 +565,13 @@ Programs: COACCT01, CODATE01. Jobs: none. Transactions: CDRA -> COACCT01 at app/
 
 Leaf nodes: the scanner records their names and callers, not their logic (INTAKE.md, open questions; docs/LEGACY-LANGUAGES.md). None runs off-host.
 
-| Member | Language | Source | Module | Callers (call-graph.md) |
-|---|---|---|---|---|
-| CBFEECAL | PL/I | `app/pli/CBFEECAL.pli` | CARDDEMO | CBFEEDRV CALL at app/cbl/CBFEEDRV.cbl:101 [PROVEN] |
-| COBDATFT | HLASM | `app/asm/COBDATFT.asm` | CARDDEMO | CBACT01C CALL at app/cbl/CBACT01C.cbl:231 [PROVEN] |
-| MVSWAIT | HLASM | `app/asm/MVSWAIT.asm` | CARDDEMO | COBSWAIT CALL at app/cbl/COBSWAIT.cbl:38 [PROVEN] |
+| Member | Kind | Source | Module | Lines | Called or referenced by |
+|---|---|---|---|---|---|
+| COBDATFT | HLASM program | `app/asm/COBDATFT.asm` | CARDDEMO | 84 | CBACT01C CALL at app/cbl/CBACT01C.cbl:231 [PROVEN] |
+| MVSWAIT | HLASM program | `app/asm/MVSWAIT.asm` | CARDDEMO | 30 | COBSWAIT CALL at app/cbl/COBSWAIT.cbl:38 [PROVEN] |
+| ASMWAIT | HLASM macro | `app/maclib/ASMWAIT.mac` | CARDDEMO | 20 | not in the scan; name appears at app/asm/MVSWAIT.asm:23 (text search) |
+| COCDATFT | HLASM DSECT | `app/maclib/COCDATFT.mac` | CARDDEMO | 23 | app/asm/COBDATFT.asm (app/asm/COBDATFT.asm:66) |
+| CBFEECAL | PL/I procedure | `app/pli/CBFEECAL.pli` | CARDDEMO | 89 | CBFEEDRV CALL at app/cbl/CBFEEDRV.cbl:101 [PROVEN] |
 
 ## 8. What the repository does not show (unknown)
 

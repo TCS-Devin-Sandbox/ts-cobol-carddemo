@@ -354,7 +354,9 @@ unreferenced = []
 for e in sorted(cat["entries"], key=lambda x: x["path"]):
     if e["kind"] in NOT_PLACEABLE or e["kind"] in SKIP: continue
     if e["id"] in referenced or e["member"].upper() in used_names or e["member"].upper() in words: continue
+    hit = subprocess.run(["grep", "-rnwI", "-m1", e["member"], "app", "--exclude=" + os.path.basename(e["path"]), "--exclude=*.md"], capture_output=True, text=True).stdout.split("\n")[0]
     unreferenced.append({"member": e["member"], "kind": e["kind"], "path": e["path"], "module": path_mod.get(e["path"], "?"),
+                         "grep": ":".join(hit.split(":")[:2]) if hit else "",
                          "cite": (e.get("evidence") or [e["path"]])[0]})
 
 # ---- 8. disagreements with docs/chain-graph.md
@@ -421,7 +423,7 @@ for m in ANALYZED:
         s = store(d["dsn"], d["type"], module=m, definition=(d.get("definition") or {}).get("source"))
         if d.get("definition"):
             s["extra"].update({k: v for k, v in d["definition"].items() if k in ("keys", "recordsize", "limit", "organization") and v})
-        if d.get("alternate_indexes"): s["extra"]["alternate_indexes"] = d["alternate_indexes"]
+        if d.get("alternate_indexes"): s["extra"]["alternate_indexes"] = sorted(set(d["alternate_indexes"]))
         if d.get("paths"): s["extra"]["paths"] = d["paths"]
         tb = d.get("type_basis") or {}
         if tb.get("source") and not s["definition"]: s["extra"].setdefault("type_basis", tb["source"])
@@ -435,6 +437,14 @@ for e in edges:
     s[layer].setdefault(e["direction"], [])
     if e["from"] not in [x[0] for x in s[layer][e["direction"]]]:
         s[layer][e["direction"]].append([e["from"], e["cite"], e["certainty"]])
+
+LEGACY_KIND = {"assembler-program": "HLASM program", "assembler-macro": "HLASM macro", "assembler-dsect": "HLASM DSECT", "unsupported-source": "PL/I procedure"}
+legacy_members = []
+for e in sorted(cat["entries"], key=lambda x: x["path"]):
+    if e["kind"] in LEGACY_KIND:
+        refs = sorted({"%s (%s)" % (o["path"], r["evidence"]) for o in cat["entries"] if o["id"] != e["id"] for r in o["references"] if r["name"].upper() == e["member"].upper()})
+        legacy_members.append({"member": e["member"].upper(), "kind": LEGACY_KIND[e["kind"]], "path": e["path"], "module": path_mod.get(e["path"], "?"),
+                               "cite": (e.get("evidence") or [e["path"]])[0], "lines": (e.get("size") or {}).get("lines"), "referenced_by": refs})
 
 summary = {
     "programs": len(programs), "leaves": len(leaves), "jobs": len(jobs),
@@ -456,7 +466,7 @@ graph = {"meta": {"baseline_sha": base, "baseline_date": git("log", "-1", "--for
          "summary": summary, "programs": sorted(programs.values(), key=lambda p: p["id"]),
          "leaves": sorted(leaves.values(), key=lambda p: p["id"]), "jobs": sorted(jobs.values(), key=lambda j: j["name"]),
          "edges": edges, "asks": asks, "copybooks": copybooks, "schedule_tables": sched_tables, "unscheduled": unscheduled,
-         "uncalled": uncalled, "unreferenced": unreferenced, "disagreements": disagreements,
+         "uncalled": uncalled, "unreferenced": unreferenced, "legacy_members": legacy_members, "disagreements": disagreements,
          "stores": sorted(stores.values(), key=lambda s: (s["type"], s["name"]))}
 os.makedirs(os.path.dirname(OUT), exist_ok=True)
 json.dump(graph, open(OUT, "w"), indent=1, sort_keys=True)

@@ -14691,6 +14691,61 @@
    "path": "app/asm/MVSWAIT.asm"
   }
  ],
+ "legacy_members": [
+  {
+   "cite": "app/asm/COBDATFT.asm:17",
+   "kind": "HLASM program",
+   "lines": 84,
+   "member": "COBDATFT",
+   "module": "CARDDEMO",
+   "path": "app/asm/COBDATFT.asm",
+   "referenced_by": [
+    "app/cbl/CBACT01C.cbl (app/cbl/CBACT01C.cbl:231)"
+   ]
+  },
+  {
+   "cite": "app/asm/MVSWAIT.asm:17",
+   "kind": "HLASM program",
+   "lines": 30,
+   "member": "MVSWAIT",
+   "module": "CARDDEMO",
+   "path": "app/asm/MVSWAIT.asm",
+   "referenced_by": [
+    "app/cbl/COBSWAIT.cbl (app/cbl/COBSWAIT.cbl:38)"
+   ]
+  },
+  {
+   "cite": "app/maclib/ASMWAIT.mac:17",
+   "kind": "HLASM macro",
+   "lines": 20,
+   "member": "ASMWAIT",
+   "module": "CARDDEMO",
+   "path": "app/maclib/ASMWAIT.mac",
+   "referenced_by": []
+  },
+  {
+   "cite": "app/maclib/COCDATFT.mac:17",
+   "kind": "HLASM DSECT",
+   "lines": 23,
+   "member": "COCDATFT",
+   "module": "CARDDEMO",
+   "path": "app/maclib/COCDATFT.mac",
+   "referenced_by": [
+    "app/asm/COBDATFT.asm (app/asm/COBDATFT.asm:66)"
+   ]
+  },
+  {
+   "cite": "app/pli/CBFEECAL.pli:21",
+   "kind": "PL/I procedure",
+   "lines": 89,
+   "member": "CBFEECAL",
+   "module": "CARDDEMO",
+   "path": "app/pli/CBFEECAL.pli",
+   "referenced_by": [
+    "app/cbl/CBFEEDRV.cbl (app/cbl/CBFEEDRV.cbl:101)"
+   ]
+  }
+ ],
  "meta": {
   "analyzed": [
    "AUTH",
@@ -16121,7 +16176,6 @@
    "definition": "app/jcl/TRANFILE.jcl:49",
    "extra": {
     "alternate_indexes": [
-     "AWS.M2.CARDDEMO.TRANSACT.VSAM.AIX",
      "AWS.M2.CARDDEMO.TRANSACT.VSAM.AIX"
     ],
     "keys": "16 0",
@@ -17873,6 +17927,7 @@
  "unreferenced": [
   {
    "cite": "app/app-authorization-ims-db2-mq/ims/DBPAUTX0.dbd:18",
+   "grep": "app/app-authorization-ims-db2-mq/ims/DBPAUTP0.dbd:31",
    "kind": "ims-dbd",
    "member": "DBPAUTX0",
    "module": "AUTH",
@@ -17880,6 +17935,7 @@
   },
   {
    "cite": "app/app-authorization-ims-db2-mq/ims/PSBPAUTL.psb:20",
+   "grep": "",
    "kind": "ims-psb",
    "member": "PSBPAUTL",
    "module": "AUTH",
@@ -17887,6 +17943,7 @@
   },
   {
    "cite": "app/catlg/LISTCAT.txt:163",
+   "grep": "",
    "kind": "sql-script",
    "member": "LISTCAT",
    "module": "CARDDEMO",
@@ -17894,6 +17951,7 @@
   },
   {
    "cite": "app/cpy/CSSTRPFY.cpy:21",
+   "grep": "app/cbl/COACTVWC.cbl:913",
    "kind": "cobol-copybook",
    "member": "CSSTRPFY",
    "module": "CARDDEMO",
@@ -17901,6 +17959,7 @@
   },
   {
    "cite": "app/cpy/CSUTLDWY.cpy:4",
+   "grep": "app/cbl/COACTUPC.cbl:166",
    "kind": "cobol-copybook",
    "member": "CSUTLDWY",
    "module": "CARDDEMO",
@@ -17908,6 +17967,7 @@
   },
   {
    "cite": "app/cpy/UNUSED1Y.cpy:1",
+   "grep": "",
    "kind": "cobol-copybook",
    "member": "UNUSED1Y",
    "module": "CARDDEMO",
@@ -17915,6 +17975,7 @@
   },
   {
    "cite": "app/maclib/ASMWAIT.mac:17",
+   "grep": "app/asm/MVSWAIT.asm:23",
    "kind": "assembler-macro",
    "member": "ASMWAIT",
    "module": "CARDDEMO",
