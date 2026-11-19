@@ -1,7 +1,7 @@
 # INT-01 pilot report
 
 Ticket: `modernization/design/tickets/01-pilot.md`. `modernization/design/tickets/README.md` names it as the Wave 1 pilot.
-Start: `origin/demo/04a-standards` @ `84ffae7`. Branch: `demo/05-pilot`. Code revision: `dc456be`.
+Start: `origin/demo/04a-standards` @ `84ffae7`. Branch: `demo/05-pilot`. Code revision: `59ffbc2` (after review fixes; first candidate `dc456be`).
 Module: `java/interest/interest-batch` (the ticket's `interest-batch/` scope placed under `java/interest` as the prompt asks).
 Skills used: `interest-conversion-standards` (read before coding) and `carddemo-parity`. `interest-ticket-build`,
 `interest-ticket-verify` and `interest-pitfalls` are not on the starting branch, so this run is the pilot for the method below.
@@ -9,7 +9,7 @@ Skills used: `interest-conversion-standards` (read before coding) and `carddemo-
 ## What was built
 - One Spring Batch job `interestPilot`. Step 1 `interestPilotIntake` decodes the real `AWS.M2.CARDDEMO.{ACCTDATA,CARDXREF,TCATBALF,DISCGRP}.PS.txt`
   files into run-scoped `interest_pilot.*_input` snapshots. Step 2 `interestPilotStep` runs reader -> processor -> writer,
-  one group per account break; the pilot commits the whole run as one chunk, so a failure commits nothing.
+  one group per account break; `PilotJobConfig.WHOLE_RUN` makes the whole run one chunk (not configurable), so a failure commits nothing.
 - Private tables: `src/main/resources/pilot/schema-pilot.sql`. Batch metadata lives in schema `interest_batch`.
 - Calculation: `InterestCalculator` (BigDecimal, `RoundingMode.DOWN`, receiver widths in `Receiver`).
   Timestamps: `LegacyTimestamp`, from an injected `Clock`. IDs: `TransactionIdSource`, from the opaque PARM. The clock and the PARM are injected separately.
@@ -18,7 +18,7 @@ Skills used: `interest-conversion-standards` (read before coding) and `carddemo-
 ## Final-revision checks
 | Check | Result |
 |---|---|
-| `mvn -B clean verify` (Java 21, Testcontainers `postgres:15-alpine`) | BUILD SUCCESS: unit 32/32, integration 8/8 (`test-output.txt`) |
+| `mvn -B clean verify` (Java 21, Testcontainers `postgres:15-alpine`) | BUILD SUCCESS: unit 36/36, integration 9/9 (`test-output.txt`) |
 | Docker PostgreSQL 15 end-to-end, i01 | exit 0; SQL assertions pass (`i01-sql-assertions.txt`) |
 | compare.py i01-baseline | FAIL: 1 difference (rc.json only, see `parity-report.md`). Datasets and SYSOUT have 0 differences |
 | Legacy baseline `make parity CHAIN=interest` | 7/7 PASS |
@@ -52,12 +52,12 @@ Skills used: `interest-conversion-standards` (read before coding) and `carddemo-
 | S06 | PASS | constructor injection throughout; ordinal and SYSOUT counter are step-scoped in `InterestGroupProcessor` |
 | S07 | PASS | `InterestCalculator`, `Receiver`; no float/double |
 | S08 | PASS | `PilotFieldCodec`, `FixtureDatasets` only; non-lab sign bytes rejected |
-| S09 | PASS | `PilotProperties`, `PilotJobConfig.pilotClock`, `TransactionIdSource` |
+| S09 | PASS | `PilotProperties`, `PilotJobConfig.pilotClock`, `TransactionIdSource` (10 printable lab-profile bytes, `Locale.ROOT`); `INT_H02_parmThatIsNotTenLabProfileBytesIsHeld` |
 | S10 | PASS | OPEN-rule table above |
 | S11 | PASS | register findings below; no decision changed; INT-H03/H02 hold paths |
-| S12 | FAIL (partial, in scope) | `PilotRollbackIT`: FAILED + no commit + `pilot-failure.json` (dd/op/status). Legacy abend RC and SYSOUT lines are excluded by the ticket and not produced |
+| S12 | FAIL (partial, in scope) | `PilotRollbackIT`: FAILED + no commit + `pilot-failure.json` (dd/op/status); `event=rate-fallback dd=DISCGRP op=READ status=23` logged (`INT_R03_defaultFallbackUsesPaddedDefaultRow`). Legacy abend RC and SYSOUT lines are excluded by the ticket and not produced |
 | S13 | PASS (untouched) | restart excluded; `run_checkpoint` written but never resumed |
-| S14 | PASS | logs carry run id, counts and dd/op/status only (`SnapshotIntake`, `PilotRunService`) |
+| S14 | PASS | logs carry run id, counts and dd/op/status only; non-pilot exceptions log their type only (`SnapshotIntake`, `PilotRunService`, `InterestGroupProcessor`) |
 | S15 | PASS | rule-named tests above; specimens `src/test/resources/pilot/specimens/README.md` |
 | S16 | FAIL (partial) | PG15 and field/SYSOUT/byte evidence present; RC comparator diff (`parity-report.md`) |
 | S17 | PASS | `git diff demo/04a-standards --stat` touches only `java/` |
@@ -119,3 +119,15 @@ Failures hit:
   with "Could not open JDBC Connection" (30 s timeouts). Fix: a singleton container started in a static block.
 - Test data mistake: zoned `00000012345{` is 1234.50, not 123.45, because the overpunch byte is the last digit.
 - The comparator also checks `rc.json` and SYSOUT, not only datasets. Plan for this early: the setup-step codes in rc.json cannot be produced (finding 1).
+
+## Review fixes (Devin Review on PR #15), evidence rerun at `59ffbc2`
+| Finding | Fix | Test |
+|---|---|---|
+| ACCT-ID decoded as X(11) | PIC 9(11) validated (`Account.decode`) | `d_accountIdIsPic9AndNonDigitKeyIsUnreadable` |
+| Smaller chunk size could commit partial runs | `groups-per-transaction` removed; `WHOLE_RUN` chunk | `INT_R10_missingAccountRollsBackEarlierGroupOutputs` |
+| Export `stripTrailing` dropped non-space filler | only trailing spaces dropped (`FixtureDatasets.writeFixed`) | `j_exportDropsOnlyTrailingSpacesSoOtherFillerBytesSurvive` |
+| Locale-dependent digits | `Locale.ROOT` / `Integer.toString` (`TransactionIdSource`, `LegacyTimestamp`, `PilotExporter`) | `INT_R08_INT_Q05_idsAndTimestampsUseAsciiDigitsUnderAnyLocale` |
+| PARM not byte-checked | rejects PARM not encodable as 10 printable lab-profile bytes | `INT_H02_parmThatIsNotTenLabProfileBytesIsHeld` |
+| No ordinary fallback event | `event=rate-fallback dd=DISCGRP op=READ status=23` | `INT_R03_defaultFallbackUsesPaddedDefaultRow` |
+| Raw exception text in logs | non-pilot failures log exception type only | – |
+| Stale success artifacts on dir reuse / export failure | artifacts staged in `.staging-<run>`, old `rc.json` removed first, new one published last; export failure gives RC 12 | `INT_R10_failedRunIntoReusedOutputDirLeavesNoStaleSuccessArtifacts` |
