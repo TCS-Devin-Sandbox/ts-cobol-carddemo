@@ -1,0 +1,4643 @@
+{
+  "baseline": {
+    "branch": "demo/01-intake",
+    "sha": "41519206b887cd0123ea850b46a96cdc9baa69af",
+    "evidence": [
+      "modernization/INTAKE.md:1"
+    ]
+  },
+  "root": {
+    "path": "app/jcl/INTCALC.jcl",
+    "evidence": [
+      "app/jcl/INTCALC.jcl:22"
+    ]
+  },
+  "scheduler_folder": {
+    "name": "MONTHLY-InterestCalculation",
+    "evidence": [
+      "app/scheduler/CardDemo.controlm:64"
+    ]
+  },
+  "in_scope": {
+    "jobs": [
+      {
+        "name": "INTCALC",
+        "evidence": [
+          "app/jcl/INTCALC.jcl:22"
+        ]
+      }
+    ],
+    "steps": [
+      {
+        "name": "STEP15",
+        "parm": "'2022071800'",
+        "evidence": [
+          "app/jcl/INTCALC.jcl:22"
+        ]
+      }
+    ],
+    "programs": [
+      {
+        "file_name": "CBACT04C.cbl",
+        "program_id": "CBACT04C",
+        "load_module": "CBACT04C",
+        "binding": "Off-host build proven; deployed z/OS load binding unverified",
+        "evidence": [
+          "app/cbl/CBACT04C.cbl:23",
+          "tools/build.sh:18-35"
+        ]
+      }
+    ],
+    "copybooks": [
+      {
+        "name": "CVTRA01Y",
+        "path": "app/cpy/CVTRA01Y.cpy",
+        "fd": "TCATBAL-FILE",
+        "records": [
+          "FD-TRAN-CAT-BAL-RECORD"
+        ],
+        "placement": "WORKING-STORAGE; moved to/from FD record, not an FD COPY",
+        "record_length": 50,
+        "evidence": [
+          "app/cbl/CBACT04C.cbl:97",
+          "app/cpy/CVTRA01Y.cpy:4",
+          "app/jcl/INTCALC.jcl:27",
+          "app/cbl/CBACT04C.cbl:28",
+          "app/cbl/CBACT04C.cbl:61-92",
+          "app/cbl/CBACT04C.cbl:236",
+          "app/cbl/CBACT04C.cbl:326",
+          "app/jcl/TCATBALF.jcl:36",
+          "app/cbl/CBACT04C.cbl:97",
+          "app/cpy/CVTRA01Y.cpy:4"
+        ]
+      },
+      {
+        "name": "CVACT03Y",
+        "path": "app/cpy/CVACT03Y.cpy",
+        "fd": "XREF-FILE",
+        "records": [
+          "FD-XREFFILE-REC"
+        ],
+        "placement": "WORKING-STORAGE; moved to/from FD record, not an FD COPY",
+        "record_length": 50,
+        "evidence": [
+          "app/cbl/CBACT04C.cbl:102",
+          "app/cpy/CVACT03Y.cpy:4",
+          "app/jcl/INTCALC.jcl:29",
+          "app/cbl/CBACT04C.cbl:34",
+          "app/cbl/CBACT04C.cbl:61-92",
+          "app/cbl/CBACT04C.cbl:254",
+          "app/cbl/CBACT04C.cbl:394",
+          "app/jcl/XREFFILE.jcl:39",
+          "app/cbl/CBACT04C.cbl:102",
+          "app/cpy/CVACT03Y.cpy:4"
+        ]
+      },
+      {
+        "name": "CVACT01Y",
+        "path": "app/cpy/CVACT01Y.cpy",
+        "fd": "ACCOUNT-FILE",
+        "records": [
+          "FD-ACCTFILE-REC"
+        ],
+        "placement": "WORKING-STORAGE; moved to/from FD record, not an FD COPY",
+        "record_length": 300,
+        "evidence": [
+          "app/cbl/CBACT04C.cbl:112",
+          "app/cpy/CVACT01Y.cpy:4",
+          "app/jcl/INTCALC.jcl:33",
+          "app/cbl/CBACT04C.cbl:41",
+          "app/cbl/CBACT04C.cbl:61-92",
+          "app/cbl/CBACT04C.cbl:291",
+          "app/cbl/CBACT04C.cbl:373",
+          "app/cbl/CBACT04C.cbl:356",
+          "app/jcl/ACCTFILE.jcl:36",
+          "app/cbl/CBACT04C.cbl:112",
+          "app/cpy/CVACT01Y.cpy:4"
+        ]
+      },
+      {
+        "name": "CVTRA02Y",
+        "path": "app/cpy/CVTRA02Y.cpy",
+        "fd": "DISCGRP-FILE",
+        "records": [
+          "FD-DISCGRP-REC"
+        ],
+        "placement": "WORKING-STORAGE; moved to/from FD record, not an FD COPY",
+        "record_length": 50,
+        "evidence": [
+          "app/cbl/CBACT04C.cbl:107",
+          "app/cpy/CVTRA02Y.cpy:4",
+          "app/jcl/INTCALC.jcl:35",
+          "app/cbl/CBACT04C.cbl:47",
+          "app/cbl/CBACT04C.cbl:61-92",
+          "app/cbl/CBACT04C.cbl:272",
+          "app/cbl/CBACT04C.cbl:416",
+          "app/cbl/CBACT04C.cbl:444",
+          "app/jcl/DISCGRP.jcl:36",
+          "app/cbl/CBACT04C.cbl:107",
+          "app/cpy/CVTRA02Y.cpy:4"
+        ]
+      },
+      {
+        "name": "CVTRA05Y",
+        "path": "app/cpy/CVTRA05Y.cpy",
+        "fd": "TRANSACT-FILE",
+        "records": [
+          "FD-TRANFILE-REC"
+        ],
+        "placement": "WORKING-STORAGE; moved to/from FD record, not an FD COPY",
+        "record_length": 350,
+        "evidence": [
+          "app/cbl/CBACT04C.cbl:117",
+          "app/cpy/CVTRA05Y.cpy:4",
+          "app/jcl/INTCALC.jcl:37",
+          "app/cbl/CBACT04C.cbl:53",
+          "app/cbl/CBACT04C.cbl:61-92",
+          "app/cbl/CBACT04C.cbl:309",
+          "app/cbl/CBACT04C.cbl:500",
+          "app/jcl/DEFGDGB.jcl:48",
+          "app/cbl/CBACT04C.cbl:117",
+          "app/cpy/CVTRA05Y.cpy:4"
+        ]
+      }
+    ],
+    "datasets": [
+      {
+        "dsn": "AWS.M2.CARDDEMO.TCATBALF.VSAM.KSDS",
+        "dd": "TCATBALF",
+        "disp": "SHR",
+        "generation": null,
+        "direction": "R",
+        "organization": "KSDS",
+        "record_length": 50,
+        "record_layout": "CVTRA01Y",
+        "definition": {
+          "job": "TCATBALF",
+          "step": "STEP10",
+          "source": "app/jcl/TCATBALF.jcl:36",
+          "kind": "vsam-cluster",
+          "organization": "KSDS",
+          "organization_word": "INDEXED",
+          "keys": "17 0",
+          "recordsize": "50 50",
+          "shareoptions": "2 3",
+          "volumes": "AWSHJ1"
+        },
+        "evidence": [
+          "app/jcl/INTCALC.jcl:27",
+          "app/cbl/CBACT04C.cbl:28",
+          "app/cbl/CBACT04C.cbl:61-92",
+          "app/cbl/CBACT04C.cbl:236",
+          "app/cbl/CBACT04C.cbl:326",
+          "app/jcl/TCATBALF.jcl:36",
+          "app/cbl/CBACT04C.cbl:97",
+          "app/cpy/CVTRA01Y.cpy:4"
+        ]
+      },
+      {
+        "dsn": "AWS.M2.CARDDEMO.CARDXREF.VSAM.KSDS",
+        "dd": "XREFFILE",
+        "disp": "SHR",
+        "generation": null,
+        "direction": "R",
+        "organization": "KSDS",
+        "record_length": 50,
+        "record_layout": "CVACT03Y",
+        "definition": {
+          "job": "XREFFILE",
+          "step": "STEP10",
+          "source": "app/jcl/XREFFILE.jcl:39",
+          "kind": "vsam-cluster",
+          "organization": "KSDS",
+          "organization_word": "INDEXED",
+          "keys": "16 0",
+          "recordsize": "50 50",
+          "shareoptions": "2 3",
+          "volumes": "AWSHJ1"
+        },
+        "evidence": [
+          "app/jcl/INTCALC.jcl:29",
+          "app/cbl/CBACT04C.cbl:34",
+          "app/cbl/CBACT04C.cbl:61-92",
+          "app/cbl/CBACT04C.cbl:254",
+          "app/cbl/CBACT04C.cbl:394",
+          "app/jcl/XREFFILE.jcl:39",
+          "app/cbl/CBACT04C.cbl:102",
+          "app/cpy/CVACT03Y.cpy:4"
+        ]
+      },
+      {
+        "dsn": "AWS.M2.CARDDEMO.CARDXREF.VSAM.AIX.PATH",
+        "dd": "XREFFIL1",
+        "disp": "SHR",
+        "generation": null,
+        "direction": "NOT_OPENED",
+        "organization": "AIX path",
+        "record_length": 50,
+        "record_layout": "CVACT03Y (base record; path not opened)",
+        "definition": {
+          "job": "XREFFILE",
+          "step": "STEP25",
+          "source": "app/jcl/XREFFILE.jcl:90",
+          "kind": "path",
+          "pathentry": "AWS.M2.CARDDEMO.CARDXREF.VSAM.AIX"
+        },
+        "evidence": [
+          "app/jcl/INTCALC.jcl:31",
+          "app/jcl/XREFFILE.jcl:90",
+          "app/cbl/CBACT04C.cbl:27-56",
+          "app/jcl/XREFFILE.jcl:67-102",
+          "app/cpy/CVACT03Y.cpy:1-10"
+        ]
+      },
+      {
+        "dsn": "AWS.M2.CARDDEMO.ACCTDATA.VSAM.KSDS",
+        "dd": "ACCTFILE",
+        "disp": "SHR",
+        "generation": null,
+        "direction": "RW",
+        "organization": "KSDS",
+        "record_length": 300,
+        "record_layout": "CVACT01Y",
+        "definition": {
+          "job": "ACCTFILE",
+          "step": "STEP10",
+          "source": "app/jcl/ACCTFILE.jcl:36",
+          "kind": "vsam-cluster",
+          "organization": "KSDS",
+          "organization_word": "INDEXED",
+          "keys": "11 0",
+          "recordsize": "300 300",
+          "shareoptions": "2 3",
+          "volumes": "AWSHJ1"
+        },
+        "evidence": [
+          "app/jcl/INTCALC.jcl:33",
+          "app/cbl/CBACT04C.cbl:41",
+          "app/cbl/CBACT04C.cbl:61-92",
+          "app/cbl/CBACT04C.cbl:291",
+          "app/cbl/CBACT04C.cbl:373",
+          "app/cbl/CBACT04C.cbl:356",
+          "app/jcl/ACCTFILE.jcl:36",
+          "app/cbl/CBACT04C.cbl:112",
+          "app/cpy/CVACT01Y.cpy:4"
+        ]
+      },
+      {
+        "dsn": "AWS.M2.CARDDEMO.DISCGRP.VSAM.KSDS",
+        "dd": "DISCGRP",
+        "disp": "SHR",
+        "generation": null,
+        "direction": "R",
+        "organization": "KSDS",
+        "record_length": 50,
+        "record_layout": "CVTRA02Y",
+        "definition": {
+          "job": "DISCGRP",
+          "step": "STEP10",
+          "source": "app/jcl/DISCGRP.jcl:36",
+          "kind": "vsam-cluster",
+          "organization": "KSDS",
+          "organization_word": "INDEXED",
+          "keys": "16 0",
+          "recordsize": "50 50",
+          "shareoptions": "2 3",
+          "volumes": "AWSHJ1"
+        },
+        "evidence": [
+          "app/jcl/INTCALC.jcl:35",
+          "app/cbl/CBACT04C.cbl:47",
+          "app/cbl/CBACT04C.cbl:61-92",
+          "app/cbl/CBACT04C.cbl:272",
+          "app/cbl/CBACT04C.cbl:416",
+          "app/cbl/CBACT04C.cbl:444",
+          "app/jcl/DISCGRP.jcl:36",
+          "app/cbl/CBACT04C.cbl:107",
+          "app/cpy/CVTRA02Y.cpy:4"
+        ]
+      },
+      {
+        "dsn": "AWS.M2.CARDDEMO.SYSTRAN",
+        "dd": "TRANSACT",
+        "disp": "(NEW,CATLG,DELETE)",
+        "generation": "+1",
+        "direction": "W",
+        "organization": "GDG",
+        "record_length": 350,
+        "record_layout": "CVTRA05Y",
+        "definition": {
+          "job": "DEFGDGB",
+          "step": "STEP05",
+          "source": "app/jcl/DEFGDGB.jcl:48",
+          "kind": "gdg",
+          "limit": "5"
+        },
+        "evidence": [
+          "app/jcl/INTCALC.jcl:37",
+          "app/cbl/CBACT04C.cbl:53",
+          "app/cbl/CBACT04C.cbl:61-92",
+          "app/cbl/CBACT04C.cbl:309",
+          "app/cbl/CBACT04C.cbl:500",
+          "app/jcl/DEFGDGB.jcl:48",
+          "app/cbl/CBACT04C.cbl:117",
+          "app/cpy/CVTRA05Y.cpy:4"
+        ],
+        "gdg_base": {
+          "name": "AWS.M2.CARDDEMO.SYSTRAN",
+          "limit": 5,
+          "scratch": true,
+          "evidence": [
+            "app/jcl/DEFGDGB.jcl:48-53"
+          ]
+        }
+      }
+    ]
+  },
+  "edges": [
+    {
+      "kind": "data",
+      "source": "AWS.M2.CARDDEMO.TCATBALF.VSAM.KSDS",
+      "target": "CBACT04C",
+      "direction": "R",
+      "dd": "TCATBALF",
+      "status": "PROVEN",
+      "basis": "SELECT binding and OPEN mode",
+      "evidence": [
+        "app/jcl/INTCALC.jcl:27",
+        "app/cbl/CBACT04C.cbl:28",
+        "app/cbl/CBACT04C.cbl:61-92",
+        "app/cbl/CBACT04C.cbl:236",
+        "app/cbl/CBACT04C.cbl:326",
+        "app/jcl/TCATBALF.jcl:36",
+        "app/cbl/CBACT04C.cbl:97",
+        "app/cpy/CVTRA01Y.cpy:4"
+      ]
+    },
+    {
+      "kind": "data",
+      "source": "AWS.M2.CARDDEMO.CARDXREF.VSAM.KSDS",
+      "target": "CBACT04C",
+      "direction": "R",
+      "dd": "XREFFILE",
+      "status": "PROVEN",
+      "basis": "SELECT binding and OPEN mode",
+      "evidence": [
+        "app/jcl/INTCALC.jcl:29",
+        "app/cbl/CBACT04C.cbl:34",
+        "app/cbl/CBACT04C.cbl:61-92",
+        "app/cbl/CBACT04C.cbl:254",
+        "app/cbl/CBACT04C.cbl:394",
+        "app/jcl/XREFFILE.jcl:39",
+        "app/cbl/CBACT04C.cbl:102",
+        "app/cpy/CVACT03Y.cpy:4"
+      ]
+    },
+    {
+      "kind": "data",
+      "source": "AWS.M2.CARDDEMO.ACCTDATA.VSAM.KSDS",
+      "target": "CBACT04C",
+      "direction": "R",
+      "dd": "ACCTFILE",
+      "status": "PROVEN",
+      "basis": "SELECT binding and OPEN mode",
+      "evidence": [
+        "app/jcl/INTCALC.jcl:33",
+        "app/cbl/CBACT04C.cbl:41",
+        "app/cbl/CBACT04C.cbl:61-92",
+        "app/cbl/CBACT04C.cbl:291",
+        "app/cbl/CBACT04C.cbl:373",
+        "app/cbl/CBACT04C.cbl:356",
+        "app/jcl/ACCTFILE.jcl:36",
+        "app/cbl/CBACT04C.cbl:112",
+        "app/cpy/CVACT01Y.cpy:4"
+      ]
+    },
+    {
+      "kind": "data",
+      "source": "CBACT04C",
+      "target": "AWS.M2.CARDDEMO.ACCTDATA.VSAM.KSDS",
+      "direction": "W",
+      "dd": "ACCTFILE",
+      "status": "PROVEN",
+      "basis": "SELECT binding and OPEN mode",
+      "evidence": [
+        "app/jcl/INTCALC.jcl:33",
+        "app/cbl/CBACT04C.cbl:41",
+        "app/cbl/CBACT04C.cbl:61-92",
+        "app/cbl/CBACT04C.cbl:291",
+        "app/cbl/CBACT04C.cbl:373",
+        "app/cbl/CBACT04C.cbl:356",
+        "app/jcl/ACCTFILE.jcl:36",
+        "app/cbl/CBACT04C.cbl:112",
+        "app/cpy/CVACT01Y.cpy:4"
+      ]
+    },
+    {
+      "kind": "data",
+      "source": "AWS.M2.CARDDEMO.DISCGRP.VSAM.KSDS",
+      "target": "CBACT04C",
+      "direction": "R",
+      "dd": "DISCGRP",
+      "status": "PROVEN",
+      "basis": "SELECT binding and OPEN mode",
+      "evidence": [
+        "app/jcl/INTCALC.jcl:35",
+        "app/cbl/CBACT04C.cbl:47",
+        "app/cbl/CBACT04C.cbl:61-92",
+        "app/cbl/CBACT04C.cbl:272",
+        "app/cbl/CBACT04C.cbl:416",
+        "app/cbl/CBACT04C.cbl:444",
+        "app/jcl/DISCGRP.jcl:36",
+        "app/cbl/CBACT04C.cbl:107",
+        "app/cpy/CVTRA02Y.cpy:4"
+      ]
+    },
+    {
+      "kind": "data",
+      "source": "CBACT04C",
+      "target": "AWS.M2.CARDDEMO.SYSTRAN",
+      "direction": "W",
+      "dd": "TRANSACT",
+      "status": "PROVEN",
+      "basis": "SELECT binding and OPEN mode",
+      "evidence": [
+        "app/jcl/INTCALC.jcl:37",
+        "app/cbl/CBACT04C.cbl:53",
+        "app/cbl/CBACT04C.cbl:61-92",
+        "app/cbl/CBACT04C.cbl:309",
+        "app/cbl/CBACT04C.cbl:500",
+        "app/jcl/DEFGDGB.jcl:48",
+        "app/cbl/CBACT04C.cbl:117",
+        "app/cpy/CVTRA05Y.cpy:4"
+      ]
+    },
+    {
+      "kind": "exec",
+      "source": "INTCALC.STEP15",
+      "target": "load-module:CBACT04C",
+      "status": "PROVEN",
+      "evidence": [
+        "app/jcl/INTCALC.jcl:22"
+      ]
+    },
+    {
+      "kind": "load-binding",
+      "source": "load-module:CBACT04C",
+      "target": "app/cbl/CBACT04C.cbl",
+      "status": "PROVEN",
+      "basis": "Off-host build binding only; production binder map not supplied",
+      "evidence": [
+        "tools/build.sh:18-35",
+        "app/cbl/CBACT04C.cbl:23"
+      ]
+    },
+    {
+      "kind": "call",
+      "source": "CBACT04C",
+      "target": "CEE3ABD",
+      "status": "PROVEN",
+      "basis": "Static literal call; runtime implementation not assumed",
+      "evidence": [
+        "app/cbl/CBACT04C.cbl:632"
+      ]
+    }
+  ],
+  "setup_jobs": [
+    {
+      "job": "DEFGDGB",
+      "role": "setup",
+      "purpose": "Defines GDG bases with LIMIT(5) SCRATCH",
+      "steps": [
+        "STEP05"
+      ],
+      "evidence": [
+        "tools/runjcl/chains.json:52-58",
+        "app/jcl/DEFGDGB.jcl:21"
+      ]
+    },
+    {
+      "job": "ACCTFILE",
+      "role": "setup",
+      "purpose": "Deletes/redefines VSAM and REPRO loads seed records",
+      "steps": [
+        "STEP05",
+        "STEP10",
+        "STEP15"
+      ],
+      "evidence": [
+        "tools/runjcl/chains.json:52-58",
+        "app/jcl/ACCTFILE.jcl:22",
+        "app/jcl/ACCTFILE.jcl:33",
+        "app/jcl/ACCTFILE.jcl:54"
+      ]
+    },
+    {
+      "job": "XREFFILE",
+      "role": "setup",
+      "purpose": "Deletes/redefines VSAM and REPRO loads seed records; defines and builds alternate index/path",
+      "steps": [
+        "STEP05",
+        "STEP10",
+        "STEP15",
+        "STEP20",
+        "STEP25",
+        "STEP30"
+      ],
+      "evidence": [
+        "tools/runjcl/chains.json:52-58",
+        "app/jcl/XREFFILE.jcl:22",
+        "app/jcl/XREFFILE.jcl:36",
+        "app/jcl/XREFFILE.jcl:57",
+        "app/jcl/XREFFILE.jcl:69",
+        "app/jcl/XREFFILE.jcl:87",
+        "app/jcl/XREFFILE.jcl:97"
+      ]
+    },
+    {
+      "job": "TCATBALF",
+      "role": "setup",
+      "purpose": "Deletes/redefines VSAM and REPRO loads seed records",
+      "steps": [
+        "STEP05",
+        "STEP10",
+        "STEP15"
+      ],
+      "evidence": [
+        "tools/runjcl/chains.json:52-58",
+        "app/jcl/TCATBALF.jcl:22",
+        "app/jcl/TCATBALF.jcl:33",
+        "app/jcl/TCATBALF.jcl:54"
+      ]
+    },
+    {
+      "job": "DISCGRP",
+      "role": "setup",
+      "purpose": "Deletes/redefines VSAM and REPRO loads seed records",
+      "steps": [
+        "STEP05",
+        "STEP10",
+        "STEP15"
+      ],
+      "evidence": [
+        "tools/runjcl/chains.json:52-58",
+        "app/jcl/DISCGRP.jcl:22",
+        "app/jcl/DISCGRP.jcl:33",
+        "app/jcl/DISCGRP.jcl:54"
+      ]
+    }
+  ],
+  "outside_dependencies": [
+    {
+      "module": "CARDDEMO",
+      "kind": "CICS program",
+      "name": "COACTUPC",
+      "dataset": "AWS.M2.CARDDEMO.ACCTDATA.VSAM.KSDS",
+      "direction": "R",
+      "status": "PROVEN",
+      "evidence": [
+        "app/cbl/COACTUPC.cbl:3703",
+        "app/csd/CARDDEMO.CSD:1"
+      ],
+      "command": "READ"
+    },
+    {
+      "module": "CARDDEMO",
+      "kind": "CICS program",
+      "name": "COACTUPC",
+      "dataset": "AWS.M2.CARDDEMO.ACCTDATA.VSAM.KSDS",
+      "direction": "R",
+      "status": "PROVEN",
+      "evidence": [
+        "app/cbl/COACTUPC.cbl:3894",
+        "app/csd/CARDDEMO.CSD:1"
+      ],
+      "command": "READ"
+    },
+    {
+      "module": "CARDDEMO",
+      "kind": "CICS program",
+      "name": "COACTUPC",
+      "dataset": "AWS.M2.CARDDEMO.ACCTDATA.VSAM.KSDS",
+      "direction": "W",
+      "status": "PROVEN",
+      "evidence": [
+        "app/cbl/COACTUPC.cbl:4065",
+        "app/csd/CARDDEMO.CSD:1"
+      ],
+      "command": "REWRITE"
+    },
+    {
+      "module": "CARDDEMO",
+      "kind": "CICS program",
+      "name": "COACTUPC",
+      "dataset": "AWS.M2.CARDDEMO.CARDXREF.VSAM.AIX.PATH",
+      "direction": "R",
+      "status": "PROVEN",
+      "evidence": [
+        "app/cbl/COACTUPC.cbl:3654",
+        "app/csd/CARDDEMO.CSD:63"
+      ],
+      "command": "READ"
+    },
+    {
+      "module": "CARDDEMO",
+      "kind": "CICS program",
+      "name": "COACTVWC",
+      "dataset": "AWS.M2.CARDDEMO.ACCTDATA.VSAM.KSDS",
+      "direction": "R",
+      "status": "PROVEN",
+      "evidence": [
+        "app/cbl/COACTVWC.cbl:776",
+        "app/csd/CARDDEMO.CSD:1"
+      ],
+      "command": "READ"
+    },
+    {
+      "module": "CARDDEMO",
+      "kind": "CICS program",
+      "name": "COACTVWC",
+      "dataset": "AWS.M2.CARDDEMO.CARDXREF.VSAM.AIX.PATH",
+      "direction": "R",
+      "status": "PROVEN",
+      "evidence": [
+        "app/cbl/COACTVWC.cbl:727",
+        "app/csd/CARDDEMO.CSD:63"
+      ],
+      "command": "READ"
+    },
+    {
+      "module": "CARDDEMO",
+      "kind": "CICS program",
+      "name": "COBIL00C",
+      "dataset": "AWS.M2.CARDDEMO.ACCTDATA.VSAM.KSDS",
+      "direction": "R",
+      "status": "PROVEN",
+      "evidence": [
+        "app/cbl/COBIL00C.cbl:345",
+        "app/csd/CARDDEMO.CSD:1"
+      ],
+      "command": "READ"
+    },
+    {
+      "module": "CARDDEMO",
+      "kind": "CICS program",
+      "name": "COBIL00C",
+      "dataset": "AWS.M2.CARDDEMO.ACCTDATA.VSAM.KSDS",
+      "direction": "W",
+      "status": "PROVEN",
+      "evidence": [
+        "app/cbl/COBIL00C.cbl:379",
+        "app/csd/CARDDEMO.CSD:1"
+      ],
+      "command": "REWRITE"
+    },
+    {
+      "module": "CARDDEMO",
+      "kind": "CICS program",
+      "name": "COBIL00C",
+      "dataset": "AWS.M2.CARDDEMO.CARDXREF.VSAM.AIX.PATH",
+      "direction": "R",
+      "status": "PROVEN",
+      "evidence": [
+        "app/cbl/COBIL00C.cbl:410",
+        "app/csd/CARDDEMO.CSD:63"
+      ],
+      "command": "READ"
+    },
+    {
+      "module": "CARDDEMO",
+      "kind": "CICS program",
+      "name": "COTRN02C",
+      "dataset": "AWS.M2.CARDDEMO.CARDXREF.VSAM.AIX.PATH",
+      "direction": "R",
+      "status": "PROVEN",
+      "evidence": [
+        "app/cbl/COTRN02C.cbl:578",
+        "app/csd/CARDDEMO.CSD:63"
+      ],
+      "command": "READ"
+    },
+    {
+      "module": "CARDDEMO",
+      "kind": "CICS program",
+      "name": "COTRN02C",
+      "dataset": "AWS.M2.CARDDEMO.CARDXREF.VSAM.KSDS",
+      "direction": "R",
+      "status": "PROVEN",
+      "evidence": [
+        "app/cbl/COTRN02C.cbl:611",
+        "app/csd/CARDDEMO.CSD:37"
+      ],
+      "command": "READ"
+    },
+    {
+      "module": "CARDDEMO",
+      "kind": "CICS transaction",
+      "name": "CA00",
+      "dataset": "AWS.M2.CARDDEMO.ACCTDATA.VSAM.KSDS",
+      "direction": "R",
+      "status": "CANDIDATE",
+      "evidence": [
+        "app/cbl/COACTUPC.cbl:3703",
+        "app/cbl/COMEN01C.cbl:156",
+        "app/csd/CARDDEMO.CSD:1",
+        "app/csd/CARDDEMO.CSD:327"
+      ],
+      "via": "COACTUPC",
+      "basis": "Entry/closure certainty; not proof of runtime overlap"
+    },
+    {
+      "module": "CARDDEMO",
+      "kind": "CICS transaction",
+      "name": "CA00",
+      "dataset": "AWS.M2.CARDDEMO.ACCTDATA.VSAM.KSDS",
+      "direction": "R",
+      "status": "CANDIDATE",
+      "evidence": [
+        "app/cbl/COACTUPC.cbl:3894",
+        "app/cbl/COMEN01C.cbl:156",
+        "app/csd/CARDDEMO.CSD:1",
+        "app/csd/CARDDEMO.CSD:327"
+      ],
+      "via": "COACTUPC",
+      "basis": "Entry/closure certainty; not proof of runtime overlap"
+    },
+    {
+      "module": "CARDDEMO",
+      "kind": "CICS transaction",
+      "name": "CA00",
+      "dataset": "AWS.M2.CARDDEMO.ACCTDATA.VSAM.KSDS",
+      "direction": "R",
+      "status": "CANDIDATE",
+      "evidence": [
+        "app/cbl/COACTVWC.cbl:776",
+        "app/cbl/COMEN01C.cbl:156",
+        "app/csd/CARDDEMO.CSD:1",
+        "app/csd/CARDDEMO.CSD:327"
+      ],
+      "via": "COACTVWC",
+      "basis": "Entry/closure certainty; not proof of runtime overlap"
+    },
+    {
+      "module": "CARDDEMO",
+      "kind": "CICS transaction",
+      "name": "CA00",
+      "dataset": "AWS.M2.CARDDEMO.ACCTDATA.VSAM.KSDS",
+      "direction": "R",
+      "status": "CANDIDATE",
+      "evidence": [
+        "app/cbl/COBIL00C.cbl:345",
+        "app/cbl/COMEN01C.cbl:156",
+        "app/csd/CARDDEMO.CSD:1",
+        "app/csd/CARDDEMO.CSD:327"
+      ],
+      "via": "COBIL00C",
+      "basis": "Entry/closure certainty; not proof of runtime overlap"
+    },
+    {
+      "module": "CARDDEMO",
+      "kind": "CICS transaction",
+      "name": "CA00",
+      "dataset": "AWS.M2.CARDDEMO.ACCTDATA.VSAM.KSDS",
+      "direction": "W",
+      "status": "CANDIDATE",
+      "evidence": [
+        "app/cbl/COACTUPC.cbl:4065",
+        "app/cbl/COMEN01C.cbl:156",
+        "app/csd/CARDDEMO.CSD:1",
+        "app/csd/CARDDEMO.CSD:327"
+      ],
+      "via": "COACTUPC",
+      "basis": "Entry/closure certainty; not proof of runtime overlap"
+    },
+    {
+      "module": "CARDDEMO",
+      "kind": "CICS transaction",
+      "name": "CA00",
+      "dataset": "AWS.M2.CARDDEMO.ACCTDATA.VSAM.KSDS",
+      "direction": "W",
+      "status": "CANDIDATE",
+      "evidence": [
+        "app/cbl/COBIL00C.cbl:379",
+        "app/cbl/COMEN01C.cbl:156",
+        "app/csd/CARDDEMO.CSD:1",
+        "app/csd/CARDDEMO.CSD:327"
+      ],
+      "via": "COBIL00C",
+      "basis": "Entry/closure certainty; not proof of runtime overlap"
+    },
+    {
+      "module": "CARDDEMO",
+      "kind": "CICS transaction",
+      "name": "CA00",
+      "dataset": "AWS.M2.CARDDEMO.CARDXREF.VSAM.AIX.PATH",
+      "direction": "R",
+      "status": "CANDIDATE",
+      "evidence": [
+        "app/cbl/COACTUPC.cbl:3654",
+        "app/cbl/COMEN01C.cbl:156",
+        "app/csd/CARDDEMO.CSD:327",
+        "app/csd/CARDDEMO.CSD:63"
+      ],
+      "via": "COACTUPC",
+      "basis": "Entry/closure certainty; not proof of runtime overlap"
+    },
+    {
+      "module": "CARDDEMO",
+      "kind": "CICS transaction",
+      "name": "CA00",
+      "dataset": "AWS.M2.CARDDEMO.CARDXREF.VSAM.AIX.PATH",
+      "direction": "R",
+      "status": "CANDIDATE",
+      "evidence": [
+        "app/cbl/COACTVWC.cbl:727",
+        "app/cbl/COMEN01C.cbl:156",
+        "app/csd/CARDDEMO.CSD:327",
+        "app/csd/CARDDEMO.CSD:63"
+      ],
+      "via": "COACTVWC",
+      "basis": "Entry/closure certainty; not proof of runtime overlap"
+    },
+    {
+      "module": "CARDDEMO",
+      "kind": "CICS transaction",
+      "name": "CA00",
+      "dataset": "AWS.M2.CARDDEMO.CARDXREF.VSAM.AIX.PATH",
+      "direction": "R",
+      "status": "CANDIDATE",
+      "evidence": [
+        "app/cbl/COBIL00C.cbl:410",
+        "app/cbl/COMEN01C.cbl:156",
+        "app/csd/CARDDEMO.CSD:327",
+        "app/csd/CARDDEMO.CSD:63"
+      ],
+      "via": "COBIL00C",
+      "basis": "Entry/closure certainty; not proof of runtime overlap"
+    },
+    {
+      "module": "CARDDEMO",
+      "kind": "CICS transaction",
+      "name": "CA00",
+      "dataset": "AWS.M2.CARDDEMO.CARDXREF.VSAM.AIX.PATH",
+      "direction": "R",
+      "status": "CANDIDATE",
+      "evidence": [
+        "app/cbl/COMEN01C.cbl:156",
+        "app/cbl/COTRN02C.cbl:578",
+        "app/csd/CARDDEMO.CSD:327",
+        "app/csd/CARDDEMO.CSD:63"
+      ],
+      "via": "COTRN02C",
+      "basis": "Entry/closure certainty; not proof of runtime overlap"
+    },
+    {
+      "module": "CARDDEMO",
+      "kind": "CICS transaction",
+      "name": "CA00",
+      "dataset": "AWS.M2.CARDDEMO.CARDXREF.VSAM.KSDS",
+      "direction": "R",
+      "status": "CANDIDATE",
+      "evidence": [
+        "app/cbl/COMEN01C.cbl:156",
+        "app/cbl/COTRN02C.cbl:611",
+        "app/csd/CARDDEMO.CSD:327",
+        "app/csd/CARDDEMO.CSD:37"
+      ],
+      "via": "COTRN02C",
+      "basis": "Entry/closure certainty; not proof of runtime overlap"
+    },
+    {
+      "module": "CARDDEMO",
+      "kind": "CICS transaction",
+      "name": "CAUP",
+      "dataset": "AWS.M2.CARDDEMO.ACCTDATA.VSAM.KSDS",
+      "direction": "R",
+      "status": "PROVEN",
+      "evidence": [
+        "app/cbl/COACTUPC.cbl:3703",
+        "app/csd/CARDDEMO.CSD:1",
+        "app/csd/CARDDEMO.CSD:306"
+      ],
+      "via": "COACTUPC",
+      "basis": "Entry/closure certainty; not proof of runtime overlap"
+    },
+    {
+      "module": "CARDDEMO",
+      "kind": "CICS transaction",
+      "name": "CAUP",
+      "dataset": "AWS.M2.CARDDEMO.ACCTDATA.VSAM.KSDS",
+      "direction": "R",
+      "status": "PROVEN",
+      "evidence": [
+        "app/cbl/COACTUPC.cbl:3894",
+        "app/csd/CARDDEMO.CSD:1",
+        "app/csd/CARDDEMO.CSD:306"
+      ],
+      "via": "COACTUPC",
+      "basis": "Entry/closure certainty; not proof of runtime overlap"
+    },
+    {
+      "module": "CARDDEMO",
+      "kind": "CICS transaction",
+      "name": "CAUP",
+      "dataset": "AWS.M2.CARDDEMO.ACCTDATA.VSAM.KSDS",
+      "direction": "R",
+      "status": "CANDIDATE",
+      "evidence": [
+        "app/cbl/COACTVWC.cbl:776",
+        "app/cbl/COMEN01C.cbl:156",
+        "app/csd/CARDDEMO.CSD:1",
+        "app/csd/CARDDEMO.CSD:306"
+      ],
+      "via": "COACTVWC",
+      "basis": "Entry/closure certainty; not proof of runtime overlap"
+    },
+    {
+      "module": "CARDDEMO",
+      "kind": "CICS transaction",
+      "name": "CAUP",
+      "dataset": "AWS.M2.CARDDEMO.ACCTDATA.VSAM.KSDS",
+      "direction": "R",
+      "status": "CANDIDATE",
+      "evidence": [
+        "app/cbl/COBIL00C.cbl:345",
+        "app/cbl/COMEN01C.cbl:156",
+        "app/csd/CARDDEMO.CSD:1",
+        "app/csd/CARDDEMO.CSD:306"
+      ],
+      "via": "COBIL00C",
+      "basis": "Entry/closure certainty; not proof of runtime overlap"
+    },
+    {
+      "module": "CARDDEMO",
+      "kind": "CICS transaction",
+      "name": "CAUP",
+      "dataset": "AWS.M2.CARDDEMO.ACCTDATA.VSAM.KSDS",
+      "direction": "W",
+      "status": "PROVEN",
+      "evidence": [
+        "app/cbl/COACTUPC.cbl:4065",
+        "app/csd/CARDDEMO.CSD:1",
+        "app/csd/CARDDEMO.CSD:306"
+      ],
+      "via": "COACTUPC",
+      "basis": "Entry/closure certainty; not proof of runtime overlap"
+    },
+    {
+      "module": "CARDDEMO",
+      "kind": "CICS transaction",
+      "name": "CAUP",
+      "dataset": "AWS.M2.CARDDEMO.ACCTDATA.VSAM.KSDS",
+      "direction": "W",
+      "status": "CANDIDATE",
+      "evidence": [
+        "app/cbl/COBIL00C.cbl:379",
+        "app/cbl/COMEN01C.cbl:156",
+        "app/csd/CARDDEMO.CSD:1",
+        "app/csd/CARDDEMO.CSD:306"
+      ],
+      "via": "COBIL00C",
+      "basis": "Entry/closure certainty; not proof of runtime overlap"
+    },
+    {
+      "module": "CARDDEMO",
+      "kind": "CICS transaction",
+      "name": "CAUP",
+      "dataset": "AWS.M2.CARDDEMO.CARDXREF.VSAM.AIX.PATH",
+      "direction": "R",
+      "status": "PROVEN",
+      "evidence": [
+        "app/cbl/COACTUPC.cbl:3654",
+        "app/csd/CARDDEMO.CSD:306",
+        "app/csd/CARDDEMO.CSD:63"
+      ],
+      "via": "COACTUPC",
+      "basis": "Entry/closure certainty; not proof of runtime overlap"
+    },
+    {
+      "module": "CARDDEMO",
+      "kind": "CICS transaction",
+      "name": "CAUP",
+      "dataset": "AWS.M2.CARDDEMO.CARDXREF.VSAM.AIX.PATH",
+      "direction": "R",
+      "status": "CANDIDATE",
+      "evidence": [
+        "app/cbl/COACTVWC.cbl:727",
+        "app/cbl/COMEN01C.cbl:156",
+        "app/csd/CARDDEMO.CSD:306",
+        "app/csd/CARDDEMO.CSD:63"
+      ],
+      "via": "COACTVWC",
+      "basis": "Entry/closure certainty; not proof of runtime overlap"
+    },
+    {
+      "module": "CARDDEMO",
+      "kind": "CICS transaction",
+      "name": "CAUP",
+      "dataset": "AWS.M2.CARDDEMO.CARDXREF.VSAM.AIX.PATH",
+      "direction": "R",
+      "status": "CANDIDATE",
+      "evidence": [
+        "app/cbl/COBIL00C.cbl:410",
+        "app/cbl/COMEN01C.cbl:156",
+        "app/csd/CARDDEMO.CSD:306",
+        "app/csd/CARDDEMO.CSD:63"
+      ],
+      "via": "COBIL00C",
+      "basis": "Entry/closure certainty; not proof of runtime overlap"
+    },
+    {
+      "module": "CARDDEMO",
+      "kind": "CICS transaction",
+      "name": "CAUP",
+      "dataset": "AWS.M2.CARDDEMO.CARDXREF.VSAM.AIX.PATH",
+      "direction": "R",
+      "status": "CANDIDATE",
+      "evidence": [
+        "app/cbl/COMEN01C.cbl:156",
+        "app/cbl/COTRN02C.cbl:578",
+        "app/csd/CARDDEMO.CSD:306",
+        "app/csd/CARDDEMO.CSD:63"
+      ],
+      "via": "COTRN02C",
+      "basis": "Entry/closure certainty; not proof of runtime overlap"
+    },
+    {
+      "module": "CARDDEMO",
+      "kind": "CICS transaction",
+      "name": "CAUP",
+      "dataset": "AWS.M2.CARDDEMO.CARDXREF.VSAM.KSDS",
+      "direction": "R",
+      "status": "CANDIDATE",
+      "evidence": [
+        "app/cbl/COMEN01C.cbl:156",
+        "app/cbl/COTRN02C.cbl:611",
+        "app/csd/CARDDEMO.CSD:306",
+        "app/csd/CARDDEMO.CSD:37"
+      ],
+      "via": "COTRN02C",
+      "basis": "Entry/closure certainty; not proof of runtime overlap"
+    },
+    {
+      "module": "CARDDEMO",
+      "kind": "CICS transaction",
+      "name": "CAVW",
+      "dataset": "AWS.M2.CARDDEMO.ACCTDATA.VSAM.KSDS",
+      "direction": "R",
+      "status": "CANDIDATE",
+      "evidence": [
+        "app/cbl/COACTUPC.cbl:3703",
+        "app/cbl/COMEN01C.cbl:156",
+        "app/csd/CARDDEMO.CSD:1",
+        "app/csd/CARDDEMO.CSD:317"
+      ],
+      "via": "COACTUPC",
+      "basis": "Entry/closure certainty; not proof of runtime overlap"
+    },
+    {
+      "module": "CARDDEMO",
+      "kind": "CICS transaction",
+      "name": "CAVW",
+      "dataset": "AWS.M2.CARDDEMO.ACCTDATA.VSAM.KSDS",
+      "direction": "R",
+      "status": "CANDIDATE",
+      "evidence": [
+        "app/cbl/COACTUPC.cbl:3894",
+        "app/cbl/COMEN01C.cbl:156",
+        "app/csd/CARDDEMO.CSD:1",
+        "app/csd/CARDDEMO.CSD:317"
+      ],
+      "via": "COACTUPC",
+      "basis": "Entry/closure certainty; not proof of runtime overlap"
+    },
+    {
+      "module": "CARDDEMO",
+      "kind": "CICS transaction",
+      "name": "CAVW",
+      "dataset": "AWS.M2.CARDDEMO.ACCTDATA.VSAM.KSDS",
+      "direction": "R",
+      "status": "PROVEN",
+      "evidence": [
+        "app/cbl/COACTVWC.cbl:776",
+        "app/csd/CARDDEMO.CSD:1",
+        "app/csd/CARDDEMO.CSD:317"
+      ],
+      "via": "COACTVWC",
+      "basis": "Entry/closure certainty; not proof of runtime overlap"
+    },
+    {
+      "module": "CARDDEMO",
+      "kind": "CICS transaction",
+      "name": "CAVW",
+      "dataset": "AWS.M2.CARDDEMO.ACCTDATA.VSAM.KSDS",
+      "direction": "R",
+      "status": "CANDIDATE",
+      "evidence": [
+        "app/cbl/COBIL00C.cbl:345",
+        "app/cbl/COMEN01C.cbl:156",
+        "app/csd/CARDDEMO.CSD:1",
+        "app/csd/CARDDEMO.CSD:317"
+      ],
+      "via": "COBIL00C",
+      "basis": "Entry/closure certainty; not proof of runtime overlap"
+    },
+    {
+      "module": "CARDDEMO",
+      "kind": "CICS transaction",
+      "name": "CAVW",
+      "dataset": "AWS.M2.CARDDEMO.ACCTDATA.VSAM.KSDS",
+      "direction": "W",
+      "status": "CANDIDATE",
+      "evidence": [
+        "app/cbl/COACTUPC.cbl:4065",
+        "app/cbl/COMEN01C.cbl:156",
+        "app/csd/CARDDEMO.CSD:1",
+        "app/csd/CARDDEMO.CSD:317"
+      ],
+      "via": "COACTUPC",
+      "basis": "Entry/closure certainty; not proof of runtime overlap"
+    },
+    {
+      "module": "CARDDEMO",
+      "kind": "CICS transaction",
+      "name": "CAVW",
+      "dataset": "AWS.M2.CARDDEMO.ACCTDATA.VSAM.KSDS",
+      "direction": "W",
+      "status": "CANDIDATE",
+      "evidence": [
+        "app/cbl/COBIL00C.cbl:379",
+        "app/cbl/COMEN01C.cbl:156",
+        "app/csd/CARDDEMO.CSD:1",
+        "app/csd/CARDDEMO.CSD:317"
+      ],
+      "via": "COBIL00C",
+      "basis": "Entry/closure certainty; not proof of runtime overlap"
+    },
+    {
+      "module": "CARDDEMO",
+      "kind": "CICS transaction",
+      "name": "CAVW",
+      "dataset": "AWS.M2.CARDDEMO.CARDXREF.VSAM.AIX.PATH",
+      "direction": "R",
+      "status": "CANDIDATE",
+      "evidence": [
+        "app/cbl/COACTUPC.cbl:3654",
+        "app/cbl/COMEN01C.cbl:156",
+        "app/csd/CARDDEMO.CSD:317",
+        "app/csd/CARDDEMO.CSD:63"
+      ],
+      "via": "COACTUPC",
+      "basis": "Entry/closure certainty; not proof of runtime overlap"
+    },
+    {
+      "module": "CARDDEMO",
+      "kind": "CICS transaction",
+      "name": "CAVW",
+      "dataset": "AWS.M2.CARDDEMO.CARDXREF.VSAM.AIX.PATH",
+      "direction": "R",
+      "status": "PROVEN",
+      "evidence": [
+        "app/cbl/COACTVWC.cbl:727",
+        "app/csd/CARDDEMO.CSD:317",
+        "app/csd/CARDDEMO.CSD:63"
+      ],
+      "via": "COACTVWC",
+      "basis": "Entry/closure certainty; not proof of runtime overlap"
+    },
+    {
+      "module": "CARDDEMO",
+      "kind": "CICS transaction",
+      "name": "CAVW",
+      "dataset": "AWS.M2.CARDDEMO.CARDXREF.VSAM.AIX.PATH",
+      "direction": "R",
+      "status": "CANDIDATE",
+      "evidence": [
+        "app/cbl/COBIL00C.cbl:410",
+        "app/cbl/COMEN01C.cbl:156",
+        "app/csd/CARDDEMO.CSD:317",
+        "app/csd/CARDDEMO.CSD:63"
+      ],
+      "via": "COBIL00C",
+      "basis": "Entry/closure certainty; not proof of runtime overlap"
+    },
+    {
+      "module": "CARDDEMO",
+      "kind": "CICS transaction",
+      "name": "CAVW",
+      "dataset": "AWS.M2.CARDDEMO.CARDXREF.VSAM.AIX.PATH",
+      "direction": "R",
+      "status": "CANDIDATE",
+      "evidence": [
+        "app/cbl/COMEN01C.cbl:156",
+        "app/cbl/COTRN02C.cbl:578",
+        "app/csd/CARDDEMO.CSD:317",
+        "app/csd/CARDDEMO.CSD:63"
+      ],
+      "via": "COTRN02C",
+      "basis": "Entry/closure certainty; not proof of runtime overlap"
+    },
+    {
+      "module": "CARDDEMO",
+      "kind": "CICS transaction",
+      "name": "CAVW",
+      "dataset": "AWS.M2.CARDDEMO.CARDXREF.VSAM.KSDS",
+      "direction": "R",
+      "status": "CANDIDATE",
+      "evidence": [
+        "app/cbl/COMEN01C.cbl:156",
+        "app/cbl/COTRN02C.cbl:611",
+        "app/csd/CARDDEMO.CSD:317",
+        "app/csd/CARDDEMO.CSD:37"
+      ],
+      "via": "COTRN02C",
+      "basis": "Entry/closure certainty; not proof of runtime overlap"
+    },
+    {
+      "module": "CARDDEMO",
+      "kind": "CICS transaction",
+      "name": "CB00",
+      "dataset": "AWS.M2.CARDDEMO.ACCTDATA.VSAM.KSDS",
+      "direction": "R",
+      "status": "CANDIDATE",
+      "evidence": [
+        "app/cbl/COACTUPC.cbl:3703",
+        "app/cbl/COMEN01C.cbl:156",
+        "app/csd/CARDDEMO.CSD:1",
+        "app/csd/CARDDEMO.CSD:337"
+      ],
+      "via": "COACTUPC",
+      "basis": "Entry/closure certainty; not proof of runtime overlap"
+    },
+    {
+      "module": "CARDDEMO",
+      "kind": "CICS transaction",
+      "name": "CB00",
+      "dataset": "AWS.M2.CARDDEMO.ACCTDATA.VSAM.KSDS",
+      "direction": "R",
+      "status": "CANDIDATE",
+      "evidence": [
+        "app/cbl/COACTUPC.cbl:3894",
+        "app/cbl/COMEN01C.cbl:156",
+        "app/csd/CARDDEMO.CSD:1",
+        "app/csd/CARDDEMO.CSD:337"
+      ],
+      "via": "COACTUPC",
+      "basis": "Entry/closure certainty; not proof of runtime overlap"
+    },
+    {
+      "module": "CARDDEMO",
+      "kind": "CICS transaction",
+      "name": "CB00",
+      "dataset": "AWS.M2.CARDDEMO.ACCTDATA.VSAM.KSDS",
+      "direction": "R",
+      "status": "CANDIDATE",
+      "evidence": [
+        "app/cbl/COACTVWC.cbl:776",
+        "app/cbl/COMEN01C.cbl:156",
+        "app/csd/CARDDEMO.CSD:1",
+        "app/csd/CARDDEMO.CSD:337"
+      ],
+      "via": "COACTVWC",
+      "basis": "Entry/closure certainty; not proof of runtime overlap"
+    },
+    {
+      "module": "CARDDEMO",
+      "kind": "CICS transaction",
+      "name": "CB00",
+      "dataset": "AWS.M2.CARDDEMO.ACCTDATA.VSAM.KSDS",
+      "direction": "R",
+      "status": "PROVEN",
+      "evidence": [
+        "app/cbl/COBIL00C.cbl:345",
+        "app/csd/CARDDEMO.CSD:1",
+        "app/csd/CARDDEMO.CSD:337"
+      ],
+      "via": "COBIL00C",
+      "basis": "Entry/closure certainty; not proof of runtime overlap"
+    },
+    {
+      "module": "CARDDEMO",
+      "kind": "CICS transaction",
+      "name": "CB00",
+      "dataset": "AWS.M2.CARDDEMO.ACCTDATA.VSAM.KSDS",
+      "direction": "W",
+      "status": "CANDIDATE",
+      "evidence": [
+        "app/cbl/COACTUPC.cbl:4065",
+        "app/cbl/COMEN01C.cbl:156",
+        "app/csd/CARDDEMO.CSD:1",
+        "app/csd/CARDDEMO.CSD:337"
+      ],
+      "via": "COACTUPC",
+      "basis": "Entry/closure certainty; not proof of runtime overlap"
+    },
+    {
+      "module": "CARDDEMO",
+      "kind": "CICS transaction",
+      "name": "CB00",
+      "dataset": "AWS.M2.CARDDEMO.ACCTDATA.VSAM.KSDS",
+      "direction": "W",
+      "status": "PROVEN",
+      "evidence": [
+        "app/cbl/COBIL00C.cbl:379",
+        "app/csd/CARDDEMO.CSD:1",
+        "app/csd/CARDDEMO.CSD:337"
+      ],
+      "via": "COBIL00C",
+      "basis": "Entry/closure certainty; not proof of runtime overlap"
+    },
+    {
+      "module": "CARDDEMO",
+      "kind": "CICS transaction",
+      "name": "CB00",
+      "dataset": "AWS.M2.CARDDEMO.CARDXREF.VSAM.AIX.PATH",
+      "direction": "R",
+      "status": "CANDIDATE",
+      "evidence": [
+        "app/cbl/COACTUPC.cbl:3654",
+        "app/cbl/COMEN01C.cbl:156",
+        "app/csd/CARDDEMO.CSD:337",
+        "app/csd/CARDDEMO.CSD:63"
+      ],
+      "via": "COACTUPC",
+      "basis": "Entry/closure certainty; not proof of runtime overlap"
+    },
+    {
+      "module": "CARDDEMO",
+      "kind": "CICS transaction",
+      "name": "CB00",
+      "dataset": "AWS.M2.CARDDEMO.CARDXREF.VSAM.AIX.PATH",
+      "direction": "R",
+      "status": "CANDIDATE",
+      "evidence": [
+        "app/cbl/COACTVWC.cbl:727",
+        "app/cbl/COMEN01C.cbl:156",
+        "app/csd/CARDDEMO.CSD:337",
+        "app/csd/CARDDEMO.CSD:63"
+      ],
+      "via": "COACTVWC",
+      "basis": "Entry/closure certainty; not proof of runtime overlap"
+    },
+    {
+      "module": "CARDDEMO",
+      "kind": "CICS transaction",
+      "name": "CB00",
+      "dataset": "AWS.M2.CARDDEMO.CARDXREF.VSAM.AIX.PATH",
+      "direction": "R",
+      "status": "PROVEN",
+      "evidence": [
+        "app/cbl/COBIL00C.cbl:410",
+        "app/csd/CARDDEMO.CSD:337",
+        "app/csd/CARDDEMO.CSD:63"
+      ],
+      "via": "COBIL00C",
+      "basis": "Entry/closure certainty; not proof of runtime overlap"
+    },
+    {
+      "module": "CARDDEMO",
+      "kind": "CICS transaction",
+      "name": "CB00",
+      "dataset": "AWS.M2.CARDDEMO.CARDXREF.VSAM.AIX.PATH",
+      "direction": "R",
+      "status": "CANDIDATE",
+      "evidence": [
+        "app/cbl/COMEN01C.cbl:156",
+        "app/cbl/COTRN02C.cbl:578",
+        "app/csd/CARDDEMO.CSD:337",
+        "app/csd/CARDDEMO.CSD:63"
+      ],
+      "via": "COTRN02C",
+      "basis": "Entry/closure certainty; not proof of runtime overlap"
+    },
+    {
+      "module": "CARDDEMO",
+      "kind": "CICS transaction",
+      "name": "CB00",
+      "dataset": "AWS.M2.CARDDEMO.CARDXREF.VSAM.KSDS",
+      "direction": "R",
+      "status": "CANDIDATE",
+      "evidence": [
+        "app/cbl/COMEN01C.cbl:156",
+        "app/cbl/COTRN02C.cbl:611",
+        "app/csd/CARDDEMO.CSD:337",
+        "app/csd/CARDDEMO.CSD:37"
+      ],
+      "via": "COTRN02C",
+      "basis": "Entry/closure certainty; not proof of runtime overlap"
+    },
+    {
+      "module": "CARDDEMO",
+      "kind": "CICS transaction",
+      "name": "CC00",
+      "dataset": "AWS.M2.CARDDEMO.ACCTDATA.VSAM.KSDS",
+      "direction": "R",
+      "status": "CANDIDATE",
+      "evidence": [
+        "app/cbl/COACTUPC.cbl:3703",
+        "app/cbl/COMEN01C.cbl:156",
+        "app/csd/CARDDEMO.CSD:1",
+        "app/csd/CARDDEMO.CSD:378"
+      ],
+      "via": "COACTUPC",
+      "basis": "Entry/closure certainty; not proof of runtime overlap"
+    },
+    {
+      "module": "CARDDEMO",
+      "kind": "CICS transaction",
+      "name": "CC00",
+      "dataset": "AWS.M2.CARDDEMO.ACCTDATA.VSAM.KSDS",
+      "direction": "R",
+      "status": "CANDIDATE",
+      "evidence": [
+        "app/cbl/COACTUPC.cbl:3894",
+        "app/cbl/COMEN01C.cbl:156",
+        "app/csd/CARDDEMO.CSD:1",
+        "app/csd/CARDDEMO.CSD:378"
+      ],
+      "via": "COACTUPC",
+      "basis": "Entry/closure certainty; not proof of runtime overlap"
+    },
+    {
+      "module": "CARDDEMO",
+      "kind": "CICS transaction",
+      "name": "CC00",
+      "dataset": "AWS.M2.CARDDEMO.ACCTDATA.VSAM.KSDS",
+      "direction": "R",
+      "status": "CANDIDATE",
+      "evidence": [
+        "app/cbl/COACTVWC.cbl:776",
+        "app/cbl/COMEN01C.cbl:156",
+        "app/csd/CARDDEMO.CSD:1",
+        "app/csd/CARDDEMO.CSD:378"
+      ],
+      "via": "COACTVWC",
+      "basis": "Entry/closure certainty; not proof of runtime overlap"
+    },
+    {
+      "module": "CARDDEMO",
+      "kind": "CICS transaction",
+      "name": "CC00",
+      "dataset": "AWS.M2.CARDDEMO.ACCTDATA.VSAM.KSDS",
+      "direction": "R",
+      "status": "CANDIDATE",
+      "evidence": [
+        "app/cbl/COBIL00C.cbl:345",
+        "app/cbl/COMEN01C.cbl:156",
+        "app/csd/CARDDEMO.CSD:1",
+        "app/csd/CARDDEMO.CSD:378"
+      ],
+      "via": "COBIL00C",
+      "basis": "Entry/closure certainty; not proof of runtime overlap"
+    },
+    {
+      "module": "CARDDEMO",
+      "kind": "CICS transaction",
+      "name": "CC00",
+      "dataset": "AWS.M2.CARDDEMO.ACCTDATA.VSAM.KSDS",
+      "direction": "W",
+      "status": "CANDIDATE",
+      "evidence": [
+        "app/cbl/COACTUPC.cbl:4065",
+        "app/cbl/COMEN01C.cbl:156",
+        "app/csd/CARDDEMO.CSD:1",
+        "app/csd/CARDDEMO.CSD:378"
+      ],
+      "via": "COACTUPC",
+      "basis": "Entry/closure certainty; not proof of runtime overlap"
+    },
+    {
+      "module": "CARDDEMO",
+      "kind": "CICS transaction",
+      "name": "CC00",
+      "dataset": "AWS.M2.CARDDEMO.ACCTDATA.VSAM.KSDS",
+      "direction": "W",
+      "status": "CANDIDATE",
+      "evidence": [
+        "app/cbl/COBIL00C.cbl:379",
+        "app/cbl/COMEN01C.cbl:156",
+        "app/csd/CARDDEMO.CSD:1",
+        "app/csd/CARDDEMO.CSD:378"
+      ],
+      "via": "COBIL00C",
+      "basis": "Entry/closure certainty; not proof of runtime overlap"
+    },
+    {
+      "module": "CARDDEMO",
+      "kind": "CICS transaction",
+      "name": "CC00",
+      "dataset": "AWS.M2.CARDDEMO.CARDXREF.VSAM.AIX.PATH",
+      "direction": "R",
+      "status": "CANDIDATE",
+      "evidence": [
+        "app/cbl/COACTUPC.cbl:3654",
+        "app/cbl/COMEN01C.cbl:156",
+        "app/csd/CARDDEMO.CSD:378",
+        "app/csd/CARDDEMO.CSD:63"
+      ],
+      "via": "COACTUPC",
+      "basis": "Entry/closure certainty; not proof of runtime overlap"
+    },
+    {
+      "module": "CARDDEMO",
+      "kind": "CICS transaction",
+      "name": "CC00",
+      "dataset": "AWS.M2.CARDDEMO.CARDXREF.VSAM.AIX.PATH",
+      "direction": "R",
+      "status": "CANDIDATE",
+      "evidence": [
+        "app/cbl/COACTVWC.cbl:727",
+        "app/cbl/COMEN01C.cbl:156",
+        "app/csd/CARDDEMO.CSD:378",
+        "app/csd/CARDDEMO.CSD:63"
+      ],
+      "via": "COACTVWC",
+      "basis": "Entry/closure certainty; not proof of runtime overlap"
+    },
+    {
+      "module": "CARDDEMO",
+      "kind": "CICS transaction",
+      "name": "CC00",
+      "dataset": "AWS.M2.CARDDEMO.CARDXREF.VSAM.AIX.PATH",
+      "direction": "R",
+      "status": "CANDIDATE",
+      "evidence": [
+        "app/cbl/COBIL00C.cbl:410",
+        "app/cbl/COMEN01C.cbl:156",
+        "app/csd/CARDDEMO.CSD:378",
+        "app/csd/CARDDEMO.CSD:63"
+      ],
+      "via": "COBIL00C",
+      "basis": "Entry/closure certainty; not proof of runtime overlap"
+    },
+    {
+      "module": "CARDDEMO",
+      "kind": "CICS transaction",
+      "name": "CC00",
+      "dataset": "AWS.M2.CARDDEMO.CARDXREF.VSAM.AIX.PATH",
+      "direction": "R",
+      "status": "CANDIDATE",
+      "evidence": [
+        "app/cbl/COMEN01C.cbl:156",
+        "app/cbl/COTRN02C.cbl:578",
+        "app/csd/CARDDEMO.CSD:378",
+        "app/csd/CARDDEMO.CSD:63"
+      ],
+      "via": "COTRN02C",
+      "basis": "Entry/closure certainty; not proof of runtime overlap"
+    },
+    {
+      "module": "CARDDEMO",
+      "kind": "CICS transaction",
+      "name": "CC00",
+      "dataset": "AWS.M2.CARDDEMO.CARDXREF.VSAM.KSDS",
+      "direction": "R",
+      "status": "CANDIDATE",
+      "evidence": [
+        "app/cbl/COMEN01C.cbl:156",
+        "app/cbl/COTRN02C.cbl:611",
+        "app/csd/CARDDEMO.CSD:37",
+        "app/csd/CARDDEMO.CSD:378"
+      ],
+      "via": "COTRN02C",
+      "basis": "Entry/closure certainty; not proof of runtime overlap"
+    },
+    {
+      "module": "CARDDEMO",
+      "kind": "CICS transaction",
+      "name": "CCDL",
+      "dataset": "AWS.M2.CARDDEMO.ACCTDATA.VSAM.KSDS",
+      "direction": "R",
+      "status": "CANDIDATE",
+      "evidence": [
+        "app/cbl/COACTUPC.cbl:3703",
+        "app/cbl/COMEN01C.cbl:156",
+        "app/csd/CARDDEMO.CSD:1",
+        "app/csd/CARDDEMO.CSD:347"
+      ],
+      "via": "COACTUPC",
+      "basis": "Entry/closure certainty; not proof of runtime overlap"
+    },
+    {
+      "module": "CARDDEMO",
+      "kind": "CICS transaction",
+      "name": "CCDL",
+      "dataset": "AWS.M2.CARDDEMO.ACCTDATA.VSAM.KSDS",
+      "direction": "R",
+      "status": "CANDIDATE",
+      "evidence": [
+        "app/cbl/COACTUPC.cbl:3894",
+        "app/cbl/COMEN01C.cbl:156",
+        "app/csd/CARDDEMO.CSD:1",
+        "app/csd/CARDDEMO.CSD:347"
+      ],
+      "via": "COACTUPC",
+      "basis": "Entry/closure certainty; not proof of runtime overlap"
+    },
+    {
+      "module": "CARDDEMO",
+      "kind": "CICS transaction",
+      "name": "CCDL",
+      "dataset": "AWS.M2.CARDDEMO.ACCTDATA.VSAM.KSDS",
+      "direction": "R",
+      "status": "CANDIDATE",
+      "evidence": [
+        "app/cbl/COACTVWC.cbl:776",
+        "app/cbl/COMEN01C.cbl:156",
+        "app/csd/CARDDEMO.CSD:1",
+        "app/csd/CARDDEMO.CSD:347"
+      ],
+      "via": "COACTVWC",
+      "basis": "Entry/closure certainty; not proof of runtime overlap"
+    },
+    {
+      "module": "CARDDEMO",
+      "kind": "CICS transaction",
+      "name": "CCDL",
+      "dataset": "AWS.M2.CARDDEMO.ACCTDATA.VSAM.KSDS",
+      "direction": "R",
+      "status": "CANDIDATE",
+      "evidence": [
+        "app/cbl/COBIL00C.cbl:345",
+        "app/cbl/COMEN01C.cbl:156",
+        "app/csd/CARDDEMO.CSD:1",
+        "app/csd/CARDDEMO.CSD:347"
+      ],
+      "via": "COBIL00C",
+      "basis": "Entry/closure certainty; not proof of runtime overlap"
+    },
+    {
+      "module": "CARDDEMO",
+      "kind": "CICS transaction",
+      "name": "CCDL",
+      "dataset": "AWS.M2.CARDDEMO.ACCTDATA.VSAM.KSDS",
+      "direction": "W",
+      "status": "CANDIDATE",
+      "evidence": [
+        "app/cbl/COACTUPC.cbl:4065",
+        "app/cbl/COMEN01C.cbl:156",
+        "app/csd/CARDDEMO.CSD:1",
+        "app/csd/CARDDEMO.CSD:347"
+      ],
+      "via": "COACTUPC",
+      "basis": "Entry/closure certainty; not proof of runtime overlap"
+    },
+    {
+      "module": "CARDDEMO",
+      "kind": "CICS transaction",
+      "name": "CCDL",
+      "dataset": "AWS.M2.CARDDEMO.ACCTDATA.VSAM.KSDS",
+      "direction": "W",
+      "status": "CANDIDATE",
+      "evidence": [
+        "app/cbl/COBIL00C.cbl:379",
+        "app/cbl/COMEN01C.cbl:156",
+        "app/csd/CARDDEMO.CSD:1",
+        "app/csd/CARDDEMO.CSD:347"
+      ],
+      "via": "COBIL00C",
+      "basis": "Entry/closure certainty; not proof of runtime overlap"
+    },
+    {
+      "module": "CARDDEMO",
+      "kind": "CICS transaction",
+      "name": "CCDL",
+      "dataset": "AWS.M2.CARDDEMO.CARDXREF.VSAM.AIX.PATH",
+      "direction": "R",
+      "status": "CANDIDATE",
+      "evidence": [
+        "app/cbl/COACTUPC.cbl:3654",
+        "app/cbl/COMEN01C.cbl:156",
+        "app/csd/CARDDEMO.CSD:347",
+        "app/csd/CARDDEMO.CSD:63"
+      ],
+      "via": "COACTUPC",
+      "basis": "Entry/closure certainty; not proof of runtime overlap"
+    },
+    {
+      "module": "CARDDEMO",
+      "kind": "CICS transaction",
+      "name": "CCDL",
+      "dataset": "AWS.M2.CARDDEMO.CARDXREF.VSAM.AIX.PATH",
+      "direction": "R",
+      "status": "CANDIDATE",
+      "evidence": [
+        "app/cbl/COACTVWC.cbl:727",
+        "app/cbl/COMEN01C.cbl:156",
+        "app/csd/CARDDEMO.CSD:347",
+        "app/csd/CARDDEMO.CSD:63"
+      ],
+      "via": "COACTVWC",
+      "basis": "Entry/closure certainty; not proof of runtime overlap"
+    },
+    {
+      "module": "CARDDEMO",
+      "kind": "CICS transaction",
+      "name": "CCDL",
+      "dataset": "AWS.M2.CARDDEMO.CARDXREF.VSAM.AIX.PATH",
+      "direction": "R",
+      "status": "CANDIDATE",
+      "evidence": [
+        "app/cbl/COBIL00C.cbl:410",
+        "app/cbl/COMEN01C.cbl:156",
+        "app/csd/CARDDEMO.CSD:347",
+        "app/csd/CARDDEMO.CSD:63"
+      ],
+      "via": "COBIL00C",
+      "basis": "Entry/closure certainty; not proof of runtime overlap"
+    },
+    {
+      "module": "CARDDEMO",
+      "kind": "CICS transaction",
+      "name": "CCDL",
+      "dataset": "AWS.M2.CARDDEMO.CARDXREF.VSAM.AIX.PATH",
+      "direction": "R",
+      "status": "CANDIDATE",
+      "evidence": [
+        "app/cbl/COMEN01C.cbl:156",
+        "app/cbl/COTRN02C.cbl:578",
+        "app/csd/CARDDEMO.CSD:347",
+        "app/csd/CARDDEMO.CSD:63"
+      ],
+      "via": "COTRN02C",
+      "basis": "Entry/closure certainty; not proof of runtime overlap"
+    },
+    {
+      "module": "CARDDEMO",
+      "kind": "CICS transaction",
+      "name": "CCDL",
+      "dataset": "AWS.M2.CARDDEMO.CARDXREF.VSAM.KSDS",
+      "direction": "R",
+      "status": "CANDIDATE",
+      "evidence": [
+        "app/cbl/COMEN01C.cbl:156",
+        "app/cbl/COTRN02C.cbl:611",
+        "app/csd/CARDDEMO.CSD:347",
+        "app/csd/CARDDEMO.CSD:37"
+      ],
+      "via": "COTRN02C",
+      "basis": "Entry/closure certainty; not proof of runtime overlap"
+    },
+    {
+      "module": "CARDDEMO",
+      "kind": "CICS transaction",
+      "name": "CCLI",
+      "dataset": "AWS.M2.CARDDEMO.ACCTDATA.VSAM.KSDS",
+      "direction": "R",
+      "status": "CANDIDATE",
+      "evidence": [
+        "app/cbl/COACTUPC.cbl:3703",
+        "app/cbl/COMEN01C.cbl:156",
+        "app/csd/CARDDEMO.CSD:1",
+        "app/csd/CARDDEMO.CSD:357"
+      ],
+      "via": "COACTUPC",
+      "basis": "Entry/closure certainty; not proof of runtime overlap"
+    },
+    {
+      "module": "CARDDEMO",
+      "kind": "CICS transaction",
+      "name": "CCLI",
+      "dataset": "AWS.M2.CARDDEMO.ACCTDATA.VSAM.KSDS",
+      "direction": "R",
+      "status": "CANDIDATE",
+      "evidence": [
+        "app/cbl/COACTUPC.cbl:3894",
+        "app/cbl/COMEN01C.cbl:156",
+        "app/csd/CARDDEMO.CSD:1",
+        "app/csd/CARDDEMO.CSD:357"
+      ],
+      "via": "COACTUPC",
+      "basis": "Entry/closure certainty; not proof of runtime overlap"
+    },
+    {
+      "module": "CARDDEMO",
+      "kind": "CICS transaction",
+      "name": "CCLI",
+      "dataset": "AWS.M2.CARDDEMO.ACCTDATA.VSAM.KSDS",
+      "direction": "R",
+      "status": "CANDIDATE",
+      "evidence": [
+        "app/cbl/COACTVWC.cbl:776",
+        "app/cbl/COMEN01C.cbl:156",
+        "app/csd/CARDDEMO.CSD:1",
+        "app/csd/CARDDEMO.CSD:357"
+      ],
+      "via": "COACTVWC",
+      "basis": "Entry/closure certainty; not proof of runtime overlap"
+    },
+    {
+      "module": "CARDDEMO",
+      "kind": "CICS transaction",
+      "name": "CCLI",
+      "dataset": "AWS.M2.CARDDEMO.ACCTDATA.VSAM.KSDS",
+      "direction": "R",
+      "status": "CANDIDATE",
+      "evidence": [
+        "app/cbl/COBIL00C.cbl:345",
+        "app/cbl/COMEN01C.cbl:156",
+        "app/csd/CARDDEMO.CSD:1",
+        "app/csd/CARDDEMO.CSD:357"
+      ],
+      "via": "COBIL00C",
+      "basis": "Entry/closure certainty; not proof of runtime overlap"
+    },
+    {
+      "module": "CARDDEMO",
+      "kind": "CICS transaction",
+      "name": "CCLI",
+      "dataset": "AWS.M2.CARDDEMO.ACCTDATA.VSAM.KSDS",
+      "direction": "W",
+      "status": "CANDIDATE",
+      "evidence": [
+        "app/cbl/COACTUPC.cbl:4065",
+        "app/cbl/COMEN01C.cbl:156",
+        "app/csd/CARDDEMO.CSD:1",
+        "app/csd/CARDDEMO.CSD:357"
+      ],
+      "via": "COACTUPC",
+      "basis": "Entry/closure certainty; not proof of runtime overlap"
+    },
+    {
+      "module": "CARDDEMO",
+      "kind": "CICS transaction",
+      "name": "CCLI",
+      "dataset": "AWS.M2.CARDDEMO.ACCTDATA.VSAM.KSDS",
+      "direction": "W",
+      "status": "CANDIDATE",
+      "evidence": [
+        "app/cbl/COBIL00C.cbl:379",
+        "app/cbl/COMEN01C.cbl:156",
+        "app/csd/CARDDEMO.CSD:1",
+        "app/csd/CARDDEMO.CSD:357"
+      ],
+      "via": "COBIL00C",
+      "basis": "Entry/closure certainty; not proof of runtime overlap"
+    },
+    {
+      "module": "CARDDEMO",
+      "kind": "CICS transaction",
+      "name": "CCLI",
+      "dataset": "AWS.M2.CARDDEMO.CARDXREF.VSAM.AIX.PATH",
+      "direction": "R",
+      "status": "CANDIDATE",
+      "evidence": [
+        "app/cbl/COACTUPC.cbl:3654",
+        "app/cbl/COMEN01C.cbl:156",
+        "app/csd/CARDDEMO.CSD:357",
+        "app/csd/CARDDEMO.CSD:63"
+      ],
+      "via": "COACTUPC",
+      "basis": "Entry/closure certainty; not proof of runtime overlap"
+    },
+    {
+      "module": "CARDDEMO",
+      "kind": "CICS transaction",
+      "name": "CCLI",
+      "dataset": "AWS.M2.CARDDEMO.CARDXREF.VSAM.AIX.PATH",
+      "direction": "R",
+      "status": "CANDIDATE",
+      "evidence": [
+        "app/cbl/COACTVWC.cbl:727",
+        "app/cbl/COMEN01C.cbl:156",
+        "app/csd/CARDDEMO.CSD:357",
+        "app/csd/CARDDEMO.CSD:63"
+      ],
+      "via": "COACTVWC",
+      "basis": "Entry/closure certainty; not proof of runtime overlap"
+    },
+    {
+      "module": "CARDDEMO",
+      "kind": "CICS transaction",
+      "name": "CCLI",
+      "dataset": "AWS.M2.CARDDEMO.CARDXREF.VSAM.AIX.PATH",
+      "direction": "R",
+      "status": "CANDIDATE",
+      "evidence": [
+        "app/cbl/COBIL00C.cbl:410",
+        "app/cbl/COMEN01C.cbl:156",
+        "app/csd/CARDDEMO.CSD:357",
+        "app/csd/CARDDEMO.CSD:63"
+      ],
+      "via": "COBIL00C",
+      "basis": "Entry/closure certainty; not proof of runtime overlap"
+    },
+    {
+      "module": "CARDDEMO",
+      "kind": "CICS transaction",
+      "name": "CCLI",
+      "dataset": "AWS.M2.CARDDEMO.CARDXREF.VSAM.AIX.PATH",
+      "direction": "R",
+      "status": "CANDIDATE",
+      "evidence": [
+        "app/cbl/COMEN01C.cbl:156",
+        "app/cbl/COTRN02C.cbl:578",
+        "app/csd/CARDDEMO.CSD:357",
+        "app/csd/CARDDEMO.CSD:63"
+      ],
+      "via": "COTRN02C",
+      "basis": "Entry/closure certainty; not proof of runtime overlap"
+    },
+    {
+      "module": "CARDDEMO",
+      "kind": "CICS transaction",
+      "name": "CCLI",
+      "dataset": "AWS.M2.CARDDEMO.CARDXREF.VSAM.KSDS",
+      "direction": "R",
+      "status": "CANDIDATE",
+      "evidence": [
+        "app/cbl/COMEN01C.cbl:156",
+        "app/cbl/COTRN02C.cbl:611",
+        "app/csd/CARDDEMO.CSD:357",
+        "app/csd/CARDDEMO.CSD:37"
+      ],
+      "via": "COTRN02C",
+      "basis": "Entry/closure certainty; not proof of runtime overlap"
+    },
+    {
+      "module": "CARDDEMO",
+      "kind": "CICS transaction",
+      "name": "CCUP",
+      "dataset": "AWS.M2.CARDDEMO.ACCTDATA.VSAM.KSDS",
+      "direction": "R",
+      "status": "CANDIDATE",
+      "evidence": [
+        "app/cbl/COACTUPC.cbl:3703",
+        "app/cbl/COMEN01C.cbl:156",
+        "app/csd/CARDDEMO.CSD:1",
+        "app/csd/CARDDEMO.CSD:367"
+      ],
+      "via": "COACTUPC",
+      "basis": "Entry/closure certainty; not proof of runtime overlap"
+    },
+    {
+      "module": "CARDDEMO",
+      "kind": "CICS transaction",
+      "name": "CCUP",
+      "dataset": "AWS.M2.CARDDEMO.ACCTDATA.VSAM.KSDS",
+      "direction": "R",
+      "status": "CANDIDATE",
+      "evidence": [
+        "app/cbl/COACTUPC.cbl:3894",
+        "app/cbl/COMEN01C.cbl:156",
+        "app/csd/CARDDEMO.CSD:1",
+        "app/csd/CARDDEMO.CSD:367"
+      ],
+      "via": "COACTUPC",
+      "basis": "Entry/closure certainty; not proof of runtime overlap"
+    },
+    {
+      "module": "CARDDEMO",
+      "kind": "CICS transaction",
+      "name": "CCUP",
+      "dataset": "AWS.M2.CARDDEMO.ACCTDATA.VSAM.KSDS",
+      "direction": "R",
+      "status": "CANDIDATE",
+      "evidence": [
+        "app/cbl/COACTVWC.cbl:776",
+        "app/cbl/COMEN01C.cbl:156",
+        "app/csd/CARDDEMO.CSD:1",
+        "app/csd/CARDDEMO.CSD:367"
+      ],
+      "via": "COACTVWC",
+      "basis": "Entry/closure certainty; not proof of runtime overlap"
+    },
+    {
+      "module": "CARDDEMO",
+      "kind": "CICS transaction",
+      "name": "CCUP",
+      "dataset": "AWS.M2.CARDDEMO.ACCTDATA.VSAM.KSDS",
+      "direction": "R",
+      "status": "CANDIDATE",
+      "evidence": [
+        "app/cbl/COBIL00C.cbl:345",
+        "app/cbl/COMEN01C.cbl:156",
+        "app/csd/CARDDEMO.CSD:1",
+        "app/csd/CARDDEMO.CSD:367"
+      ],
+      "via": "COBIL00C",
+      "basis": "Entry/closure certainty; not proof of runtime overlap"
+    },
+    {
+      "module": "CARDDEMO",
+      "kind": "CICS transaction",
+      "name": "CCUP",
+      "dataset": "AWS.M2.CARDDEMO.ACCTDATA.VSAM.KSDS",
+      "direction": "W",
+      "status": "CANDIDATE",
+      "evidence": [
+        "app/cbl/COACTUPC.cbl:4065",
+        "app/cbl/COMEN01C.cbl:156",
+        "app/csd/CARDDEMO.CSD:1",
+        "app/csd/CARDDEMO.CSD:367"
+      ],
+      "via": "COACTUPC",
+      "basis": "Entry/closure certainty; not proof of runtime overlap"
+    },
+    {
+      "module": "CARDDEMO",
+      "kind": "CICS transaction",
+      "name": "CCUP",
+      "dataset": "AWS.M2.CARDDEMO.ACCTDATA.VSAM.KSDS",
+      "direction": "W",
+      "status": "CANDIDATE",
+      "evidence": [
+        "app/cbl/COBIL00C.cbl:379",
+        "app/cbl/COMEN01C.cbl:156",
+        "app/csd/CARDDEMO.CSD:1",
+        "app/csd/CARDDEMO.CSD:367"
+      ],
+      "via": "COBIL00C",
+      "basis": "Entry/closure certainty; not proof of runtime overlap"
+    },
+    {
+      "module": "CARDDEMO",
+      "kind": "CICS transaction",
+      "name": "CCUP",
+      "dataset": "AWS.M2.CARDDEMO.CARDXREF.VSAM.AIX.PATH",
+      "direction": "R",
+      "status": "CANDIDATE",
+      "evidence": [
+        "app/cbl/COACTUPC.cbl:3654",
+        "app/cbl/COMEN01C.cbl:156",
+        "app/csd/CARDDEMO.CSD:367",
+        "app/csd/CARDDEMO.CSD:63"
+      ],
+      "via": "COACTUPC",
+      "basis": "Entry/closure certainty; not proof of runtime overlap"
+    },
+    {
+      "module": "CARDDEMO",
+      "kind": "CICS transaction",
+      "name": "CCUP",
+      "dataset": "AWS.M2.CARDDEMO.CARDXREF.VSAM.AIX.PATH",
+      "direction": "R",
+      "status": "CANDIDATE",
+      "evidence": [
+        "app/cbl/COACTVWC.cbl:727",
+        "app/cbl/COMEN01C.cbl:156",
+        "app/csd/CARDDEMO.CSD:367",
+        "app/csd/CARDDEMO.CSD:63"
+      ],
+      "via": "COACTVWC",
+      "basis": "Entry/closure certainty; not proof of runtime overlap"
+    },
+    {
+      "module": "CARDDEMO",
+      "kind": "CICS transaction",
+      "name": "CCUP",
+      "dataset": "AWS.M2.CARDDEMO.CARDXREF.VSAM.AIX.PATH",
+      "direction": "R",
+      "status": "CANDIDATE",
+      "evidence": [
+        "app/cbl/COBIL00C.cbl:410",
+        "app/cbl/COMEN01C.cbl:156",
+        "app/csd/CARDDEMO.CSD:367",
+        "app/csd/CARDDEMO.CSD:63"
+      ],
+      "via": "COBIL00C",
+      "basis": "Entry/closure certainty; not proof of runtime overlap"
+    },
+    {
+      "module": "CARDDEMO",
+      "kind": "CICS transaction",
+      "name": "CCUP",
+      "dataset": "AWS.M2.CARDDEMO.CARDXREF.VSAM.AIX.PATH",
+      "direction": "R",
+      "status": "CANDIDATE",
+      "evidence": [
+        "app/cbl/COMEN01C.cbl:156",
+        "app/cbl/COTRN02C.cbl:578",
+        "app/csd/CARDDEMO.CSD:367",
+        "app/csd/CARDDEMO.CSD:63"
+      ],
+      "via": "COTRN02C",
+      "basis": "Entry/closure certainty; not proof of runtime overlap"
+    },
+    {
+      "module": "CARDDEMO",
+      "kind": "CICS transaction",
+      "name": "CCUP",
+      "dataset": "AWS.M2.CARDDEMO.CARDXREF.VSAM.KSDS",
+      "direction": "R",
+      "status": "CANDIDATE",
+      "evidence": [
+        "app/cbl/COMEN01C.cbl:156",
+        "app/cbl/COTRN02C.cbl:611",
+        "app/csd/CARDDEMO.CSD:367",
+        "app/csd/CARDDEMO.CSD:37"
+      ],
+      "via": "COTRN02C",
+      "basis": "Entry/closure certainty; not proof of runtime overlap"
+    },
+    {
+      "module": "CARDDEMO",
+      "kind": "CICS transaction",
+      "name": "CM00",
+      "dataset": "AWS.M2.CARDDEMO.ACCTDATA.VSAM.KSDS",
+      "direction": "R",
+      "status": "CANDIDATE",
+      "evidence": [
+        "app/cbl/COACTUPC.cbl:3703",
+        "app/cbl/COMEN01C.cbl:156",
+        "app/csd/CARDDEMO.CSD:1",
+        "app/csd/CARDDEMO.CSD:399"
+      ],
+      "via": "COACTUPC",
+      "basis": "Entry/closure certainty; not proof of runtime overlap"
+    },
+    {
+      "module": "CARDDEMO",
+      "kind": "CICS transaction",
+      "name": "CM00",
+      "dataset": "AWS.M2.CARDDEMO.ACCTDATA.VSAM.KSDS",
+      "direction": "R",
+      "status": "CANDIDATE",
+      "evidence": [
+        "app/cbl/COACTUPC.cbl:3894",
+        "app/cbl/COMEN01C.cbl:156",
+        "app/csd/CARDDEMO.CSD:1",
+        "app/csd/CARDDEMO.CSD:399"
+      ],
+      "via": "COACTUPC",
+      "basis": "Entry/closure certainty; not proof of runtime overlap"
+    },
+    {
+      "module": "CARDDEMO",
+      "kind": "CICS transaction",
+      "name": "CM00",
+      "dataset": "AWS.M2.CARDDEMO.ACCTDATA.VSAM.KSDS",
+      "direction": "R",
+      "status": "CANDIDATE",
+      "evidence": [
+        "app/cbl/COACTVWC.cbl:776",
+        "app/cbl/COMEN01C.cbl:156",
+        "app/csd/CARDDEMO.CSD:1",
+        "app/csd/CARDDEMO.CSD:399"
+      ],
+      "via": "COACTVWC",
+      "basis": "Entry/closure certainty; not proof of runtime overlap"
+    },
+    {
+      "module": "CARDDEMO",
+      "kind": "CICS transaction",
+      "name": "CM00",
+      "dataset": "AWS.M2.CARDDEMO.ACCTDATA.VSAM.KSDS",
+      "direction": "R",
+      "status": "CANDIDATE",
+      "evidence": [
+        "app/cbl/COBIL00C.cbl:345",
+        "app/cbl/COMEN01C.cbl:156",
+        "app/csd/CARDDEMO.CSD:1",
+        "app/csd/CARDDEMO.CSD:399"
+      ],
+      "via": "COBIL00C",
+      "basis": "Entry/closure certainty; not proof of runtime overlap"
+    },
+    {
+      "module": "CARDDEMO",
+      "kind": "CICS transaction",
+      "name": "CM00",
+      "dataset": "AWS.M2.CARDDEMO.ACCTDATA.VSAM.KSDS",
+      "direction": "W",
+      "status": "CANDIDATE",
+      "evidence": [
+        "app/cbl/COACTUPC.cbl:4065",
+        "app/cbl/COMEN01C.cbl:156",
+        "app/csd/CARDDEMO.CSD:1",
+        "app/csd/CARDDEMO.CSD:399"
+      ],
+      "via": "COACTUPC",
+      "basis": "Entry/closure certainty; not proof of runtime overlap"
+    },
+    {
+      "module": "CARDDEMO",
+      "kind": "CICS transaction",
+      "name": "CM00",
+      "dataset": "AWS.M2.CARDDEMO.ACCTDATA.VSAM.KSDS",
+      "direction": "W",
+      "status": "CANDIDATE",
+      "evidence": [
+        "app/cbl/COBIL00C.cbl:379",
+        "app/cbl/COMEN01C.cbl:156",
+        "app/csd/CARDDEMO.CSD:1",
+        "app/csd/CARDDEMO.CSD:399"
+      ],
+      "via": "COBIL00C",
+      "basis": "Entry/closure certainty; not proof of runtime overlap"
+    },
+    {
+      "module": "CARDDEMO",
+      "kind": "CICS transaction",
+      "name": "CM00",
+      "dataset": "AWS.M2.CARDDEMO.CARDXREF.VSAM.AIX.PATH",
+      "direction": "R",
+      "status": "CANDIDATE",
+      "evidence": [
+        "app/cbl/COACTUPC.cbl:3654",
+        "app/cbl/COMEN01C.cbl:156",
+        "app/csd/CARDDEMO.CSD:399",
+        "app/csd/CARDDEMO.CSD:63"
+      ],
+      "via": "COACTUPC",
+      "basis": "Entry/closure certainty; not proof of runtime overlap"
+    },
+    {
+      "module": "CARDDEMO",
+      "kind": "CICS transaction",
+      "name": "CM00",
+      "dataset": "AWS.M2.CARDDEMO.CARDXREF.VSAM.AIX.PATH",
+      "direction": "R",
+      "status": "CANDIDATE",
+      "evidence": [
+        "app/cbl/COACTVWC.cbl:727",
+        "app/cbl/COMEN01C.cbl:156",
+        "app/csd/CARDDEMO.CSD:399",
+        "app/csd/CARDDEMO.CSD:63"
+      ],
+      "via": "COACTVWC",
+      "basis": "Entry/closure certainty; not proof of runtime overlap"
+    },
+    {
+      "module": "CARDDEMO",
+      "kind": "CICS transaction",
+      "name": "CM00",
+      "dataset": "AWS.M2.CARDDEMO.CARDXREF.VSAM.AIX.PATH",
+      "direction": "R",
+      "status": "CANDIDATE",
+      "evidence": [
+        "app/cbl/COBIL00C.cbl:410",
+        "app/cbl/COMEN01C.cbl:156",
+        "app/csd/CARDDEMO.CSD:399",
+        "app/csd/CARDDEMO.CSD:63"
+      ],
+      "via": "COBIL00C",
+      "basis": "Entry/closure certainty; not proof of runtime overlap"
+    },
+    {
+      "module": "CARDDEMO",
+      "kind": "CICS transaction",
+      "name": "CM00",
+      "dataset": "AWS.M2.CARDDEMO.CARDXREF.VSAM.AIX.PATH",
+      "direction": "R",
+      "status": "CANDIDATE",
+      "evidence": [
+        "app/cbl/COMEN01C.cbl:156",
+        "app/cbl/COTRN02C.cbl:578",
+        "app/csd/CARDDEMO.CSD:399",
+        "app/csd/CARDDEMO.CSD:63"
+      ],
+      "via": "COTRN02C",
+      "basis": "Entry/closure certainty; not proof of runtime overlap"
+    },
+    {
+      "module": "CARDDEMO",
+      "kind": "CICS transaction",
+      "name": "CM00",
+      "dataset": "AWS.M2.CARDDEMO.CARDXREF.VSAM.KSDS",
+      "direction": "R",
+      "status": "CANDIDATE",
+      "evidence": [
+        "app/cbl/COMEN01C.cbl:156",
+        "app/cbl/COTRN02C.cbl:611",
+        "app/csd/CARDDEMO.CSD:37",
+        "app/csd/CARDDEMO.CSD:399"
+      ],
+      "via": "COTRN02C",
+      "basis": "Entry/closure certainty; not proof of runtime overlap"
+    },
+    {
+      "module": "CARDDEMO",
+      "kind": "CICS transaction",
+      "name": "CR00",
+      "dataset": "AWS.M2.CARDDEMO.ACCTDATA.VSAM.KSDS",
+      "direction": "R",
+      "status": "CANDIDATE",
+      "evidence": [
+        "app/cbl/COACTUPC.cbl:3703",
+        "app/cbl/COMEN01C.cbl:156",
+        "app/csd/CARDDEMO.CSD:1",
+        "app/csd/CARDDEMO.CSD:409"
+      ],
+      "via": "COACTUPC",
+      "basis": "Entry/closure certainty; not proof of runtime overlap"
+    },
+    {
+      "module": "CARDDEMO",
+      "kind": "CICS transaction",
+      "name": "CR00",
+      "dataset": "AWS.M2.CARDDEMO.ACCTDATA.VSAM.KSDS",
+      "direction": "R",
+      "status": "CANDIDATE",
+      "evidence": [
+        "app/cbl/COACTUPC.cbl:3894",
+        "app/cbl/COMEN01C.cbl:156",
+        "app/csd/CARDDEMO.CSD:1",
+        "app/csd/CARDDEMO.CSD:409"
+      ],
+      "via": "COACTUPC",
+      "basis": "Entry/closure certainty; not proof of runtime overlap"
+    },
+    {
+      "module": "CARDDEMO",
+      "kind": "CICS transaction",
+      "name": "CR00",
+      "dataset": "AWS.M2.CARDDEMO.ACCTDATA.VSAM.KSDS",
+      "direction": "R",
+      "status": "CANDIDATE",
+      "evidence": [
+        "app/cbl/COACTVWC.cbl:776",
+        "app/cbl/COMEN01C.cbl:156",
+        "app/csd/CARDDEMO.CSD:1",
+        "app/csd/CARDDEMO.CSD:409"
+      ],
+      "via": "COACTVWC",
+      "basis": "Entry/closure certainty; not proof of runtime overlap"
+    },
+    {
+      "module": "CARDDEMO",
+      "kind": "CICS transaction",
+      "name": "CR00",
+      "dataset": "AWS.M2.CARDDEMO.ACCTDATA.VSAM.KSDS",
+      "direction": "R",
+      "status": "CANDIDATE",
+      "evidence": [
+        "app/cbl/COBIL00C.cbl:345",
+        "app/cbl/COMEN01C.cbl:156",
+        "app/csd/CARDDEMO.CSD:1",
+        "app/csd/CARDDEMO.CSD:409"
+      ],
+      "via": "COBIL00C",
+      "basis": "Entry/closure certainty; not proof of runtime overlap"
+    },
+    {
+      "module": "CARDDEMO",
+      "kind": "CICS transaction",
+      "name": "CR00",
+      "dataset": "AWS.M2.CARDDEMO.ACCTDATA.VSAM.KSDS",
+      "direction": "W",
+      "status": "CANDIDATE",
+      "evidence": [
+        "app/cbl/COACTUPC.cbl:4065",
+        "app/cbl/COMEN01C.cbl:156",
+        "app/csd/CARDDEMO.CSD:1",
+        "app/csd/CARDDEMO.CSD:409"
+      ],
+      "via": "COACTUPC",
+      "basis": "Entry/closure certainty; not proof of runtime overlap"
+    },
+    {
+      "module": "CARDDEMO",
+      "kind": "CICS transaction",
+      "name": "CR00",
+      "dataset": "AWS.M2.CARDDEMO.ACCTDATA.VSAM.KSDS",
+      "direction": "W",
+      "status": "CANDIDATE",
+      "evidence": [
+        "app/cbl/COBIL00C.cbl:379",
+        "app/cbl/COMEN01C.cbl:156",
+        "app/csd/CARDDEMO.CSD:1",
+        "app/csd/CARDDEMO.CSD:409"
+      ],
+      "via": "COBIL00C",
+      "basis": "Entry/closure certainty; not proof of runtime overlap"
+    },
+    {
+      "module": "CARDDEMO",
+      "kind": "CICS transaction",
+      "name": "CR00",
+      "dataset": "AWS.M2.CARDDEMO.CARDXREF.VSAM.AIX.PATH",
+      "direction": "R",
+      "status": "CANDIDATE",
+      "evidence": [
+        "app/cbl/COACTUPC.cbl:3654",
+        "app/cbl/COMEN01C.cbl:156",
+        "app/csd/CARDDEMO.CSD:409",
+        "app/csd/CARDDEMO.CSD:63"
+      ],
+      "via": "COACTUPC",
+      "basis": "Entry/closure certainty; not proof of runtime overlap"
+    },
+    {
+      "module": "CARDDEMO",
+      "kind": "CICS transaction",
+      "name": "CR00",
+      "dataset": "AWS.M2.CARDDEMO.CARDXREF.VSAM.AIX.PATH",
+      "direction": "R",
+      "status": "CANDIDATE",
+      "evidence": [
+        "app/cbl/COACTVWC.cbl:727",
+        "app/cbl/COMEN01C.cbl:156",
+        "app/csd/CARDDEMO.CSD:409",
+        "app/csd/CARDDEMO.CSD:63"
+      ],
+      "via": "COACTVWC",
+      "basis": "Entry/closure certainty; not proof of runtime overlap"
+    },
+    {
+      "module": "CARDDEMO",
+      "kind": "CICS transaction",
+      "name": "CR00",
+      "dataset": "AWS.M2.CARDDEMO.CARDXREF.VSAM.AIX.PATH",
+      "direction": "R",
+      "status": "CANDIDATE",
+      "evidence": [
+        "app/cbl/COBIL00C.cbl:410",
+        "app/cbl/COMEN01C.cbl:156",
+        "app/csd/CARDDEMO.CSD:409",
+        "app/csd/CARDDEMO.CSD:63"
+      ],
+      "via": "COBIL00C",
+      "basis": "Entry/closure certainty; not proof of runtime overlap"
+    },
+    {
+      "module": "CARDDEMO",
+      "kind": "CICS transaction",
+      "name": "CR00",
+      "dataset": "AWS.M2.CARDDEMO.CARDXREF.VSAM.AIX.PATH",
+      "direction": "R",
+      "status": "CANDIDATE",
+      "evidence": [
+        "app/cbl/COMEN01C.cbl:156",
+        "app/cbl/COTRN02C.cbl:578",
+        "app/csd/CARDDEMO.CSD:409",
+        "app/csd/CARDDEMO.CSD:63"
+      ],
+      "via": "COTRN02C",
+      "basis": "Entry/closure certainty; not proof of runtime overlap"
+    },
+    {
+      "module": "CARDDEMO",
+      "kind": "CICS transaction",
+      "name": "CR00",
+      "dataset": "AWS.M2.CARDDEMO.CARDXREF.VSAM.KSDS",
+      "direction": "R",
+      "status": "CANDIDATE",
+      "evidence": [
+        "app/cbl/COMEN01C.cbl:156",
+        "app/cbl/COTRN02C.cbl:611",
+        "app/csd/CARDDEMO.CSD:37",
+        "app/csd/CARDDEMO.CSD:409"
+      ],
+      "via": "COTRN02C",
+      "basis": "Entry/closure certainty; not proof of runtime overlap"
+    },
+    {
+      "module": "CARDDEMO",
+      "kind": "CICS transaction",
+      "name": "CT00",
+      "dataset": "AWS.M2.CARDDEMO.ACCTDATA.VSAM.KSDS",
+      "direction": "R",
+      "status": "CANDIDATE",
+      "evidence": [
+        "app/cbl/COACTUPC.cbl:3703",
+        "app/cbl/COMEN01C.cbl:156",
+        "app/csd/CARDDEMO.CSD:1",
+        "app/csd/CARDDEMO.CSD:419"
+      ],
+      "via": "COACTUPC",
+      "basis": "Entry/closure certainty; not proof of runtime overlap"
+    },
+    {
+      "module": "CARDDEMO",
+      "kind": "CICS transaction",
+      "name": "CT00",
+      "dataset": "AWS.M2.CARDDEMO.ACCTDATA.VSAM.KSDS",
+      "direction": "R",
+      "status": "CANDIDATE",
+      "evidence": [
+        "app/cbl/COACTUPC.cbl:3894",
+        "app/cbl/COMEN01C.cbl:156",
+        "app/csd/CARDDEMO.CSD:1",
+        "app/csd/CARDDEMO.CSD:419"
+      ],
+      "via": "COACTUPC",
+      "basis": "Entry/closure certainty; not proof of runtime overlap"
+    },
+    {
+      "module": "CARDDEMO",
+      "kind": "CICS transaction",
+      "name": "CT00",
+      "dataset": "AWS.M2.CARDDEMO.ACCTDATA.VSAM.KSDS",
+      "direction": "R",
+      "status": "CANDIDATE",
+      "evidence": [
+        "app/cbl/COACTVWC.cbl:776",
+        "app/cbl/COMEN01C.cbl:156",
+        "app/csd/CARDDEMO.CSD:1",
+        "app/csd/CARDDEMO.CSD:419"
+      ],
+      "via": "COACTVWC",
+      "basis": "Entry/closure certainty; not proof of runtime overlap"
+    },
+    {
+      "module": "CARDDEMO",
+      "kind": "CICS transaction",
+      "name": "CT00",
+      "dataset": "AWS.M2.CARDDEMO.ACCTDATA.VSAM.KSDS",
+      "direction": "R",
+      "status": "CANDIDATE",
+      "evidence": [
+        "app/cbl/COBIL00C.cbl:345",
+        "app/cbl/COMEN01C.cbl:156",
+        "app/csd/CARDDEMO.CSD:1",
+        "app/csd/CARDDEMO.CSD:419"
+      ],
+      "via": "COBIL00C",
+      "basis": "Entry/closure certainty; not proof of runtime overlap"
+    },
+    {
+      "module": "CARDDEMO",
+      "kind": "CICS transaction",
+      "name": "CT00",
+      "dataset": "AWS.M2.CARDDEMO.ACCTDATA.VSAM.KSDS",
+      "direction": "W",
+      "status": "CANDIDATE",
+      "evidence": [
+        "app/cbl/COACTUPC.cbl:4065",
+        "app/cbl/COMEN01C.cbl:156",
+        "app/csd/CARDDEMO.CSD:1",
+        "app/csd/CARDDEMO.CSD:419"
+      ],
+      "via": "COACTUPC",
+      "basis": "Entry/closure certainty; not proof of runtime overlap"
+    },
+    {
+      "module": "CARDDEMO",
+      "kind": "CICS transaction",
+      "name": "CT00",
+      "dataset": "AWS.M2.CARDDEMO.ACCTDATA.VSAM.KSDS",
+      "direction": "W",
+      "status": "CANDIDATE",
+      "evidence": [
+        "app/cbl/COBIL00C.cbl:379",
+        "app/cbl/COMEN01C.cbl:156",
+        "app/csd/CARDDEMO.CSD:1",
+        "app/csd/CARDDEMO.CSD:419"
+      ],
+      "via": "COBIL00C",
+      "basis": "Entry/closure certainty; not proof of runtime overlap"
+    },
+    {
+      "module": "CARDDEMO",
+      "kind": "CICS transaction",
+      "name": "CT00",
+      "dataset": "AWS.M2.CARDDEMO.CARDXREF.VSAM.AIX.PATH",
+      "direction": "R",
+      "status": "CANDIDATE",
+      "evidence": [
+        "app/cbl/COACTUPC.cbl:3654",
+        "app/cbl/COMEN01C.cbl:156",
+        "app/csd/CARDDEMO.CSD:419",
+        "app/csd/CARDDEMO.CSD:63"
+      ],
+      "via": "COACTUPC",
+      "basis": "Entry/closure certainty; not proof of runtime overlap"
+    },
+    {
+      "module": "CARDDEMO",
+      "kind": "CICS transaction",
+      "name": "CT00",
+      "dataset": "AWS.M2.CARDDEMO.CARDXREF.VSAM.AIX.PATH",
+      "direction": "R",
+      "status": "CANDIDATE",
+      "evidence": [
+        "app/cbl/COACTVWC.cbl:727",
+        "app/cbl/COMEN01C.cbl:156",
+        "app/csd/CARDDEMO.CSD:419",
+        "app/csd/CARDDEMO.CSD:63"
+      ],
+      "via": "COACTVWC",
+      "basis": "Entry/closure certainty; not proof of runtime overlap"
+    },
+    {
+      "module": "CARDDEMO",
+      "kind": "CICS transaction",
+      "name": "CT00",
+      "dataset": "AWS.M2.CARDDEMO.CARDXREF.VSAM.AIX.PATH",
+      "direction": "R",
+      "status": "CANDIDATE",
+      "evidence": [
+        "app/cbl/COBIL00C.cbl:410",
+        "app/cbl/COMEN01C.cbl:156",
+        "app/csd/CARDDEMO.CSD:419",
+        "app/csd/CARDDEMO.CSD:63"
+      ],
+      "via": "COBIL00C",
+      "basis": "Entry/closure certainty; not proof of runtime overlap"
+    },
+    {
+      "module": "CARDDEMO",
+      "kind": "CICS transaction",
+      "name": "CT00",
+      "dataset": "AWS.M2.CARDDEMO.CARDXREF.VSAM.AIX.PATH",
+      "direction": "R",
+      "status": "CANDIDATE",
+      "evidence": [
+        "app/cbl/COMEN01C.cbl:156",
+        "app/cbl/COTRN02C.cbl:578",
+        "app/csd/CARDDEMO.CSD:419",
+        "app/csd/CARDDEMO.CSD:63"
+      ],
+      "via": "COTRN02C",
+      "basis": "Entry/closure certainty; not proof of runtime overlap"
+    },
+    {
+      "module": "CARDDEMO",
+      "kind": "CICS transaction",
+      "name": "CT00",
+      "dataset": "AWS.M2.CARDDEMO.CARDXREF.VSAM.KSDS",
+      "direction": "R",
+      "status": "CANDIDATE",
+      "evidence": [
+        "app/cbl/COMEN01C.cbl:156",
+        "app/cbl/COTRN02C.cbl:611",
+        "app/csd/CARDDEMO.CSD:37",
+        "app/csd/CARDDEMO.CSD:419"
+      ],
+      "via": "COTRN02C",
+      "basis": "Entry/closure certainty; not proof of runtime overlap"
+    },
+    {
+      "module": "CARDDEMO",
+      "kind": "CICS transaction",
+      "name": "CT01",
+      "dataset": "AWS.M2.CARDDEMO.ACCTDATA.VSAM.KSDS",
+      "direction": "R",
+      "status": "CANDIDATE",
+      "evidence": [
+        "app/cbl/COACTUPC.cbl:3703",
+        "app/cbl/COMEN01C.cbl:156",
+        "app/csd/CARDDEMO.CSD:1",
+        "app/csd/CARDDEMO.CSD:429"
+      ],
+      "via": "COACTUPC",
+      "basis": "Entry/closure certainty; not proof of runtime overlap"
+    },
+    {
+      "module": "CARDDEMO",
+      "kind": "CICS transaction",
+      "name": "CT01",
+      "dataset": "AWS.M2.CARDDEMO.ACCTDATA.VSAM.KSDS",
+      "direction": "R",
+      "status": "CANDIDATE",
+      "evidence": [
+        "app/cbl/COACTUPC.cbl:3894",
+        "app/cbl/COMEN01C.cbl:156",
+        "app/csd/CARDDEMO.CSD:1",
+        "app/csd/CARDDEMO.CSD:429"
+      ],
+      "via": "COACTUPC",
+      "basis": "Entry/closure certainty; not proof of runtime overlap"
+    },
+    {
+      "module": "CARDDEMO",
+      "kind": "CICS transaction",
+      "name": "CT01",
+      "dataset": "AWS.M2.CARDDEMO.ACCTDATA.VSAM.KSDS",
+      "direction": "R",
+      "status": "CANDIDATE",
+      "evidence": [
+        "app/cbl/COACTVWC.cbl:776",
+        "app/cbl/COMEN01C.cbl:156",
+        "app/csd/CARDDEMO.CSD:1",
+        "app/csd/CARDDEMO.CSD:429"
+      ],
+      "via": "COACTVWC",
+      "basis": "Entry/closure certainty; not proof of runtime overlap"
+    },
+    {
+      "module": "CARDDEMO",
+      "kind": "CICS transaction",
+      "name": "CT01",
+      "dataset": "AWS.M2.CARDDEMO.ACCTDATA.VSAM.KSDS",
+      "direction": "R",
+      "status": "CANDIDATE",
+      "evidence": [
+        "app/cbl/COBIL00C.cbl:345",
+        "app/cbl/COMEN01C.cbl:156",
+        "app/csd/CARDDEMO.CSD:1",
+        "app/csd/CARDDEMO.CSD:429"
+      ],
+      "via": "COBIL00C",
+      "basis": "Entry/closure certainty; not proof of runtime overlap"
+    },
+    {
+      "module": "CARDDEMO",
+      "kind": "CICS transaction",
+      "name": "CT01",
+      "dataset": "AWS.M2.CARDDEMO.ACCTDATA.VSAM.KSDS",
+      "direction": "W",
+      "status": "CANDIDATE",
+      "evidence": [
+        "app/cbl/COACTUPC.cbl:4065",
+        "app/cbl/COMEN01C.cbl:156",
+        "app/csd/CARDDEMO.CSD:1",
+        "app/csd/CARDDEMO.CSD:429"
+      ],
+      "via": "COACTUPC",
+      "basis": "Entry/closure certainty; not proof of runtime overlap"
+    },
+    {
+      "module": "CARDDEMO",
+      "kind": "CICS transaction",
+      "name": "CT01",
+      "dataset": "AWS.M2.CARDDEMO.ACCTDATA.VSAM.KSDS",
+      "direction": "W",
+      "status": "CANDIDATE",
+      "evidence": [
+        "app/cbl/COBIL00C.cbl:379",
+        "app/cbl/COMEN01C.cbl:156",
+        "app/csd/CARDDEMO.CSD:1",
+        "app/csd/CARDDEMO.CSD:429"
+      ],
+      "via": "COBIL00C",
+      "basis": "Entry/closure certainty; not proof of runtime overlap"
+    },
+    {
+      "module": "CARDDEMO",
+      "kind": "CICS transaction",
+      "name": "CT01",
+      "dataset": "AWS.M2.CARDDEMO.CARDXREF.VSAM.AIX.PATH",
+      "direction": "R",
+      "status": "CANDIDATE",
+      "evidence": [
+        "app/cbl/COACTUPC.cbl:3654",
+        "app/cbl/COMEN01C.cbl:156",
+        "app/csd/CARDDEMO.CSD:429",
+        "app/csd/CARDDEMO.CSD:63"
+      ],
+      "via": "COACTUPC",
+      "basis": "Entry/closure certainty; not proof of runtime overlap"
+    },
+    {
+      "module": "CARDDEMO",
+      "kind": "CICS transaction",
+      "name": "CT01",
+      "dataset": "AWS.M2.CARDDEMO.CARDXREF.VSAM.AIX.PATH",
+      "direction": "R",
+      "status": "CANDIDATE",
+      "evidence": [
+        "app/cbl/COACTVWC.cbl:727",
+        "app/cbl/COMEN01C.cbl:156",
+        "app/csd/CARDDEMO.CSD:429",
+        "app/csd/CARDDEMO.CSD:63"
+      ],
+      "via": "COACTVWC",
+      "basis": "Entry/closure certainty; not proof of runtime overlap"
+    },
+    {
+      "module": "CARDDEMO",
+      "kind": "CICS transaction",
+      "name": "CT01",
+      "dataset": "AWS.M2.CARDDEMO.CARDXREF.VSAM.AIX.PATH",
+      "direction": "R",
+      "status": "CANDIDATE",
+      "evidence": [
+        "app/cbl/COBIL00C.cbl:410",
+        "app/cbl/COMEN01C.cbl:156",
+        "app/csd/CARDDEMO.CSD:429",
+        "app/csd/CARDDEMO.CSD:63"
+      ],
+      "via": "COBIL00C",
+      "basis": "Entry/closure certainty; not proof of runtime overlap"
+    },
+    {
+      "module": "CARDDEMO",
+      "kind": "CICS transaction",
+      "name": "CT01",
+      "dataset": "AWS.M2.CARDDEMO.CARDXREF.VSAM.AIX.PATH",
+      "direction": "R",
+      "status": "CANDIDATE",
+      "evidence": [
+        "app/cbl/COMEN01C.cbl:156",
+        "app/cbl/COTRN02C.cbl:578",
+        "app/csd/CARDDEMO.CSD:429",
+        "app/csd/CARDDEMO.CSD:63"
+      ],
+      "via": "COTRN02C",
+      "basis": "Entry/closure certainty; not proof of runtime overlap"
+    },
+    {
+      "module": "CARDDEMO",
+      "kind": "CICS transaction",
+      "name": "CT01",
+      "dataset": "AWS.M2.CARDDEMO.CARDXREF.VSAM.KSDS",
+      "direction": "R",
+      "status": "CANDIDATE",
+      "evidence": [
+        "app/cbl/COMEN01C.cbl:156",
+        "app/cbl/COTRN02C.cbl:611",
+        "app/csd/CARDDEMO.CSD:37",
+        "app/csd/CARDDEMO.CSD:429"
+      ],
+      "via": "COTRN02C",
+      "basis": "Entry/closure certainty; not proof of runtime overlap"
+    },
+    {
+      "module": "CARDDEMO",
+      "kind": "CICS transaction",
+      "name": "CT02",
+      "dataset": "AWS.M2.CARDDEMO.ACCTDATA.VSAM.KSDS",
+      "direction": "R",
+      "status": "CANDIDATE",
+      "evidence": [
+        "app/cbl/COACTUPC.cbl:3703",
+        "app/cbl/COMEN01C.cbl:156",
+        "app/csd/CARDDEMO.CSD:1",
+        "app/csd/CARDDEMO.CSD:439"
+      ],
+      "via": "COACTUPC",
+      "basis": "Entry/closure certainty; not proof of runtime overlap"
+    },
+    {
+      "module": "CARDDEMO",
+      "kind": "CICS transaction",
+      "name": "CT02",
+      "dataset": "AWS.M2.CARDDEMO.ACCTDATA.VSAM.KSDS",
+      "direction": "R",
+      "status": "CANDIDATE",
+      "evidence": [
+        "app/cbl/COACTUPC.cbl:3894",
+        "app/cbl/COMEN01C.cbl:156",
+        "app/csd/CARDDEMO.CSD:1",
+        "app/csd/CARDDEMO.CSD:439"
+      ],
+      "via": "COACTUPC",
+      "basis": "Entry/closure certainty; not proof of runtime overlap"
+    },
+    {
+      "module": "CARDDEMO",
+      "kind": "CICS transaction",
+      "name": "CT02",
+      "dataset": "AWS.M2.CARDDEMO.ACCTDATA.VSAM.KSDS",
+      "direction": "R",
+      "status": "CANDIDATE",
+      "evidence": [
+        "app/cbl/COACTVWC.cbl:776",
+        "app/cbl/COMEN01C.cbl:156",
+        "app/csd/CARDDEMO.CSD:1",
+        "app/csd/CARDDEMO.CSD:439"
+      ],
+      "via": "COACTVWC",
+      "basis": "Entry/closure certainty; not proof of runtime overlap"
+    },
+    {
+      "module": "CARDDEMO",
+      "kind": "CICS transaction",
+      "name": "CT02",
+      "dataset": "AWS.M2.CARDDEMO.ACCTDATA.VSAM.KSDS",
+      "direction": "R",
+      "status": "CANDIDATE",
+      "evidence": [
+        "app/cbl/COBIL00C.cbl:345",
+        "app/cbl/COMEN01C.cbl:156",
+        "app/csd/CARDDEMO.CSD:1",
+        "app/csd/CARDDEMO.CSD:439"
+      ],
+      "via": "COBIL00C",
+      "basis": "Entry/closure certainty; not proof of runtime overlap"
+    },
+    {
+      "module": "CARDDEMO",
+      "kind": "CICS transaction",
+      "name": "CT02",
+      "dataset": "AWS.M2.CARDDEMO.ACCTDATA.VSAM.KSDS",
+      "direction": "W",
+      "status": "CANDIDATE",
+      "evidence": [
+        "app/cbl/COACTUPC.cbl:4065",
+        "app/cbl/COMEN01C.cbl:156",
+        "app/csd/CARDDEMO.CSD:1",
+        "app/csd/CARDDEMO.CSD:439"
+      ],
+      "via": "COACTUPC",
+      "basis": "Entry/closure certainty; not proof of runtime overlap"
+    },
+    {
+      "module": "CARDDEMO",
+      "kind": "CICS transaction",
+      "name": "CT02",
+      "dataset": "AWS.M2.CARDDEMO.ACCTDATA.VSAM.KSDS",
+      "direction": "W",
+      "status": "CANDIDATE",
+      "evidence": [
+        "app/cbl/COBIL00C.cbl:379",
+        "app/cbl/COMEN01C.cbl:156",
+        "app/csd/CARDDEMO.CSD:1",
+        "app/csd/CARDDEMO.CSD:439"
+      ],
+      "via": "COBIL00C",
+      "basis": "Entry/closure certainty; not proof of runtime overlap"
+    },
+    {
+      "module": "CARDDEMO",
+      "kind": "CICS transaction",
+      "name": "CT02",
+      "dataset": "AWS.M2.CARDDEMO.CARDXREF.VSAM.AIX.PATH",
+      "direction": "R",
+      "status": "CANDIDATE",
+      "evidence": [
+        "app/cbl/COACTUPC.cbl:3654",
+        "app/cbl/COMEN01C.cbl:156",
+        "app/csd/CARDDEMO.CSD:439",
+        "app/csd/CARDDEMO.CSD:63"
+      ],
+      "via": "COACTUPC",
+      "basis": "Entry/closure certainty; not proof of runtime overlap"
+    },
+    {
+      "module": "CARDDEMO",
+      "kind": "CICS transaction",
+      "name": "CT02",
+      "dataset": "AWS.M2.CARDDEMO.CARDXREF.VSAM.AIX.PATH",
+      "direction": "R",
+      "status": "CANDIDATE",
+      "evidence": [
+        "app/cbl/COACTVWC.cbl:727",
+        "app/cbl/COMEN01C.cbl:156",
+        "app/csd/CARDDEMO.CSD:439",
+        "app/csd/CARDDEMO.CSD:63"
+      ],
+      "via": "COACTVWC",
+      "basis": "Entry/closure certainty; not proof of runtime overlap"
+    },
+    {
+      "module": "CARDDEMO",
+      "kind": "CICS transaction",
+      "name": "CT02",
+      "dataset": "AWS.M2.CARDDEMO.CARDXREF.VSAM.AIX.PATH",
+      "direction": "R",
+      "status": "CANDIDATE",
+      "evidence": [
+        "app/cbl/COBIL00C.cbl:410",
+        "app/cbl/COMEN01C.cbl:156",
+        "app/csd/CARDDEMO.CSD:439",
+        "app/csd/CARDDEMO.CSD:63"
+      ],
+      "via": "COBIL00C",
+      "basis": "Entry/closure certainty; not proof of runtime overlap"
+    },
+    {
+      "module": "CARDDEMO",
+      "kind": "CICS transaction",
+      "name": "CT02",
+      "dataset": "AWS.M2.CARDDEMO.CARDXREF.VSAM.AIX.PATH",
+      "direction": "R",
+      "status": "PROVEN",
+      "evidence": [
+        "app/cbl/COTRN02C.cbl:578",
+        "app/csd/CARDDEMO.CSD:439",
+        "app/csd/CARDDEMO.CSD:63"
+      ],
+      "via": "COTRN02C",
+      "basis": "Entry/closure certainty; not proof of runtime overlap"
+    },
+    {
+      "module": "CARDDEMO",
+      "kind": "CICS transaction",
+      "name": "CT02",
+      "dataset": "AWS.M2.CARDDEMO.CARDXREF.VSAM.KSDS",
+      "direction": "R",
+      "status": "PROVEN",
+      "evidence": [
+        "app/cbl/COTRN02C.cbl:611",
+        "app/csd/CARDDEMO.CSD:37",
+        "app/csd/CARDDEMO.CSD:439"
+      ],
+      "via": "COTRN02C",
+      "basis": "Entry/closure certainty; not proof of runtime overlap"
+    },
+    {
+      "module": "CARDDEMO",
+      "kind": "CICS transaction",
+      "name": "CU00",
+      "dataset": "AWS.M2.CARDDEMO.ACCTDATA.VSAM.KSDS",
+      "direction": "R",
+      "status": "CANDIDATE",
+      "evidence": [
+        "app/cbl/COACTUPC.cbl:3703",
+        "app/cbl/COMEN01C.cbl:156",
+        "app/csd/CARDDEMO.CSD:1",
+        "app/csd/CARDDEMO.CSD:449"
+      ],
+      "via": "COACTUPC",
+      "basis": "Entry/closure certainty; not proof of runtime overlap"
+    },
+    {
+      "module": "CARDDEMO",
+      "kind": "CICS transaction",
+      "name": "CU00",
+      "dataset": "AWS.M2.CARDDEMO.ACCTDATA.VSAM.KSDS",
+      "direction": "R",
+      "status": "CANDIDATE",
+      "evidence": [
+        "app/cbl/COACTUPC.cbl:3894",
+        "app/cbl/COMEN01C.cbl:156",
+        "app/csd/CARDDEMO.CSD:1",
+        "app/csd/CARDDEMO.CSD:449"
+      ],
+      "via": "COACTUPC",
+      "basis": "Entry/closure certainty; not proof of runtime overlap"
+    },
+    {
+      "module": "CARDDEMO",
+      "kind": "CICS transaction",
+      "name": "CU00",
+      "dataset": "AWS.M2.CARDDEMO.ACCTDATA.VSAM.KSDS",
+      "direction": "R",
+      "status": "CANDIDATE",
+      "evidence": [
+        "app/cbl/COACTVWC.cbl:776",
+        "app/cbl/COMEN01C.cbl:156",
+        "app/csd/CARDDEMO.CSD:1",
+        "app/csd/CARDDEMO.CSD:449"
+      ],
+      "via": "COACTVWC",
+      "basis": "Entry/closure certainty; not proof of runtime overlap"
+    },
+    {
+      "module": "CARDDEMO",
+      "kind": "CICS transaction",
+      "name": "CU00",
+      "dataset": "AWS.M2.CARDDEMO.ACCTDATA.VSAM.KSDS",
+      "direction": "R",
+      "status": "CANDIDATE",
+      "evidence": [
+        "app/cbl/COBIL00C.cbl:345",
+        "app/cbl/COMEN01C.cbl:156",
+        "app/csd/CARDDEMO.CSD:1",
+        "app/csd/CARDDEMO.CSD:449"
+      ],
+      "via": "COBIL00C",
+      "basis": "Entry/closure certainty; not proof of runtime overlap"
+    },
+    {
+      "module": "CARDDEMO",
+      "kind": "CICS transaction",
+      "name": "CU00",
+      "dataset": "AWS.M2.CARDDEMO.ACCTDATA.VSAM.KSDS",
+      "direction": "W",
+      "status": "CANDIDATE",
+      "evidence": [
+        "app/cbl/COACTUPC.cbl:4065",
+        "app/cbl/COMEN01C.cbl:156",
+        "app/csd/CARDDEMO.CSD:1",
+        "app/csd/CARDDEMO.CSD:449"
+      ],
+      "via": "COACTUPC",
+      "basis": "Entry/closure certainty; not proof of runtime overlap"
+    },
+    {
+      "module": "CARDDEMO",
+      "kind": "CICS transaction",
+      "name": "CU00",
+      "dataset": "AWS.M2.CARDDEMO.ACCTDATA.VSAM.KSDS",
+      "direction": "W",
+      "status": "CANDIDATE",
+      "evidence": [
+        "app/cbl/COBIL00C.cbl:379",
+        "app/cbl/COMEN01C.cbl:156",
+        "app/csd/CARDDEMO.CSD:1",
+        "app/csd/CARDDEMO.CSD:449"
+      ],
+      "via": "COBIL00C",
+      "basis": "Entry/closure certainty; not proof of runtime overlap"
+    },
+    {
+      "module": "CARDDEMO",
+      "kind": "CICS transaction",
+      "name": "CU00",
+      "dataset": "AWS.M2.CARDDEMO.CARDXREF.VSAM.AIX.PATH",
+      "direction": "R",
+      "status": "CANDIDATE",
+      "evidence": [
+        "app/cbl/COACTUPC.cbl:3654",
+        "app/cbl/COMEN01C.cbl:156",
+        "app/csd/CARDDEMO.CSD:449",
+        "app/csd/CARDDEMO.CSD:63"
+      ],
+      "via": "COACTUPC",
+      "basis": "Entry/closure certainty; not proof of runtime overlap"
+    },
+    {
+      "module": "CARDDEMO",
+      "kind": "CICS transaction",
+      "name": "CU00",
+      "dataset": "AWS.M2.CARDDEMO.CARDXREF.VSAM.AIX.PATH",
+      "direction": "R",
+      "status": "CANDIDATE",
+      "evidence": [
+        "app/cbl/COACTVWC.cbl:727",
+        "app/cbl/COMEN01C.cbl:156",
+        "app/csd/CARDDEMO.CSD:449",
+        "app/csd/CARDDEMO.CSD:63"
+      ],
+      "via": "COACTVWC",
+      "basis": "Entry/closure certainty; not proof of runtime overlap"
+    },
+    {
+      "module": "CARDDEMO",
+      "kind": "CICS transaction",
+      "name": "CU00",
+      "dataset": "AWS.M2.CARDDEMO.CARDXREF.VSAM.AIX.PATH",
+      "direction": "R",
+      "status": "CANDIDATE",
+      "evidence": [
+        "app/cbl/COBIL00C.cbl:410",
+        "app/cbl/COMEN01C.cbl:156",
+        "app/csd/CARDDEMO.CSD:449",
+        "app/csd/CARDDEMO.CSD:63"
+      ],
+      "via": "COBIL00C",
+      "basis": "Entry/closure certainty; not proof of runtime overlap"
+    },
+    {
+      "module": "CARDDEMO",
+      "kind": "CICS transaction",
+      "name": "CU00",
+      "dataset": "AWS.M2.CARDDEMO.CARDXREF.VSAM.AIX.PATH",
+      "direction": "R",
+      "status": "CANDIDATE",
+      "evidence": [
+        "app/cbl/COMEN01C.cbl:156",
+        "app/cbl/COTRN02C.cbl:578",
+        "app/csd/CARDDEMO.CSD:449",
+        "app/csd/CARDDEMO.CSD:63"
+      ],
+      "via": "COTRN02C",
+      "basis": "Entry/closure certainty; not proof of runtime overlap"
+    },
+    {
+      "module": "CARDDEMO",
+      "kind": "CICS transaction",
+      "name": "CU00",
+      "dataset": "AWS.M2.CARDDEMO.CARDXREF.VSAM.KSDS",
+      "direction": "R",
+      "status": "CANDIDATE",
+      "evidence": [
+        "app/cbl/COMEN01C.cbl:156",
+        "app/cbl/COTRN02C.cbl:611",
+        "app/csd/CARDDEMO.CSD:37",
+        "app/csd/CARDDEMO.CSD:449"
+      ],
+      "via": "COTRN02C",
+      "basis": "Entry/closure certainty; not proof of runtime overlap"
+    },
+    {
+      "module": "CARDDEMO",
+      "kind": "CICS transaction",
+      "name": "CU01",
+      "dataset": "AWS.M2.CARDDEMO.ACCTDATA.VSAM.KSDS",
+      "direction": "R",
+      "status": "CANDIDATE",
+      "evidence": [
+        "app/cbl/COACTUPC.cbl:3703",
+        "app/cbl/COMEN01C.cbl:156",
+        "app/csd/CARDDEMO.CSD:1",
+        "app/csd/CARDDEMO.CSD:459"
+      ],
+      "via": "COACTUPC",
+      "basis": "Entry/closure certainty; not proof of runtime overlap"
+    },
+    {
+      "module": "CARDDEMO",
+      "kind": "CICS transaction",
+      "name": "CU01",
+      "dataset": "AWS.M2.CARDDEMO.ACCTDATA.VSAM.KSDS",
+      "direction": "R",
+      "status": "CANDIDATE",
+      "evidence": [
+        "app/cbl/COACTUPC.cbl:3894",
+        "app/cbl/COMEN01C.cbl:156",
+        "app/csd/CARDDEMO.CSD:1",
+        "app/csd/CARDDEMO.CSD:459"
+      ],
+      "via": "COACTUPC",
+      "basis": "Entry/closure certainty; not proof of runtime overlap"
+    },
+    {
+      "module": "CARDDEMO",
+      "kind": "CICS transaction",
+      "name": "CU01",
+      "dataset": "AWS.M2.CARDDEMO.ACCTDATA.VSAM.KSDS",
+      "direction": "R",
+      "status": "CANDIDATE",
+      "evidence": [
+        "app/cbl/COACTVWC.cbl:776",
+        "app/cbl/COMEN01C.cbl:156",
+        "app/csd/CARDDEMO.CSD:1",
+        "app/csd/CARDDEMO.CSD:459"
+      ],
+      "via": "COACTVWC",
+      "basis": "Entry/closure certainty; not proof of runtime overlap"
+    },
+    {
+      "module": "CARDDEMO",
+      "kind": "CICS transaction",
+      "name": "CU01",
+      "dataset": "AWS.M2.CARDDEMO.ACCTDATA.VSAM.KSDS",
+      "direction": "R",
+      "status": "CANDIDATE",
+      "evidence": [
+        "app/cbl/COBIL00C.cbl:345",
+        "app/cbl/COMEN01C.cbl:156",
+        "app/csd/CARDDEMO.CSD:1",
+        "app/csd/CARDDEMO.CSD:459"
+      ],
+      "via": "COBIL00C",
+      "basis": "Entry/closure certainty; not proof of runtime overlap"
+    },
+    {
+      "module": "CARDDEMO",
+      "kind": "CICS transaction",
+      "name": "CU01",
+      "dataset": "AWS.M2.CARDDEMO.ACCTDATA.VSAM.KSDS",
+      "direction": "W",
+      "status": "CANDIDATE",
+      "evidence": [
+        "app/cbl/COACTUPC.cbl:4065",
+        "app/cbl/COMEN01C.cbl:156",
+        "app/csd/CARDDEMO.CSD:1",
+        "app/csd/CARDDEMO.CSD:459"
+      ],
+      "via": "COACTUPC",
+      "basis": "Entry/closure certainty; not proof of runtime overlap"
+    },
+    {
+      "module": "CARDDEMO",
+      "kind": "CICS transaction",
+      "name": "CU01",
+      "dataset": "AWS.M2.CARDDEMO.ACCTDATA.VSAM.KSDS",
+      "direction": "W",
+      "status": "CANDIDATE",
+      "evidence": [
+        "app/cbl/COBIL00C.cbl:379",
+        "app/cbl/COMEN01C.cbl:156",
+        "app/csd/CARDDEMO.CSD:1",
+        "app/csd/CARDDEMO.CSD:459"
+      ],
+      "via": "COBIL00C",
+      "basis": "Entry/closure certainty; not proof of runtime overlap"
+    },
+    {
+      "module": "CARDDEMO",
+      "kind": "CICS transaction",
+      "name": "CU01",
+      "dataset": "AWS.M2.CARDDEMO.CARDXREF.VSAM.AIX.PATH",
+      "direction": "R",
+      "status": "CANDIDATE",
+      "evidence": [
+        "app/cbl/COACTUPC.cbl:3654",
+        "app/cbl/COMEN01C.cbl:156",
+        "app/csd/CARDDEMO.CSD:459",
+        "app/csd/CARDDEMO.CSD:63"
+      ],
+      "via": "COACTUPC",
+      "basis": "Entry/closure certainty; not proof of runtime overlap"
+    },
+    {
+      "module": "CARDDEMO",
+      "kind": "CICS transaction",
+      "name": "CU01",
+      "dataset": "AWS.M2.CARDDEMO.CARDXREF.VSAM.AIX.PATH",
+      "direction": "R",
+      "status": "CANDIDATE",
+      "evidence": [
+        "app/cbl/COACTVWC.cbl:727",
+        "app/cbl/COMEN01C.cbl:156",
+        "app/csd/CARDDEMO.CSD:459",
+        "app/csd/CARDDEMO.CSD:63"
+      ],
+      "via": "COACTVWC",
+      "basis": "Entry/closure certainty; not proof of runtime overlap"
+    },
+    {
+      "module": "CARDDEMO",
+      "kind": "CICS transaction",
+      "name": "CU01",
+      "dataset": "AWS.M2.CARDDEMO.CARDXREF.VSAM.AIX.PATH",
+      "direction": "R",
+      "status": "CANDIDATE",
+      "evidence": [
+        "app/cbl/COBIL00C.cbl:410",
+        "app/cbl/COMEN01C.cbl:156",
+        "app/csd/CARDDEMO.CSD:459",
+        "app/csd/CARDDEMO.CSD:63"
+      ],
+      "via": "COBIL00C",
+      "basis": "Entry/closure certainty; not proof of runtime overlap"
+    },
+    {
+      "module": "CARDDEMO",
+      "kind": "CICS transaction",
+      "name": "CU01",
+      "dataset": "AWS.M2.CARDDEMO.CARDXREF.VSAM.AIX.PATH",
+      "direction": "R",
+      "status": "CANDIDATE",
+      "evidence": [
+        "app/cbl/COMEN01C.cbl:156",
+        "app/cbl/COTRN02C.cbl:578",
+        "app/csd/CARDDEMO.CSD:459",
+        "app/csd/CARDDEMO.CSD:63"
+      ],
+      "via": "COTRN02C",
+      "basis": "Entry/closure certainty; not proof of runtime overlap"
+    },
+    {
+      "module": "CARDDEMO",
+      "kind": "CICS transaction",
+      "name": "CU01",
+      "dataset": "AWS.M2.CARDDEMO.CARDXREF.VSAM.KSDS",
+      "direction": "R",
+      "status": "CANDIDATE",
+      "evidence": [
+        "app/cbl/COMEN01C.cbl:156",
+        "app/cbl/COTRN02C.cbl:611",
+        "app/csd/CARDDEMO.CSD:37",
+        "app/csd/CARDDEMO.CSD:459"
+      ],
+      "via": "COTRN02C",
+      "basis": "Entry/closure certainty; not proof of runtime overlap"
+    },
+    {
+      "module": "CARDDEMO",
+      "kind": "CICS transaction",
+      "name": "CU02",
+      "dataset": "AWS.M2.CARDDEMO.ACCTDATA.VSAM.KSDS",
+      "direction": "R",
+      "status": "CANDIDATE",
+      "evidence": [
+        "app/cbl/COACTUPC.cbl:3703",
+        "app/cbl/COMEN01C.cbl:156",
+        "app/csd/CARDDEMO.CSD:1",
+        "app/csd/CARDDEMO.CSD:469"
+      ],
+      "via": "COACTUPC",
+      "basis": "Entry/closure certainty; not proof of runtime overlap"
+    },
+    {
+      "module": "CARDDEMO",
+      "kind": "CICS transaction",
+      "name": "CU02",
+      "dataset": "AWS.M2.CARDDEMO.ACCTDATA.VSAM.KSDS",
+      "direction": "R",
+      "status": "CANDIDATE",
+      "evidence": [
+        "app/cbl/COACTUPC.cbl:3894",
+        "app/cbl/COMEN01C.cbl:156",
+        "app/csd/CARDDEMO.CSD:1",
+        "app/csd/CARDDEMO.CSD:469"
+      ],
+      "via": "COACTUPC",
+      "basis": "Entry/closure certainty; not proof of runtime overlap"
+    },
+    {
+      "module": "CARDDEMO",
+      "kind": "CICS transaction",
+      "name": "CU02",
+      "dataset": "AWS.M2.CARDDEMO.ACCTDATA.VSAM.KSDS",
+      "direction": "R",
+      "status": "CANDIDATE",
+      "evidence": [
+        "app/cbl/COACTVWC.cbl:776",
+        "app/cbl/COMEN01C.cbl:156",
+        "app/csd/CARDDEMO.CSD:1",
+        "app/csd/CARDDEMO.CSD:469"
+      ],
+      "via": "COACTVWC",
+      "basis": "Entry/closure certainty; not proof of runtime overlap"
+    },
+    {
+      "module": "CARDDEMO",
+      "kind": "CICS transaction",
+      "name": "CU02",
+      "dataset": "AWS.M2.CARDDEMO.ACCTDATA.VSAM.KSDS",
+      "direction": "R",
+      "status": "CANDIDATE",
+      "evidence": [
+        "app/cbl/COBIL00C.cbl:345",
+        "app/cbl/COMEN01C.cbl:156",
+        "app/csd/CARDDEMO.CSD:1",
+        "app/csd/CARDDEMO.CSD:469"
+      ],
+      "via": "COBIL00C",
+      "basis": "Entry/closure certainty; not proof of runtime overlap"
+    },
+    {
+      "module": "CARDDEMO",
+      "kind": "CICS transaction",
+      "name": "CU02",
+      "dataset": "AWS.M2.CARDDEMO.ACCTDATA.VSAM.KSDS",
+      "direction": "W",
+      "status": "CANDIDATE",
+      "evidence": [
+        "app/cbl/COACTUPC.cbl:4065",
+        "app/cbl/COMEN01C.cbl:156",
+        "app/csd/CARDDEMO.CSD:1",
+        "app/csd/CARDDEMO.CSD:469"
+      ],
+      "via": "COACTUPC",
+      "basis": "Entry/closure certainty; not proof of runtime overlap"
+    },
+    {
+      "module": "CARDDEMO",
+      "kind": "CICS transaction",
+      "name": "CU02",
+      "dataset": "AWS.M2.CARDDEMO.ACCTDATA.VSAM.KSDS",
+      "direction": "W",
+      "status": "CANDIDATE",
+      "evidence": [
+        "app/cbl/COBIL00C.cbl:379",
+        "app/cbl/COMEN01C.cbl:156",
+        "app/csd/CARDDEMO.CSD:1",
+        "app/csd/CARDDEMO.CSD:469"
+      ],
+      "via": "COBIL00C",
+      "basis": "Entry/closure certainty; not proof of runtime overlap"
+    },
+    {
+      "module": "CARDDEMO",
+      "kind": "CICS transaction",
+      "name": "CU02",
+      "dataset": "AWS.M2.CARDDEMO.CARDXREF.VSAM.AIX.PATH",
+      "direction": "R",
+      "status": "CANDIDATE",
+      "evidence": [
+        "app/cbl/COACTUPC.cbl:3654",
+        "app/cbl/COMEN01C.cbl:156",
+        "app/csd/CARDDEMO.CSD:469",
+        "app/csd/CARDDEMO.CSD:63"
+      ],
+      "via": "COACTUPC",
+      "basis": "Entry/closure certainty; not proof of runtime overlap"
+    },
+    {
+      "module": "CARDDEMO",
+      "kind": "CICS transaction",
+      "name": "CU02",
+      "dataset": "AWS.M2.CARDDEMO.CARDXREF.VSAM.AIX.PATH",
+      "direction": "R",
+      "status": "CANDIDATE",
+      "evidence": [
+        "app/cbl/COACTVWC.cbl:727",
+        "app/cbl/COMEN01C.cbl:156",
+        "app/csd/CARDDEMO.CSD:469",
+        "app/csd/CARDDEMO.CSD:63"
+      ],
+      "via": "COACTVWC",
+      "basis": "Entry/closure certainty; not proof of runtime overlap"
+    },
+    {
+      "module": "CARDDEMO",
+      "kind": "CICS transaction",
+      "name": "CU02",
+      "dataset": "AWS.M2.CARDDEMO.CARDXREF.VSAM.AIX.PATH",
+      "direction": "R",
+      "status": "CANDIDATE",
+      "evidence": [
+        "app/cbl/COBIL00C.cbl:410",
+        "app/cbl/COMEN01C.cbl:156",
+        "app/csd/CARDDEMO.CSD:469",
+        "app/csd/CARDDEMO.CSD:63"
+      ],
+      "via": "COBIL00C",
+      "basis": "Entry/closure certainty; not proof of runtime overlap"
+    },
+    {
+      "module": "CARDDEMO",
+      "kind": "CICS transaction",
+      "name": "CU02",
+      "dataset": "AWS.M2.CARDDEMO.CARDXREF.VSAM.AIX.PATH",
+      "direction": "R",
+      "status": "CANDIDATE",
+      "evidence": [
+        "app/cbl/COMEN01C.cbl:156",
+        "app/cbl/COTRN02C.cbl:578",
+        "app/csd/CARDDEMO.CSD:469",
+        "app/csd/CARDDEMO.CSD:63"
+      ],
+      "via": "COTRN02C",
+      "basis": "Entry/closure certainty; not proof of runtime overlap"
+    },
+    {
+      "module": "CARDDEMO",
+      "kind": "CICS transaction",
+      "name": "CU02",
+      "dataset": "AWS.M2.CARDDEMO.CARDXREF.VSAM.KSDS",
+      "direction": "R",
+      "status": "CANDIDATE",
+      "evidence": [
+        "app/cbl/COMEN01C.cbl:156",
+        "app/cbl/COTRN02C.cbl:611",
+        "app/csd/CARDDEMO.CSD:37",
+        "app/csd/CARDDEMO.CSD:469"
+      ],
+      "via": "COTRN02C",
+      "basis": "Entry/closure certainty; not proof of runtime overlap"
+    },
+    {
+      "module": "CARDDEMO",
+      "kind": "CICS transaction",
+      "name": "CU03",
+      "dataset": "AWS.M2.CARDDEMO.ACCTDATA.VSAM.KSDS",
+      "direction": "R",
+      "status": "CANDIDATE",
+      "evidence": [
+        "app/cbl/COACTUPC.cbl:3703",
+        "app/cbl/COMEN01C.cbl:156",
+        "app/csd/CARDDEMO.CSD:1",
+        "app/csd/CARDDEMO.CSD:479"
+      ],
+      "via": "COACTUPC",
+      "basis": "Entry/closure certainty; not proof of runtime overlap"
+    },
+    {
+      "module": "CARDDEMO",
+      "kind": "CICS transaction",
+      "name": "CU03",
+      "dataset": "AWS.M2.CARDDEMO.ACCTDATA.VSAM.KSDS",
+      "direction": "R",
+      "status": "CANDIDATE",
+      "evidence": [
+        "app/cbl/COACTUPC.cbl:3894",
+        "app/cbl/COMEN01C.cbl:156",
+        "app/csd/CARDDEMO.CSD:1",
+        "app/csd/CARDDEMO.CSD:479"
+      ],
+      "via": "COACTUPC",
+      "basis": "Entry/closure certainty; not proof of runtime overlap"
+    },
+    {
+      "module": "CARDDEMO",
+      "kind": "CICS transaction",
+      "name": "CU03",
+      "dataset": "AWS.M2.CARDDEMO.ACCTDATA.VSAM.KSDS",
+      "direction": "R",
+      "status": "CANDIDATE",
+      "evidence": [
+        "app/cbl/COACTVWC.cbl:776",
+        "app/cbl/COMEN01C.cbl:156",
+        "app/csd/CARDDEMO.CSD:1",
+        "app/csd/CARDDEMO.CSD:479"
+      ],
+      "via": "COACTVWC",
+      "basis": "Entry/closure certainty; not proof of runtime overlap"
+    },
+    {
+      "module": "CARDDEMO",
+      "kind": "CICS transaction",
+      "name": "CU03",
+      "dataset": "AWS.M2.CARDDEMO.ACCTDATA.VSAM.KSDS",
+      "direction": "R",
+      "status": "CANDIDATE",
+      "evidence": [
+        "app/cbl/COBIL00C.cbl:345",
+        "app/cbl/COMEN01C.cbl:156",
+        "app/csd/CARDDEMO.CSD:1",
+        "app/csd/CARDDEMO.CSD:479"
+      ],
+      "via": "COBIL00C",
+      "basis": "Entry/closure certainty; not proof of runtime overlap"
+    },
+    {
+      "module": "CARDDEMO",
+      "kind": "CICS transaction",
+      "name": "CU03",
+      "dataset": "AWS.M2.CARDDEMO.ACCTDATA.VSAM.KSDS",
+      "direction": "W",
+      "status": "CANDIDATE",
+      "evidence": [
+        "app/cbl/COACTUPC.cbl:4065",
+        "app/cbl/COMEN01C.cbl:156",
+        "app/csd/CARDDEMO.CSD:1",
+        "app/csd/CARDDEMO.CSD:479"
+      ],
+      "via": "COACTUPC",
+      "basis": "Entry/closure certainty; not proof of runtime overlap"
+    },
+    {
+      "module": "CARDDEMO",
+      "kind": "CICS transaction",
+      "name": "CU03",
+      "dataset": "AWS.M2.CARDDEMO.ACCTDATA.VSAM.KSDS",
+      "direction": "W",
+      "status": "CANDIDATE",
+      "evidence": [
+        "app/cbl/COBIL00C.cbl:379",
+        "app/cbl/COMEN01C.cbl:156",
+        "app/csd/CARDDEMO.CSD:1",
+        "app/csd/CARDDEMO.CSD:479"
+      ],
+      "via": "COBIL00C",
+      "basis": "Entry/closure certainty; not proof of runtime overlap"
+    },
+    {
+      "module": "CARDDEMO",
+      "kind": "CICS transaction",
+      "name": "CU03",
+      "dataset": "AWS.M2.CARDDEMO.CARDXREF.VSAM.AIX.PATH",
+      "direction": "R",
+      "status": "CANDIDATE",
+      "evidence": [
+        "app/cbl/COACTUPC.cbl:3654",
+        "app/cbl/COMEN01C.cbl:156",
+        "app/csd/CARDDEMO.CSD:479",
+        "app/csd/CARDDEMO.CSD:63"
+      ],
+      "via": "COACTUPC",
+      "basis": "Entry/closure certainty; not proof of runtime overlap"
+    },
+    {
+      "module": "CARDDEMO",
+      "kind": "CICS transaction",
+      "name": "CU03",
+      "dataset": "AWS.M2.CARDDEMO.CARDXREF.VSAM.AIX.PATH",
+      "direction": "R",
+      "status": "CANDIDATE",
+      "evidence": [
+        "app/cbl/COACTVWC.cbl:727",
+        "app/cbl/COMEN01C.cbl:156",
+        "app/csd/CARDDEMO.CSD:479",
+        "app/csd/CARDDEMO.CSD:63"
+      ],
+      "via": "COACTVWC",
+      "basis": "Entry/closure certainty; not proof of runtime overlap"
+    },
+    {
+      "module": "CARDDEMO",
+      "kind": "CICS transaction",
+      "name": "CU03",
+      "dataset": "AWS.M2.CARDDEMO.CARDXREF.VSAM.AIX.PATH",
+      "direction": "R",
+      "status": "CANDIDATE",
+      "evidence": [
+        "app/cbl/COBIL00C.cbl:410",
+        "app/cbl/COMEN01C.cbl:156",
+        "app/csd/CARDDEMO.CSD:479",
+        "app/csd/CARDDEMO.CSD:63"
+      ],
+      "via": "COBIL00C",
+      "basis": "Entry/closure certainty; not proof of runtime overlap"
+    },
+    {
+      "module": "CARDDEMO",
+      "kind": "CICS transaction",
+      "name": "CU03",
+      "dataset": "AWS.M2.CARDDEMO.CARDXREF.VSAM.AIX.PATH",
+      "direction": "R",
+      "status": "CANDIDATE",
+      "evidence": [
+        "app/cbl/COMEN01C.cbl:156",
+        "app/cbl/COTRN02C.cbl:578",
+        "app/csd/CARDDEMO.CSD:479",
+        "app/csd/CARDDEMO.CSD:63"
+      ],
+      "via": "COTRN02C",
+      "basis": "Entry/closure certainty; not proof of runtime overlap"
+    },
+    {
+      "module": "CARDDEMO",
+      "kind": "CICS transaction",
+      "name": "CU03",
+      "dataset": "AWS.M2.CARDDEMO.CARDXREF.VSAM.KSDS",
+      "direction": "R",
+      "status": "CANDIDATE",
+      "evidence": [
+        "app/cbl/COMEN01C.cbl:156",
+        "app/cbl/COTRN02C.cbl:611",
+        "app/csd/CARDDEMO.CSD:37",
+        "app/csd/CARDDEMO.CSD:479"
+      ],
+      "via": "COTRN02C",
+      "basis": "Entry/closure certainty; not proof of runtime overlap"
+    },
+    {
+      "module": "CARDDEMO",
+      "kind": "job",
+      "name": "ACCTFILE",
+      "dataset": "AWS.M2.CARDDEMO.ACCTDATA.VSAM.KSDS",
+      "direction": "W",
+      "status": "PROVEN",
+      "evidence": [
+        "app/jcl/ACCTFILE.jcl:25"
+      ],
+      "step": "STEP05",
+      "basis": "IDCAMS deletion; destructive setup/administration"
+    },
+    {
+      "module": "CARDDEMO",
+      "kind": "job",
+      "name": "ACCTFILE",
+      "dataset": "AWS.M2.CARDDEMO.ACCTDATA.VSAM.KSDS",
+      "direction": "W",
+      "status": "PROVEN",
+      "evidence": [
+        "app/jcl/ACCTFILE.jcl:36"
+      ],
+      "step": "STEP10",
+      "basis": "IDCAMS definition; setup/administration, not stream logic"
+    },
+    {
+      "module": "CARDDEMO",
+      "kind": "job",
+      "name": "ACCTFILE",
+      "dataset": "AWS.M2.CARDDEMO.ACCTDATA.VSAM.KSDS",
+      "direction": "W",
+      "status": "PROVEN",
+      "evidence": [
+        "app/jcl/ACCTFILE.jcl:58",
+        "app/jcl/ACCTFILE.jcl:61"
+      ],
+      "step": "STEP15",
+      "basis": "OPEN/utility evidence"
+    },
+    {
+      "module": "CARDDEMO",
+      "kind": "job",
+      "name": "CBEXPORT",
+      "dataset": "AWS.M2.CARDDEMO.ACCTDATA.VSAM.KSDS",
+      "direction": "R",
+      "status": "PROVEN",
+      "evidence": [
+        "app/cbl/CBEXPORT.cbl:41",
+        "app/jcl/CBEXPORT.jcl:51"
+      ],
+      "step": "STEP02",
+      "basis": "OPEN/utility evidence"
+    },
+    {
+      "module": "CARDDEMO",
+      "kind": "job",
+      "name": "CBEXPORT",
+      "dataset": "AWS.M2.CARDDEMO.CARDXREF.VSAM.KSDS",
+      "direction": "R",
+      "status": "PROVEN",
+      "evidence": [
+        "app/cbl/CBEXPORT.cbl:47",
+        "app/jcl/CBEXPORT.jcl:53"
+      ],
+      "step": "STEP02",
+      "basis": "OPEN/utility evidence"
+    },
+    {
+      "module": "CARDDEMO",
+      "kind": "job",
+      "name": "COMBTRAN",
+      "dataset": "AWS.M2.CARDDEMO.SYSTRAN",
+      "direction": "R",
+      "status": "PROVEN",
+      "evidence": [
+        "app/jcl/COMBTRAN.jcl:21-30",
+        "app/scheduler/CardDemo.controlm:72-78"
+      ],
+      "step": "STEP05R",
+      "generation": "0",
+      "basis": "Concatenated SORTIN; GDG roll from prior job (+1)"
+    },
+    {
+      "module": "CARDDEMO",
+      "kind": "job",
+      "name": "COMBTRAN",
+      "dataset": "AWS.M2.CARDDEMO.SYSTRAN",
+      "direction": "RW",
+      "status": "CANDIDATE",
+      "evidence": [
+        "app/jcl/COMBTRAN.jcl:25"
+      ],
+      "step": "STEP05R",
+      "basis": "Allocation only; R/W possibilities, execution and direction not proven"
+    },
+    {
+      "module": "CARDDEMO",
+      "kind": "job",
+      "name": "CREASTMT",
+      "dataset": "AWS.M2.CARDDEMO.ACCTDATA.VSAM.KSDS",
+      "direction": "R",
+      "status": "PROVEN",
+      "evidence": [
+        "app/cbl/CBSTM03B.CBL:49",
+        "app/jcl/CREASTMT.JCL:85"
+      ],
+      "step": "STEP040",
+      "basis": "OPEN/utility evidence"
+    },
+    {
+      "module": "CARDDEMO",
+      "kind": "job",
+      "name": "CREASTMT",
+      "dataset": "AWS.M2.CARDDEMO.CARDXREF.VSAM.KSDS",
+      "direction": "R",
+      "status": "PROVEN",
+      "evidence": [
+        "app/cbl/CBSTM03B.CBL:37",
+        "app/jcl/CREASTMT.JCL:84"
+      ],
+      "step": "STEP040",
+      "basis": "OPEN/utility evidence"
+    },
+    {
+      "module": "CARDDEMO",
+      "kind": "job",
+      "name": "DEFGDGB",
+      "dataset": "AWS.M2.CARDDEMO.SYSTRAN",
+      "direction": "W",
+      "status": "PROVEN",
+      "evidence": [
+        "app/jcl/DEFGDGB.jcl:48"
+      ],
+      "step": "STEP05",
+      "basis": "IDCAMS definition; setup/administration, not stream logic"
+    },
+    {
+      "module": "CARDDEMO",
+      "kind": "job",
+      "name": "DISCGRP",
+      "dataset": "AWS.M2.CARDDEMO.DISCGRP.VSAM.KSDS",
+      "direction": "W",
+      "status": "PROVEN",
+      "evidence": [
+        "app/jcl/DISCGRP.jcl:25"
+      ],
+      "step": "STEP05",
+      "basis": "IDCAMS deletion; destructive setup/administration"
+    },
+    {
+      "module": "CARDDEMO",
+      "kind": "job",
+      "name": "DISCGRP",
+      "dataset": "AWS.M2.CARDDEMO.DISCGRP.VSAM.KSDS",
+      "direction": "W",
+      "status": "PROVEN",
+      "evidence": [
+        "app/jcl/DISCGRP.jcl:36"
+      ],
+      "step": "STEP10",
+      "basis": "IDCAMS definition; setup/administration, not stream logic"
+    },
+    {
+      "module": "CARDDEMO",
+      "kind": "job",
+      "name": "DISCGRP",
+      "dataset": "AWS.M2.CARDDEMO.DISCGRP.VSAM.KSDS",
+      "direction": "W",
+      "status": "PROVEN",
+      "evidence": [
+        "app/jcl/DISCGRP.jcl:58",
+        "app/jcl/DISCGRP.jcl:61"
+      ],
+      "step": "STEP15",
+      "basis": "OPEN/utility evidence"
+    },
+    {
+      "module": "CARDDEMO",
+      "kind": "job",
+      "name": "FEECALC",
+      "dataset": "AWS.M2.CARDDEMO.ACCTDATA.VSAM.KSDS",
+      "direction": "R",
+      "status": "PROVEN",
+      "evidence": [
+        "app/cbl/CBFEEDRV.cbl:32",
+        "app/jcl/FEECALC.jcl:27"
+      ],
+      "step": "STEP05",
+      "basis": "OPEN/utility evidence"
+    },
+    {
+      "module": "CARDDEMO",
+      "kind": "job",
+      "name": "POSTTRAN",
+      "dataset": "AWS.M2.CARDDEMO.ACCTDATA.VSAM.KSDS",
+      "direction": "RW",
+      "status": "PROVEN",
+      "evidence": [
+        "app/cbl/CBTRN02C.cbl:51",
+        "app/jcl/POSTTRAN.jcl:39"
+      ],
+      "step": "STEP15",
+      "basis": "OPEN/utility evidence"
+    },
+    {
+      "module": "CARDDEMO",
+      "kind": "job",
+      "name": "POSTTRAN",
+      "dataset": "AWS.M2.CARDDEMO.CARDXREF.VSAM.KSDS",
+      "direction": "R",
+      "status": "PROVEN",
+      "evidence": [
+        "app/cbl/CBTRN02C.cbl:40",
+        "app/jcl/POSTTRAN.jcl:32"
+      ],
+      "step": "STEP15",
+      "basis": "OPEN/utility evidence"
+    },
+    {
+      "module": "CARDDEMO",
+      "kind": "job",
+      "name": "POSTTRAN",
+      "dataset": "AWS.M2.CARDDEMO.TCATBALF.VSAM.KSDS",
+      "direction": "RW",
+      "status": "PROVEN",
+      "evidence": [
+        "app/cbl/CBTRN02C.cbl:57",
+        "app/jcl/POSTTRAN.jcl:41"
+      ],
+      "step": "STEP15",
+      "basis": "OPEN/utility evidence"
+    },
+    {
+      "module": "CARDDEMO",
+      "kind": "job",
+      "name": "PRTCATBL",
+      "dataset": "AWS.M2.CARDDEMO.TCATBALF.VSAM.KSDS",
+      "direction": "RW",
+      "status": "CANDIDATE",
+      "evidence": [
+        "app/jcl/PRTCATBL.jcl:32"
+      ],
+      "step": "STEP05R",
+      "basis": "Allocation only; R/W possibilities, execution and direction not proven"
+    },
+    {
+      "module": "CARDDEMO",
+      "kind": "job",
+      "name": "READACCT",
+      "dataset": "AWS.M2.CARDDEMO.ACCTDATA.VSAM.KSDS",
+      "direction": "R",
+      "status": "PROVEN",
+      "evidence": [
+        "app/cbl/CBACT01C.cbl:29",
+        "app/jcl/READACCT.jcl:35"
+      ],
+      "step": "STEP05",
+      "basis": "OPEN/utility evidence"
+    },
+    {
+      "module": "CARDDEMO",
+      "kind": "job",
+      "name": "READXREF",
+      "dataset": "AWS.M2.CARDDEMO.CARDXREF.VSAM.KSDS",
+      "direction": "R",
+      "status": "PROVEN",
+      "evidence": [
+        "app/cbl/CBACT03C.cbl:29",
+        "app/jcl/READXREF.jcl:25"
+      ],
+      "step": "STEP05",
+      "basis": "OPEN/utility evidence"
+    },
+    {
+      "module": "CARDDEMO",
+      "kind": "job",
+      "name": "TCATBALF",
+      "dataset": "AWS.M2.CARDDEMO.TCATBALF.VSAM.KSDS",
+      "direction": "W",
+      "status": "PROVEN",
+      "evidence": [
+        "app/jcl/TCATBALF.jcl:25"
+      ],
+      "step": "STEP05",
+      "basis": "IDCAMS deletion; destructive setup/administration"
+    },
+    {
+      "module": "CARDDEMO",
+      "kind": "job",
+      "name": "TCATBALF",
+      "dataset": "AWS.M2.CARDDEMO.TCATBALF.VSAM.KSDS",
+      "direction": "W",
+      "status": "PROVEN",
+      "evidence": [
+        "app/jcl/TCATBALF.jcl:36"
+      ],
+      "step": "STEP10",
+      "basis": "IDCAMS definition; setup/administration, not stream logic"
+    },
+    {
+      "module": "CARDDEMO",
+      "kind": "job",
+      "name": "TCATBALF",
+      "dataset": "AWS.M2.CARDDEMO.TCATBALF.VSAM.KSDS",
+      "direction": "W",
+      "status": "PROVEN",
+      "evidence": [
+        "app/jcl/TCATBALF.jcl:58",
+        "app/jcl/TCATBALF.jcl:61"
+      ],
+      "step": "STEP15",
+      "basis": "OPEN/utility evidence"
+    },
+    {
+      "module": "CARDDEMO",
+      "kind": "job",
+      "name": "TRANREPT",
+      "dataset": "AWS.M2.CARDDEMO.CARDXREF.VSAM.KSDS",
+      "direction": "R",
+      "status": "PROVEN",
+      "evidence": [
+        "app/cbl/CBTRN03C.cbl:33",
+        "app/jcl/TRANREPT.jcl:67"
+      ],
+      "step": "STEP10R",
+      "basis": "OPEN/utility evidence"
+    },
+    {
+      "module": "CARDDEMO",
+      "kind": "job",
+      "name": "XREFFILE",
+      "dataset": "AWS.M2.CARDDEMO.CARDXREF.VSAM.AIX.PATH",
+      "direction": "W",
+      "status": "PROVEN",
+      "evidence": [
+        "app/jcl/XREFFILE.jcl:90"
+      ],
+      "step": "STEP25",
+      "basis": "IDCAMS definition; setup/administration, not stream logic"
+    },
+    {
+      "module": "CARDDEMO",
+      "kind": "job",
+      "name": "XREFFILE",
+      "dataset": "AWS.M2.CARDDEMO.CARDXREF.VSAM.KSDS",
+      "direction": "W",
+      "status": "PROVEN",
+      "evidence": [
+        "app/jcl/XREFFILE.jcl:25"
+      ],
+      "step": "STEP05",
+      "basis": "IDCAMS deletion; destructive setup/administration"
+    },
+    {
+      "module": "CARDDEMO",
+      "kind": "job",
+      "name": "XREFFILE",
+      "dataset": "AWS.M2.CARDDEMO.CARDXREF.VSAM.KSDS",
+      "direction": "W",
+      "status": "PROVEN",
+      "evidence": [
+        "app/jcl/XREFFILE.jcl:39"
+      ],
+      "step": "STEP10",
+      "basis": "IDCAMS definition; setup/administration, not stream logic"
+    },
+    {
+      "module": "CARDDEMO",
+      "kind": "job",
+      "name": "XREFFILE",
+      "dataset": "AWS.M2.CARDDEMO.CARDXREF.VSAM.KSDS",
+      "direction": "W",
+      "status": "PROVEN",
+      "evidence": [
+        "app/jcl/XREFFILE.jcl:61",
+        "app/jcl/XREFFILE.jcl:64"
+      ],
+      "step": "STEP15",
+      "basis": "OPEN/utility evidence"
+    },
+    {
+      "module": "CARDDEMO",
+      "kind": "program",
+      "name": "CBACT01C",
+      "dataset": "AWS.M2.CARDDEMO.ACCTDATA.VSAM.KSDS",
+      "direction": "R",
+      "status": "PROVEN",
+      "evidence": [
+        "app/cbl/CBACT01C.cbl:29",
+        "app/cbl/CBACT01C.cbl:319",
+        "app/jcl/READACCT.jcl:35"
+      ]
+    },
+    {
+      "module": "CARDDEMO",
+      "kind": "program",
+      "name": "CBACT03C",
+      "dataset": "AWS.M2.CARDDEMO.CARDXREF.VSAM.KSDS",
+      "direction": "R",
+      "status": "PROVEN",
+      "evidence": [
+        "app/cbl/CBACT03C.cbl:120",
+        "app/cbl/CBACT03C.cbl:29",
+        "app/jcl/READXREF.jcl:25"
+      ]
+    },
+    {
+      "module": "CARDDEMO",
+      "kind": "program",
+      "name": "CBEXPORT",
+      "dataset": "AWS.M2.CARDDEMO.ACCTDATA.VSAM.KSDS",
+      "direction": "R",
+      "status": "PROVEN",
+      "evidence": [
+        "app/cbl/CBEXPORT.cbl:207",
+        "app/cbl/CBEXPORT.cbl:41",
+        "app/jcl/CBEXPORT.jcl:51"
+      ]
+    },
+    {
+      "module": "CARDDEMO",
+      "kind": "program",
+      "name": "CBEXPORT",
+      "dataset": "AWS.M2.CARDDEMO.CARDXREF.VSAM.KSDS",
+      "direction": "R",
+      "status": "PROVEN",
+      "evidence": [
+        "app/cbl/CBEXPORT.cbl:214",
+        "app/cbl/CBEXPORT.cbl:47",
+        "app/jcl/CBEXPORT.jcl:53"
+      ]
+    },
+    {
+      "module": "CARDDEMO",
+      "kind": "program",
+      "name": "CBFEEDRV",
+      "dataset": "AWS.M2.CARDDEMO.ACCTDATA.VSAM.KSDS",
+      "direction": "R",
+      "status": "PROVEN",
+      "evidence": [
+        "app/cbl/CBFEEDRV.cbl:32",
+        "app/cbl/CBFEEDRV.cbl:75",
+        "app/jcl/FEECALC.jcl:27"
+      ]
+    },
+    {
+      "module": "CARDDEMO",
+      "kind": "program",
+      "name": "CBSTM03B",
+      "dataset": "AWS.M2.CARDDEMO.ACCTDATA.VSAM.KSDS",
+      "direction": "R",
+      "status": "PROVEN",
+      "evidence": [
+        "app/cbl/CBSTM03B.CBL:209",
+        "app/cbl/CBSTM03B.CBL:49",
+        "app/jcl/CREASTMT.JCL:85"
+      ]
+    },
+    {
+      "module": "CARDDEMO",
+      "kind": "program",
+      "name": "CBSTM03B",
+      "dataset": "AWS.M2.CARDDEMO.CARDXREF.VSAM.KSDS",
+      "direction": "R",
+      "status": "PROVEN",
+      "evidence": [
+        "app/cbl/CBSTM03B.CBL:160",
+        "app/cbl/CBSTM03B.CBL:37",
+        "app/jcl/CREASTMT.JCL:84"
+      ]
+    },
+    {
+      "module": "CARDDEMO",
+      "kind": "program",
+      "name": "CBTRN02C",
+      "dataset": "AWS.M2.CARDDEMO.ACCTDATA.VSAM.KSDS",
+      "direction": "RW",
+      "status": "PROVEN",
+      "evidence": [
+        "app/cbl/CBTRN02C.cbl:311",
+        "app/cbl/CBTRN02C.cbl:51",
+        "app/jcl/POSTTRAN.jcl:39"
+      ]
+    },
+    {
+      "module": "CARDDEMO",
+      "kind": "program",
+      "name": "CBTRN02C",
+      "dataset": "AWS.M2.CARDDEMO.CARDXREF.VSAM.KSDS",
+      "direction": "R",
+      "status": "PROVEN",
+      "evidence": [
+        "app/cbl/CBTRN02C.cbl:275",
+        "app/cbl/CBTRN02C.cbl:40",
+        "app/jcl/POSTTRAN.jcl:32"
+      ]
+    },
+    {
+      "module": "CARDDEMO",
+      "kind": "program",
+      "name": "CBTRN02C",
+      "dataset": "AWS.M2.CARDDEMO.TCATBALF.VSAM.KSDS",
+      "direction": "RW",
+      "status": "PROVEN",
+      "evidence": [
+        "app/cbl/CBTRN02C.cbl:329",
+        "app/cbl/CBTRN02C.cbl:57",
+        "app/jcl/POSTTRAN.jcl:41"
+      ]
+    },
+    {
+      "module": "CARDDEMO",
+      "kind": "program",
+      "name": "CBTRN03C",
+      "dataset": "AWS.M2.CARDDEMO.CARDXREF.VSAM.KSDS",
+      "direction": "R",
+      "status": "PROVEN",
+      "evidence": [
+        "app/cbl/CBTRN03C.cbl:33",
+        "app/cbl/CBTRN03C.cbl:414",
+        "app/jcl/TRANREPT.jcl:67"
+      ]
+    }
+  ],
+  "module_coverage": [
+    {
+      "module": "AUTH",
+      "datasets_examined": 21,
+      "jobs_examined": 5,
+      "transactions_examined": 3,
+      "evidence": [
+        "store/AUTH/connections.json:1",
+        "store/AUTH/jobs.json:1",
+        "store/AUTH/online.json:1"
+      ]
+    },
+    {
+      "module": "CARDDEMO",
+      "datasets_examined": 69,
+      "jobs_examined": 39,
+      "transactions_examined": 18,
+      "evidence": [
+        "store/CARDDEMO/connections.json:1",
+        "store/CARDDEMO/jobs.json:1",
+        "store/CARDDEMO/online.json:1"
+      ]
+    },
+    {
+      "module": "TRANTYPE",
+      "datasets_examined": 13,
+      "jobs_examined": 4,
+      "transactions_examined": 2,
+      "evidence": [
+        "store/TRANTYPE/connections.json:1",
+        "store/TRANTYPE/jobs.json:1",
+        "store/TRANTYPE/online.json:1"
+      ]
+    },
+    {
+      "module": "VSAMMQ",
+      "datasets_examined": 0,
+      "jobs_examined": 0,
+      "transactions_examined": 2,
+      "evidence": [
+        "store/VSAMMQ/connections.json:1",
+        "store/VSAMMQ/jobs.json:1",
+        "store/VSAMMQ/online.json:1"
+      ]
+    }
+  ],
+  "scheduler": {
+    "jobs": [
+      {
+        "job": "CLOSEFIL",
+        "role": "scheduler neighbour",
+        "jobisn": "1",
+        "maxrerun": "5",
+        "incond": [],
+        "outcond": [
+          {
+            "NAME": "MONTHLY-InterestCalculation-CLOSEFIL",
+            "ODATE": "ODAT",
+            "SIGN": "+"
+          }
+        ],
+        "evidence": [
+          "app/scheduler/CardDemo.controlm:65"
+        ]
+      },
+      {
+        "job": "INTCALC",
+        "role": "stream",
+        "jobisn": "2",
+        "maxrerun": "5",
+        "incond": [
+          {
+            "NAME": "MONTHLY-InterestCalculation-CLOSEFIL",
+            "ODATE": "ODAT",
+            "AND_OR": "A"
+          }
+        ],
+        "outcond": [
+          {
+            "NAME": "MONTHLY-InterestCalculation-CLOSEFIL",
+            "ODATE": "ODAT",
+            "SIGN": "-"
+          },
+          {
+            "NAME": "MONTHLY-InterestCalculation-INTCALC",
+            "ODATE": "ODAT",
+            "SIGN": "+"
+          }
+        ],
+        "evidence": [
+          "app/scheduler/CardDemo.controlm:69"
+        ]
+      },
+      {
+        "job": "COMBTRAN",
+        "role": "scheduler neighbour",
+        "jobisn": "3",
+        "maxrerun": "5",
+        "incond": [
+          {
+            "NAME": "MONTHLY-InterestCalculation-INTCALC",
+            "ODATE": "ODAT",
+            "AND_OR": "A"
+          }
+        ],
+        "outcond": [
+          {
+            "NAME": "MONTHLY-InterestCalculation-INTCALC",
+            "ODATE": "ODAT",
+            "SIGN": "-"
+          },
+          {
+            "NAME": "MONTHLY-InterestCalculation-COMBTRAN",
+            "ODATE": "ODAT",
+            "SIGN": "+"
+          }
+        ],
+        "evidence": [
+          "app/scheduler/CardDemo.controlm:75"
+        ]
+      },
+      {
+        "job": "WAITSTEP",
+        "role": "scheduler neighbour",
+        "jobisn": "4",
+        "maxrerun": "5",
+        "incond": [
+          {
+            "NAME": "MONTHLY-InterestCalculation-COMBTRAN",
+            "ODATE": "ODAT",
+            "AND_OR": "A"
+          }
+        ],
+        "outcond": [
+          {
+            "NAME": "MONTHLY-InterestCalculation-COMBTRAN",
+            "ODATE": "ODAT",
+            "SIGN": "-"
+          },
+          {
+            "NAME": "MONTHLY-InterestCalculation-WAITSTEP",
+            "ODATE": "ODAT",
+            "SIGN": "+"
+          }
+        ],
+        "evidence": [
+          "app/scheduler/CardDemo.controlm:81"
+        ]
+      },
+      {
+        "job": "OPENFIL",
+        "role": "scheduler neighbour",
+        "jobisn": "4",
+        "maxrerun": "5",
+        "incond": [
+          {
+            "NAME": "MONTHLY-InterestCalculation-WAITSTEP",
+            "ODATE": "ODAT",
+            "AND_OR": "A"
+          }
+        ],
+        "outcond": [
+          {
+            "NAME": "MONTHLY-InterestCalculation-WAITSTEP",
+            "ODATE": "ODAT",
+            "SIGN": "-"
+          }
+        ],
+        "evidence": [
+          "app/scheduler/CardDemo.controlm:87"
+        ]
+      }
+    ],
+    "edges": [
+      {
+        "source": "CLOSEFIL",
+        "target": "INTCALC",
+        "condition": "MONTHLY-InterestCalculation-CLOSEFIL",
+        "status": "PROVEN",
+        "evidence": [
+          "app/scheduler/CardDemo.controlm:66",
+          "app/scheduler/CardDemo.controlm:70"
+        ]
+      },
+      {
+        "source": "INTCALC",
+        "target": "COMBTRAN",
+        "condition": "MONTHLY-InterestCalculation-INTCALC",
+        "status": "PROVEN",
+        "evidence": [
+          "app/scheduler/CardDemo.controlm:72",
+          "app/scheduler/CardDemo.controlm:76"
+        ]
+      },
+      {
+        "source": "COMBTRAN",
+        "target": "WAITSTEP",
+        "condition": "MONTHLY-InterestCalculation-COMBTRAN",
+        "status": "PROVEN",
+        "evidence": [
+          "app/scheduler/CardDemo.controlm:78",
+          "app/scheduler/CardDemo.controlm:82"
+        ]
+      },
+      {
+        "source": "WAITSTEP",
+        "target": "OPENFIL",
+        "condition": "MONTHLY-InterestCalculation-WAITSTEP",
+        "status": "PROVEN",
+        "evidence": [
+          "app/scheduler/CardDemo.controlm:84",
+          "app/scheduler/CardDemo.controlm:88"
+        ]
+      }
+    ],
+    "not_proven": [
+      {
+        "detail": "No monthly/daily POSTTRAN ordering on ACCTDATA/TCATBALF or online exclusion is proven. SDSF effects remain opaque; WAITSTEP and OPENFIL duplicate JOBISN=4.",
+        "evidence": [
+          "app/scheduler/CardDemo.controlm:64-92",
+          "app/jcl/CLOSEFIL.jcl:22-32",
+          "app/jcl/OPENFIL.jcl:22-32",
+          "app/jcl/POSTTRAN.jcl:35-41",
+          "app/csd/CARDDEMO.CSD:1-17"
+        ]
+      }
+    ],
+    "neighbour_calls": [
+      {
+        "source": "COBSWAIT",
+        "target": "MVSWAIT",
+        "status": "PROVEN",
+        "in_scope": false,
+        "evidence": [
+          "app/cbl/COBSWAIT.cbl:38",
+          "app/asm/MVSWAIT.asm:17-27"
+        ]
+      }
+    ]
+  },
+  "discrepancies": [
+    {
+      "topic": "Stream versus folder",
+      "mftb_view": "Five scheduled jobs",
+      "chain_graph_view": "INTCALC plus setup jobs",
+      "source_decision": "Only INTCALC.STEP15 is stream logic; four neighbours remain outside.",
+      "evidence": [
+        "app/scheduler/CardDemo.controlm:64-92",
+        "tools/runjcl/chains.json:43-62"
+      ]
+    },
+    {
+      "topic": "SYSTRAN consumer",
+      "mftb_view": "chain-output-unconsumed (closed by skill)",
+      "chain_graph_view": "Output only",
+      "source_decision": "COMBTRAN.STEP05R reads SYSTRAN(0), rolling the previous job (+1).",
+      "evidence": [
+        "app/jcl/COMBTRAN.jcl:23-26",
+        "app/jcl/INTCALC.jcl:37-40"
+      ]
+    },
+    {
+      "topic": "Data directions",
+      "mftb_view": "OPEN-mode directions, with DISP fallback",
+      "chain_graph_view": "Undirected dotted data edges",
+      "source_decision": "ACCTFILE RW; TCATBALF/XREFFILE/DISCGRP R; TRANSACT W.",
+      "evidence": [
+        "app/cbl/CBACT04C.cbl:234-309",
+        "docs/chain-graph.md:112-119"
+      ]
+    },
+    {
+      "topic": "XREFFIL1",
+      "mftb_view": "DISP SHR fallback read",
+      "chain_graph_view": "No program data edge",
+      "source_decision": "Allocated AIX PATH, not SELECTed or opened; no data edge asserted.",
+      "evidence": [
+        "app/jcl/INTCALC.jcl:31",
+        "app/cbl/CBACT04C.cbl:27-56"
+      ]
+    },
+    {
+      "topic": "Cycle date",
+      "mftb_view": "Literal PARM",
+      "chain_graph_view": "No date semantics",
+      "source_decision": "2022071800 fixed, used in transaction ID; replacement policy unknown.",
+      "evidence": [
+        "app/jcl/INTCALC.jcl:22",
+        "app/cbl/CBACT04C.cbl:476-480"
+      ]
+    },
+    {
+      "topic": "Restart",
+      "mftb_view": "MAXRERUN=5 resubmission intent",
+      "chain_graph_view": "No restart guarantee",
+      "source_decision": "Partial update recovery not proven safe.",
+      "evidence": [
+        "app/scheduler/CardDemo.controlm:70",
+        "app/cbl/CBACT04C.cbl:350-356"
+      ]
+    },
+    {
+      "topic": "CA7 coverage",
+      "mftb_view": "CA7 CARDDEMO is separate from monthly folder",
+      "chain_graph_view": "Harness is scheduler-independent",
+      "source_decision": "CA7 lists CLOSEFIL/WAITSTEP/OPENFIL; no INTCALC or COMBTRAN in supplied export.",
+      "evidence": [
+        "app/scheduler/CardDemo.ca7:1-571"
+      ]
+    },
+    {
+      "topic": "Fee and EOF semantics",
+      "mftb_view": "Descriptions mention interest and fees",
+      "chain_graph_view": "Names interest calculation",
+      "source_decision": "Fee paragraph is EXIT only; no final-account update at EOF; preserve legacy semantics.",
+      "evidence": [
+        "app/cbl/CBACT04C.cbl:188-227",
+        "app/cbl/CBACT04C.cbl:518-520"
+      ]
+    }
+  ],
+  "toolbox_issues": [
+    {
+      "topic": "Concatenated SORTIN dropped",
+      "detail": "mftb reports SYSTRAN unconsumed; COMBTRAN.STEP05R reads it by GDG roll. Keep scanner JSON intact.",
+      "evidence": [
+        "app/jcl/COMBTRAN.jcl:23-26",
+        "store/CARDDEMO/chains.json:1"
+      ]
+    }
+  ],
+  "open_asks": [
+    {
+      "id": "interest-1",
+      "ask": "Operations/application owner: provide restore, checkpoint, GDG cleanup and duplicate prevention procedure.",
+      "owner": "Operations/application",
+      "detail": "MAXRERUN=5 does not prove safety after partial ACCTDATA updates and SYSTRAN(+1) creation.",
+      "evidence": [
+        "app/scheduler/CardDemo.controlm:70",
+        "app/jcl/INTCALC.jcl:33-40",
+        "app/cbl/CBACT04C.cbl:350-356"
+      ]
+    },
+    {
+      "id": "interest-2",
+      "ask": "Application/scheduler owner: provide cycle-date substitution policy and format.",
+      "owner": "Scheduler/application",
+      "detail": "PARM hard-codes 2022071800 and is used to build transaction IDs.",
+      "evidence": [
+        "app/jcl/INTCALC.jcl:22",
+        "app/cbl/CBACT04C.cbl:476-480"
+      ]
+    },
+    {
+      "id": "interest-3",
+      "ask": "Scheduler/CICS owner: supply production ordering, quiescence evidence and validated folder identifiers.",
+      "owner": "Scheduler/CICS",
+      "detail": "Cross-folder and online exclusion is unproven; SDSF effects are opaque and WAITSTEP/OPENFIL both have JOBISN=4.",
+      "evidence": [
+        "app/scheduler/CardDemo.controlm:64-92",
+        "app/jcl/CLOSEFIL.jcl:22-32",
+        "app/jcl/OPENFIL.jcl:22-32",
+        "app/csd/CARDDEMO.CSD:1-17"
+      ]
+    },
+    {
+      "id": "interest-4",
+      "ask": "Supply production binder/load-library provenance; off-host build does not prove deployed module identity.",
+      "owner": "Build/release",
+      "evidence": [
+        "tools/build.sh:18-35",
+        "app/jcl/INTCALC.jcl:22-23"
+      ]
+    }
+  ],
+  "scanner_summary": {
+    "detail": "Monthly scan has 5 jobs; source decisions above do not modify scanner facts.",
+    "evidence": [
+      "store/CARDDEMO/chains.json:1"
+    ]
+  },
+  "counts": {
+    "baseline.evidence": 1,
+    "root.evidence": 1,
+    "scheduler_folder.evidence": 1,
+    "in_scope.jobs": 1,
+    "in_scope.steps": 1,
+    "in_scope.programs": 1,
+    "in_scope.copybooks": 5,
+    "in_scope.datasets": 6,
+    "edges": 9,
+    "setup_jobs": 5,
+    "outside_dependencies": 237,
+    "module_coverage": 4,
+    "scheduler.jobs": 5,
+    "scheduler.edges": 4,
+    "scheduler.not_proven": 1,
+    "scheduler.neighbour_calls": 1,
+    "discrepancies": 8,
+    "toolbox_issues": 1,
+    "open_asks": 4,
+    "scanner_summary.evidence": 1
+  }
+}
