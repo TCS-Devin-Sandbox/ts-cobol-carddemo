@@ -15,6 +15,24 @@ class StreamTest(unittest.TestCase):
         self.assertTrue(any(x['name'] == 'COMBTRAN' and x['generation'] == '0'
                             for x in m['outside_dependencies'] if 'generation' in x))
         self.assertFalse(any(x.get('dd') == 'XREFFIL1' for x in m['edges']))
+        bindings = [x for x in m['edges'] if x['kind'] == 'load-binding']
+        self.assertEqual(len(bindings), 2)
+        self.assertEqual(bindings[0]['status'], 'PROVEN')
+        self.assertEqual(bindings[0]['scope'], 'off-host loadlib')
+        self.assertEqual(bindings[0]['evidence'], ['tools/build.sh:18-35'])
+        self.assertEqual(bindings[1]['status'], 'CANDIDATE')
+        self.assertEqual(bindings[1]['open_ask'], 'interest-4')
+        self.assertIn('AWS.M2.CARDDEMO.LOADLIB', bindings[1]['source'])
+        self.assertIn(bindings[1]['open_ask'], [a['id'] for a in m['open_asks']])
+        self.assertEqual({k: m['in_scope']['programs'][0][k]
+                          for k in ('file_name', 'program_id', 'load_module')},
+                         dict(file_name='CBACT04C.cbl', program_id='CBACT04C', load_module='CBACT04C'))
+        uncertainties = m['scheduler']['not_proven']
+        self.assertEqual(len(uncertainties), 5)
+        self.assertEqual(len({x['target'] for x in uncertainties}), 5)
+        self.assertTrue(all(x['evidence'] for x in uncertainties))
+        self.assertTrue(any(e['source'] == 'WAITSTEP' and e['target'] == 'OPENFIL'
+                            and e['status'] == 'PROVEN' for e in m['scheduler']['edges']))
         raw = json.dumps(m, indent=2, ensure_ascii=False) + '\n'
         page = stream.render(m, raw)
         embedded = page.split('<script id="manifest" type="application/json">')[1].split('</script>')[0]

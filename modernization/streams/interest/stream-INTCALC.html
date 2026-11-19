@@ -646,13 +646,57 @@
   ],
   &quot;not_proven&quot;: [
     {
-      &quot;detail&quot;: &quot;No monthly/daily POSTTRAN ordering on ACCTDATA/TCATBALF or online exclusion is proven. SDSF effects remain opaque; WAITSTEP and OPENFIL duplicate JOBISN=4.&quot;,
+      &quot;source&quot;: &quot;INTCALC&quot;,
+      &quot;target&quot;: &quot;POSTTRAN / daily CARDDEMO table&quot;,
+      &quot;detail&quot;: &quot;Ordering on shared ACCTDATA and TCATBALF is not proven between the monthly folder and the separate CA7 CARDDEMO table.&quot;,
       &quot;evidence&quot;: [
         &quot;app/scheduler/CardDemo.controlm:64-92&quot;,
+        &quot;app/scheduler/CardDemo.ca7:70-97&quot;,
+        &quot;app/jcl/POSTTRAN.jcl:39-42&quot;,
+        &quot;app/jcl/INTCALC.jcl:27-34&quot;
+      ]
+    },
+    {
+      &quot;source&quot;: &quot;INTCALC&quot;,
+      &quot;target&quot;: &quot;CICS online updates&quot;,
+      &quot;detail&quot;: &quot;Online update exclusion is not proven: CLOSEFIL/OPENFIL SDSF runtime effects are opaque; scheduled close/open names do not prove quiescence.&quot;,
+      &quot;evidence&quot;: [
         &quot;app/jcl/CLOSEFIL.jcl:22-32&quot;,
         &quot;app/jcl/OPENFIL.jcl:22-32&quot;,
-        &quot;app/jcl/POSTTRAN.jcl:35-41&quot;,
-        &quot;app/csd/CARDDEMO.CSD:1-17&quot;
+        &quot;app/csd/CARDDEMO.CSD:1-17&quot;,
+        &quot;app/cbl/COACTUPC.cbl:4065&quot;,
+        &quot;app/scheduler/CardDemo.controlm:64-92&quot;
+      ]
+    },
+    {
+      &quot;source&quot;: &quot;WAITSTEP&quot;,
+      &quot;target&quot;: &quot;OPENFIL&quot;,
+      &quot;detail&quot;: &quot;Both have JOBISN=4. WAITSTEP OUTCOND and OPENFIL INCOND prove a condition edge; this is the only explicit ordering mechanism between them in the supplied folder. Import/runtime behavior with duplicate identifiers remains unproven.&quot;,
+      &quot;evidence&quot;: [
+        &quot;app/scheduler/CardDemo.controlm:81-90&quot;
+      ]
+    },
+    {
+      &quot;source&quot;: &quot;INTCALC&quot;,
+      &quot;target&quot;: &quot;DisclosureGroupsRefresh.DISCGRP&quot;,
+      &quot;detail&quot;: &quot;Ordering is not proven between INTCALC reading DISCGRP and DisclosureGroupsRefresh deleting, redefining and loading it; the weekly folder conditions do not name the monthly folder.&quot;,
+      &quot;evidence&quot;: [
+        &quot;app/scheduler/CardDemo.controlm:32-56&quot;,
+        &quot;app/scheduler/CardDemo.controlm:64-92&quot;,
+        &quot;app/jcl/DISCGRP.jcl:25-26&quot;,
+        &quot;app/jcl/DISCGRP.jcl:36-49&quot;,
+        &quot;app/jcl/DISCGRP.jcl:54-61&quot;,
+        &quot;app/jcl/INTCALC.jcl:35-36&quot;,
+        &quot;app/cbl/CBACT04C.cbl:272&quot;
+      ]
+    },
+    {
+      &quot;source&quot;: &quot;MONTHLY-InterestCalculation&quot;,
+      &quot;target&quot;: &quot;Other scheduler folders/tables&quot;,
+      &quot;detail&quot;: &quot;No cross-folder trigger into or out of the monthly folder appears in the supplied Control-M export: its INCOND/OUTCOND names are internal. External production triggers or cross-scheduler dependencies are not proven absent.&quot;,
+      &quot;evidence&quot;: [
+        &quot;app/scheduler/CardDemo.controlm:1-93&quot;,
+        &quot;app/scheduler/CardDemo.ca7:1-571&quot;
       ]
     }
   ],
@@ -1279,9 +1323,22 @@
       "source": "load-module:CBACT04C",
       "target": "app/cbl/CBACT04C.cbl",
       "status": "PROVEN",
-      "basis": "Off-host build binding only; production binder map not supplied",
+      "scope": "off-host loadlib",
+      "basis": "Harness compiles source basename into loadlib",
       "evidence": [
-        "tools/build.sh:18-35",
+        "tools/build.sh:18-35"
+      ]
+    },
+    {
+      "kind": "load-binding",
+      "source": "AWS.M2.CARDDEMO.LOADLIB:CBACT04C",
+      "target": "app/cbl/CBACT04C.cbl",
+      "status": "CANDIDATE",
+      "scope": "production load module",
+      "open_ask": "interest-4",
+      "basis": "names match (PGM=, file stem, PROGRAM-ID) but no binder map/link-edit listing supplied",
+      "evidence": [
+        "app/jcl/INTCALC.jcl:22-23",
         "app/cbl/CBACT04C.cbl:23"
       ]
     },
@@ -5247,13 +5304,57 @@
     ],
     "not_proven": [
       {
-        "detail": "No monthly/daily POSTTRAN ordering on ACCTDATA/TCATBALF or online exclusion is proven. SDSF effects remain opaque; WAITSTEP and OPENFIL duplicate JOBISN=4.",
+        "source": "INTCALC",
+        "target": "POSTTRAN / daily CARDDEMO table",
+        "detail": "Ordering on shared ACCTDATA and TCATBALF is not proven between the monthly folder and the separate CA7 CARDDEMO table.",
         "evidence": [
           "app/scheduler/CardDemo.controlm:64-92",
+          "app/scheduler/CardDemo.ca7:70-97",
+          "app/jcl/POSTTRAN.jcl:39-42",
+          "app/jcl/INTCALC.jcl:27-34"
+        ]
+      },
+      {
+        "source": "INTCALC",
+        "target": "CICS online updates",
+        "detail": "Online update exclusion is not proven: CLOSEFIL/OPENFIL SDSF runtime effects are opaque; scheduled close/open names do not prove quiescence.",
+        "evidence": [
           "app/jcl/CLOSEFIL.jcl:22-32",
           "app/jcl/OPENFIL.jcl:22-32",
-          "app/jcl/POSTTRAN.jcl:35-41",
-          "app/csd/CARDDEMO.CSD:1-17"
+          "app/csd/CARDDEMO.CSD:1-17",
+          "app/cbl/COACTUPC.cbl:4065",
+          "app/scheduler/CardDemo.controlm:64-92"
+        ]
+      },
+      {
+        "source": "WAITSTEP",
+        "target": "OPENFIL",
+        "detail": "Both have JOBISN=4. WAITSTEP OUTCOND and OPENFIL INCOND prove a condition edge; this is the only explicit ordering mechanism between them in the supplied folder. Import/runtime behavior with duplicate identifiers remains unproven.",
+        "evidence": [
+          "app/scheduler/CardDemo.controlm:81-90"
+        ]
+      },
+      {
+        "source": "INTCALC",
+        "target": "DisclosureGroupsRefresh.DISCGRP",
+        "detail": "Ordering is not proven between INTCALC reading DISCGRP and DisclosureGroupsRefresh deleting, redefining and loading it; the weekly folder conditions do not name the monthly folder.",
+        "evidence": [
+          "app/scheduler/CardDemo.controlm:32-56",
+          "app/scheduler/CardDemo.controlm:64-92",
+          "app/jcl/DISCGRP.jcl:25-26",
+          "app/jcl/DISCGRP.jcl:36-49",
+          "app/jcl/DISCGRP.jcl:54-61",
+          "app/jcl/INTCALC.jcl:35-36",
+          "app/cbl/CBACT04C.cbl:272"
+        ]
+      },
+      {
+        "source": "MONTHLY-InterestCalculation",
+        "target": "Other scheduler folders/tables",
+        "detail": "No cross-folder trigger into or out of the monthly folder appears in the supplied Control-M export: its INCOND/OUTCOND names are internal. External production triggers or cross-scheduler dependencies are not proven absent.",
+        "evidence": [
+          "app/scheduler/CardDemo.controlm:1-93",
+          "app/scheduler/CardDemo.ca7:1-571"
         ]
       }
     ],
@@ -5420,13 +5521,13 @@
     "in_scope.programs": 1,
     "in_scope.copybooks": 5,
     "in_scope.datasets": 6,
-    "edges": 9,
+    "edges": 10,
     "setup_jobs": 5,
     "outside_dependencies": 237,
     "module_coverage": 4,
     "scheduler.jobs": 5,
     "scheduler.edges": 4,
-    "scheduler.not_proven": 1,
+    "scheduler.not_proven": 5,
     "scheduler.neighbour_calls": 1,
     "discrepancies": 8,
     "toolbox_issues": 1,
