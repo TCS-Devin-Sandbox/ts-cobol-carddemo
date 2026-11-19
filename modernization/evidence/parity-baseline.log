@@ -1,0 +1,65 @@
+docker compose up -d --build --wait
+ ✔ Image ts-cobol-carddemo-estate       Built                               0.6s
+ ✔ Container ts-cobol-carddemo-db-1     Running                             0.0s
+ ✔ Container ts-cobol-carddemo-estate-1 Running                             0.0s
+ ✔ Container carddemo-postgres          Running                             0.0s
+ ✔ Container ts-cobol-carddemo-db-1     Healthy                             1.0s
+ ✔ Container ts-cobol-carddemo-estate-1 Healthy                             1.0s
+ ✔ Container carddemo-postgres          Healthy                             1.0s
+docker compose up -d --build --wait
+ ✔ Image ts-cobol-carddemo-estate       Built                               0.4s
+ ✔ Container carddemo-postgres          Running                             0.0s
+ ✔ Container ts-cobol-carddemo-estate-1 Running                             0.0s
+ ✔ Container carddemo-postgres          Healthy                             1.0s
+ ✔ Container ts-cobol-carddemo-db-1     Healthy                             1.0s
+ ✔ Container ts-cobol-carddemo-estate-1 Healthy                             1.0s
+docker compose exec -T estate tools/build.sh
+CBACT01C: compiled
+CBACT02C: compiled
+CBACT03C: compiled
+CBACT04C: compiled
+CBCUS01C: compiled
+CBEXPORT: skipped (known GnuCOBOL failure, docs/BASELINE.md)
+CBFEEDRV: compiled
+CBIMPORT: skipped (known GnuCOBOL failure, docs/BASELINE.md)
+CBTRN01C: compiled
+CBTRN02C: compiled
+CBTRN03C: compiled
+CSUTLDTC: compiled
+COBSWAIT: compiled
+PARMDRV: compiled
+CEE3ABD: compiled
+esql_prep: app/app-transaction-type-db2/dcl/DCLTRCAT.dcl: removed EXEC SQL DECLARE ... TABLE
+esql_prep: app/app-transaction-type-db2/dcl/DCLTRTYP.dcl: removed EXEC SQL DECLARE ... TABLE
+esql_prep: app/app-transaction-type-db2/cbl/CBTRNDYN.cbl: columns 73-80 only
+esql_prep: app/app-transaction-type-db2/cbl/COBTUPDT.cbl: joined multi-line INCLUDE SQLCA
+CBTRNDYN: precompiled (ocesql) and compiled
+COBTUPDT: precompiled (ocesql) and compiled
+DSNEXIT: precompiled (ocesql) and compiled
+DSNRUN: precompiled (ocesql) and compiled
+posting/p01-baseline-mixed [legacy rerun]: PASS (23 records, 92 fields, 0 differences)
+posting/p02-invalid-card [legacy rerun]: PASS (12 records, 44 fields, 0 differences)
+posting/p03-account-missing [legacy rerun]: PASS (12 records, 44 fields, 0 differences)
+posting/p04-overlimit-reject [legacy rerun]: PASS (12 records, 44 fields, 0 differences)
+posting/p05-expired-account [legacy rerun]: PASS (14 records, 60 fields, 0 differences)
+posting/p06-credits-new-category [legacy rerun]: PASS (18 records, 67 fields, 0 differences)
+posting/p07-empty-day [legacy rerun]: PASS (2 records, 16 fields, 0 differences)
+interest/i01-baseline [legacy rerun]: PASS (4 records, 50 fields, 0 differences)
+interest/i02-tie-half-cent [legacy rerun]: PASS (4 records, 50 fields, 0 differences)
+interest/i03-zero-rate-skipped [legacy rerun]: PASS (2 records, 25 fields, 0 differences)
+interest/i04-default-group-fallback [legacy rerun]: PASS (2 records, 25 fields, 0 differences)
+interest/i05-multi-category [legacy rerun]: PASS (3 records, 38 fields, 0 differences)
+interest/i06-negative-balance [legacy rerun]: PASS (2 records, 25 fields, 0 differences)
+interest/i07-nontie-rounding [legacy rerun]: PASS (4 records, 50 fields, 0 differences)
+trantype-update/t01-add [legacy rerun]: PASS (0 records, 0 fields, 0 differences)
+trantype-update/t02-update [legacy rerun]: PASS (0 records, 0 fields, 0 differences)
+trantype-update/t03-delete [legacy rerun]: PASS (0 records, 0 fields, 0 differences)
+trantype-update/t04-comments [legacy rerun]: PASS (0 records, 0 fields, 0 differences)
+trantype-update/t05-delete-missing [legacy rerun]: PASS (0 records, 0 fields, 0 differences)
+trantype-update/t06-duplicate-add [legacy rerun]: PASS (0 records, 0 fields, 0 differences)
+trantype-update/t07-mixed-batch [legacy rerun]: PASS (0 records, 0 fields, 0 differences)
+trantype-dynamic/d01-update-then-apply [legacy rerun]: PASS (0 records, 0 fields, 0 differences)
+trantype-dynamic/d02-delete-statement [legacy rerun]: PASS (0 records, 0 fields, 0 differences)
+trantype-dynamic/d03-bad-statement [legacy rerun]: PASS (0 records, 0 fields, 0 differences)
+report: work/parity/report.md
+EXIT=0
