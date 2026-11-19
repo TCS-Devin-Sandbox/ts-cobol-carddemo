@@ -1,0 +1,275 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'unsafe-inline'; style-src 'unsafe-inline'; img-src data:; base-uri 'none'; form-action 'none'">
+<link rel="icon" href="data:,">
+<title>Interest migration strategy · INTCALC</title>
+<style>
+:root{color-scheme:light;--ink:#13243a;--muted:#425570;--paper:#f3f6fa;--panel:#fff;--line:#cad6e5;--accent:#075d62;--soft:#e3f2ef;--nav:#10364b}
+*{box-sizing:border-box}
+body{margin:0;background:var(--paper);color:var(--ink);font:1rem/1.55 system-ui,sans-serif}
+a{color:var(--accent);text-underline-offset:.2em}
+.wrap{max-width:74rem;margin:auto;padding:0 clamp(1rem,4vw,3rem)}
+header{background:var(--nav);color:white;padding:1rem 0 1.7rem}
+header a{color:#e6fffa} header nav,header .kicker{font-size:.83rem;letter-spacing:.06em}nav{display:flex;gap:1.3rem;flex-wrap:wrap}
+.kicker{color:#bdede5;font-weight:750;text-transform:uppercase;margin:1.4rem 0 .25rem}
+h1{font-size:clamp(2rem,5vw,3.25rem);line-height:1.1;margin:.2rem 0 .5rem;letter-spacing:-.035em}
+header p{margin:.4rem 0}.baseline{font-size:.83rem;overflow-wrap:anywhere;color:#e1ecf3}
+main{padding-block:1.35rem 2rem!important} h2{font-size:1.45rem;margin:.35rem 0 .8rem}
+a:focus-visible,button:focus-visible,summary:focus-visible,select:focus-visible,[tabindex="-1"]:focus-visible{outline:3px solid #b76300;outline-offset:4px}
+.stats,.cards{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:.75rem}
+.stats{margin-bottom:1.4rem}.stat,.card,details,.figure{background:var(--panel);border:1px solid var(--line);border-radius:.7rem;padding:.8rem 1rem}
+.stat strong{font-size:1.55rem;display:block;line-height:1.1;color:var(--accent)}.stat span,.owner,.figure figcaption{color:var(--muted);font-size:.88rem}
+[role="tablist"]{display:flex;gap:.35rem;flex-wrap:wrap;border-bottom:1px solid var(--line);margin-bottom:1rem}
+button,select{font:inherit;color:inherit}button{border:1px solid transparent;background:transparent;padding:.55rem .9rem;cursor:pointer;font-weight:650}
+button[aria-selected="true"]{color:var(--accent);border-bottom:3px solid var(--accent);background:var(--soft)}
+[hidden]{display:none!important}.figure{margin:0 0 .7rem;overflow:auto}.figure svg{width:100%;min-width:38rem;display:block}.figure text{font:600 14px system-ui,sans-serif;fill:var(--ink)}
+.node{fill:#e3f2ef;stroke:#117174;stroke-width:1.5}.line{stroke:#496780;stroke-width:2;fill:none}
+.cards{grid-template-columns:repeat(2,minmax(0,1fr));margin:.8rem 0}.card h3{font-size:1.06rem;margin:.3rem 0 0}.card p,details p{margin:.35rem 0}.badge{font-size:.69rem;font-weight:800;letter-spacing:.07em;color:var(--accent);background:var(--soft);padding:.18rem .42rem;border-radius:.25rem}
+details{margin:.55rem 0}summary{cursor:pointer;font-weight:700}summary .badge{margin-inline:.45rem}#review{margin-top:1.5rem;border-top:1px solid var(--line);padding-top:.7rem}footer{padding-top:.7rem;color:var(--muted);font-size:.88rem}
+.controls{display:flex;align-items:center;flex-wrap:wrap;gap:.6rem}select{background:white;padding:.3rem .5rem;border:1px solid var(--line);border-radius:.35rem}#visible-count{color:var(--muted);font-size:.9rem}
+@media(max-width:40rem){.cards{grid-template-columns:1fr}.stat{padding:.6rem}.stats{gap:.35rem}.stat span{font-size:.76rem}}
+</style>
+</head>
+<body>
+<header id="overview" tabindex="-1"><div class="wrap">
+<nav aria-label="Page navigation"><a href="#plan">Migration plan</a><a href="#review">Review boundaries</a></nav>
+<p class="kicker">PROPOSED · Design review only</p>
+<h1>Interest migration strategy</h1>
+<p>Move monthly interest calculation, not the rest of the mainframe chain.</p>
+<p class="baseline">Design baseline · demo/03-rules @ <code id="baseline"></code><br>Estate evidence · demo/01-intake @ <code id="estate"></code></p>
+</div></header>
+<main class="wrap">
+<section class="stats" aria-label="Scope counts" id="stats"></section>
+<section id="plan" tabindex="-1">
+<h2>Migration plan</h2>
+<div role="tablist" aria-label="Plan sections">
+<button id="tab-map" role="tab" aria-controls="map" aria-selected="true">Move map</button>
+<button id="tab-build" role="tab" aria-controls="build" aria-selected="false" tabindex="-1">Build steps</button>
+<button id="tab-data" role="tab" aria-controls="movement" aria-selected="false" tabindex="-1">Moving the data</button>
+</div>
+<section id="map" role="tabpanel" aria-labelledby="tab-map" tabindex="0">
+<figure class="figure">
+<svg viewBox="0 0 840 72" role="img" aria-label="From host datasets to sealed snapshot, interest calculation, private output and guarded host handoff">
+<defs><marker id="arrow" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6" markerHeight="6" orient="auto"><path d="M0 0L8 4L0 8z" fill="#496780"/></marker></defs>
+<path class="line" d="M148 33h26" marker-end="url(#arrow)"/><path class="line" d="M320 33h26" marker-end="url(#arrow)"/><path class="line" d="M492 33h26" marker-end="url(#arrow)"/><path class="line" d="M664 33h26" marker-end="url(#arrow)"/>
+<rect class="node" x="4" y="11" width="144" height="44" rx="9"/><text x="76" y="38" text-anchor="middle">Host datasets</text>
+<rect class="node" x="176" y="11" width="144" height="44" rx="9"/><text x="248" y="38" text-anchor="middle">Sealed snapshot</text>
+<rect class="node" x="348" y="11" width="144" height="44" rx="9"/><text x="420" y="38" text-anchor="middle">Java / Batch</text>
+<rect class="node" x="520" y="11" width="144" height="44" rx="9"/><text x="592" y="38" text-anchor="middle">Private output</text>
+<rect class="node" x="692" y="11" width="144" height="44" rx="9"/><text x="764" y="38" text-anchor="middle">Host handoff</text>
+</svg>
+<figcaption>PROPOSED · Host remains authoritative. Shadow runs stop at private output. Confirm: Mainframe operations.</figcaption>
+</figure>
+<div id="moves" class="cards"></div>
+</section>
+<section id="build" role="tabpanel" aria-labelledby="tab-build" tabindex="0" hidden>
+<div class="controls"><label for="phase">Filter by phase</label><select id="phase"><option value="All">All phases</option></select><span id="visible-count" role="status"></span></div>
+<div id="steps" class="cards"></div>
+</section>
+<section id="movement" role="tabpanel" aria-labelledby="tab-data" tabindex="0" hidden>
+<figure class="figure">
+<svg viewBox="0 0 840 72" role="img" aria-label="Trial load, reconcile, shadow, cutover under fence or fallback">
+<defs><marker id="data-arrow" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6" markerHeight="6" orient="auto"><path d="M0 0L8 4L0 8z" fill="#496780"/></marker></defs>
+<path class="line" d="M160 33h26" marker-end="url(#data-arrow)"/><path class="line" d="M352 33h26" marker-end="url(#data-arrow)"/><path class="line" d="M544 33h26" marker-end="url(#data-arrow)"/>
+<rect class="node" x="4" y="11" width="156" height="44" rx="9"/><text x="82" y="38" text-anchor="middle">Trial load</text>
+<rect class="node" x="188" y="11" width="164" height="44" rx="9"/><text x="270" y="38" text-anchor="middle">Reconcile</text>
+<rect class="node" x="380" y="11" width="164" height="44" rx="9"/><text x="462" y="38" text-anchor="middle">Shadow</text>
+<rect class="node" x="572" y="11" width="264" height="44" rx="9"/><text x="704" y="38" text-anchor="middle">Fenced cutover or fallback</text>
+</svg>
+<figcaption>PROPOSED · Release only after reconciled shadow runs and a proven fence. Confirm: Finance / release manager.</figcaption>
+</figure>
+<div id="operations"></div>
+<p>Account deltas and emitted interest reconcile separately: the final account emits interest but is not rewritten (INT-Q02). Make receiver-width effects explicit. Confirm: Finance control.</p>
+</section>
+</section>
+<section id="review" tabindex="-1"><h2>Review boundaries</h2><div id="notes" class="cards"></div></section>
+<footer><a href="#overview">Back to overview</a> · References: INT-ARCH v1.0, INT-MAP v1.0, the INTCALC stream manifest and interest decision register. Open those alongside this offline page for review.</footer>
+</main>
+<noscript><p class="wrap">Enable JavaScript to use this offline strategy page.</p></noscript>
+<script id="strategy-data" type="application/json">
+{
+  "baseline": "0dd0a8e672cbdf46479b45b02a5ba8c650de6561",
+  "legacy": "41519206b887cd0123ea850b46a96cdc9baa69af",
+  "counts": {
+    "copybooks": 5,
+    "cases": 7,
+    "decisions": 15
+  },
+  "moves": [
+    [
+      "Calculation",
+      "Batch engineering",
+      "Replace INTCALC.STEP15 (CBACT04C) only with Java 21 / Spring Batch. Keep input order, outputs and every OPEN quirk on the legacy option."
+    ],
+    [
+      "Shared inputs",
+      "Mainframe data",
+      "Keep ACCTDATA, TCATBALF, CARDXREF/AIX and DISCGRP authoritative on host. Load one sealed snapshot to PostgreSQL 15; do not dual-write."
+    ],
+    [
+      "Account and transaction output",
+      "Mainframe operations",
+      "Stage guarded ACCTDATA patches and fixed-length SYSTRAN in the target. Only the controlled host bridge can publish at cutover; shadows never do."
+    ],
+    [
+      "Surviving consumers",
+      "Scheduler / CICS",
+      "Keep CLOSEFIL, COMBTRAN, WAITSTEP and OPENFIL; also retain POSTTRAN, disclosure refresh and online users. Gating uses observed fencing, not assumed scheduler exclusion."
+    ]
+  ],
+  "build": [
+    [
+      "01",
+      "Pilot",
+      "Foundation",
+      "Batch engineering",
+      "Read i01-baseline in order, compute interest and persist transactions/delta in an isolated PostgreSQL schema; compare against existing golden rows before expanding."
+    ],
+    [
+      "02",
+      "Schema",
+      "Foundation",
+      "PostgreSQL owner",
+      "Build snapshot, input, run, delta, checkpoint and publication schemas; isolate Batch metadata. Test keys, widths and permissions."
+    ],
+    [
+      "03",
+      "Fixed records",
+      "Foundation",
+      "Data engineering",
+      "In parallel with schema after the pilot, prove codecs, signed fields, key bytes, framing and unchanged-record round trips."
+    ],
+    [
+      "04",
+      "Full calculation",
+      "Integration",
+      "Batch engineering",
+      "After schema and codec, integrate snapshot load, legacy behaviour, atomic account-group updates, and private restart and error handling."
+    ],
+    [
+      "05",
+      "Package and handoff",
+      "Integration",
+      "Mainframe integration",
+      "After schema and codec, use seeded durable rows and a simulated host to verify export and fail-closed receipts. No live publish."
+    ],
+    [
+      "06",
+      "Final verification",
+      "Gate",
+      "QA / release engineering",
+      "After integration, prove all fixture cases and compare RC, SYSOUT, fields and bytes; rehearse operational controls with a simulated host. Hand evidence to release owners."
+    ]
+  ],
+  "movement": [
+    [
+      "Trial load",
+      "Host data / DBA",
+      "Export one coordinated point-in-time baseline with source IDs, CCSID, lengths, key ranges and hashes; use protected or synthetic data. Byte-check framing, decode four inputs into staging, log any quarantine and prevent sealing on invalid data."
+    ],
+    [
+      "Reconciliation",
+      "Finance control / data QA",
+      "For each input reconcile extracted = accepted + quarantined and require zero quarantine, duplicate source keys, or unexplained differences to seal. Compare by key and count: account and xref rows; distinct xref accounts and observed AIX first rows; category/rate rows per group/type/category; signed account balances, cycle credit/debit, category amounts and rate totals. Use exact decimals, counts of each sign and per-key/group sums, not just a net total."
+    ],
+    [
+      "Side-by-side",
+      "QA / Finance",
+      "Run legacy and target on equivalent pre-run copies (pin PARM and clock for exact fixture parity). Legacy alone writes live; target writes shadow. Compare emitted count, ID/order and signed amounts by category and account, delta keys/count and before/after cycle totals, untouched final account, bytes/padding, RC and SYSOUT. Record production-only timestamp differences separately with explicit Finance acceptance, not a hidden tolerance."
+    ],
+    [
+      "Cutover",
+      "Scheduler / CICS / mainframe operations",
+      "Hold COMBTRAN; prove POSTTRAN, CICS, refresh/setup and other conflicting activity are fenced. Use an approved one-engine release claim. Verify unchanged snapshot/preimages, publish guarded ACCTDATA patches and exactly one verified SYSTRAN(+1), confirm absolute generation resolves as (0), then signal COMBTRAN and release readers at the approved boundary."
+    ],
+    [
+      "Fallback",
+      "Mainframe operations / release manager",
+      "Before external mutation, discard the packet and run legacy once. After partial apply/catalog and before consumption, keep the fence; use receipts, exact generation and before-images to restore and reconcile, then run legacy once only after verified restore. After consumption, hold downstream and follow incident recovery; no blind rerun or recatalog."
+    ]
+  ],
+  "notes": [
+    [
+      "Legacy calculation remains the reference",
+      "Finance / Card Operations",
+      "All QUIRK and HOLE rows remain OPEN; design uses legacy option A where known. The decision register holds alternatives. Unknown host input or restart evidence stays a release constraint, not a new business ticket."
+    ],
+    [
+      "Production proof is outstanding",
+      "Mainframe data / Scheduler / Release",
+      "Confirm actual CCSID/framing, AIX choice, generation/restore procedures, fence and binder provenance. No production release approval follows from lab parity."
+    ]
+  ]
+}
+</script>
+<script>
+'use strict';
+const data = JSON.parse(document.getElementById('strategy-data').textContent);
+const $ = id => document.getElementById(id);
+const make = (tag, content, className) => {
+  const el = document.createElement(tag);
+  if (content !== undefined) el.textContent = content;
+  if (className) el.className = className;
+  return el;
+};
+const badge = () => make('span', 'PROPOSED', 'badge');
+const owner = name => make('p', 'Confirm: ' + name, 'owner');
+function card(title, role, text) {
+  const el = make('article', undefined, 'card');
+  el.append(badge(), make('h3', title), owner(role), make('p', text));
+  return el;
+}
+$('baseline').textContent = data.baseline;
+$('estate').textContent = data.legacy;
+for (const [key, label] of Object.entries({copybooks:'Mapped copybooks',cases:'Golden cases',decisions:'OPEN decisions'})) {
+  const el = make('div', undefined, 'stat');
+  const metric = make('strong', data.counts[key]);
+  metric.dataset.metric = key;
+  el.append(metric, make('span', label));
+  $('stats').append(el);
+}
+for (const [title, role, detail] of data.moves) $('moves').append(card(title, role, detail));
+for (const [title, role, detail] of data.notes) $('notes').append(card(title, role, detail));
+for (const [title, role, detail] of data.movement) {
+  const el = make('details'), summary = make('summary', title);
+  summary.append(badge());
+  el.append(summary, owner(role), make('p', detail));
+  $('operations').append(el);
+}
+for (const phase of new Set(data.build.map(row => row[2]))) {
+  const option = make('option', phase);
+  option.value = phase;
+  $('phase').append(option);
+}
+function renderBuild() {
+  const rows = data.build.filter(row => $('phase').value === 'All' || row[2] === $('phase').value);
+  $('steps').replaceChildren(...rows.map(([id, title, phase, role, detail]) => card(id + ' · ' + title, role, detail)));
+  $('visible-count').textContent = rows.length + ' of ' + data.build.length + ' steps';
+}
+$('phase').addEventListener('change', renderBuild);
+renderBuild();
+const tabs = [...document.querySelectorAll('[role=tab]')];
+function select(index, focus = false) {
+  tabs.forEach((tab, i) => {
+    tab.setAttribute('aria-selected', String(i === index));
+    tab.tabIndex = i === index ? 0 : -1;
+    $(tab.getAttribute('aria-controls')).hidden = i !== index;
+  });
+  if (focus) tabs[index].focus();
+}
+tabs.forEach((tab, index) => {
+  tab.addEventListener('click', () => select(index));
+  tab.addEventListener('keydown', event => {
+    const n = tabs.length, keys = {ArrowRight:(index+1)%n, ArrowLeft:(index+n-1)%n, Home:0, End:n-1};
+    if (Object.hasOwn(keys, event.key)) {
+      event.preventDefault();
+      select(keys[event.key], true);
+    }
+  });
+});
+</script>
+</body>
+</html>
