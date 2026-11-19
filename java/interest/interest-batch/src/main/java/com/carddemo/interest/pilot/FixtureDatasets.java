@@ -61,7 +61,11 @@ public final class FixtureDatasets {
         Files.createDirectories(file.getParent());
         StringBuilder out = new StringBuilder();
         for (byte[] record : records) {
-            out.append(new String(record, PilotFieldCodec.LAB_PROFILE).stripTrailing()).append('\n');
+            int end = record.length;
+            while (end > 0 && record[end - 1] == (byte) ' ') {
+                end--;
+            }
+            out.append(new String(record, 0, end, PilotFieldCodec.LAB_PROFILE)).append('\n');
         }
         Files.write(file, out.toString().getBytes(PilotFieldCodec.LAB_PROFILE));
     }

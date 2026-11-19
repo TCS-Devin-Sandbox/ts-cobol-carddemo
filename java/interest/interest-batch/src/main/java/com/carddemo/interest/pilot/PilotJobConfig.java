@@ -18,6 +18,9 @@ import org.springframework.transaction.PlatformTransactionManager;
 @Configuration
 public class PilotJobConfig {
 
+    /** INT-H06: restart is excluded, so the whole run is one chunk and any failure commits no pilot output. */
+    static final int WHOLE_RUN = Integer.MAX_VALUE;
+
     public static final String JOB_NAME = "interestPilot";
 
     @Bean
@@ -54,7 +57,7 @@ public class PilotJobConfig {
     Step interestPilotStep(JobRepository jobRepository, PlatformTransactionManager tx, PilotProperties properties,
             AccountGroupReader reader, InterestGroupProcessor processor, GroupOutcomeWriter writer) {
         return new StepBuilder("interestPilotStep", jobRepository)
-                .<AccountGroup, GroupOutcome>chunk(properties.groupsPerTransaction(), tx)
+                .<AccountGroup, GroupOutcome>chunk(WHOLE_RUN, tx)
                 .reader(reader)
                 .processor(processor)
                 .writer(writer)

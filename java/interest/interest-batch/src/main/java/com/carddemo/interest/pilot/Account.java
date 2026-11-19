@@ -3,6 +3,7 @@ package com.carddemo.interest.pilot;
 import static com.carddemo.interest.pilot.PilotFieldCodec.signedZoned;
 import static com.carddemo.interest.pilot.PilotFieldCodec.slice;
 import static com.carddemo.interest.pilot.PilotFieldCodec.text;
+import static com.carddemo.interest.pilot.PilotFieldCodec.unsignedDigits;
 
 import java.math.BigDecimal;
 
@@ -47,7 +48,7 @@ public record Account(
 
     public static Account decode(byte[] r, long recordNumber) {
         return new Account(
-                text(r, 0, 11),                                              // ACCT-ID X(11)
+                unsignedDigits(r, 0, 11, DATASET, recordNumber),             // ACCT-ID 9(11)
                 text(r, 11, 1),                                              // ACCT-ACTIVE-STATUS X(01)
                 signedZoned(r, CURR_BAL_OFFSET, 12, 2, DATASET, recordNumber), // ACCT-CURR-BAL S9(10)V99
                 signedZoned(r, 24, 12, 2, DATASET, recordNumber),            // ACCT-CREDIT-LIMIT S9(10)V99

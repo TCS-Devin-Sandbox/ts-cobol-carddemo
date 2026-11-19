@@ -5,6 +5,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.batch.item.ItemProcessor;
 
 /**
@@ -14,6 +16,7 @@ import org.springframework.batch.item.ItemProcessor;
 public class InterestGroupProcessor implements ItemProcessor<AccountGroup, GroupOutcome> {
 
     static final String NOT_FOUND = "23";
+    private static final Logger log = LoggerFactory.getLogger(InterestGroupProcessor.class);
     private final PilotStore store;
     private final InterestCalculator calculator;
     private final LegacyTimestamp timestamps;
@@ -46,6 +49,7 @@ public class InterestGroupProcessor implements ItemProcessor<AccountGroup, Group
             if (rate.fellBackToDefault()) {
                 sysout.add(line("DISCLOSURE GROUP RECORD MISSING"));
                 sysout.add(line("TRY WITH DEFAULT GROUP CODE"));
+                log.info("event=rate-fallback run={} dd=DISCGRP op=READ status={}", runId, NOT_FOUND);
             }
             // INT-R04: a zero rate is skipped. INT-H07 (OPEN): negative rates are not excluded.
             if (rate.annualRate().signum() == 0) {

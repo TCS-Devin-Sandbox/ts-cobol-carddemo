@@ -49,11 +49,11 @@ public class PilotExporter {
         Files.writeString(outputDir.resolve("rc.json"), """
                 {
                  "INTCALC": {
-                  "maxrc": %d,
+                  "maxrc": %s,
                   "steps": {
-                   "STEP15": %d
+                   "STEP15": %s
                   }
                  }
-                }""".formatted(rc, rc));
+                }""".formatted(Integer.toString(rc), Integer.toString(rc)));
     }
 }

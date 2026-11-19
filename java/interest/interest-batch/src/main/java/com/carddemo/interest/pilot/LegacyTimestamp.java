@@ -2,6 +2,7 @@ package com.carddemo.interest.pilot;
 
 import java.time.Clock;
 import java.time.LocalDateTime;
+import java.util.Locale;
 
 /**
  * INT-Q05 (OPEN, legacy kept) / TN-02: Z-GET-DB2-FORMAT-TIMESTAMP (CBACT04C.cbl:613-626) formats
@@ -19,7 +20,7 @@ public final class LegacyTimestamp {
     public String sample() {
         LocalDateTime now = LocalDateTime.now(clock);
         int hundredths = now.getNano() / 10_000_000;
-        return String.format("%04d-%02d-%02d-%02d.%02d.%02d.%02d0000",
+        return String.format(Locale.ROOT, "%04d-%02d-%02d-%02d.%02d.%02d.%02d0000",
                 now.getYear(), now.getMonthValue(), now.getDayOfMonth(),
                 now.getHour(), now.getMinute(), now.getSecond(), hundredths);
     }

@@ -6,9 +6,13 @@ import java.math.BigDecimal;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.springframework.boot.test.system.CapturedOutput;
+import org.springframework.boot.test.system.OutputCaptureExtension;
 import org.springframework.batch.core.BatchStatus;
 
 /** Failure paths: the run fails and no pilot output for that run is committed (INT-R10). */
+@ExtendWith(OutputCaptureExtension.class)
 class PilotRollbackIT extends PilotPostgresTestSupport {
 
     private PilotRunService.PilotRunResult run(String specimen) throws Exception {
@@ -63,13 +67,16 @@ class PilotRollbackIT extends PilotPostgresTestSupport {
     }
 
     @Test
-    void INT_R03_defaultFallbackUsesPaddedDefaultRow() throws Exception {
+    void INT_R03_defaultFallbackUsesPaddedDefaultRow(CapturedOutput logs) throws Exception {
         PilotRunService.PilotRunResult r = run("default-fallback");
         assertThat(r.status()).isEqualTo(BatchStatus.COMPLETED);
         assertThat(jdbc.queryForList("SELECT amount FROM interest_pilot.interest_tx WHERE run_id = ? ORDER BY emit_ordinal",
                 BigDecimal.class, r.runId())).containsExactly(new BigDecimal("17.50"), new BigDecimal("37.00"));
         assertThat(Files.readAllLines(Path.of("target/pilot-it/default-fallback/sysout/INTCALC.STEP15.txt")))
                 .contains("DISCLOSURE GROUP RECORD MISSING", "TRY WITH DEFAULT GROUP CODE");
+        // S12/S14: ordinary fallback event with dd/op/status and no account or card identifiers.
+        assertThat(logs.getOut()).contains("event=rate-fallback run=" + r.runId() + " dd=DISCGRP op=READ status=23")
+                .doesNotContain("00000002001");
     }
 
     @Test
@@ -79,5 +86,20 @@ class PilotRollbackIT extends PilotPostgresTestSupport {
         assertThat(count("interest_tx", r.runId()) + count("account_delta", r.runId())).isZero();
         assertThat(Files.readAllLines(Path.of("target/pilot-it/empty-tcatbalf/datasets/"
                 + FixtureDatasets.SYSTRAN_DSN + ".txt"))).isEmpty();
+    }
+
+    @Test
+    void INT_R10_failedRunIntoReusedOutputDirLeavesNoStaleSuccessArtifacts() throws Exception {
+        Path out = Path.of("target/pilot-it/reused").toAbsolutePath();
+        assertThat(service.run(I01.resolve("input"), out).exitCode()).isZero();
+        assertThat(out.resolve("datasets")).exists();
+        PilotRunService.PilotRunResult r = service.run(SPECIMENS.resolve("missing-account"), out);
+        assertThat(r.exitCode()).isEqualTo(PilotRunService.FAILED_RC);
+        assertThat(out.resolve("datasets")).doesNotExist();
+        assertThat(out.resolve("sysout")).doesNotExist();
+        assertThat(Files.readString(out.resolve("rc.json"))).contains("\"maxrc\": 12");
+        try (var entries = Files.list(out)) {
+            assertThat(entries.map(p -> p.getFileName().toString())).containsExactlyInAnyOrder("rc.json", "pilot-failure.json");
+        }
     }
 }

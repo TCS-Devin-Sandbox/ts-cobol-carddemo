@@ -14,7 +14,6 @@ public record PilotProperties(
         String parm,
         LocalDateTime clock,
         ZoneId zone,
-        int groupsPerTransaction,
         boolean runOnStartup,
         Path inputDir,
         Path outputDir) {
