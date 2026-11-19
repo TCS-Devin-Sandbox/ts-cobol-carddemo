@@ -1,0 +1,36 @@
+{
+ "notes": [],
+ "closures": [
+  {
+   "kind": "online-map-no-source",
+   "transid": "CTLI",
+   "match": "mapset COTRTLI",
+   "how": "the symbolic map copybook COTRTLI is in the scanned copybook roots and gives the screen fields and their COBOL names; the BMS macro source is outside this module's catalog roots and is not needed for that",
+   "evidence": [
+    "app/app-transaction-type-db2/cpy-bms/COTRTLI.cpy:17",
+    "app/app-transaction-type-db2/cbl/COTRTLIC.cbl:433"
+   ]
+  },
+  {
+   "kind": "online-map-no-source",
+   "transid": "CTLI",
+   "match": "mapset COTRTUP",
+   "how": "the symbolic map copybook COTRTUP is in the scanned copybook roots and gives the screen fields and their COBOL names; the BMS macro source is outside this module's catalog roots and is not needed for that",
+   "evidence": [
+    "app/app-transaction-type-db2/cpy-bms/COTRTUP.cpy:17",
+    "app/app-transaction-type-db2/cbl/COTRTUPC.cbl:265"
+   ]
+  },
+  {
+   "kind": "online-map-no-source",
+   "transid": "CTTU",
+   "match": "mapset COTRTUP",
+   "how": "the symbolic map copybook COTRTUP is in the scanned copybook roots and gives the screen fields and their COBOL names; the BMS macro source is outside this module's catalog roots and is not needed for that",
+   "evidence": [
+    "app/app-transaction-type-db2/cpy-bms/COTRTUP.cpy:17",
+    "app/app-transaction-type-db2/cbl/COTRTUPC.cbl:265"
+   ]
+  }
+ ],
+ "asks": []
+}
