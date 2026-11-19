@@ -12,3 +12,7 @@ batch-app/markers/*
 /work/
 /datasets/
 __pycache__/
+
+# board exports and e2e artefacts (never committed)
+rules-INTCALC-decisions*.csv
+/e2e/.artifacts/
