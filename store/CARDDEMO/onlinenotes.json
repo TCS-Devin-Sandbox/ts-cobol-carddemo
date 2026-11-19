@@ -1,0 +1,163 @@
+{
+ "meta": {
+  "module": "CARDDEMO",
+  "written_by": "online-transaction-analysis skill"
+ },
+ "notes": [],
+ "closures": [
+  {
+   "kind": "online-map-no-source",
+   "match": "uses mapset COACTUP but",
+   "how": "the symbolic map copybook COACTUP.CPY and the BMS macro source COACTUP.bms are both in the module's own directories; mftb 0.2.1 does not parse BMS, so the pass could not see them",
+   "evidence": [
+    "app/cpy-bms/COACTUP.CPY:17",
+    "app/bms/COACTUP.bms:20"
+   ]
+  },
+  {
+   "kind": "online-map-no-source",
+   "match": "uses mapset COACTVW but",
+   "how": "the symbolic map copybook COACTVW.CPY and the BMS macro source COACTVW.bms are both in the module's own directories; mftb 0.2.1 does not parse BMS, so the pass could not see them",
+   "evidence": [
+    "app/cpy-bms/COACTVW.CPY:17",
+    "app/bms/COACTVW.bms:20"
+   ]
+  },
+  {
+   "kind": "online-map-no-source",
+   "match": "uses mapset COADM01 but",
+   "how": "the symbolic map copybook COADM01.CPY and the BMS macro source COADM01.bms are both in the module's own directories; mftb 0.2.1 does not parse BMS, so the pass could not see them",
+   "evidence": [
+    "app/cpy-bms/COADM01.CPY:17",
+    "app/bms/COADM01.bms:19"
+   ]
+  },
+  {
+   "kind": "online-map-no-source",
+   "match": "uses mapset COBIL00 but",
+   "how": "the symbolic map copybook COBIL00.CPY and the BMS macro source COBIL00.bms are both in the module's own directories; mftb 0.2.1 does not parse BMS, so the pass could not see them",
+   "evidence": [
+    "app/cpy-bms/COBIL00.CPY:17",
+    "app/bms/COBIL00.bms:19"
+   ]
+  },
+  {
+   "kind": "online-map-no-source",
+   "match": "uses mapset COCRDLI but",
+   "how": "the symbolic map copybook COCRDLI.CPY and the BMS macro source COCRDLI.bms are both in the module's own directories; mftb 0.2.1 does not parse BMS, so the pass could not see them",
+   "evidence": [
+    "app/cpy-bms/COCRDLI.CPY:17",
+    "app/bms/COCRDLI.bms:20"
+   ]
+  },
+  {
+   "kind": "online-map-no-source",
+   "match": "uses mapset COCRDSL but",
+   "how": "the symbolic map copybook COCRDSL.CPY and the BMS macro source COCRDSL.bms are both in the module's own directories; mftb 0.2.1 does not parse BMS, so the pass could not see them",
+   "evidence": [
+    "app/cpy-bms/COCRDSL.CPY:17",
+    "app/bms/COCRDSL.bms:20"
+   ]
+  },
+  {
+   "kind": "online-map-no-source",
+   "match": "uses mapset COCRDUP but",
+   "how": "the symbolic map copybook COCRDUP.CPY and the BMS macro source COCRDUP.bms are both in the module's own directories; mftb 0.2.1 does not parse BMS, so the pass could not see them",
+   "evidence": [
+    "app/cpy-bms/COCRDUP.CPY:17",
+    "app/bms/COCRDUP.bms:20"
+   ]
+  },
+  {
+   "kind": "online-map-no-source",
+   "match": "uses mapset COMEN01 but",
+   "how": "the symbolic map copybook COMEN01.CPY and the BMS macro source COMEN01.bms are both in the module's own directories; mftb 0.2.1 does not parse BMS, so the pass could not see them",
+   "evidence": [
+    "app/cpy-bms/COMEN01.CPY:17",
+    "app/bms/COMEN01.bms:19"
+   ]
+  },
+  {
+   "kind": "online-map-no-source",
+   "match": "uses mapset CORPT00 but",
+   "how": "the symbolic map copybook CORPT00.CPY and the BMS macro source CORPT00.bms are both in the module's own directories; mftb 0.2.1 does not parse BMS, so the pass could not see them",
+   "evidence": [
+    "app/cpy-bms/CORPT00.CPY:17",
+    "app/bms/CORPT00.bms:19"
+   ]
+  },
+  {
+   "kind": "online-map-no-source",
+   "match": "uses mapset COSGN00 but",
+   "how": "the symbolic map copybook COSGN00.CPY and the BMS macro source COSGN00.bms are both in the module's own directories; mftb 0.2.1 does not parse BMS, so the pass could not see them",
+   "evidence": [
+    "app/cpy-bms/COSGN00.CPY:17",
+    "app/bms/COSGN00.bms:19"
+   ]
+  },
+  {
+   "kind": "online-map-no-source",
+   "match": "uses mapset COTRN00 but",
+   "how": "the symbolic map copybook COTRN00.CPY and the BMS macro source COTRN00.bms are both in the module's own directories; mftb 0.2.1 does not parse BMS, so the pass could not see them",
+   "evidence": [
+    "app/cpy-bms/COTRN00.CPY:17",
+    "app/bms/COTRN00.bms:19"
+   ]
+  },
+  {
+   "kind": "online-map-no-source",
+   "match": "uses mapset COTRN01 but",
+   "how": "the symbolic map copybook COTRN01.CPY and the BMS macro source COTRN01.bms are both in the module's own directories; mftb 0.2.1 does not parse BMS, so the pass could not see them",
+   "evidence": [
+    "app/cpy-bms/COTRN01.CPY:17",
+    "app/bms/COTRN01.bms:19"
+   ]
+  },
+  {
+   "kind": "online-map-no-source",
+   "match": "uses mapset COTRN02 but",
+   "how": "the symbolic map copybook COTRN02.CPY and the BMS macro source COTRN02.bms are both in the module's own directories; mftb 0.2.1 does not parse BMS, so the pass could not see them",
+   "evidence": [
+    "app/cpy-bms/COTRN02.CPY:17",
+    "app/bms/COTRN02.bms:19"
+   ]
+  },
+  {
+   "kind": "online-map-no-source",
+   "match": "uses mapset COUSR00 but",
+   "how": "the symbolic map copybook COUSR00.CPY and the BMS macro source COUSR00.bms are both in the module's own directories; mftb 0.2.1 does not parse BMS, so the pass could not see them",
+   "evidence": [
+    "app/cpy-bms/COUSR00.CPY:17",
+    "app/bms/COUSR00.bms:19"
+   ]
+  },
+  {
+   "kind": "online-map-no-source",
+   "match": "uses mapset COUSR01 but",
+   "how": "the symbolic map copybook COUSR01.CPY and the BMS macro source COUSR01.bms are both in the module's own directories; mftb 0.2.1 does not parse BMS, so the pass could not see them",
+   "evidence": [
+    "app/cpy-bms/COUSR01.CPY:17",
+    "app/bms/COUSR01.bms:19"
+   ]
+  },
+  {
+   "kind": "online-map-no-source",
+   "match": "uses mapset COUSR02 but",
+   "how": "the symbolic map copybook COUSR02.CPY and the BMS macro source COUSR02.bms are both in the module's own directories; mftb 0.2.1 does not parse BMS, so the pass could not see them",
+   "evidence": [
+    "app/cpy-bms/COUSR02.CPY:17",
+    "app/bms/COUSR02.bms:19"
+   ]
+  },
+  {
+   "kind": "online-map-no-source",
+   "match": "uses mapset COUSR03 but",
+   "how": "the symbolic map copybook COUSR03.CPY and the BMS macro source COUSR03.bms are both in the module's own directories; mftb 0.2.1 does not parse BMS, so the pass could not see them",
+   "evidence": [
+    "app/cpy-bms/COUSR03.CPY:17",
+    "app/bms/COUSR03.bms:19"
+   ]
+  }
+ ],
+ "asks": []
+}
