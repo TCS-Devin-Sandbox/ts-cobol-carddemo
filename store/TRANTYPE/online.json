@@ -1,7 +1,7 @@
 {
   "meta": {
     "module": "TRANTYPE",
-    "generated_at": "2026-11-19T08:30:25Z",
+    "generated_at": "2026-11-19T08:35:24Z",
     "tool": "mftb 0.2.1",
     "inputs": {
       "from": [
@@ -548,7 +548,27 @@
       },
       "starts": [],
       "remote": [],
-      "notes": [],
+      "notes": [
+        {
+          "transid": "CTTU",
+          "note": "PF3 return path: COTRTUPC transfers to CDEMO-FROM-PROGRAM, or to the admin menu COADM01C when that field is empty. When the screen was opened from the list with PF2, COTRTLIC has put its own name in CDEMO-FROM-PROGRAM before the XCTL, so PF3 returns to COTRTLIC. The diagram draws the raw candidates and does not show this hop; the dynamic-call annotation for COTRTUPC.cbl:457 records COTRTLIC as a derived target.",
+          "evidence": [
+            "app/app-transaction-type-db2/cbl/COTRTUPC.cbl:440-442",
+            "app/app-transaction-type-db2/cbl/COTRTUPC.cbl:457-458",
+            "app/app-transaction-type-db2/cbl/COTRTLIC.cbl:633",
+            "app/app-transaction-type-db2/cbl/COTRTLIC.cbl:648-650"
+          ]
+        },
+        {
+          "transid": "CTTU",
+          "note": "The SEND MAP that names its mapset through CCARD-NEXT-MAPSET sends map CTRTUPA of mapset COTRTUP: both writers of the item in COTRTUPC move LIT-THISMAPSET, whose VALUE is 'COTRTUP '. The mapset shown as unknown is this same screen, not a second one.",
+          "evidence": [
+            "app/app-transaction-type-db2/cbl/COTRTUPC.cbl:205-208",
+            "app/app-transaction-type-db2/cbl/COTRTUPC.cbl:634-635",
+            "app/app-transaction-type-db2/cbl/COTRTUPC.cbl:1430-1434"
+          ]
+        }
+      ],
       "role": "screen",
       "reached_by": [
         {
@@ -580,7 +600,17 @@
             "app/app-transaction-type-db2/cbl/COTRTUPC.cbl:1433"
           ],
           "request": "Provide the BMS macro source for mapset None (or its symbolic map copybook)",
-          "status": "open"
+          "status": "closed",
+          "closure": {
+            "by": "skill",
+            "how": "the data item CCARD-NEXT-MAPSET only ever receives LIT-THISMAPSET ('COTRTUP ') in COTRTUPC, so the send is on mapset COTRTUP, whose symbolic map copybook is in the scanned roots",
+            "evidence": [
+              "app/app-transaction-type-db2/cbl/COTRTUPC.cbl:205-206",
+              "app/app-transaction-type-db2/cbl/COTRTUPC.cbl:634",
+              "app/app-transaction-type-db2/cbl/COTRTUPC.cbl:1430-1434",
+              "app/app-transaction-type-db2/cpy-bms/COTRTUP.cpy:17"
+            ]
+          }
         },
         {
           "kind": "online-map-no-source",
@@ -668,7 +698,27 @@
     "datasets": []
   },
   "unreached": [],
-  "notes": [],
+  "notes": [
+    {
+      "transid": "CTTU",
+      "note": "PF3 return path: COTRTUPC transfers to CDEMO-FROM-PROGRAM, or to the admin menu COADM01C when that field is empty. When the screen was opened from the list with PF2, COTRTLIC has put its own name in CDEMO-FROM-PROGRAM before the XCTL, so PF3 returns to COTRTLIC. The diagram draws the raw candidates and does not show this hop; the dynamic-call annotation for COTRTUPC.cbl:457 records COTRTLIC as a derived target.",
+      "evidence": [
+        "app/app-transaction-type-db2/cbl/COTRTUPC.cbl:440-442",
+        "app/app-transaction-type-db2/cbl/COTRTUPC.cbl:457-458",
+        "app/app-transaction-type-db2/cbl/COTRTLIC.cbl:633",
+        "app/app-transaction-type-db2/cbl/COTRTLIC.cbl:648-650"
+      ]
+    },
+    {
+      "transid": "CTTU",
+      "note": "The SEND MAP that names its mapset through CCARD-NEXT-MAPSET sends map CTRTUPA of mapset COTRTUP: both writers of the item in COTRTUPC move LIT-THISMAPSET, whose VALUE is 'COTRTUP '. The mapset shown as unknown is this same screen, not a second one.",
+      "evidence": [
+        "app/app-transaction-type-db2/cbl/COTRTUPC.cbl:205-208",
+        "app/app-transaction-type-db2/cbl/COTRTUPC.cbl:634-635",
+        "app/app-transaction-type-db2/cbl/COTRTUPC.cbl:1430-1434"
+      ]
+    }
+  ],
   "asks": [],
   "summary": {
     "transactions": 2,

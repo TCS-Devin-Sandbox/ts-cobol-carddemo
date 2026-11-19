@@ -1,7 +1,7 @@
 {
   "meta": {
     "module": "TRANTYPE",
-    "generated_at": "2026-11-19T08:30:25Z",
+    "generated_at": "2026-11-19T08:35:24Z",
     "tool": "mftb 0.2.1",
     "inputs": {}
   },
@@ -461,20 +461,6 @@
       "owner": "human"
     },
     {
-      "kind": "online-map-no-source",
-      "severity": "info",
-      "message": "TRANID CTTU uses mapset None but no BMS source (DFHMSD/DFHMDI/DFHMDF) was scanned, so the fields on the screen and their COBOL names are unknown",
-      "evidence": [
-        "app/app-transaction-type-db2/cbl/COTRTUPC.cbl:1433"
-      ],
-      "request": "Provide the BMS macro source for mapset None (or its symbolic map copybook)",
-      "status": "open",
-      "transaction": "CTTU",
-      "origin": "online-transaction-analysis",
-      "id": "F0038",
-      "owner": "human"
-    },
-    {
       "kind": "online-screen-flow-unproven",
       "severity": "info",
       "message": "TRANID CTLI sends/receives 3 mapset(s); which screen follows which is chosen at run time by the data and the AID key, and the store cannot order them",
@@ -488,7 +474,7 @@
       "status": "open",
       "transaction": "CTLI",
       "origin": "online-transaction-analysis",
-      "id": "F0039",
+      "id": "F0038",
       "owner": "human"
     },
     {
@@ -503,7 +489,7 @@
       "status": "open",
       "transaction": "CTTU",
       "origin": "online-transaction-analysis",
-      "id": "F0040",
+      "id": "F0039",
       "owner": "human"
     },
     {
@@ -519,7 +505,7 @@
       ],
       "request": null,
       "status": "open",
-      "id": "F0041",
+      "id": "F0040",
       "owner": "informational"
     },
     {
@@ -535,7 +521,7 @@
       ],
       "request": null,
       "status": "open",
-      "id": "F0042",
+      "id": "F0041",
       "owner": "informational"
     },
     {
@@ -554,7 +540,7 @@
       ],
       "request": "Confirm that the 2 build paths are intended (different DB2 level, load concatenation or compile options inside one module) and which one the migration targets",
       "status": "open",
-      "id": "F0043",
+      "id": "F0042",
       "owner": "informational"
     },
     {
@@ -583,7 +569,7 @@
         ]
       },
       "was_asked": "Map bytes 4..12 of DFHCOMMAREA to the field(s) that produce CDEMO-FROM-PROGRAM",
-      "id": "F0044",
+      "id": "F0043",
       "owner": "agent"
     },
     {
@@ -612,7 +598,7 @@
         ]
       },
       "was_asked": "Map bytes 16..24 of DFHCOMMAREA to the field(s) that produce CDEMO-TO-PROGRAM",
-      "id": "F0045",
+      "id": "F0044",
       "owner": "agent"
     },
     {
@@ -633,7 +619,7 @@
           "app/app-transaction-type-db2/ctl/DB2TIAD1.ctl"
         ]
       },
-      "id": "F0046",
+      "id": "F0045",
       "owner": "informational"
     },
     {
@@ -654,7 +640,7 @@
           "app/app-transaction-type-db2/ctl/DB2TEP41.ctl"
         ]
       },
-      "id": "F0047",
+      "id": "F0046",
       "owner": "informational"
     },
     {
@@ -675,7 +661,7 @@
           "app/app-transaction-type-db2/ctl/DB2TEP41.ctl"
         ]
       },
-      "id": "F0048",
+      "id": "F0047",
       "owner": "informational"
     },
     {
@@ -694,7 +680,7 @@
           "app/app-transaction-type-db2/jcl/CREADB21.jcl:40"
         ]
       },
-      "id": "F0049",
+      "id": "F0048",
       "owner": "informational"
     },
     {
@@ -717,7 +703,7 @@
           "app/app-transaction-type-db2/cbl/CBTRNDYN.cbl:53-56"
         ]
       },
-      "id": "F0050",
+      "id": "F0049",
       "owner": "informational"
     },
     {
@@ -738,7 +724,7 @@
           "app/app-transaction-type-db2/cbl/COTRTLIC.cbl:43"
         ]
       },
-      "id": "F0051",
+      "id": "F0050",
       "owner": "informational"
     },
     {
@@ -756,7 +742,7 @@
         "how": "PF3 with CDEMO-FROM-PROGRAM low-values, spaces or COTRTLIC moves LIT-ADMINPGM (VALUE 'COADM01C') to CDEMO-TO-PROGRAM. COADM01C is not in the TRANTYPE scan. Cites: app/app-transaction-type-db2/cbl/COTRTLIC.cbl:600-603, app/app-transaction-type-db2/cbl/COTRTLIC.cbl:47.",
         "evidence": []
       },
-      "id": "F0052",
+      "id": "F0051",
       "owner": "informational"
     },
     {
@@ -777,7 +763,7 @@
           "app/app-transaction-type-db2/cbl/COTRTLIC.cbl:638"
         ]
       },
-      "id": "F0053",
+      "id": "F0052",
       "owner": "informational"
     },
     {
@@ -797,7 +783,7 @@
           "app/app-transaction-type-db2/cbl/COTRTLIC.cbl:50"
         ]
       },
-      "id": "F0054",
+      "id": "F0053",
       "owner": "informational"
     },
     {
@@ -815,7 +801,7 @@
         "how": "PF3 with CDEMO-FROM-PROGRAM low-values or spaces moves LIT-ADMINPGM (VALUE 'COADM01C'). COADM01C is not in the TRANTYPE scan. Cites: app/app-transaction-type-db2/cbl/COTRTUPC.cbl:438-440, app/app-transaction-type-db2/cbl/COTRTUPC.cbl:209-210.",
         "evidence": []
       },
-      "id": "F0055",
+      "id": "F0054",
       "owner": "informational"
     },
     {
@@ -838,7 +824,7 @@
           "app/cpy/COCOM01Y.cpy:22"
         ]
       },
-      "id": "F0056",
+      "id": "F0055",
       "owner": "informational"
     },
     {
@@ -859,7 +845,7 @@
           "app/app-transaction-type-db2/cbl/COTRTUPC.cbl:446"
         ]
       },
-      "id": "F0057",
+      "id": "F0056",
       "owner": "informational"
     },
     {
@@ -893,7 +879,7 @@
           "app/cpy/COCOM01Y.cpy:24"
         ]
       },
-      "id": "F0058",
+      "id": "F0057",
       "owner": "informational"
     },
     {
@@ -913,7 +899,7 @@
           "app/app-transaction-type-db2/cbl/COTRTLIC.cbl:50"
         ]
       },
-      "id": "F0059",
+      "id": "F0058",
       "owner": "informational"
     },
     {
@@ -932,7 +918,7 @@
           "app/app-transaction-type-db2/jcl/MNTTRDB2.jcl:21"
         ]
       },
-      "id": "F0060",
+      "id": "F0059",
       "owner": "informational"
     },
     {
@@ -951,7 +937,7 @@
           "app/app-transaction-type-db2/jcl/MNTTRDYN.jcl:23"
         ]
       },
-      "id": "F0061",
+      "id": "F0060",
       "owner": "informational"
     },
     {
@@ -974,7 +960,7 @@
           "descriptions.json"
         ]
       },
-      "id": "F0062",
+      "id": "F0061",
       "owner": "informational"
     },
     {
@@ -997,7 +983,7 @@
           "app/app-transaction-type-db2/cbl/COTRTLIC.cbl"
         ]
       },
-      "id": "F0063",
+      "id": "F0062",
       "owner": "informational"
     },
     {
@@ -1020,7 +1006,7 @@
           "app/app-transaction-type-db2/cbl/COTRTUPC.cbl"
         ]
       },
-      "id": "F0064",
+      "id": "F0063",
       "owner": "informational"
     },
     {
@@ -1044,7 +1030,7 @@
         ]
       },
       "was_asked": "Provide the BMS macro source for mapset COTRTLI (or its symbolic map copybook)",
-      "id": "F0065",
+      "id": "F0064",
       "owner": "human"
     },
     {
@@ -1067,7 +1053,7 @@
         ]
       },
       "was_asked": "Provide the BMS macro source for mapset COTRTUP (or its symbolic map copybook)",
-      "id": "F0066",
+      "id": "F0065",
       "owner": "human"
     },
     {
@@ -1090,6 +1076,31 @@
         ]
       },
       "was_asked": "Provide the BMS macro source for mapset COTRTUP (or its symbolic map copybook)",
+      "id": "F0066",
+      "owner": "human"
+    },
+    {
+      "kind": "online-map-no-source",
+      "severity": "info",
+      "message": "TRANID CTTU uses mapset None but no BMS source (DFHMSD/DFHMDI/DFHMDF) was scanned, so the fields on the screen and their COBOL names are unknown",
+      "evidence": [
+        "app/app-transaction-type-db2/cbl/COTRTUPC.cbl:1433"
+      ],
+      "request": null,
+      "status": "closed",
+      "transaction": "CTTU",
+      "origin": "online-transaction-analysis",
+      "closure": {
+        "by": "skill",
+        "how": "the data item CCARD-NEXT-MAPSET only ever receives LIT-THISMAPSET ('COTRTUP ') in COTRTUPC, so the send is on mapset COTRTUP, whose symbolic map copybook is in the scanned roots",
+        "evidence": [
+          "app/app-transaction-type-db2/cbl/COTRTUPC.cbl:205-206",
+          "app/app-transaction-type-db2/cbl/COTRTUPC.cbl:634",
+          "app/app-transaction-type-db2/cbl/COTRTUPC.cbl:1430-1434",
+          "app/app-transaction-type-db2/cpy-bms/COTRTUP.cpy:17"
+        ]
+      },
+      "was_asked": "Provide the BMS macro source for mapset None (or its symbolic map copybook)",
       "id": "F0067",
       "owner": "human"
     }
