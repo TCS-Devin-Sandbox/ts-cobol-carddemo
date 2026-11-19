@@ -1,0 +1,158 @@
+{
+  "meta": {
+    "module": "TRANTYPE",
+    "generated_at": "2026-11-19T08:35:24Z",
+    "tool": "mftb 0.2.1",
+    "inputs": [
+      "programs.json",
+      "jobs.json"
+    ]
+  },
+  "author": "agent",
+  "summary": {
+    "subjects": 8,
+    "written": 8,
+    "unknown": 0,
+    "by_kind": {
+      "program": 4,
+      "jcl": 4,
+      "proc": 0
+    },
+    "with_key_points": 6,
+    "overviews": 1,
+    "overviews_written": 1
+  },
+  "overviews": [
+    {
+      "kind": "module",
+      "name": "TRANTYPE",
+      "key_points": [
+        "Maintains the transaction type reference table in Db2, online through a list screen and an add/update screen and in batch from an update file.",
+        "Creates and seeds the transaction type and transaction type category tables, and unloads both to sequential extract files, keeping the previous extracts as backup generations."
+      ],
+      "basis": [
+        "app/app-transaction-type-db2/cbl/COTRTLIC.cbl:1-7",
+        "app/app-transaction-type-db2/cbl/COTRTUPC.cbl:1-5",
+        "app/app-transaction-type-db2/cbl/COBTUPDT.cbl:1-5",
+        "app/app-transaction-type-db2/jcl/CREADB21.jcl:1-84",
+        "app/app-transaction-type-db2/jcl/TRANEXTR.jcl:25-122"
+      ],
+      "written_by": "agent"
+    }
+  ],
+  "descriptions": [
+    {
+      "kind": "program",
+      "name": "CBTRNDYN",
+      "path": "app/app-transaction-type-db2/cbl/CBTRNDYN.cbl",
+      "description": "Ad-hoc maintenance driver: runs one SQL statement read from DYNSQL with PREPARE/EXECUTE, then dynamically CALLs the program named in its PARM.",
+      "key_points": [
+        "Concatenates the non-comment DYNSQL records into one statement and runs it as dynamic SQL; a failed PREPARE or negative EXECUTE SQLCODE sets return code 8.",
+        "When a PARM is present it CALLs the program named there; the name is not known at compile time."
+      ],
+      "basis": [
+        "app/app-transaction-type-db2/cbl/CBTRNDYN.cbl:1-103"
+      ],
+      "written_by": "agent"
+    },
+    {
+      "kind": "program",
+      "name": "COBTUPDT",
+      "path": "app/app-transaction-type-db2/cbl/COBTUPDT.cbl",
+      "description": "Batch maintenance of CARDDEMO.TRANSACTION_TYPE: applies add, update and delete records read from INPFILE.",
+      "key_points": [
+        "Each INPFILE record carries an action (A, U, D, or * for a comment), a two-character type and a 50-character description.",
+        "A negative SQLCODE, or +100 on update or delete, displays a message and sets return code 4; an insert has no +100 branch."
+      ],
+      "basis": [
+        "app/app-transaction-type-db2/cbl/COBTUPDT.cbl:1-237"
+      ],
+      "written_by": "agent"
+    },
+    {
+      "kind": "program",
+      "name": "COTRTLIC",
+      "path": "app/app-transaction-type-db2/cbl/COTRTLIC.cbl",
+      "description": "CICS screen (transaction CTLI) that lists transaction types from Db2 with paging and lets the user update or delete rows.",
+      "key_points": [
+        "Pages forward and backward through CARDDEMO.TRANSACTION_TYPE with two cursors, seven rows per screen.",
+        "PF2 transfers to the add/update program COTRTUPC; PF3 transfers back to the calling program or the admin menu."
+      ],
+      "basis": [
+        "app/app-transaction-type-db2/cbl/COTRTLIC.cbl:1-62",
+        "app/app-transaction-type-db2/cbl/COTRTLIC.cbl:338-360",
+        "app/app-transaction-type-db2/cbl/COTRTLIC.cbl:497-915"
+      ],
+      "written_by": "agent"
+    },
+    {
+      "kind": "program",
+      "name": "COTRTUPC",
+      "path": "app/app-transaction-type-db2/cbl/COTRTUPC.cbl",
+      "description": "CICS screen (transaction CTTU) that fetches one transaction type and lets the user add, change or delete it in Db2.",
+      "key_points": [
+        "Selects, updates, inserts and deletes rows of CARDDEMO.TRANSACTION_TYPE, asking for confirmation with PF5 (save) and PF4 (delete).",
+        "PF3 transfers back to the calling program, or to the admin menu when no caller is recorded in the COMMAREA."
+      ],
+      "basis": [
+        "app/app-transaction-type-db2/cbl/COTRTUPC.cbl:1-30",
+        "app/app-transaction-type-db2/cbl/COTRTUPC.cbl:200-217",
+        "app/app-transaction-type-db2/cbl/COTRTUPC.cbl:344-570",
+        "app/app-transaction-type-db2/cbl/COTRTUPC.cbl:1476-1630"
+      ],
+      "written_by": "agent"
+    },
+    {
+      "kind": "jcl",
+      "name": "CREADB2",
+      "path": "app/app-transaction-type-db2/jcl/CREADB21.jcl",
+      "description": "Sets up the Db2 side: frees the old plans, creates the CARDDEMO database, tables and indexes, and loads the type and category reference rows.",
+      "key_points": [
+        "FREEPLN runs the DB2FREE cards, CRCRDDB runs the DB2CREAT DDL, RUNTEP2 and LDTCCAT run the DB2LTTYP and DB2LTCAT inserts.",
+        "The JOB card carries TYPRUN=SCAN."
+      ],
+      "basis": [
+        "app/app-transaction-type-db2/jcl/CREADB21.jcl:1-84",
+        "app/app-transaction-type-db2/ctl/DB2CREAT.ctl:17-85",
+        "app/app-transaction-type-db2/ctl/DB2FREE.ctl:16-18"
+      ],
+      "written_by": "agent"
+    },
+    {
+      "kind": "jcl",
+      "name": "MNTTRDB2",
+      "path": "app/app-transaction-type-db2/jcl/MNTTRDB2.jcl",
+      "description": "Runs COBTUPDT under plan CARDDEMO to insert, update or delete transaction type rows from the INPFILE input.",
+      "key_points": [],
+      "basis": [
+        "app/app-transaction-type-db2/jcl/MNTTRDB2.jcl:1-29"
+      ],
+      "written_by": "agent"
+    },
+    {
+      "kind": "jcl",
+      "name": "MNTTRDYN",
+      "path": "app/app-transaction-type-db2/jcl/MNTTRDYN.jcl",
+      "description": "Ad-hoc maintenance: runs CBTRNDYN under plan CARDDEMO with the SQL in DYNSQL and PARMS('COBTUPDT'), with INPFILE also allocated.",
+      "key_points": [],
+      "basis": [
+        "app/app-transaction-type-db2/jcl/MNTTRDYN.jcl:1-39"
+      ],
+      "written_by": "agent"
+    },
+    {
+      "kind": "jcl",
+      "name": "TRANEXTR",
+      "path": "app/app-transaction-type-db2/jcl/TRANEXTR.jcl",
+      "description": "Backs up the previous transaction type and category extract files to GDGs, deletes them, and unloads both Db2 tables again with DSNTIAUL.",
+      "key_points": [
+        "STEP10 and STEP20 copy TRANTYPE.PS and TRANCATG.PS to new backup generations; STEP30 deletes both files.",
+        "STEP40 and STEP50 unload TRANSACTION_TYPE and TRANSACTION_TYPE_CATEGORY as 60-byte records into the two files."
+      ],
+      "basis": [
+        "app/app-transaction-type-db2/jcl/TRANEXTR.jcl:1-122"
+      ],
+      "written_by": "agent"
+    }
+  ]
+}

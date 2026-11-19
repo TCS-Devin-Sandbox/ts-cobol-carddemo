@@ -1,0 +1,22 @@
+{
+  "notes": [
+    {
+      "transid": "CDRA",
+      "note": "COACCT01 begins with EXEC CICS RETRIEVE INTO(MQTM) and takes its input queue from MQTM-QNAME, so the program expects to be started with an MQ trigger message (it ends in error when the RETRIEVE fails). Which queue, process definition and trigger monitor start CDRA is not in the scanned sources; the entry-point ask stays open. No map is sent or received and the task ends with a plain RETURN - there is no screen flow.",
+      "evidence": [
+        "app/app-vsam-mq/cbl/COACCT01.cbl:189-210",
+        "app/app-vsam-mq/cbl/COACCT01.cbl:549"
+      ]
+    },
+    {
+      "transid": "CDRD",
+      "note": "CODATE01 begins with EXEC CICS RETRIEVE INTO(MQTM) and takes its input queue from MQTM-QNAME, so the program expects to be started with an MQ trigger message. Which queue, process definition and trigger monitor start CDRD is not in the scanned sources; the entry-point ask stays open. No map is sent or received and the task ends with a plain RETURN - there is no screen flow.",
+      "evidence": [
+        "app/app-vsam-mq/cbl/CODATE01.cbl:138-148",
+        "app/app-vsam-mq/cbl/CODATE01.cbl:453"
+      ]
+    }
+  ],
+  "closures": [],
+  "asks": []
+}
