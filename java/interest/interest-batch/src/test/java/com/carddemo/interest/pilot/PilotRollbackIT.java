@@ -93,13 +93,33 @@ class PilotRollbackIT extends PilotPostgresTestSupport {
         Path out = Path.of("target/pilot-it/reused").toAbsolutePath();
         assertThat(service.run(I01.resolve("input"), out).exitCode()).isZero();
         assertThat(out.resolve("datasets")).exists();
+        Files.writeString(out.resolve("datasets/operator-note.txt"), "kept");
         PilotRunService.PilotRunResult r = service.run(SPECIMENS.resolve("missing-account"), out);
         assertThat(r.exitCode()).isEqualTo(PilotRunService.FAILED_RC);
-        assertThat(out.resolve("datasets")).doesNotExist();
-        assertThat(out.resolve("sysout")).doesNotExist();
+        assertThat(out.resolve("datasets/" + FixtureDatasets.SYSTRAN_DSN + ".txt")).doesNotExist();
+        assertThat(out.resolve("datasets/" + FixtureDatasets.ACCOUNT_DSN + ".txt")).doesNotExist();
+        assertThat(out.resolve(PilotExporter.SYSOUT_FILE)).doesNotExist();
+        assertThat(out.resolve("datasets/operator-note.txt")).hasContent("kept");
         assertThat(Files.readString(out.resolve("rc.json"))).contains("\"maxrc\": 12");
+        assertThat(out.resolve("pilot-failure.json")).exists();
         try (var entries = Files.list(out)) {
-            assertThat(entries.map(p -> p.getFileName().toString())).containsExactlyInAnyOrder("rc.json", "pilot-failure.json");
+            assertThat(entries.map(p -> p.getFileName().toString()))
+                    .containsExactlyInAnyOrder("rc.json", "pilot-failure.json", "datasets", "sysout");
+        }
+    }
+
+    @Test
+    void INT_R10_failureRcIsPublishedEvenWhenOldArtifactsCannotBeRemoved() throws Exception {
+        Path out = Path.of("target/pilot-it/read-only").toAbsolutePath();
+        assertThat(service.run(I01.resolve("input"), out).exitCode()).isZero();
+        Path datasets = out.resolve("datasets");
+        assertThat(datasets.toFile().setWritable(false)).isTrue();
+        try {
+            PilotRunService.PilotRunResult r = service.run(SPECIMENS.resolve("missing-account"), out);
+            assertThat(r.exitCode()).isEqualTo(PilotRunService.FAILED_RC);
+            assertThat(Files.readString(out.resolve("rc.json"))).contains("\"maxrc\": 12");
+        } finally {
+            datasets.toFile().setWritable(true);
         }
     }
 }

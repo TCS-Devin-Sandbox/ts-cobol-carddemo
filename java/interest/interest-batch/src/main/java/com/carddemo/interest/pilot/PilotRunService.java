@@ -27,7 +27,12 @@ public class PilotRunService {
     public static final int FAILED_RC = 12;
     private static final String RC_FILE = "rc.json";
     private static final String FAILURE_FILE = "pilot-failure.json";
-    private static final List<String> ARTIFACTS = List.of("datasets", "sysout", FAILURE_FILE);
+    /** Exactly the files a pilot run writes; anything else in the output directory is left alone. */
+    private static final List<String> ARTIFACTS = List.of(
+            "datasets/" + FixtureDatasets.SYSTRAN_DSN + ".txt",
+            "datasets/" + FixtureDatasets.ACCOUNT_DSN + ".txt",
+            PilotExporter.SYSOUT_FILE,
+            FAILURE_FILE);
     private static final Logger log = LoggerFactory.getLogger(PilotRunService.class);
     private final JobLauncher jobLauncher;
     private final Job interestPilotJob;
@@ -92,7 +97,14 @@ public class PilotRunService {
                 {"run": "%s", "category": "%s", "detail": "%s"}
                 """.formatted(runId, category, detail), StandardCharsets.UTF_8);
         PilotExporter.writeReturnCode(staging, FAILED_RC);
-        publish(staging, outputDir);
+        try {
+            publish(staging, outputDir);
+        } catch (IOException e) {
+            // Old artifacts could not be replaced; the failure RC must still reach the output directory.
+            log.warn("event=publish-failed run={} detail={}", runId, e.getClass().getSimpleName());
+            PilotExporter.writeReturnCode(outputDir, FAILED_RC);
+            deleteTree(staging);
+        }
     }
 
     /**
@@ -102,10 +114,11 @@ public class PilotRunService {
     private static void publish(Path staging, Path outputDir) throws IOException {
         Files.deleteIfExists(outputDir.resolve(RC_FILE));
         for (String artifact : ARTIFACTS) {
-            deleteTree(outputDir.resolve(artifact));
+            Files.deleteIfExists(outputDir.resolve(artifact));
         }
         for (String artifact : ARTIFACTS) {
             if (Files.exists(staging.resolve(artifact))) {
+                Files.createDirectories(outputDir.resolve(artifact).getParent());
                 Files.move(staging.resolve(artifact), outputDir.resolve(artifact), StandardCopyOption.ATOMIC_MOVE);
             }
         }

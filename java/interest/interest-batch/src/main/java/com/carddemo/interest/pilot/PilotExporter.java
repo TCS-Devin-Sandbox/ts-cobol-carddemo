@@ -18,6 +18,7 @@ import org.springframework.stereotype.Component;
 public class PilotExporter {
 
     static final String START = "START OF EXECUTION OF PROGRAM CBACT04C";
+    static final String SYSOUT_FILE = "sysout/INTCALC.STEP15.txt";
     static final String END = "END OF EXECUTION OF PROGRAM CBACT04C";
     private final PilotStore store;
 
@@ -38,7 +39,7 @@ public class PilotExporter {
         sysout.add(START);
         sysout.addAll(store.sysoutInOrder(runId));
         sysout.add(END);
-        Path sysoutFile = outputDir.resolve("sysout").resolve("INTCALC.STEP15.txt");
+        Path sysoutFile = outputDir.resolve(SYSOUT_FILE);
         Files.createDirectories(sysoutFile.getParent());
         Files.writeString(sysoutFile, String.join("\n", sysout) + "\n", StandardCharsets.ISO_8859_1);
         writeReturnCode(outputDir, 0);
