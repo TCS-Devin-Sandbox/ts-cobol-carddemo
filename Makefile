@@ -23,7 +23,7 @@ CHAIN   ?=
 CASE    ?=
 PY       = python3
 
-.PHONY: up down build run record parity parity-naive chain-graph chain-graph-check reset baseline shell
+.PHONY: up down build run record parity parity-naive chain-graph chain-graph-check reset baseline shell rules-interest rules-check board-e2e
 
 up:
 	$(COMPOSE) up -d --build --wait
@@ -87,3 +87,19 @@ baseline:
 reset:
 	rm -rf datasets loadlib work
 	$(COMPOSE) down -v
+
+# ---- interest rulebook (modernization/rules/interest) ----------------------
+# Host-side, Python 3 + PyYAML; board-e2e also needs playwright + pytest-playwright.
+RULES_PY ?= python3
+RULES_DIR := modernization/rules/interest
+
+rules-interest:            ## regenerate expected/*.json, rules-INTCALC.html, decisions.md
+	$(RULES_PY) $(RULES_DIR)/tools/evaluate.py
+	$(RULES_PY) $(RULES_DIR)/tools/build_board.py
+
+rules-check:               ## fail when expectations, board or register are stale vs rules.yaml
+	$(RULES_PY) $(RULES_DIR)/tools/evaluate.py --check
+	$(RULES_PY) $(RULES_DIR)/tools/build_board.py --check
+
+board-e2e: rules-check     ## Playwright suite for rules-INTCALC.html (ui-test-plan.md rows 1-9)
+	$(RULES_PY) -m pytest e2e -v

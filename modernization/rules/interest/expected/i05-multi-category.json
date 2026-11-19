@@ -1,0 +1,522 @@
+{
+ "case": "i05-multi-category",
+ "derived_from": [
+  "modernization/rules/interest/rules.yaml",
+  "fixtures/interest/i05-multi-category/input/AWS.M2.CARDDEMO.ACCTDATA.PS.txt",
+  "fixtures/interest/i05-multi-category/input/AWS.M2.CARDDEMO.CARDXREF.PS.txt",
+  "fixtures/interest/i05-multi-category/input/AWS.M2.CARDDEMO.DISCGRP.PS.txt",
+  "fixtures/interest/i05-multi-category/input/AWS.M2.CARDDEMO.TCATBALF.PS.txt",
+  "fixtures/interest/i05-multi-category/input/AWS.M2.CARDDEMO.TRANCATG.PS.txt",
+  "fixtures/interest/i05-multi-category/input/AWS.M2.CARDDEMO.TRANTYPE.PS.txt"
+ ],
+ "not_sme_signoff": true,
+ "return_code": {
+  "value": 0,
+  "rules": [
+   "INT-R10"
+  ]
+ },
+ "transactions": [
+  {
+   "balance_key": "00000002007/01/0001",
+   "exists": {
+    "status": "OPEN",
+    "rules": [
+     "INT-R04",
+     "INT-R05",
+     "INT-Q03",
+     "INT-Q04"
+    ],
+    "candidates": [
+     {
+      "decision": "legacy (every decision A)",
+      "value": true
+     },
+     {
+      "decision": "INT-Q03=B",
+      "value": true
+     },
+     {
+      "decision": "INT-Q04=B",
+      "value": true
+     }
+    ]
+   },
+   "TRAN-ID": {
+    "status": "OPEN",
+    "rules": [
+     "INT-R08",
+     "INT-R09",
+     "INT-Q03",
+     "INT-Q04"
+    ],
+    "candidates": [
+     {
+      "decision": "legacy (every decision A)",
+      "value": "2022071800000001"
+     },
+     {
+      "decision": "INT-Q03=B",
+      "value": "2022071800000001"
+     },
+     {
+      "decision": "INT-Q04=B",
+      "value": "2022071800000001"
+     }
+    ]
+   },
+   "TRAN-TYPE-CD": {
+    "value": "01",
+    "rules": [
+     "INT-R05"
+    ]
+   },
+   "TRAN-CAT-CD": {
+    "value": "0005",
+    "rules": [
+     "INT-R05"
+    ]
+   },
+   "TRAN-SOURCE": {
+    "value": "System",
+    "rules": [
+     "INT-R05"
+    ]
+   },
+   "TRAN-DESC": {
+    "value": "Int. for a/c 00000002007",
+    "rules": [
+     "INT-R05"
+    ]
+   },
+   "TRAN-MERCHANT-ID": {
+    "value": "0",
+    "rules": [
+     "INT-R05"
+    ]
+   },
+   "TRAN-MERCHANT-NAME": {
+    "value": "",
+    "rules": [
+     "INT-R05"
+    ]
+   },
+   "TRAN-MERCHANT-CITY": {
+    "value": "",
+    "rules": [
+     "INT-R05"
+    ]
+   },
+   "TRAN-MERCHANT-ZIP": {
+    "value": "",
+    "rules": [
+     "INT-R05"
+    ]
+   },
+   "TRAN-CARD-NUM": {
+    "value": "4000000000002007",
+    "rules": [
+     "INT-R05",
+     "INT-R09"
+    ]
+   },
+   "TRAN-AMT": {
+    "status": "OPEN",
+    "rules": [
+     "INT-R01",
+     "INT-R02",
+     "INT-Q01",
+     "INT-Q03"
+    ],
+    "candidates": [
+     {
+      "decision": "legacy (every decision A)",
+      "value": "10.00"
+     },
+     {
+      "decision": "INT-Q01=B",
+      "value": "10.00"
+     },
+     {
+      "decision": "INT-Q01=C",
+      "value": "10.00"
+     },
+     {
+      "decision": "INT-Q03=B",
+      "value": "10.00"
+     }
+    ]
+   },
+   "TRAN-ORIG-TS": {
+    "status": "OPEN",
+    "rules": [
+     "INT-Q05",
+     "TN-02"
+    ],
+    "candidates": [
+     {
+      "decision": "legacy (every decision A)",
+      "value": "2022-07-05-10.00.00.000000"
+     },
+     {
+      "decision": "INT-Q05=B",
+      "value": null,
+      "status": "UNRESOLVED",
+      "owner": "<owner: Finance / statement production>"
+     }
+    ]
+   },
+   "TRAN-PROC-TS": {
+    "status": "OPEN",
+    "rules": [
+     "INT-Q05",
+     "TN-02"
+    ],
+    "candidates": [
+     {
+      "decision": "legacy (every decision A)",
+      "value": "2022-07-05-10.00.00.000000"
+     },
+     {
+      "decision": "INT-Q05=B",
+      "value": "2022-07-05-10.00.00.000000"
+     }
+    ]
+   }
+  },
+  {
+   "balance_key": "00000002007/01/0002",
+   "exists": {
+    "status": "OPEN",
+    "rules": [
+     "INT-R04",
+     "INT-R05",
+     "INT-Q03",
+     "INT-Q04"
+    ],
+    "candidates": [
+     {
+      "decision": "legacy (every decision A)",
+      "value": true
+     },
+     {
+      "decision": "INT-Q03=B",
+      "value": true
+     },
+     {
+      "decision": "INT-Q04=B",
+      "value": true
+     }
+    ]
+   },
+   "TRAN-ID": {
+    "status": "OPEN",
+    "rules": [
+     "INT-R08",
+     "INT-R09",
+     "INT-Q03",
+     "INT-Q04"
+    ],
+    "candidates": [
+     {
+      "decision": "legacy (every decision A)",
+      "value": "2022071800000002"
+     },
+     {
+      "decision": "INT-Q03=B",
+      "value": "2022071800000002"
+     },
+     {
+      "decision": "INT-Q04=B",
+      "value": "2022071800000002"
+     }
+    ]
+   },
+   "TRAN-TYPE-CD": {
+    "value": "01",
+    "rules": [
+     "INT-R05"
+    ]
+   },
+   "TRAN-CAT-CD": {
+    "value": "0005",
+    "rules": [
+     "INT-R05"
+    ]
+   },
+   "TRAN-SOURCE": {
+    "value": "System",
+    "rules": [
+     "INT-R05"
+    ]
+   },
+   "TRAN-DESC": {
+    "value": "Int. for a/c 00000002007",
+    "rules": [
+     "INT-R05"
+    ]
+   },
+   "TRAN-MERCHANT-ID": {
+    "value": "0",
+    "rules": [
+     "INT-R05"
+    ]
+   },
+   "TRAN-MERCHANT-NAME": {
+    "value": "",
+    "rules": [
+     "INT-R05"
+    ]
+   },
+   "TRAN-MERCHANT-CITY": {
+    "value": "",
+    "rules": [
+     "INT-R05"
+    ]
+   },
+   "TRAN-MERCHANT-ZIP": {
+    "value": "",
+    "rules": [
+     "INT-R05"
+    ]
+   },
+   "TRAN-CARD-NUM": {
+    "value": "4000000000002007",
+    "rules": [
+     "INT-R05",
+     "INT-R09"
+    ]
+   },
+   "TRAN-AMT": {
+    "status": "OPEN",
+    "rules": [
+     "INT-R01",
+     "INT-R02",
+     "INT-Q01",
+     "INT-Q03"
+    ],
+    "candidates": [
+     {
+      "decision": "legacy (every decision A)",
+      "value": "7.50"
+     },
+     {
+      "decision": "INT-Q01=B",
+      "value": "7.50"
+     },
+     {
+      "decision": "INT-Q01=C",
+      "value": "7.50"
+     },
+     {
+      "decision": "INT-Q03=B",
+      "value": "7.50"
+     }
+    ]
+   },
+   "TRAN-ORIG-TS": {
+    "status": "OPEN",
+    "rules": [
+     "INT-Q05",
+     "TN-02"
+    ],
+    "candidates": [
+     {
+      "decision": "legacy (every decision A)",
+      "value": "2022-07-05-10.00.00.000000"
+     },
+     {
+      "decision": "INT-Q05=B",
+      "value": null,
+      "status": "UNRESOLVED",
+      "owner": "<owner: Finance / statement production>"
+     }
+    ]
+   },
+   "TRAN-PROC-TS": {
+    "status": "OPEN",
+    "rules": [
+     "INT-Q05",
+     "TN-02"
+    ],
+    "candidates": [
+     {
+      "decision": "legacy (every decision A)",
+      "value": "2022-07-05-10.00.00.000000"
+     },
+     {
+      "decision": "INT-Q05=B",
+      "value": "2022-07-05-10.00.00.000000"
+     }
+    ]
+   }
+  }
+ ],
+ "accounts": {
+  "00000002007": {
+   "updated": {
+    "status": "OPEN",
+    "rules": [
+     "INT-R06",
+     "INT-Q02",
+     "INT-Q06"
+    ],
+    "candidates": [
+     {
+      "decision": "legacy (every decision A)",
+      "value": false
+     },
+     {
+      "decision": "INT-Q02=B",
+      "value": true
+     },
+     {
+      "decision": "INT-Q06=B",
+      "value": false
+     }
+    ]
+   },
+   "ACCT-CURR-BAL": {
+    "status": "OPEN",
+    "rules": [
+     "INT-R06",
+     "INT-R01",
+     "INT-Q01",
+     "INT-Q02",
+     "INT-Q03"
+    ],
+    "candidates": [
+     {
+      "decision": "legacy (every decision A)",
+      "value": "1500.00"
+     },
+     {
+      "decision": "INT-Q01=B",
+      "value": "1500.00"
+     },
+     {
+      "decision": "INT-Q01=C",
+      "value": "1500.00"
+     },
+     {
+      "decision": "INT-Q02=B",
+      "value": "1517.50"
+     },
+     {
+      "decision": "INT-Q03=B",
+      "value": "1500.00"
+     }
+    ]
+   },
+   "ACCT-CURR-CYC-CREDIT": {
+    "status": "OPEN",
+    "rules": [
+     "INT-R07",
+     "INT-Q02",
+     "INT-Q06"
+    ],
+    "candidates": [
+     {
+      "decision": "legacy (every decision A)",
+      "value": "1500.00"
+     },
+     {
+      "decision": "INT-Q02=B",
+      "value": "0.00"
+     },
+     {
+      "decision": "INT-Q06=B",
+      "value": "1500.00"
+     }
+    ]
+   },
+   "ACCT-CURR-CYC-DEBIT": {
+    "status": "OPEN",
+    "rules": [
+     "INT-R07",
+     "INT-Q02",
+     "INT-Q06"
+    ],
+    "candidates": [
+     {
+      "decision": "legacy (every decision A)",
+      "value": "0.00"
+     },
+     {
+      "decision": "INT-Q02=B",
+      "value": "0.00"
+     },
+     {
+      "decision": "INT-Q06=B",
+      "value": "0.00"
+     }
+    ]
+   },
+   "other_fields": {
+    "value": "unchanged from input",
+    "rules": [
+     "TN-06"
+    ]
+   }
+  }
+ },
+ "fee_transactions": {
+  "status": "OPEN",
+  "rules": [
+   "INT-H01"
+  ],
+  "candidates": [
+   {
+    "decision": "legacy (every decision A)",
+    "value": []
+   },
+   {
+    "decision": "INT-H01=B",
+    "value": null,
+    "status": "UNRESOLVED",
+    "owner": "<owner: Finance / product>"
+   }
+  ]
+ },
+ "sysout": {
+  "value": [
+   "START OF EXECUTION OF PROGRAM CBACT04C",
+   "000000020070100010000010000{                      ",
+   "000000020070100020000005000{                      ",
+   "END OF EXECUTION OF PROGRAM CBACT04C"
+  ],
+  "rules": [
+   "TN-01"
+  ]
+ },
+ "unresolved": [
+  {
+   "value": "TRAN-ORIG-TS of 00000002007/01/0001",
+   "rule": "INT-Q05",
+   "decision": "INT-Q05=B",
+   "owner": "<owner: Finance / statement production>"
+  },
+  {
+   "value": "TRAN-ORIG-TS of 00000002007/01/0002",
+   "rule": "INT-Q05",
+   "decision": "INT-Q05=B",
+   "owner": "<owner: Finance / statement production>"
+  },
+  {
+   "value": "fee transactions",
+   "rule": "INT-H01",
+   "decision": "INT-H01=B",
+   "owner": "<owner: Finance / product>"
+  }
+ ],
+ "status": "OPEN",
+ "open_rules": [
+  "INT-H01",
+  "INT-Q01",
+  "INT-Q02",
+  "INT-Q03",
+  "INT-Q04",
+  "INT-Q05",
+  "INT-Q06"
+ ]
+}
