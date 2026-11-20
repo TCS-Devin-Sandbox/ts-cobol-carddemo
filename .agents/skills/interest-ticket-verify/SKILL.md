@@ -11,7 +11,7 @@ the output that shows it. Which behaviour a ticket must reproduce, and which tes
 is in [interest-conversion-standards](../interest-conversion-standards/SKILL.md) §5, §7 and
 §9; field-level parity in general is [carddemo-parity](../carddemo-parity/SKILL.md).
 
-`<ticket>` below is the ticket file name without `.md` (`01-pilot`, `02-schema-and-codecs`,
+`<ticket>` below is the ticket file name without `.md` (`01-pilot`, `02-schema`,
 ...). Each ticket writes its evidence only under `java/interest/evidence/<ticket>/` and its
 runtime output only under `work/<ticket>/`, so tickets built in parallel do not overwrite each
 other. The pilot's own evidence stays under
@@ -19,9 +19,10 @@ other. The pilot's own evidence stays under
 
 ## Steps
 
-1. Make the evidence directory and start a fresh report (`--report` appends; a rerun into an
-   old report repeats every heading):
+1. In Bash, enable pipeline error propagation, make the evidence directory and start a fresh
+   report (`--report` appends; a rerun into an old report repeats every heading):
    ```sh
+   set -o pipefail
    T=01-pilot
    mkdir -p java/interest/evidence/$T
    rm -f java/interest/evidence/$T/compare-report.md
@@ -39,7 +40,7 @@ other. The pilot's own evidence stays under
      docker compose exec -T \
        -e INTEREST_PILOT_JDBC_URL=jdbc:postgresql://db:5432/carddemo \
        -e INTEREST_PILOT_DB_USER=carddemo -e INTEREST_PILOT_DB_PASSWORD=carddemo \
-       estate python3 "$P/parity/run_case.py" $c --out work/$T/$c
+       estate python3 "$P/parity/run_case.py" $c --out work/$T/$c || exit "$?"
    done 2>&1 | tee java/interest/evidence/$T/e2e-run.log
    ```
    Success, once per case: `interest/<case>: Java STEP15 RC=0, outputs in /estate/work/01-pilot/<case>`.
@@ -51,7 +52,7 @@ other. The pilot's own evidence stays under
    for c in i01-baseline i02-tie-half-cent i03-zero-rate-skipped i04-default-group-fallback \
             i05-multi-category i06-negative-balance i07-nontie-rounding; do
      python3 tools/parity/compare.py interest $c --actual work/$T/$c --label java \
-       --report java/interest/evidence/$T/compare-report.md
+       --report java/interest/evidence/$T/compare-report.md || exit "$?"
    done | tee java/interest/evidence/$T/compare-stdout.txt
    ```
    Success, each case with exit 0:
@@ -65,6 +66,8 @@ other. The pilot's own evidence stays under
    interest/i07-nontie-rounding [java]: PASS (4 records, 50 fields, 0 differences)
    ```
    `grep -c '^## ' java/interest/evidence/$T/compare-report.md` prints `7`.
+   A nonzero case exits the loop immediately and makes the pipeline nonzero even when
+   `tee` succeeds. Stop on a nonzero exit; do not treat a partial log as parity evidence.
 4. Read a difference. A failing case prints
    `interest/<case> [java]: FAIL (<records> records, <fields> fields, <n> differences)` and
    exits 1. Its section in `compare-report.md` is headed
