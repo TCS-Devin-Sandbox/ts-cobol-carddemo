@@ -104,7 +104,7 @@ public class WorkloadTests
         Assert.True(File.Exists(Path.Combine(outDir, "keep.txt")));
     }
 
-    /// <summary>CHAR(2) codes with a trailing blank match like ocesql's untyped host variables; blank DYNSQL fails PREPARE but COBTUPDT still runs.</summary>
+    /// <summary>CHAR(2) codes with a trailing blank match like ocesql's untyped host variables; comment-only DYNSQL gives EXECUTE SQLCODE -212 (as on the estate) and COBTUPDT still applies its records.</summary>
     [Fact]
     public void Db2_padded_code_and_blank_dynsql()
     {
@@ -123,7 +123,7 @@ public class WorkloadTests
             var outDir = Temp("db2out");
             Assert.Equal(0, ChainRunner.Run("trantype-dynamic", caseDir, outDir, db2: db2)); // CBTRNDYN RC 8 is lost after CALL COBTUPDT (GAP-007)
             var sysout = File.ReadAllText(Path.Combine(outDir, "sysout", "MNTTRDYN.STEP1.txt"));
-            Assert.Contains("CBTRNDYN: PREPARE FAILED SQLCODE -0000000400", sysout, StringComparison.Ordinal);
+            Assert.Contains("CBTRNDYN: EXECUTE SQLCODE -0000000212", sysout, StringComparison.Ordinal);
             Assert.Contains("RECORD UPDATED SUCCESSFULLY", sysout, StringComparison.Ordinal);
             Assert.DoesNotContain("7 ", File.ReadAllText(Path.Combine(outDir, "db", "carddemo.transaction_type.csv")), StringComparison.Ordinal);
             Assert.DoesNotContain("\r", sysout, StringComparison.Ordinal);

@@ -124,19 +124,13 @@ public sealed class Cbtrndyn : IDb2Program
         var sql = stmt.Length > 800 ? stmt.ToString(0, 800) : stmt.ToString();
         ctx.Display("CBTRNDYN: " + (lines % 100).ToString("00", CultureInfo.InvariantCulture) + " SQL LINES READ");
         var rc = 0;
-        if (string.IsNullOrWhiteSpace(sql))
+        // PREPARE + EXECUTE: ocesql reports statement errors at EXECUTE (BR-DYN-002); an empty statement gives -212
+        // without touching the unit of work (observed on the estate).
+        var sqlcode = string.IsNullOrWhiteSpace(sql) ? -212 : db.Execute(sql.TrimEnd());
+        ctx.Display("CBTRNDYN: EXECUTE SQLCODE " + SqlCode(sqlcode));
+        if (sqlcode < 0)
         {
-            ctx.Display("CBTRNDYN: PREPARE FAILED SQLCODE " + SqlCode(-400)); // empty statement: PREPARE fails (GAP-006: ocesql code assumed -400)
-            rc = 8;
-        }
-        else
-        {
-            var sqlcode = db.Execute(sql.TrimEnd()); // PREPARE + EXECUTE: ocesql reports statement errors at EXECUTE (BR-DYN-002)
-            ctx.Display("CBTRNDYN: EXECUTE SQLCODE " + SqlCode(sqlcode));
-            if (sqlcode < 0)
-            {
-                rc = 8; // [Trace("CBTRNDYN 2000-RUN-DYNAMIC-SQL", "BR-DYN-003")]
-            }
+            rc = 8; // [Trace("CBTRNDYN 2000-RUN-DYNAMIC-SQL", "BR-DYN-003")]
         }
         if (!string.IsNullOrEmpty(parm))
         {
