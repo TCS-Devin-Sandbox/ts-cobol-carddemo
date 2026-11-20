@@ -16,34 +16,37 @@ fixture, golden, `tools/parity` or `carddemo-parity` file was changed.
 
 ## 2. Replay result
 
-Clean clone of `demo/05a-skills`, no `target/`, `work/`, `datasets/` or `loadlib/`; only the
+Clean clone of `demo/05a-skills` at `197f178`, no `target/`, `work/`, `datasets/` or `loadlib/`; only the
 build and verify skills followed, ticket `01-pilot`. Raw output:
 `java/interest/evidence/01-pilot/` (`test-output.txt`, `e2e-run.log`, `compare-stdout.txt`,
 `compare-report.md`, `i01-sql.sql`, `i01-sql-output.txt`, `replay-transcript.txt`).
 
 | Step | Command | Result |
 |---|---|---|
-| build 2 | `sudo apt-get install -y -q openjdk-21-jdk-headless`; `export JAVA_HOME=/usr/lib/jvm/java-21-openjdk-amd64`; `mvn -v` | REPLAY_JAVA |
-| build 3 | `make up && make build && make parity CHAIN=interest` | REPLAY_LEGACY |
-| build 4 | `mvn -B -f java/interest/interest-batch/pom.xml clean verify` | REPLAY_MVN |
-| build 5 | `python3 -m unittest discover -s java/interest/interest-batch/src/test/resources/pilot/parity -v` | REPLAY_UNIT |
-| verify 2 | `docker compose exec -T ... estate python3 .../run_case.py <case> --out work/01-pilot/<case>` | REPLAY_DRIVER |
+| build 2 | `sudo apt-get install -y -q openjdk-21-jdk-headless`; `export JAVA_HOME=/usr/lib/jvm/java-21-openjdk-amd64`; `mvn -v` | exit 0; `Apache Maven 3.9.9`, `Java version: 21.0.13.1` (Java 21 already present, install skipped as the step allows) |
+| build 3 | `make up && make build && make parity CHAIN=interest` | exit 0; `db-1 Healthy`, `estate-1 Healthy`, `CBACT04C: compiled`, 7/7 `[legacy rerun]: PASS` |
+| build 4 | `mvn -B -f java/interest/interest-batch/pom.xml clean verify` | exit 0; 36 unit + 10 integration, 0 failures/errors/skips, `BUILD SUCCESS` |
+| build 5 | `python3 -m unittest discover -s java/interest/interest-batch/src/test/resources/pilot/parity -v` | exit 0; `Ran 1 test`, `OK` |
+| build 6 | `git diff --stat origin/demo/04a-standards -- java/interest` | exit 0; 79 files, all in INT-01 Scope or `java/interest/evidence/01-pilot/` |
+| verify 2 | `docker compose exec -T ... estate python3 .../run_case.py <case> --out work/01-pilot/<case>` | 7/7 exit 0; `Java STEP15 RC=0` |
 | verify 3 | `python3 tools/parity/compare.py interest <case> --actual work/01-pilot/<case> --label java --report java/interest/evidence/01-pilot/compare-report.md` | see table |
-| verify 5 | `docker compose exec -T db psql ... -v run_id=<id> -f - < java/interest/evidence/01-pilot/i01-sql.sql` | REPLAY_SQL |
+| verify 5 | `docker compose exec -T db psql ... -v run_id=<id> -f - < java/interest/evidence/01-pilot/i01-sql.sql` | exit 0; run `d30078c7-4c70-4cbf-94fb-ff5d54735b98`; 2 transactions = 47.00, delta 1000.00 → 1010.00, final account no delta; `transactions_pass`, `delta_pass`, `final_account_unchanged_pass` all `t` |
 
 Parity per case (pilot result in `parity-report.md` → replay):
 
 | Case | Ticket case | Pilot | Replay |
 |---|---|---|---|
-| i01-baseline | yes | PASS 4 / 50, 0 differences | REPLAY_i01 |
-| i02-tie-half-cent | no | PASS 4 / 50, 0 differences | REPLAY_i02 |
-| i03-zero-rate-skipped | no | PASS 2 / 25, 0 differences | REPLAY_i03 |
-| i04-default-group-fallback | no | PASS 2 / 25, 0 differences | REPLAY_i04 |
-| i05-multi-category | no | PASS 3 / 38, 0 differences | REPLAY_i05 |
-| i06-negative-balance | no | PASS 2 / 25, 0 differences | REPLAY_i06 |
-| i07-nontie-rounding | no | PASS 4 / 50, 0 differences | REPLAY_i07 |
+| i01-baseline | yes | PASS 4 / 50, 0 differences | PASS 4 / 50, 0 differences (match) |
+| i02-tie-half-cent | no | PASS 4 / 50, 0 differences | PASS 4 / 50, 0 differences (match) |
+| i03-zero-rate-skipped | no | PASS 2 / 25, 0 differences | PASS 2 / 25, 0 differences (match) |
+| i04-default-group-fallback | no | PASS 2 / 25, 0 differences | PASS 2 / 25, 0 differences (match) |
+| i05-multi-category | no | PASS 3 / 38, 0 differences | PASS 3 / 38, 0 differences (match) |
+| i06-negative-balance | no | PASS 2 / 25, 0 differences | PASS 2 / 25, 0 differences (match) |
+| i07-nontie-rounding | no | PASS 4 / 50, 0 differences | PASS 4 / 50, 0 differences (match) |
 
-Tests: pilot 36 unit + 10 integration, 0 failures/errors/skips → replay REPLAY_TESTS.
+Tests: pilot 36 unit + 10 integration, 0 failures/errors/skips → replay 36 unit + 10 integration, 0 failures/errors/skips (match).
+
+First replay (at `cf0a66c`) stopped at build step 6: `<base>` was not named for INT-01. Fixed in `197f178` (pilot base `demo/04a-standards`, `mkdir -p` before `tee`, `[legacy rerun]` label); the full replay above was then rerun from a fresh clone.
 
 ## 3. Pitfall reproduction
 

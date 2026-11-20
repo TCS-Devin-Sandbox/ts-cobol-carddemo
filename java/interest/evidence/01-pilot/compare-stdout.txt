@@ -1,0 +1,28 @@
+
+COMMAND: python3 tools/parity/compare.py interest i01-baseline --actual work/01-pilot/i01-baseline --label java --report java/interest/evidence/01-pilot/compare-report.md 
+interest/i01-baseline [java]: PASS (4 records, 50 fields, 0 differences)
+EXIT CODE: 0
+
+COMMAND: python3 tools/parity/compare.py interest i02-tie-half-cent --actual work/01-pilot/i02-tie-half-cent --label java --report java/interest/evidence/01-pilot/compare-report.md 
+interest/i02-tie-half-cent [java]: PASS (4 records, 50 fields, 0 differences)
+EXIT CODE: 0
+
+COMMAND: python3 tools/parity/compare.py interest i03-zero-rate-skipped --actual work/01-pilot/i03-zero-rate-skipped --label java --report java/interest/evidence/01-pilot/compare-report.md 
+interest/i03-zero-rate-skipped [java]: PASS (2 records, 25 fields, 0 differences)
+EXIT CODE: 0
+
+COMMAND: python3 tools/parity/compare.py interest i04-default-group-fallback --actual work/01-pilot/i04-default-group-fallback --label java --report java/interest/evidence/01-pilot/compare-report.md 
+interest/i04-default-group-fallback [java]: PASS (2 records, 25 fields, 0 differences)
+EXIT CODE: 0
+
+COMMAND: python3 tools/parity/compare.py interest i05-multi-category --actual work/01-pilot/i05-multi-category --label java --report java/interest/evidence/01-pilot/compare-report.md 
+interest/i05-multi-category [java]: PASS (3 records, 38 fields, 0 differences)
+EXIT CODE: 0
+
+COMMAND: python3 tools/parity/compare.py interest i06-negative-balance --actual work/01-pilot/i06-negative-balance --label java --report java/interest/evidence/01-pilot/compare-report.md 
+interest/i06-negative-balance [java]: PASS (2 records, 25 fields, 0 differences)
+EXIT CODE: 0
+
+COMMAND: python3 tools/parity/compare.py interest i07-nontie-rounding --actual work/01-pilot/i07-nontie-rounding --label java --report java/interest/evidence/01-pilot/compare-report.md 
+interest/i07-nontie-rounding [java]: PASS (4 records, 50 fields, 0 differences)
+EXIT CODE: 0
