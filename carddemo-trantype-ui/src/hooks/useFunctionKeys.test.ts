@@ -4,6 +4,17 @@ import userEvent from '@testing-library/user-event';
 import { useFunctionKeys, type KeyHandlers } from './useFunctionKeys';
 
 describe('useFunctionKeys', () => {
+  it('blocks repeated Enter clicks on a focused confirmation button', async () => {
+    const enter = vi.fn();
+    const remove = vi.fn();
+    renderHook(() => useFunctionKeys({ Enter: enter }));
+    render(createElement('button', { onClick: remove }, 'Delete'));
+    screen.getByRole('button').focus();
+    await userEvent.keyboard('{Enter>3/}');
+    expect(remove).toHaveBeenCalledOnce();
+    expect(enter).not.toHaveBeenCalled();
+  });
+
   it('lets Enter activate a focused button instead of processing the page', async () => {
     const enter = vi.fn();
     const save = vi.fn();

@@ -11,7 +11,10 @@ export function useFunctionKeys(handlers: KeyHandlers) {
       if (e.key === 'Enter' && e.target instanceof Element && e.target.closest(
         'button, a[href], textarea, select, summary, input[type="button"], input[type="submit"], '
         + 'input[type="reset"], [contenteditable="true"], [contenteditable=""], [role="button"], [role="link"]',
-      )) return;
+      )) {
+        if (e.repeat) e.preventDefault();
+        return;
+      }
       const handler = ref.current[e.key as keyof KeyHandlers];
       if (handler) {
         e.preventDefault();
