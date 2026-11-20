@@ -1,46 +1,52 @@
-# Step 5b build run - BLOCKED before the workflow
+# Step 5b build run - interest tickets 02-06 in four groups
 
-Branch `demo/05b-integration` was created from `demo/05a-skills` (bcc92be) and pushed.
-The four skills are present under `.agents/skills/`. No workflow was written or run,
-no child session was started and no ticket was built.
+Status: **workflow started** (results below are filled in after the run).
 
-## Why: the group plan does not match the ticket queue
+## Regrouping (decided by the presenter - to be confirmed by a person)
 
-The step prompt assigns nine tickets (02-10) to four groups. The queue in
-`modernization/design/tickets/` on `demo/05-pilot`, `demo/05a-skills`, `demo/04-design`
-and `demo/04a-standards` has six (01-06); no branch or commit in the repository history
-has a ticket 07-10.
+A previous run of this step blocked because the step prompt named tickets 02-10 and the queue
+has 01-06 (see git history of this file, commit aa05c03). The presenter replaced the groups with
+the existing queue, unchanged and not renumbered:
 
-| Prompt ticket | Prompt group | Ticket file in the repo | Its dependencies (ticket file) |
-|---|---|---|---|
-| 02 schema | g1 | 02-schema.md | 01 |
-| 03 record codec | g1 | 03-record-codecs.md | 01 |
-| 04 rules | g2 | 04-calculation-restart.md (calculation + restart, not "rules") | 02, 03 |
-| 05 loader | g3 | 05-shadow-handoff.md (export packet + handoff, not "loader") | 02, 03 |
-| 06 calculation step | g2 | 06-parity-gate.md (parity gate, not "calculation step") | 04, 05 |
-| 07 export | g3 | missing | - |
-| 08 error paths | g2 | missing | - |
-| 09 parity gate | g4 | missing | - |
-| 10 data-move kit | g3 | missing | - |
+| Group | Tickets (build order) | Starts | Ticket dependencies (Dependencies line) | Check |
+|---|---|---|---|---|
+| g1-groundwork | 02-schema, 03-record-codecs | at once | 02 -> 01; 03 -> 01 (no schema dependency) | OK: 01 is on the starting branch; 03 does not need 02 |
+| g2-logic | 04-calculation-restart | after g1 | 04 -> 02, 03 | OK: g1 is earlier |
+| g3-data-flow | 05-shadow-handoff | after g1, beside g2 | 05 -> 02, 03 ("does not wait for 04") | OK: g1 is earlier; no need of g2 |
+| g4-gate | 06-parity-gate | after g2 and g3 | 06 -> 04, 05 | OK: g2 and g3 are earlier |
 
-Dependency check (step 2) fails with the files that exist:
+Grants restated against these tickets (used only where the ticket needs them):
+- 04-calculation-restart: `codec/AccountRecord.java` may pass ACCT-ACTIVE-STATUS to the domain, the
+  `RecordLayoutTest` assertions this breaks may be updated; policy switches incl. `multiCard` and
+  `overflow` in `policy/InterestPolicy.java` and `application.yml`.
+- 06-parity-gate: `batch/InterestJobConfig.java` and new `batch/` classes that only join the load,
+  calculation and export steps into one job, with their tests.
+None of these files exist on `demo/05b-integration` before the run (the pilot has only `pilot/`);
+a grant lets the ticket create them.
 
-- g2 would hold 06-parity-gate.md, which needs 05 from g3; g3 starts at the same time as g2.
-- Tickets 07, 08, 09 and 10 have no file, so there is no contract (Allowed files,
-  acceptance, verification) for g2, g3 or g4 to build.
-- The pre-granted file permissions are tied to the prompt's numbering (04 rules, 08 error
-  paths, 09 parity gate) and do not map to the existing tickets 04-06.
+## Workflow script
 
-## Options for a person to decide (none taken)
+`modernization/design/build-workflow.py`: one child session per group, no other agent.
 
-1. Supply ticket files 07-10 (and renumber 04-06 to match the prompt), then rerun step 5b unchanged.
-2. Regroup onto the existing queue: g1 = 02, 03; g2 = 04; g3 = 05 (beside g2); g4 = 06;
-   re-state the grants against 04-06.
-3. Keep the queue and the prompt as they are: not possible, the dependency rule fails.
+Dry run with stand-in agents (`evidence/build-workflow-dryrun.txt`):
 
-## Not produced
+| Case | Result |
+|---|---|
+| all pass | g1 runs alone; g2 and g3 start together at t=1.0s after g1 is combined; g4 starts at t=2.5s after g3 (the later of g2/g3) is combined; all passed |
+| g2 needs-decision | g1 passed; g2 needs-decision; g3 passed; g4 skipped (depends on g2=needs-decision); g2 not retried |
+| g1 fails twice | g1 attempt 2 carries "stub failure 1" quoted; g1 failed; g2, g3 skipped; g4 skipped |
 
-- `modernization/design/build-workflow.py`, its dry runs and printed prompts.
-- Workflow run id, group sessions, PRs, per-ticket results, skill corrections, standards proposals.
-- Final combined-check output on `demo/05b-integration` (nothing was built; the branch equals `demo/05a-skills` plus this file).
-- PR from `demo/05b-integration` to `demo/05a-skills`.
+Prompt check (g2 printed in `evidence/build-workflow-prompt-g2.txt`; g3 differs only in group, branch,
+ticket, evidence folder, grants and squash message):
+
+| Item | g2 | g3 |
+|---|---|---|
+| Ticket files in order | 04-calculation-restart.md | 05-shadow-handoff.md |
+| Starting branch / branch / PR base | demo/05b-integration / demo/05-g2-logic / demo/05b-integration | same with demo/05-g3-data-flow |
+| Four skills, read first, never edit | yes | yes |
+| Forbidden: app/, fixtures/, tools/parity/, modernization/ | yes | yes |
+| Evidence folder per ticket | java/interest/evidence/04-calculation-restart/ | java/interest/evidence/05-shadow-handoff/ |
+| Standards §9 checklist per ticket | yes | yes |
+| No-merge rule word for word | yes | yes |
+| Grants only where granted | ticket 04 grants only | "none" |
+| Self-contained (repo, commands, combined check, squash/push loop, return fields) | yes | yes |
