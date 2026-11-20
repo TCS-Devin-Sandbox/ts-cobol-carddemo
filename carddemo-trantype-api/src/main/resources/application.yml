@@ -2,6 +2,8 @@ spring:
   application:
     name: carddemo-trantype-api
   datasource:
+    hikari:
+      connection-init-sql: SET lock_timeout = '${carddemo.db.lock-timeout:5s}'
     url: ${DB_URL:jdbc:postgresql://localhost:5432/carddemo}
     username: ${DB_USER:carddemo}
     password: ${DB_PASSWORD:carddemo}

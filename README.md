@@ -210,7 +210,7 @@ The DB2 transaction-type screens `CTLI` (COTRTLIC) and `CTTU` (COTRTUPC) from `a
 
 | Path | Content |
 |---|---|
-| `docs/` | discovery, requirements/RTM, schema mapping, target spec, test plan, deviations |
+| [docs/trantype/](docs/trantype/) | discovery, requirements/RTM, schema mapping, target spec, test plan, deviations |
 | `db/migration/` | Flyway migrations (`V1__create_tables.sql`, `V2__seed_data.sql`) |
 | `carddemo-trantype-api/` | Spring Boot API (Java 17, Maven) |
 | `carddemo-trantype-ui/` | React + TypeScript UI (Vite, MUI) |

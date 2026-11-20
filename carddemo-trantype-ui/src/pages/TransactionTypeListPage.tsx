@@ -1,9 +1,11 @@
 import { useCallback, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import {
-  Box, Button, Stack, Table, TableBody, TableCell, TableHead, TableRow, TextField,
+  Box, Stack, Table, TableBody, TableCell, TableHead, TableRow, TextField,
 } from '@mui/material';
 import { api, ApiError, type PageQuery, type TransactionTypePage } from '../api/client';
+import { FunctionKeyBar } from '../components/FunctionKeyBar';
+import { useFunctionKeys } from '../hooks/useFunctionKeys';
 import { MessageLine } from '../components/MessageLine';
 import { ScreenHeader } from '../components/ScreenHeader';
 import { descriptionError, sameDescription, typeFilterError } from '../validation';
@@ -139,6 +141,15 @@ export function TransactionTypeListPage() {
     setPending(null);
   };
 
+  useFunctionKeys({
+    Enter: enter,
+    F2: () => navigate('/transaction-types/maintain?from=list'),
+    F3: () => navigate('/admin', { state: { info: MSG.exit } }),
+    F7: pageUp,
+    F8: pageDown,
+    F10: () => void save(),
+  });
+
   return (
     <Box sx={{ maxWidth: 960, mx: 'auto', p: 2 }}>
       <ScreenHeader tranId="CTLI" program="COTRTLIC" title="Maintain Transaction Type" page={data?.pageNumber ?? 1} />
@@ -196,14 +207,14 @@ export function TransactionTypeListPage() {
         </TableBody>
       </Table>
       <MessageLine info={info} error={error} />
-      <Stack direction="row" spacing={1} sx={{ mt: 1 }}>
-        <Button variant="contained" onClick={enter}>ENTER</Button>
-        <Button onClick={() => navigate('/transaction-types/maintain?from=list')}>F2=Add</Button>
-        <Button onClick={() => navigate('/admin', { state: { info: MSG.exit } })}>F3=Exit</Button>
-        <Button onClick={pageUp}>F7=Page Up</Button>
-        <Button onClick={pageDown}>F8=Page Dn</Button>
-        <Button onClick={() => void save()} disabled={!pending}>F10=Save</Button>
-      </Stack>
+      <FunctionKeyBar keys={[
+        { label: 'ENTER', onClick: enter },
+        { label: 'F2=Add', onClick: () => navigate('/transaction-types/maintain?from=list') },
+        { label: 'F3=Exit', onClick: () => navigate('/admin', { state: { info: MSG.exit } }) },
+        { label: 'F7=Page Up', onClick: pageUp },
+        { label: 'F8=Page Dn', onClick: pageDown },
+        { label: 'F10=Save', onClick: () => void save(), disabled: !pending },
+      ]} />
     </Box>
   );
 }

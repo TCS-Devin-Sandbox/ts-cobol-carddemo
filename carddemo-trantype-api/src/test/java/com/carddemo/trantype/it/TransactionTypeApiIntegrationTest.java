@@ -28,7 +28,7 @@ import org.testcontainers.junit.jupiter.Testcontainers;
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @Testcontainers
 @ActiveProfiles("dev")
-@TestPropertySource(properties = "spring.flyway.clean-disabled=false")
+@TestPropertySource(properties = {"spring.flyway.clean-disabled=false", "carddemo.db.lock-timeout=1s"})
 class TransactionTypeApiIntegrationTest {
 
     @Container
@@ -79,6 +79,36 @@ class TransactionTypeApiIntegrationTest {
         assertThat(keys(res)).containsExactly("01", "02", "03", "04", "05", "06", "07");
         assertThat(res.getBody()).containsEntry("hasNext", false).containsEntry("hasPrev", false)
                 .containsEntry("pageNumber", 1).containsEntry("firstKey", "01").containsEntry("lastKey", "07");
+    }
+
+    @Test
+    void healthIsPublic() {
+        var response = rest.exchange("/actuator/health", HttpMethod.GET, HttpEntity.EMPTY, MAP);
+        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
+        assertThat(response.getBody()).containsEntry("status", "UP");
+    }
+
+    @Test
+    void updateBlockedByRowLock() throws Exception {
+        try (var locker = java.sql.DriverManager.getConnection(
+                postgres.getJdbcUrl(), postgres.getUsername(), postgres.getPassword())) {
+            locker.setAutoCommit(false);
+            try {
+                locker.createStatement().execute("SELECT * FROM transaction_type WHERE tr_type = '05' FOR UPDATE");
+                var inline = call(HttpMethod.PATCH, "/api/transaction-types/05", Map.of("trDescription", "LOCKED"));
+                assertThat(inline.getStatusCode()).isEqualTo(HttpStatus.CONFLICT);
+                assertThat(inline.getBody()).containsEntry("code", "LOCK_ERROR")
+                        .containsEntry("message", "Deadlock. Someone else updating ?");
+                var edit = call(HttpMethod.PUT, "/api/transaction-types/05", Map.of("trDescription", "LOCKED"));
+                assertThat(edit.getStatusCode()).isEqualTo(HttpStatus.CONFLICT);
+                assertThat(edit.getBody()).containsEntry("code", "LOCK_ERROR")
+                        .containsEntry("message", "Could not lock record for update");
+            } finally {
+                locker.rollback();
+            }
+        }
+        assertThat(jdbc.queryForObject("SELECT tr_description FROM transaction_type WHERE tr_type='05'",
+                String.class)).isEqualTo("REFUND");
     }
 
     @Test
