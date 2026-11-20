@@ -3,6 +3,7 @@ package com.carddemo.interest.calc;
 import com.carddemo.interest.codec.FixedRecordCodec.*;
 import com.carddemo.interest.job.CloseStore;
 import java.math.BigDecimal;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -26,6 +27,7 @@ public final class GroupCalculation implements ItemProcessor<AccountGroups.Group
     }
 
     @Override public Outcome process(AccountGroups.Group group) {
+        // INT-H04: every encountered account is eligible, without status or expiry filtering.
         // INT-R09 / INT-R10: lookups precede rate skipping, including a zero-rate first balance.
         Decoded original = store.account(snapshot, group.account()).orElseThrow(() -> new MissingLookup("ACCTFILE"));
         Account account = (Account) original.fields();
@@ -53,9 +55,10 @@ public final class GroupCalculation implements ItemProcessor<AccountGroups.Group
     }
 
     /** INT-R10 / INT-H08: no identifiers in ordinary exception/log text. */
-    public static final class MissingLookup extends RuntimeException {
-        private final String dd;
-        public MissingLookup(String dd) { super("dd=" + dd + " op=READ status=23"); this.dd = dd; }
-        public String dd() { return dd; }
+    public static final class MissingLookup extends LegacyStatus.Failure {
+        public MissingLookup(String dd) {
+            super(LegacyStatus.Dd.valueOf(dd), LegacyStatus.Operation.READ, "23".getBytes(StandardCharsets.US_ASCII),
+                    LegacyStatus.Profile.LAB_ASCII, dd.equals("DISCGRP"), List.of());
+        }
     }
 }

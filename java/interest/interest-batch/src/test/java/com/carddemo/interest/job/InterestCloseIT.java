@@ -2,6 +2,7 @@ package com.carddemo.interest.job;
 
 import static org.junit.jupiter.api.Assertions.*;
 import com.carddemo.interest.calc.GroupWriter;
+import com.carddemo.interest.calc.LegacyStatus;
 import com.carddemo.interest.codec.FixedRecordCodec;
 import com.carddemo.interest.codec.FixedRecordCodec.*;
 import com.carddemo.interest.intake.SnapshotIntake;
@@ -51,7 +52,9 @@ class InterestCloseIT {
     static class TestHook implements GroupWriter.CommitHook {
         long before = -1;
         long after = -1;
+        LegacyStatus.Failure io;
         @Override public void beforeCommit(UUID run, long ordinal) {
+            if (io != null) { var failure = io; io = null; throw failure; }
             if (ordinal == before) { before = -1; throw new IllegalStateException("injected-before-commit"); }
         }
         @Override public void afterCommit(UUID run, long ordinal) {
@@ -61,7 +64,7 @@ class InterestCloseIT {
     @TestConfiguration static class Hooks {
         @Bean @Primary TestHook testHook() { return new TestHook(); }
     }
-    @BeforeEach void resetHook() { hook.before = -1; hook.after = -1; }
+    @BeforeEach void resetHook() { hook.before = -1; hook.after = -1; hook.io = null; }
     Path fixture(String c) { return REPO.resolve("fixtures/interest/" + c); }
     Path input(String c) { return fixture(c).resolve("input"); }
     Path out() { return temp.resolve(UUID.randomUUID().toString()); }
@@ -213,6 +216,44 @@ class InterestCloseIT {
             assertEquals(0, store.jdbc().queryForObject("SELECT count(*) FROM interest.run WHERE snapshot_id=?", Integer.class, result.snapshotId()));
             assertEquals(0, store.rows(result.snapshotId(), Layout.ACCOUNT).size());
             assertTrue(store.jdbc().queryForObject("SELECT manifest->>'reason' FROM interest.snapshot WHERE snapshot_id=?", String.class, result.snapshotId()).contains("offset="));
+        }
+    }
+
+    @Test void INT_R10_TN_03_TN_04_TN_07_TN_09_typedOperationFailuresRollbackAndPreserveRestrictedSourceOrder() throws Exception {
+        var balances = SnapshotIntake.decodeLines(Layout.TCATBAL, Files.readAllBytes(ps(input(CASES.getFirst()), "TCATBALF")));
+        String first = new String(balances.getFirst().original(), StandardCharsets.US_ASCII);
+        String lookahead = new String(balances.getLast().original(), StandardCharsets.US_ASCII);
+        record Probe(LegacyStatus.Dd dd, LegacyStatus.Operation operation, String status, boolean defaultRead,
+                List<String> prefix, String diagnostic, String formatted) {}
+        var probes = List.of(
+                new Probe(LegacyStatus.Dd.DISCGRP, LegacyStatus.Operation.OPEN, "35", false, List.of(),
+                        "ERROR OPENING DALY REJECTS FILE", "FILE STATUS IS: NNNN0035"),
+                new Probe(LegacyStatus.Dd.XREFFILE, LegacyStatus.Operation.READ, "10", false, List.of(first),
+                        "ERROR READING XREF FILE", "FILE STATUS IS: NNNN0010"),
+                new Probe(LegacyStatus.Dd.TRANSACT, LegacyStatus.Operation.WRITE, "95", false, List.of(first),
+                        "ERROR WRITING TRANSACTION RECORD", "FILE STATUS IS: NNNN9053"),
+                new Probe(LegacyStatus.Dd.ACCTFILE, LegacyStatus.Operation.REWRITE, "99", false, List.of(first, lookahead),
+                        "ERROR RE-WRITING ACCOUNT FILE", "FILE STATUS IS: NNNN9057"),
+                new Probe(LegacyStatus.Dd.TCATBALF, LegacyStatus.Operation.CLOSE, "30", false, List.of(first, lookahead),
+                        "ERROR CLOSING TRANSACTION BALANCE FILE", "FILE STATUS IS: NNNN0030"),
+                new Probe(LegacyStatus.Dd.DISCGRP, LegacyStatus.Operation.READ, "41", true,
+                        List.of(first, "DISCLOSURE GROUP RECORD MISSING", "TRY WITH DEFAULT GROUP CODE"),
+                        "ERROR READING DEFAULT DISCLOSURE GROUP", "FILE STATUS IS: NNNN0041"));
+        for (var probe : probes) {
+            hook.io = assertThrows(LegacyStatus.Failure.class, () -> LegacyStatus.check(probe.dd(), probe.operation(),
+                    probe.status().getBytes(StandardCharsets.US_ASCII), LegacyStatus.Profile.LAB_ASCII, probe.defaultRead(), probe.prefix()));
+            Path output = out();
+            var failed = service.run(input(CASES.getFirst()), output, ID, null);
+            assertEquals(12, failed.rc()); assertEquals("LEGACY_IO_FAILURE", failed.category());
+            assertEquals("FAILED", state(failed.runId()));
+            assertEquals(0, count("interest_tx", failed.runId())); assertEquals(0, count("account_delta", failed.runId()));
+            assertEquals(0, count("run_checkpoint", failed.runId()));
+            assertFalse(Files.exists(output.resolve(CloseExporter.ACCOUNT))); assertFalse(Files.exists(output.resolve(CloseExporter.SYSTRAN)));
+            var expected = new ArrayList<>(List.of("START OF EXECUTION OF PROGRAM CBACT04C"));
+            expected.addAll(probe.prefix());
+            expected.addAll(List.of(probe.diagnostic(), probe.formatted(), "ABENDING PROGRAM", "CEE3ABD: USER ABEND U+000000999"));
+            assertEquals(String.join("\n", expected) + "\n", Files.readString(output.resolve(CloseExporter.SYSOUT)));
+            assertTrue(Files.readString(output.resolve("rc.json")).contains("\"STEP15\":12"));
         }
     }
 

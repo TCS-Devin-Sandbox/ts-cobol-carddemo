@@ -2,6 +2,8 @@ package com.carddemo.interest.job;
 
 import com.carddemo.interest.codec.FixedRecordCodec;
 import com.carddemo.interest.codec.FixedRecordCodec.*;
+import com.carddemo.interest.calc.GroupCalculation;
+import com.carddemo.interest.calc.LegacyStatus;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
@@ -25,6 +27,10 @@ public final class CloseExporter {
     public CloseExporter(CloseStore store) { this.store = store; }
 
     public void export(UUID run, UUID snapshot, Path output, int rc, String category) throws IOException {
+        export(run, snapshot, output, rc, category, null);
+    }
+
+    public void export(UUID run, UUID snapshot, Path output, int rc, String category, LegacyStatus.Failure failure) throws IOException {
         if (output == null) return;
         Path staging = output.resolve(".close-" + UUID.randomUUID());
         Files.createDirectories(staging);
@@ -47,7 +53,7 @@ public final class CloseExporter {
             }
             Path sysout = staging.resolve(SYSOUT);
             Files.createDirectories(sysout.getParent());
-            Files.writeString(sysout, String.join("\n", transcript(snapshot, rc == 0)) + "\n", StandardCharsets.ISO_8859_1);
+            Files.writeString(sysout, String.join("\n", transcript(snapshot, rc == 0, failure)) + "\n", StandardCharsets.ISO_8859_1);
             Files.deleteIfExists(output.resolve("rc.json"));
             for (String artifact : ARTIFACTS) {
                 Files.deleteIfExists(output.resolve(artifact));
@@ -67,8 +73,17 @@ public final class CloseExporter {
 
     /** TN-01 / INT-R03 / INT-R10: regenerate restricted DISPLAY from immutable inputs, never ordinary logs. */
     public List<String> transcript(UUID snapshot, boolean success) {
+        return transcript(snapshot, success, null);
+    }
+
+    public List<String> transcript(UUID snapshot, boolean success, LegacyStatus.Failure failure) {
         List<String> lines = new ArrayList<>();
         lines.add("START OF EXECUTION OF PROGRAM CBACT04C");
+        if (failure != null && !(failure instanceof GroupCalculation.MissingLookup)) {
+            lines.addAll(failure.restrictedPrefix());
+            lines.addAll(failure.diagnostics());
+            return lines;
+        }
         if (snapshot == null) return lines;
         String previous = "";
         Account account = null;
@@ -79,12 +94,12 @@ public final class CloseExporter {
                 var found = store.account(snapshot, balance.acctId());
                 if (found.isEmpty()) {
                     lines.add("ACCOUNT NOT FOUND: " + balance.acctId());
-                    abend(lines, "ERROR READING ACCOUNT FILE"); return lines;
+                    lines.addAll(new GroupCalculation.MissingLookup("ACCTFILE").diagnostics()); return lines;
                 }
                 account = (Account) found.get().fields();
                 if (store.card(snapshot, balance.acctId()).isEmpty()) {
                     lines.add("ACCOUNT NOT FOUND: " + balance.acctId());
-                    abend(lines, "ERROR READING XREF FILE"); return lines;
+                    lines.addAll(new GroupCalculation.MissingLookup("XREFFILE").diagnostics()); return lines;
                 }
                 previous = balance.acctId();
             }
@@ -92,19 +107,12 @@ public final class CloseExporter {
                 lines.add("DISCLOSURE GROUP RECORD MISSING");
                 lines.add("TRY WITH DEFAULT GROUP CODE");
                 if (store.rate(snapshot, "DEFAULT   ", balance).isEmpty()) {
-                    abend(lines, "ERROR READING DEFAULT DISCLOSURE GROUP"); return lines;
+                    lines.addAll(new GroupCalculation.MissingLookup("DISCGRP").diagnostics()); return lines;
                 }
             }
         }
         if (success) lines.add("END OF EXECUTION OF PROGRAM CBACT04C");
         return lines;
-    }
-
-    private static void abend(List<String> lines, String diagnostic) {
-        lines.add(diagnostic);
-        lines.add("FILE STATUS IS: NNNN0023");
-        lines.add("ABENDING PROGRAM");
-        lines.add("CEE3ABD: USER ABEND U+000000999");
     }
 
     public static void writeFixed(Path file, List<byte[]> rows) throws IOException {

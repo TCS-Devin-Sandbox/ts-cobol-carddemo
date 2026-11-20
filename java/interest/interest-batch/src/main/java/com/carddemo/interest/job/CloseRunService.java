@@ -4,6 +4,7 @@ import com.carddemo.interest.calc.AccountGroups;
 import com.carddemo.interest.calc.GroupCalculation;
 import com.carddemo.interest.calc.GroupWriter;
 import com.carddemo.interest.calc.InterestRules;
+import com.carddemo.interest.calc.LegacyStatus;
 import com.carddemo.interest.intake.SnapshotIntake;
 import java.nio.file.Path;
 import java.util.List;
@@ -41,6 +42,7 @@ public final class CloseRunService {
         this.repository = repository; this.launcher = launcher; this.manager = manager; this.hook = hook;
     }
 
+    /** INT-H06: only an explicit FAILED run ID authorizes private resume; fresh launches never auto-restart. */
     public Result run(Path input, Path output, Identity identity, UUID resume) throws Exception {
         UUID run = resume == null ? UUID.randomUUID() : resume;
         UUID snapshot;
@@ -86,6 +88,7 @@ public final class CloseRunService {
         if (resume == null) store.jdbc().update("UPDATE interest.run SET state='COMPUTING' WHERE run_id=? AND state='READY'", run);
         int rc = 12;
         String category = "TARGET_COMPUTE_FAILED";
+        LegacyStatus.Failure legacyFailure = null;
         try {
             var checkpoint = store.checkpoint(run);
             var step = new StepBuilder("interestClose.compute", repository)
@@ -97,13 +100,19 @@ public final class CloseRunService {
             var execution = launcher.run(job, new JobParametersBuilder().addString("runId", run.toString())
                     .addString("attempt", UUID.randomUUID().toString()).toJobParameters());
             if (execution.getStatus() == BatchStatus.COMPLETED) { rc = 0; category = "COMPUTED"; }
-            else if (execution.getAllFailureExceptions().stream().anyMatch(CloseRunService::missingLookup)) category = "REQUIRED_LOOKUP_MISSING";
+            else legacyFailure = execution.getAllFailureExceptions().stream().map(CloseRunService::legacyFailure)
+                    .filter(java.util.Objects::nonNull).findFirst().orElse(null);
         } catch (Exception e) {
-            category = "TARGET_COMPUTE_FAILED";
+            legacyFailure = legacyFailure(e);
+        }
+        if (legacyFailure != null) {
+            category = legacyFailure instanceof GroupCalculation.MissingLookup ? "REQUIRED_LOOKUP_MISSING" : "LEGACY_IO_FAILURE";
+            LoggerFactory.getLogger(CloseRunService.class).warn("event=legacy-io-failed run={} dd={} op={} status-hex={}",
+                    run, legacyFailure.dd(), legacyFailure.operation(), legacyFailure.statusHex());
         }
         store.jdbc().update("UPDATE interest.run SET state=? WHERE run_id=?", rc == 0 ? "COMPUTED" : "FAILED", run);
         try {
-            exporter.export(run, snapshot, output, rc, category);
+            exporter.export(run, snapshot, output, rc, category, legacyFailure);
         } catch (Exception e) {
             store.jdbc().update("UPDATE interest.run SET state='FAILED' WHERE run_id=?", run);
             exporter.export(run, snapshot, output, 12, "TARGET_EXPORT_FAILED");
@@ -113,7 +122,7 @@ public final class CloseRunService {
         return new Result(run, snapshot, rc, category);
     }
 
-    private static boolean missingLookup(Throwable e) {
-        return e instanceof GroupCalculation.MissingLookup || e.getCause() != null && missingLookup(e.getCause());
+    private static LegacyStatus.Failure legacyFailure(Throwable e) {
+        return e instanceof LegacyStatus.Failure failure ? failure : e.getCause() == null ? null : legacyFailure(e.getCause());
     }
 }
