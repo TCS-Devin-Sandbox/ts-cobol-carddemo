@@ -1,0 +1,7 @@
+interest/i01-baseline [java]: PASS (4 records, 50 fields, 0 differences)
+interest/i02-tie-half-cent [java]: PASS (4 records, 50 fields, 0 differences)
+interest/i03-zero-rate-skipped [java]: PASS (2 records, 25 fields, 0 differences)
+interest/i04-default-group-fallback [java]: PASS (2 records, 25 fields, 0 differences)
+interest/i05-multi-category [java]: PASS (3 records, 38 fields, 0 differences)
+interest/i06-negative-balance [java]: PASS (2 records, 25 fields, 0 differences)
+interest/i07-nontie-rounding [java]: PASS (4 records, 50 fields, 0 differences)

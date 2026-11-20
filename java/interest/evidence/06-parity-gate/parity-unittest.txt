@@ -1,0 +1,12 @@
+test_cli_mismatch_is_nonzero_with_case_file_record_and_offset (test_byte_check.ByteCheckTest.test_cli_mismatch_is_nonzero_with_case_file_record_and_offset) ... ok
+test_missing_overlength_and_record_count (test_byte_check.ByteCheckTest.test_missing_overlength_and_record_count) ... ok
+test_padding_and_empty_files (test_byte_check.ByteCheckTest.test_padding_and_empty_files) ... ok
+test_signed_zoned_golden_amounts (test_byte_check.ByteCheckTest.test_signed_zoned_golden_amounts) ... ok
+test_empty_properties (test_intcalc_java.CandidateCommandTest.test_empty_properties) ... ok
+test_rejects_invalid_invocation (test_intcalc_java.CandidateCommandTest.test_rejects_invalid_invocation) ... ok
+test_translates_only_pilot_property_prefix (test_intcalc_java.CandidateCommandTest.test_translates_only_pilot_property_prefix) ... ok
+
+----------------------------------------------------------------------
+Ran 7 tests in 0.037s
+
+OK

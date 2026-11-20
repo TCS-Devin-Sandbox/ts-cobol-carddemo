@@ -1,0 +1,15 @@
+BYTE case=i01-baseline file=datasets/AWS.M2.CARDDEMO.ACCTDATA.VSAM.KSDS.txt records=2 lrecl=300 identical
+BYTE case=i01-baseline file=datasets/AWS.M2.CARDDEMO.SYSTRAN.G0001V00.txt records=2 lrecl=350 identical
+BYTE case=i02-tie-half-cent file=datasets/AWS.M2.CARDDEMO.ACCTDATA.VSAM.KSDS.txt records=2 lrecl=300 identical
+BYTE case=i02-tie-half-cent file=datasets/AWS.M2.CARDDEMO.SYSTRAN.G0001V00.txt records=2 lrecl=350 identical
+BYTE case=i03-zero-rate-skipped file=datasets/AWS.M2.CARDDEMO.ACCTDATA.VSAM.KSDS.txt records=1 lrecl=300 identical
+BYTE case=i03-zero-rate-skipped file=datasets/AWS.M2.CARDDEMO.SYSTRAN.G0001V00.txt records=1 lrecl=350 identical
+BYTE case=i04-default-group-fallback file=datasets/AWS.M2.CARDDEMO.ACCTDATA.VSAM.KSDS.txt records=1 lrecl=300 identical
+BYTE case=i04-default-group-fallback file=datasets/AWS.M2.CARDDEMO.SYSTRAN.G0001V00.txt records=1 lrecl=350 identical
+BYTE case=i05-multi-category file=datasets/AWS.M2.CARDDEMO.ACCTDATA.VSAM.KSDS.txt records=1 lrecl=300 identical
+BYTE case=i05-multi-category file=datasets/AWS.M2.CARDDEMO.SYSTRAN.G0001V00.txt records=2 lrecl=350 identical
+BYTE case=i06-negative-balance file=datasets/AWS.M2.CARDDEMO.ACCTDATA.VSAM.KSDS.txt records=1 lrecl=300 identical
+BYTE case=i06-negative-balance file=datasets/AWS.M2.CARDDEMO.SYSTRAN.G0001V00.txt records=1 lrecl=350 identical
+BYTE case=i07-nontie-rounding file=datasets/AWS.M2.CARDDEMO.ACCTDATA.VSAM.KSDS.txt records=2 lrecl=300 identical
+BYTE case=i07-nontie-rounding file=datasets/AWS.M2.CARDDEMO.SYSTRAN.G0001V00.txt records=2 lrecl=350 identical
+BYTE CHECK PASS cases=7 files=14 framing=LF-space-padded
