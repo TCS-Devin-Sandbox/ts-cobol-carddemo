@@ -1,0 +1,52 @@
+DB PostgreSQL 15.20 on x86_64-pc-linux-musl, compiled by gcc (Alpine 15.2.0) 15.2.0, 64-bit
+ROLE interest_publish
+FAULT shadow outcome=ShadowRehearsed publication=PRIVATE run=COMPUTED signals=0 host_calls=0 host_mutations=0 generations=0
+SQL released_without_verified_receipt=0 live_claims_per_destination_cycle_gt1=0 publication_rows_for_run=0
+FAULT missing-fence outcome=Held reason=FENCE_MISSING publication=HELD run=HELD signals=0 host_calls=2 host_mutations=0 generations=0
+SQL released_without_verified_receipt=0 live_claims_per_destination_cycle_gt1=0 publication_rows_for_run=1
+FAULT txn-id-collision outcome=Held reason=TXN_ID_COLLISION publication=HELD run=HELD signals=0 host_calls=4 host_mutations=0 generations=0
+SQL released_without_verified_receipt=0 live_claims_per_destination_cycle_gt1=0 publication_rows_for_run=1
+PACKET records=2 bytes=700 payload_sha256=4808df2ada1f74834f16ea24b136b50cf4e557118f24faad56d77cb3a856ea01 manifest_sha256=50677b242d04c83e629aa7065ca19650a8388c5896a32da82087191c0b24b3a9 deltas=1
+MANIFEST {"format":"INT-05/1","run_id":"<run>","snapshot_id":"<snapshot>","mode":"live","destination":"AWS.M2.CARDDEMO.SYSTRAN","cycle":"<cycle>","feed":"SYSTRAN","parm":"2022071800","codec_profile":"lab-ascii","build_revision":"INT-05","rule_revision":"legacy-A","clock_profile":"frozen","recfm":"F","lrecl":350,"record_count":2,"payload_sha256":"4808df2ada1f74834f16ea24b136b50cf4e557118f24faad56d77cb3a856ea01","txn_ids":["2022071800000001","2022071800000002"],"deltas":[{"acct_id":"00000002001","preimage_sha256":"df2c204a022231ab7b0e3ccf15307b3d8fc652f1bfc918387cf6d11056f70f4a","postimage_sha256":"f375a8a1332f4c998002fe718393a29a19c3cc3234dc7d113b5d86861194d59e","old_current_balance":"1000.00","new_current_balance":"1010.00","old_cycle_credit":"1000.00","new_cycle_credit":"0.00","old_cycle_debit":"0.00","new_cycle_debit":"0.00"}]}
+SQL released_without_verified_receipt=0 live_claims_per_destination_cycle_gt1=0 publication_rows_for_run=0
+FAULT stale-fence-cycle outcome=Held reason=FENCE_STALE publication=HELD run=HELD signals=0 host_calls=2 host_mutations=0 generations=0
+SQL released_without_verified_receipt=0 live_claims_per_destination_cycle_gt1=0 publication_rows_for_run=1
+FAULT receipt-generation-not-current outcome=Held reason=GENERATION_MOVED publication=HELD run=HELD signals=0 host_calls=11 host_mutations=2 generations=2
+SQL released_without_verified_receipt=0 live_claims_per_destination_cycle_gt1=0 publication_rows_for_run=1
+FAULT partial-apply outcome=Held reason=APPLY_UNCERTAIN publication=HELD run=HELD signals=0 host_calls=10 host_mutations=2 generations=0
+SQL released_without_verified_receipt=0 live_claims_per_destination_cycle_gt1=0 publication_rows_for_run=0
+FAULT fence-changed outcome=Held reason=FENCE_STALE publication=HELD run=HELD signals=0 host_calls=5 host_mutations=0 generations=0
+SQL released_without_verified_receipt=0 live_claims_per_destination_cycle_gt1=0 publication_rows_for_run=1
+FAULT ambiguous-catalog outcome=Held reason=CATALOG_AMBIGUOUS publication=RECEIVED run=RELEASED signals=1 host_calls=11 host_mutations=2 generations=1
+SQL released_without_verified_receipt=0 live_claims_per_destination_cycle_gt1=0 publication_rows_for_run=1
+SQL released_without_verified_receipt=0 live_claims_per_destination_cycle_gt1=0 publication_rows_for_run=0
+FAULT inactive-fence outcome=Held reason=FENCE_STALE publication=HELD run=HELD signals=0 host_calls=2 host_mutations=0 generations=0
+SQL released_without_verified_receipt=0 live_claims_per_destination_cycle_gt1=0 publication_rows_for_run=1
+FAULT host-error-after-apply outcome=Held reason=HOST_ERROR publication=HELD run=HELD signals=0 host_calls=8 host_mutations=1 generations=0
+SQL released_without_verified_receipt=0 live_claims_per_destination_cycle_gt1=0 publication_rows_for_run=1
+FAULT repeat-receipt outcome=Released publication=RECEIVED run=RELEASED signals=1 host_calls=11 host_mutations=2 generations=1
+SQL released_without_verified_receipt=0 live_claims_per_destination_cycle_gt1=0 publication_rows_for_run=1
+SQL released_without_verified_receipt=0 live_claims_per_destination_cycle_gt1=0 publication_rows_for_run=0
+FAULT signal-redelivered outcome=Released publication=RECEIVED run=RELEASED signals=1 host_calls=11 host_mutations=2 generations=1
+SQL released_without_verified_receipt=0 live_claims_per_destination_cycle_gt1=0 publication_rows_for_run=1
+FAULT missing-receipt outcome=Held reason=RECEIPT_MISSING publication=RECEIVED run=RELEASED signals=1 host_calls=13 host_mutations=2 generations=1
+SQL released_without_verified_receipt=0 live_claims_per_destination_cycle_gt1=0 publication_rows_for_run=1
+FAULT wrong-preimage outcome=Held reason=PREIMAGE_MISMATCH publication=HELD run=HELD signals=0 host_calls=3 host_mutations=0 generations=0
+SQL released_without_verified_receipt=0 live_claims_per_destination_cycle_gt1=0 publication_rows_for_run=1
+FAULT receipt-mismatch outcome=Held reason=RECEIPT_MISMATCH publication=HELD run=HELD signals=0 host_calls=11 host_mutations=2 generations=1
+SQL released_without_verified_receipt=0 live_claims_per_destination_cycle_gt1=0 publication_rows_for_run=1
+SQL released_without_verified_receipt=0 live_claims_per_destination_cycle_gt1=0 publication_rows_for_run=0
+FAULT claim-conflict outcome=Held reason=CLAIM_CONFLICT publication=NONE run=COMPUTED signals=1 host_calls=1 host_mutations=0 generations=0
+SQL released_without_verified_receipt=0 live_claims_per_destination_cycle_gt1=0 publication_rows_for_run=1
+SQL released_without_verified_receipt=0 live_claims_per_destination_cycle_gt1=0 publication_rows_for_run=0
+FAULT verified-receipt outcome=Released publication=RECEIVED run=RELEASED signals=1 host_calls=11 host_mutations=2 generations=1
+SQL released_without_verified_receipt=0 live_claims_per_destination_cycle_gt1=0 publication_rows_for_run=1
+FAULT unknown-apply outcome=Held reason=APPLY_UNCERTAIN publication=HELD run=HELD signals=0 host_calls=6 host_mutations=1 generations=0
+SQL released_without_verified_receipt=0 live_claims_per_destination_cycle_gt1=0 publication_rows_for_run=1
+SQL released_without_verified_receipt=0 live_claims_per_destination_cycle_gt1=0 publication_rows_for_run=0
+FAULT generation-moved outcome=Held reason=GENERATION_MOVED publication=HELD run=HELD signals=0 host_calls=8 host_mutations=1 generations=1
+SQL released_without_verified_receipt=0 live_claims_per_destination_cycle_gt1=0 publication_rows_for_run=1
+FAULT failed-catalog outcome=Held reason=CATALOG_AMBIGUOUS publication=HELD run=HELD signals=0 host_calls=10 host_mutations=2 generations=0
+SQL released_without_verified_receipt=0 live_claims_per_destination_cycle_gt1=0 publication_rows_for_run=1
+SQL released_without_verified_receipt=0 live_claims_per_destination_cycle_gt1=0 publication_rows_for_run=0
+DB PostgreSQL 15.20 on x86_64-pc-linux-musl, compiled by gcc (Alpine 15.2.0) 15.2.0, 64-bit
