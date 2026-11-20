@@ -112,7 +112,7 @@ export default function App() {
         <nav aria-label="Main">
           <Link to="/transaction-types">Transaction types</Link>
           {authenticated && !signedOut && (
-            <button type="button" className="btn btn-ghost btn-sm" onClick={onSignOut}>Sign out</button>
+            <button type="button" className="btn btn-ghost btn-sm !text-white/90 hover:!bg-white/10 hover:!text-white" onClick={onSignOut}>Sign out</button>
           )}
         </nav>
       </header>

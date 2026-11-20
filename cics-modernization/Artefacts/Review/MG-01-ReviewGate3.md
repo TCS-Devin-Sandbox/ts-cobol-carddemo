@@ -91,3 +91,10 @@ The full Phase 8 browser suite (74 cases) was not re-run after these fixes. The 
 2. **R1:** keep React Router v6 for now, or upgrade to v7 (this changes the major version for all MGs).
 3. **R4:** add the CI pipeline file at repository level (outside `Target/MG-01/`).
 4. **Next:** after approval, start **MG-02 (sign-on and the user/admin menus, CC00/CM00/CA00)** at Phase 4, per `MoveGroup.md`.
+
+## 7. Sign-off
+
+- **Gate 3: APPROVED** by the user ("ok proceed", 2026-11-20 13:01 IST).
+- R1: keep React Router v6 for now (default; no upgrade requested). R4: no repository-level CI file added (default; `ci/quality-gate.sh` stays under `Target/MG-01/`).
+- Post-approval cosmetic fix: the header "Sign out" button now has readable contrast on the dark header.
+- Next: MG-02 (CC00 → CM00 → CA00) from Phase 4.
