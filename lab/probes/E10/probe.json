@@ -1,0 +1,12 @@
+{
+  "id": "E10",
+  "title": "Nonzero rate emits zero and sub-cent interest",
+  "stresses": "Nonzero rate emits zero and sub-cent interest",
+  "rules": [
+    "INT-Q04"
+  ],
+  "flags": {},
+  "gnucobol_vs_host": "GnuCOBOL lab observation only; not Enterprise COBOL arithmetic, LE abend, or VSAM AIX first-return proof.",
+  "open_question": null,
+  "derived_from": "fixtures/interest/i02-tie-half-cent/input"
+}

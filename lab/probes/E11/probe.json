@@ -1,0 +1,12 @@
+{
+  "id": "E11",
+  "title": "Negative annual rate is used as supplied",
+  "stresses": "Negative annual rate is used as supplied",
+  "rules": [
+    "INT-H07"
+  ],
+  "flags": {},
+  "gnucobol_vs_host": "GnuCOBOL lab observation only; not Enterprise COBOL arithmetic, LE abend, or VSAM AIX first-return proof.",
+  "open_question": null,
+  "derived_from": "fixtures/interest/i02-tie-half-cent/input"
+}

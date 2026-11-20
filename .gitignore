@@ -11,6 +11,7 @@ batch-app/markers/*
 /loadlib/
 /work/
 /datasets/
+/java/interest/interest-batch/target/
 __pycache__/
 
 # board exports and e2e artefacts (never committed)

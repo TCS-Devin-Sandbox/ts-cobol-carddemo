@@ -1,0 +1,12 @@
+{
+  "id": "E03",
+  "title": "Blank and unknown account groups use DEFAULT",
+  "stresses": "Blank and unknown account groups use DEFAULT",
+  "rules": [
+    "INT-R03"
+  ],
+  "flags": {},
+  "gnucobol_vs_host": "GnuCOBOL lab observation only; not Enterprise COBOL arithmetic, LE abend, or VSAM AIX first-return proof.",
+  "open_question": null,
+  "derived_from": "fixtures/interest/i02-tie-half-cent/input"
+}

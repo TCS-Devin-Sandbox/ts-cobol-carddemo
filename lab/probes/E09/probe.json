@@ -1,0 +1,14 @@
+{
+  "id": "E09",
+  "title": "Multiple cards require host AIX first-return evidence",
+  "stresses": "Multiple cards require host AIX first-return evidence",
+  "rules": [
+    "INT-H03"
+  ],
+  "flags": {
+    "multi_card": true
+  },
+  "gnucobol_vs_host": "GnuCOBOL lab observation only; not Enterprise COBOL arithmetic, LE abend, or VSAM AIX first-return proof.",
+  "open_question": "INT-H03",
+  "derived_from": "fixtures/interest/i02-tie-half-cent/input"
+}

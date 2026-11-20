@@ -1,0 +1,14 @@
+{
+  "id": "E08",
+  "title": "Second run reads legacy run-one host file state",
+  "stresses": "Second run reads legacy run-one host file state",
+  "rules": [
+    "INT-H06"
+  ],
+  "flags": {
+    "repeat": true
+  },
+  "gnucobol_vs_host": "GnuCOBOL lab observation only; not Enterprise COBOL arithmetic, LE abend, or VSAM AIX first-return proof.",
+  "open_question": "INT-H06",
+  "derived_from": "fixtures/interest/i02-tie-half-cent/input"
+}

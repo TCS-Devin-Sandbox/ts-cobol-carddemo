@@ -1,0 +1,14 @@
+{
+  "id": "E02",
+  "title": "Final multi-category account; untouched no-balance account; inactive expired account charged",
+  "stresses": "Final multi-category account; untouched no-balance account; inactive expired account charged",
+  "rules": [
+    "INT-Q02",
+    "INT-Q06",
+    "INT-H04"
+  ],
+  "flags": {},
+  "gnucobol_vs_host": "GnuCOBOL lab observation only; not Enterprise COBOL arithmetic, LE abend, or VSAM AIX first-return proof.",
+  "open_question": null,
+  "derived_from": "fixtures/interest/i02-tie-half-cent/input"
+}

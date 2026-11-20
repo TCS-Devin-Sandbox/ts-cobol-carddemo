@@ -1,0 +1,21 @@
+============================= test session starts ==============================
+platform linux -- Python 3.12.16, pytest-8.4.2, pluggy-1.7.0 -- /home/ubuntu/envs/lab/bin/python
+cachedir: .pytest_cache
+rootdir: /home/ubuntu/repos/ts-cobol-carddemo
+plugins: playwright-0.10.0
+collecting ... collected 12 items
+
+lab/e2e/test_ui_plan.py::test_row_01_initial_load_and_metadata[chromium] PASSED [  8%]
+lab/e2e/test_ui_plan.py::test_row_02_all_golden_fixtures[chromium] PASSED [ 16%]
+lab/e2e/test_ui_plan.py::test_row_03_i02_rounding_tie[chromium] PASSED   [ 25%]
+lab/e2e/test_ui_plan.py::test_row_04_register_deep_link[chromium] PASSED [ 33%]
+lab/e2e/test_ui_plan.py::test_row_05_every_edge_probe_and_immutable_fixtures[chromium] PASSED [ 41%]
+lab/e2e/test_ui_plan.py::test_row_06_custom_validation_and_recovery[chromium] PASSED [ 50%]
+lab/e2e/test_ui_plan.py::test_row_07_page_gate_matches_cli[chromium] PASSED [ 58%]
+lab/e2e/test_ui_plan.py::test_row_08_rules_board_popup[chromium] PASSED  [ 66%]
+lab/e2e/test_ui_plan.py::test_row_09_reload_during_run[chromium] PASSED  [ 75%]
+lab/e2e/test_ui_plan.py::test_row_10_evidence_popups[chromium] PASSED    [ 83%]
+lab/e2e/test_ui_plan.py::test_row_11_back_keeps_results[chromium] PASSED [ 91%]
+lab/e2e/test_ui_plan.py::test_row_12_reload_clears_results[chromium] PASSED [100%]
+
+======================== 12 passed in 207.40s (0:03:27) ========================

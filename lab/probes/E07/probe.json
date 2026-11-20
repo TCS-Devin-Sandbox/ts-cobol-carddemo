@@ -1,0 +1,15 @@
+{
+  "id": "E07",
+  "title": "Missing exact and DEFAULT rates stop the run",
+  "stresses": "Missing exact and DEFAULT rates stop the run",
+  "rules": [
+    "INT-R10",
+    "INT-H08"
+  ],
+  "flags": {
+    "stop": true
+  },
+  "gnucobol_vs_host": "GnuCOBOL lab observation only; not Enterprise COBOL arithmetic, LE abend, or VSAM AIX first-return proof.",
+  "open_question": null,
+  "derived_from": "fixtures/interest/i02-tie-half-cent/input"
+}

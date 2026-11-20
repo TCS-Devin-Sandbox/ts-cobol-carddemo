@@ -1,0 +1,33 @@
+make[1]: Entering directory '/home/ubuntu/repos/ts-cobol-carddemo'
+python3 lab/replay.py gate --json work/lab/report.json --report work/lab/report.md
+Interest replay | baseline fb7d603daaa170230b85fb71bae86ad810773a5b | clock 2022-07-05 10:00:00.00 | PARM 2022071800
+i01-baseline: MATCH 53, INTENDED_CHANGE 0, UNRESOLVED 6 (engines agree 6, engines differ 0), UNCLASSIFIED 0; RC observed=0 target=0
+i02-tie-half-cent: MATCH 50, INTENDED_CHANGE 0, UNRESOLVED 9 (engines agree 9, engines differ 0), UNCLASSIFIED 0; RC observed=0 target=0
+i03-zero-rate-skipped: MATCH 26, INTENDED_CHANGE 0, UNRESOLVED 6 (engines agree 6, engines differ 0), UNCLASSIFIED 0; RC observed=0 target=0
+i04-default-group-fallback: MATCH 27, INTENDED_CHANGE 0, UNRESOLVED 5 (engines agree 5, engines differ 0), UNCLASSIFIED 0; RC observed=0 target=0
+i05-multi-category: MATCH 40, INTENDED_CHANGE 0, UNRESOLVED 6 (engines agree 6, engines differ 0), UNCLASSIFIED 0; RC observed=0 target=0
+i06-negative-balance: MATCH 24, INTENDED_CHANGE 0, UNRESOLVED 8 (engines agree 8, engines differ 0), UNCLASSIFIED 0; RC observed=0 target=0
+i07-nontie-rounding: MATCH 53, INTENDED_CHANGE 0, UNRESOLVED 6 (engines agree 6, engines differ 0), UNCLASSIFIED 0; RC observed=0 target=0
+E01: MATCH 95, INTENDED_CHANGE 0, UNRESOLVED 18 (engines agree 18, engines differ 0), UNCLASSIFIED 0; RC observed=0 target=0
+E02: MATCH 78, INTENDED_CHANGE 0, UNRESOLVED 9 (engines agree 9, engines differ 0), UNCLASSIFIED 0; RC observed=0 target=0
+E03: MATCH 53, INTENDED_CHANGE 0, UNRESOLVED 6 (engines agree 6, engines differ 0), UNCLASSIFIED 0; RC observed=0 target=0
+E04: MATCH 48, INTENDED_CHANGE 0, UNRESOLVED 11 (engines agree 11, engines differ 0), UNCLASSIFIED 0; RC observed=0 target=0
+E05: MATCH 2, INTENDED_CHANGE 0, UNRESOLVED 0 (engines agree 0, engines differ 0), UNCLASSIFIED 0; RC observed=12 target=12
+E06: MATCH 2, INTENDED_CHANGE 0, UNRESOLVED 0 (engines agree 0, engines differ 0), UNCLASSIFIED 0; RC observed=12 target=12
+E07: MATCH 2, INTENDED_CHANGE 0, UNRESOLVED 0 (engines agree 0, engines differ 0), UNCLASSIFIED 0; RC observed=12 target=12
+E08: MATCH 54, INTENDED_CHANGE 0, UNRESOLVED 6 (engines agree 6, engines differ 0), UNCLASSIFIED 0; RC observed=0 target=0
+E09: MATCH 0, INTENDED_CHANGE 0, UNRESOLVED 2 (engines agree 0, engines differ 2), UNCLASSIFIED 0; RC observed=0 target=12
+E10: MATCH 50, INTENDED_CHANGE 0, UNRESOLVED 9 (engines agree 9, engines differ 0), UNCLASSIFIED 0; RC observed=0 target=0
+E11: MATCH 54, INTENDED_CHANGE 0, UNRESOLVED 6 (engines agree 6, engines differ 0), UNCLASSIFIED 0; RC observed=0 target=0
+golden: MATCH 273, INTENDED_CHANGE 0, UNRESOLVED 46 (engines agree 46, engines differ 0), UNCLASSIFIED 0
+edge: MATCH 438, INTENDED_CHANGE 0, UNRESOLVED 67 (engines agree 65, engines differ 2), UNCLASSIFIED 0
+total: MATCH 711, INTENDED_CHANGE 0, UNRESOLVED 113 (engines agree 111, engines differ 2), UNCLASSIFIED 0
+golden parity 7/7
+observed rule verdicts: CONFORMS 21, VIOLATES 0, NOT JUDGED 0, NOT EXERCISED 4
+target rule verdicts: CONFORMS 20, VIOLATES 0, NOT JUDGED 2, NOT EXERCISED 3
+Rules exercised: 21 of 21 a replay can exercise; missing: none
+Open questions no case can settle: 4; INT-H02: scheduler/application answer on the cycle date source (<owner: Scheduler / application>); INT-H03: host evidence: AIX first-return card; E09 shows each engine today (<owner: Card operations>); INT-H05: host Enterprise COBOL arithmetic/TRUNC evidence on overflow (<owner: Application>); INT-H09: operations answer: which job clears TCATBALF (<owner: Card operations>)
+GATE: PASS (no unclassified differences or violations; golden parity 7/7)
+make[1]: Leaving directory '/home/ubuntu/repos/ts-cobol-carddemo'
+
+Exit code: 0

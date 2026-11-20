@@ -1,0 +1,14 @@
+{
+  "id": "E05",
+  "title": "Missing account stops the run",
+  "stresses": "Missing account stops the run",
+  "rules": [
+    "INT-R10"
+  ],
+  "flags": {
+    "stop": true
+  },
+  "gnucobol_vs_host": "GnuCOBOL lab observation only; not Enterprise COBOL arithmetic, LE abend, or VSAM AIX first-return proof.",
+  "open_question": null,
+  "derived_from": "fixtures/interest/i02-tie-half-cent/input"
+}
