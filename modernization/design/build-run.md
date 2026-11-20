@@ -1,6 +1,6 @@
 # Step 5b build run - interest tickets 02-06 in four groups
 
-Status: **all four groups passed; final combined check passed** on `demo/05b-integration` @ `55f3afc`.
+Status: **all four groups passed; final combined check passed** on `demo/05b-integration` @ `9f78de6`.
 Workflow run `wfr-a2207d5a0fb04ea68deeca07ca05b2c6` (script `build-workflow.py` @ `ef8d77f`), 4 child
 sessions, 0 retries, 0 skipped, 0 needs-decision, 3335 s wall time, 35.04 ACUs.
 
@@ -70,14 +70,14 @@ waited for); both met every item of the step prompt's list above. To be confirme
 | 06-parity-gate | g4-gate | passed | devin-65427584a9c247fab4eb91875519949d | [#22](https://github.com/TCS-Devin-Sandbox/ts-cobol-carddemo/pull/22) | 70 unit + 80 IT, 0 fail/err/skip; byte check 7 cases/14 files; SQL 7 runs; 7 rehearsal scenarios | compare.py 7/7 PASS (joined job); make parity 24/24 | 38 PASS / 0 FAIL | standards, build, verify, pitfalls |
 
 Combined into `demo/05b-integration` (squash, PRs left open): g1 `c43bcf1`, g3 `7bb786d`, g2 `4f68796`,
-g4 `55f3afc`. Order of state changes: g1 running -> passed; g2 and g3 running side by side; g3 passed;
+g4 `55f3afc`, then a second g4 squash `40f6cc2` (INT-06 review fixes: failed candidate job status persisted, stored-status assertion, refreshed evidence) pushed by the g4 session after it had reported. Order of state changes: g1 running -> passed; g2 and g3 running side by side; g3 passed;
 g2 passed; g4 running -> passed.
 
 Grants used: 04-calculation-restart and 06-parity-gate grants were offered; whether each grant
 file was touched is visible in PR #21 and #22 (`policy/`, `codec/AccountRecord.java`, `batch/`).
 06's joined job lives in `batch/InterestJobConfig.java` / `InterestBatchApplication`.
 
-## Final combined check (coordinating session, on `55f3afc`)
+## Final combined check (coordinating session, on `9f78de6` - includes `40f6cc2`)
 
 | Check | Result |
 |---|---|
@@ -117,5 +117,6 @@ None. No group failed, was retried, skipped or returned needs-decision.
 
 - The regrouping onto tickets 02-06 and the restated grants (top of this file).
 - The prompt check and flowchart review done without a person (above).
+- g4's second squash `40f6cc2`, pushed after the workflow had ended (not in the child's structured result; final check covers it).
 - The four group PRs #18, #20, #21, #22 (open, base `demo/05b-integration`) and this PR (base `demo/05a-skills`).
 - The nine standards proposals.
