@@ -1,16 +1,17 @@
 # INT-01 pilot – per-case parity report (open this first)
 
-Candidate revision: `d99d984577bc04f2ebc6aec7add0de2a1e4aedd4` (branch `demo/05-pilot`).
-Java 21 (OpenJDK 21), Spring Boot 3.3.5 / Spring Batch 5.1.2, PostgreSQL 15.20 (Docker `postgres:15`, port 5433).
+Final code revision: `2109615405fe658bd4d9b2b55af43c48e0a704f1` (branch `demo/05-pilot`).
+Java 21, Spring Boot 3.3.5 / Spring Batch 5.1.2, PostgreSQL 15 (compose db).
 Legacy baseline rerun in this session: `make up && make build && make parity CHAIN=interest` -> 7/7 PASS.
 
 Command per case (repo root, comparator unchanged):
 
 ```sh
-java -jar java/interest/interest-batch/target/interest-batch-0.1.0-PILOT.jar \
-  --interest.pilot.run-on-startup=true \
-  --interest.pilot.input-dir=fixtures/interest/<case>/input \
-  --interest.pilot.output-dir=work/java-pilot/<case>
+P=java/interest/interest-batch/src/test/resources/pilot
+docker compose exec -T \
+  -e INTEREST_PILOT_JDBC_URL=jdbc:postgresql://db:5432/carddemo \
+  -e INTEREST_PILOT_DB_USER=carddemo -e INTEREST_PILOT_DB_PASSWORD=carddemo \
+  estate python3 "$P/parity/run_case.py" <case> --out work/java-pilot/<case>
 python3 tools/parity/compare.py interest <case> --actual work/java-pilot/<case> --label java \
   --report work/java-pilot/compare-report.md
 ```
@@ -21,22 +22,31 @@ The ticket names one case, **i01-baseline**. The other six were run for informat
 
 | Case | Ticket case | compare.py | Datasets (records / decoded fields) | SYSOUT STEP15 | rc.json |
 |---|---|---|---|---|---|
-| i01-baseline | yes | **FAIL (1 difference)** | 4 / 50, 0 differences | identical | differs |
-| i02-tie-half-cent | no | FAIL (1) | 4 / 50, 0 differences | identical | differs |
-| i03-zero-rate-skipped | no | FAIL (1) | 2 / 25, 0 differences | identical | differs |
-| i04-default-group-fallback | no | FAIL (1) | 2 / 25, 0 differences | identical | differs |
-| i05-multi-category | no | FAIL (1) | 3 / 38, 0 differences | identical | differs |
-| i06-negative-balance | no | FAIL (1) | 2 / 25, 0 differences | identical | differs |
-| i07-nontie-rounding | no | FAIL (1) | 4 / 50, 0 differences | identical | differs |
+| i01-baseline | yes | **PASS** | 4 / 50, 0 differences | identical | identical |
+| i02-tie-half-cent | no | PASS | 4 / 50, 0 differences | identical | identical |
+| i03-zero-rate-skipped | no | PASS | 2 / 25, 0 differences | identical | identical |
+| i04-default-group-fallback | no | PASS | 2 / 25, 0 differences | identical | identical |
+| i05-multi-category | no | PASS | 3 / 38, 0 differences | identical | identical |
+| i06-negative-balance | no | PASS | 2 / 25, 0 differences | identical | identical |
+| i07-nontie-rounding | no | PASS | 4 / 50, 0 differences | identical | identical |
 
-The only difference in every case is `rc.json`. The golden file lists `STEP05`, `STEP10`, `STEP15`, `STEP20`,
-`STEP25` and `STEP30` under `INTCALC`, but `app/jcl/INTCALC.jcl` has only `STEP15`. The other five codes come
-from the setup jobs (DEFGDGB, ACCTFILE, XREFFILE, TCATBALF, DISCGRP); `tools/parity/record.py:131` keeps every
-step key without a `.` under the job. The pilot runs only STEP15 and writes `{"INTCALC": {"maxrc": 0, "steps": {"STEP15": 0}}}`.
-To match, it would have to report codes for steps it never ran, or someone would have to change the golden or
-the comparator. Both are prohibited, so the comparator check stays FAIL. Raw output: `compare-report.md`, `compare-stdout.txt`.
+All seven checks now PASS with the owner-authorized real-setup driver. It runs DEFGDGB, ACCTFILE,
+XREFFILE, TCATBALF and DISCGRP on one Runner, then unloads their actual KSDS datasets for Java intake.
+Only STEP15 is replaced by Java. Every RC comes from an executed setup step or the Java process exit code;
+no code is hardcoded. The previous direct-jar RC-only failure is superseded. Exact commands and faithful
+input/framing explanation: `../parity/README.md`. Raw outputs: `compare-report.md`, `compare-stdout.txt`,
+`e2e-run.log`. Manifest includes layout/lrecl/records; SYSOUT comes from Java's committed SYSOUT rows.
 
-## Ticket verification: i01 field slice (not full parity)
+Recorder bug remains OPEN for a person: scope/reset Runner.rcs in record.py and explicitly re-record goldens.
+INTCALC has only STEP15, but the current recorder attributes accumulated setup keys to it. No forbidden files
+were edited. Standards §9 lacks a separate line for non-converted setup RC provenance (skill not edited).
+S16 normal-path ticket parity is PASS; S12 remains FAIL (partial), not proved by these normal-path cases.
+Maven: 36 unit + 10 integration tests, no failures/errors/skips, BUILD SUCCESS (`test-output.txt`).
+Driver unit check: 1 test OK, including normal/empty/overlength records. Docker Hub 429 required the existing
+ESTATE_BASE_IMAGE=mirror.gcr.io/library/ubuntu:22.04 build argument. Java 21 is already in estate;
+Maven runs on host Java 21. Runtime setup logs/unloads remain under work/java-pilot/<case>.
+
+## Additional i01 field slice (historical SQL evidence, final Maven ITs rerun)
 
 From `PilotI01IT` (Testcontainers PostgreSQL 15) and `i01-field-slice.md`:
 - SYSTRAN T01–T13: 2 of 2 rows match the decoded golden. ACCTDATA A03/A09/A10 and whole records: 2 of 2 match,
@@ -52,4 +62,4 @@ From `PilotI01IT` (Testcontainers PostgreSQL 15) and `i01-field-slice.md`:
   missing account, group 1 had already been computed and was rolled back.
 
 Scope of this evidence: field slice plus normal-path SYSOUT for the lab ASCII profile only. Not covered:
-full RC parity, error-path SYSOUT/abend RC, EBCDIC/host profiles and restart.
+error-path SYSOUT/abend RC, EBCDIC/host profiles and restart. Normal-path RC parity is now covered above.

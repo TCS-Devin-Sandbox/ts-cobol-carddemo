@@ -1,7 +1,7 @@
 # INT-01 pilot report
 
 Ticket: `modernization/design/tickets/01-pilot.md`. `modernization/design/tickets/README.md` names it as the Wave 1 pilot.
-Start: `origin/demo/04a-standards` @ `84ffae7`. Branch: `demo/05-pilot`. Code revision: `d99d984` (after two review rounds; earlier candidates `dc456be`, `59ffbc2`).
+Start: `origin/demo/04a-standards` @ `84ffae7`. Branch: `demo/05-pilot`. Final code revision: `2109615405fe658bd4d9b2b55af43c48e0a704f1` (scoped parity driver; Java unchanged from `d99d984`).
 Module: `java/interest/interest-batch` (the ticket's `interest-batch/` scope placed under `java/interest` as the prompt asks).
 Skills used: `interest-conversion-standards` (read before coding) and `carddemo-parity`. `interest-ticket-build`,
 `interest-ticket-verify` and `interest-pitfalls` are not on the starting branch, so this run is the pilot for the method below.
@@ -14,14 +14,16 @@ Skills used: `interest-conversion-standards` (read before coding) and `carddemo-
 - Calculation: `InterestCalculator` (BigDecimal, `RoundingMode.DOWN`, receiver widths in `Receiver`).
   Timestamps: `LegacyTimestamp`, from an injected `Clock`. IDs: `TransactionIdSource`, from the opaque PARM. The clock and the PARM are injected separately.
 - Export to the comparator layout: `PilotExporter` writes SYSTRAN G0001V00, the ACCTDATA image, the STEP15 SYSOUT and `rc.json`.
+- Scoped parity driver: `../parity/run_case.py` runs real setup jobs on one Runner, unloads their resulting KSDS files for Java intake, then substitutes only STEP15. Combined rc.json uses observed setup codes and the Java process exit code. Exact commands: `../parity/README.md`.
 
 ## Final-revision checks
 | Check | Result |
 |---|---|
 | `mvn -B clean verify` (Java 21, Testcontainers `postgres:15-alpine`) | BUILD SUCCESS: unit 36/36, integration 10/10 (`test-output.txt`) |
-| Docker PostgreSQL 15 end-to-end, i01 | exit 0; SQL assertions pass (`i01-sql-assertions.txt`) |
-| compare.py i01-baseline | FAIL: 1 difference (rc.json only, see `parity-report.md`). Datasets and SYSOUT have 0 differences |
+| Historical direct-jar PostgreSQL 15 SQL assertions, i01 | exit 0; SQL assertions pass (`i01-sql-assertions.txt`); not re-queried in this driver revision |
+| compare.py i01-baseline + six informational cases | PASS: 7/7 including datasets, SYSOUT and setup/Java RCs (`compare-report.md`, `compare-stdout.txt`, `e2e-run.log`) |
 | Legacy baseline `make parity CHAIN=interest` | 7/7 PASS |
+| Driver framing unit check | PASS: 1 test OK (normal, empty, overlength records), `python3 -m unittest discover -s src/test/resources/pilot/parity -v` |
 
 ## OPEN rules: where legacy behaviour is kept, and the tests that prove it
 | Rule | Code path | Test |
@@ -45,7 +47,7 @@ Skills used: `interest-conversion-standards` (read before coding) and `carddemo-
 | Line | Result | Evidence |
 |---|---|---|
 | S01 | PASS | this report; source ranges cited in Javadoc (`InterestGroupProcessor`, `InterestCalculator`, records) |
-| S02 | PASS | `PilotI01IT` slices the i01 goldens; conflicting rc.json claim routed below |
+| S02 | PASS | `PilotI01IT` slices the i01 goldens; scoped driver now matches the whole normal-path comparator contract |
 | S03 | PASS | `InterestGroupProcessor` (typed `PilotFailure`, `RateLookup`), no paragraph/flag emulation |
 | S04 | PASS | `Account`, `CardXref`, `CategoryBalance`, `DisclosureRate`, `InterestTransaction` (records, defensive copies, raw bytes kept) |
 | S05 | PASS | `PilotJobConfig` (reader/processor/writer, JDBC tx), `PilotStore` |
@@ -59,7 +61,7 @@ Skills used: `interest-conversion-standards` (read before coding) and `carddemo-
 | S13 | PASS (untouched) | restart excluded; `run_checkpoint` written but never resumed |
 | S14 | PASS | logs carry run id, counts and dd/op/status only; non-pilot exceptions log their type only (`SnapshotIntake`, `PilotRunService`, `InterestGroupProcessor`) |
 | S15 | PASS | rule-named tests above; specimens `src/test/resources/pilot/specimens/README.md` |
-| S16 | FAIL (partial) | PG15 and field/SYSOUT/byte evidence present; RC comparator diff (`parity-report.md`) |
+| S16 | PASS (ticket normal path) | PG15; unchanged comparator 7/7 PASS, with actual setup and Java RCs (`parity-report.md`). Error-path/host/restart exclusions remain |
 | S17 | PASS | `git diff demo/04a-standards --stat` touches only `java/` |
 | S18 | PASS | new dependencies: Spring Boot batch/jdbc starters, PostgreSQL JDBC, Testcontainers 1.21.4 (1.20.3 cannot talk to Docker Engine API ≥1.44) |
 | S19 | PASS | specimens are edited copies of synthetic i01 inputs |
@@ -88,16 +90,27 @@ Generic codecs (EBCDIC, COMP-3), production DDL, the full RC and error-path SYSO
 the GDG/DISP bridge, non-unique AIX ordering, PARM shorter than 10 bytes, and the fixtures other than i01 (run for information only).
 
 ## Findings for the decision register (not edited)
-1. The golden `fixtures/interest/*/expected/rc.json` lists the setup-job steps STEP05–STEP30 under `INTCALC`
-   (`tools/parity/record.py:131`), but INTCALC has only STEP15. No converted INTCALC can match this without a bridge or a re-record. Owner: comparator/fixtures.
+1. OPEN — person action, owner comparator/fixtures: fix `tools/parity/record.py` to scope/reset `Runner.rcs`, then explicitly re-record goldens. Golden rc.json lists setup steps STEP05–STEP30 under INTCALC (`record.py:131`), though INTCALC has only STEP15. The owner-authorized scoped driver now executes those real setup jobs and preserves their observed codes; it does not fix the recorder defect or fabricate codes.
 2. INT-H03: if XREFFIL1 returns more than one row, the host order is unproven. The pilot holds such runs.
 3. INT-Q01/H05: the intermediate precision of `COMPUTE` under host ARITH options is still unproven. The pilot uses an exact product.
 4. TRAN-RECORD FILLER(20) and the TRAN-DESC tail after the STRING are never assigned in CBACT04C (STRING does not pad).
    Goldens strip trailing spaces and the comparator skips filler, so the byte value is unproven. The pilot writes spaces.
 5. INT-H02: PARM-LENGTH is never checked. A PARM shorter than 10 bytes reads unassigned linkage. The pilot rejects it.
-6. Standards skill (not edited): §9 has no line for golden RC claims that cover non-converted setup steps; S12/S16 cannot both PASS for a pilot that excludes full RC parity.
+6. Standards skill (not edited): §9 lacks a line distinguishing converted-step RCs from real setup-job provenance. S16 normal-path parity now passes through the scoped driver; S12 remains FAIL (partial), since excluded legacy abend/error SYSOUT is not produced. Normal-path parity does not prove S12.
 
-## Method, commands and failures (input for interest-ticket-build / -verify / -pitfalls)
+## Final scoped-driver verification
+
+Final code SHA: `2109615405fe658bd4d9b2b55af43c48e0a704f1`. Exact complete commands: `../parity/README.md`.
+Docker Hub returned HTTP 429 resolving ubuntu:22.04; the successful baseline used the existing
+`ESTATE_BASE_IMAGE=mirror.gcr.io/library/ubuntu:22.04` argument with `make up && make build && make parity CHAIN=interest`.
+No tracked infrastructure changed. The existing estate Dockerfile installs Java 21, so Java and Runner run together in estate
+against compose db (PostgreSQL 15). Host Java 21 was installed for Maven.
+`test-output.txt` is full Maven stdout/stderr: 36 unit + 10 integration tests, zero failures/errors/skips, BUILD SUCCESS.
+`e2e-run.log` records all seven real setup/Java executions. `compare-stdout.txt` and `compare-report.md` show 7/7 PASS.
+Setup logs and post-setup unloads remain under `work/java-pilot/<case>/setup-joblog` and `intake/` (runtime artifacts).
+The driver unit check proves normal/empty/overlength framing. No UI changed; visual verification is not applicable.
+
+## Historical direct-jar method and failures (superseded by driver above)
 ```sh
 git fetch origin && git checkout -b demo/05-pilot origin/demo/04a-standards
 sudo apt-get install -y -q openjdk-21-jdk-headless          # image ships Java 17
@@ -118,7 +131,7 @@ Failures hit:
 - A `@Container` static field in an abstract base stopped after the first IT class, and the cached Spring context then failed
   with "Could not open JDBC Connection" (30 s timeouts). Fix: a singleton container started in a static block.
 - Test data mistake: zoned `00000012345{` is 1234.50, not 123.45, because the overpunch byte is the last digit.
-- The comparator also checks `rc.json` and SYSOUT, not only datasets. Plan for this early: the setup-step codes in rc.json cannot be produced (finding 1).
+- The comparator also checks `rc.json` and SYSOUT, not only datasets. The original direct-jar command failed on setup RCs only; the real-setup driver supersedes that failure. Recorder finding 1 remains open.
 
 ## Review fixes (Devin Review on PR #15), evidence rerun at `59ffbc2`
 | Finding | Fix | Test |
