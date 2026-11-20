@@ -15,6 +15,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,6 +24,8 @@ import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Import;
 import org.springframework.context.annotation.Primary;
+import org.springframework.core.env.ConfigurableEnvironment;
+import org.springframework.core.env.MapPropertySource;
 import org.springframework.test.context.DynamicPropertyRegistry;
 import org.springframework.test.context.DynamicPropertySource;
 import org.testcontainers.containers.PostgreSQLContainer;
@@ -47,6 +50,7 @@ class InterestCloseIT {
     @Autowired CloseStore store;
     @Autowired SnapshotIntake intake;
     @Autowired TestHook hook;
+    @Autowired ConfigurableEnvironment environment;
     @TempDir Path temp;
 
     static class TestHook implements GroupWriter.CommitHook {
@@ -65,6 +69,10 @@ class InterestCloseIT {
         @Bean @Primary TestHook testHook() { return new TestHook(); }
     }
     @BeforeEach void resetHook() { hook.before = -1; hook.after = -1; hook.io = null; }
+    @AfterEach void resetOptions() { environment.getPropertySources().remove("review-options"); }
+    void options(Map<String, Object> values) {
+        environment.getPropertySources().addFirst(new MapPropertySource("review-options", values));
+    }
     Path fixture(String c) { return REPO.resolve("fixtures/interest/" + c); }
     Path input(String c) { return fixture(c).resolve("input"); }
     Path out() { return temp.resolve(UUID.randomUUID().toString()); }
@@ -164,6 +172,36 @@ class InterestCloseIT {
         assertEquals(prior, store.jdbc().queryForList("SELECT emit_ordinal,amount,orig_ts,proc_ts FROM interest.interest_tx WHERE run_id=? AND emit_ordinal=1", failed.runId()));
         assertEquals(2, count("interest_tx", failed.runId()));
         golden(CASES.getFirst(), output);
+    }
+
+    @Test void INT_H06_A3_operatorAbandonedComputingRequiresExplicitResumeAndPreservesCheckpoint() throws Exception {
+        for (boolean committed : List.of(false, true)) {
+            if (committed) hook.after = 1; else hook.before = 1;
+            Path output = out();
+            var interrupted = service.run(input(CASES.getFirst()), output, ID, null);
+            assertEquals(12, interrupted.rc());
+            var prior = store.jdbc().queryForList("SELECT emit_ordinal,amount,raw_record FROM interest.interest_tx WHERE run_id=?", interrupted.runId());
+            store.jdbc().update("UPDATE interest.run SET state='COMPUTING' WHERE run_id=?", interrupted.runId());
+            store.jdbc().update("UPDATE interest_batch.batch_job_execution SET status='STARTED',end_time=NULL WHERE job_execution_id IN "
+                    + "(SELECT job_execution_id FROM interest_batch.batch_job_execution_params WHERE parameter_name='runId' AND parameter_value=?)", interrupted.runId().toString());
+            assertThrows(IllegalArgumentException.class, () -> service.run(null, output, ID, interrupted.runId()));
+            options(Map.of("interest.close.abandoned", true));
+            var changed = new CloseRunService.Identity("abcdefghij", ID.cycle(), ID.feed(), ID.buildRevision(), ID.ruleRevision(), ID.clockProfile());
+            assertThrows(IllegalArgumentException.class, () -> service.run(null, output, changed, interrupted.runId()));
+            assertEquals("COMPUTING", state(interrupted.runId()));
+            var fresh = service.run(input(CASES.getFirst()), out(), ID, null);
+            assertEquals(0, fresh.rc()); assertNotEquals(interrupted.runId(), fresh.runId());
+            assertEquals("COMPUTING", state(interrupted.runId()));
+            var resumed = assertDoesNotThrow(() -> service.run(null, output, ID, interrupted.runId()));
+            assertEquals(0, resumed.rc()); assertEquals("COMPUTED", state(resumed.runId()));
+            assertEquals(interrupted.snapshotId(), resumed.snapshotId());
+            assertEquals(committed ? 1 : 0, prior.size());
+            assertEquals(2, count("interest_tx", resumed.runId()));
+            if (committed) assertArrayEquals((byte[]) prior.getFirst().get("raw_record"), store.jdbc().queryForObject(
+                    "SELECT raw_record FROM interest.interest_tx WHERE run_id=? AND emit_ordinal=1", byte[].class, resumed.runId()));
+            golden(CASES.getFirst(), output);
+            resetOptions();
+        }
     }
 
     @Test void INT_H06_A3_resumeChangedIdentityRefusedAndNoAutomaticRestart() throws Exception {

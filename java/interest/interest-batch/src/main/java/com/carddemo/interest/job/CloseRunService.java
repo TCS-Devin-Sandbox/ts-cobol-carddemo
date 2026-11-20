@@ -17,6 +17,7 @@ import org.springframework.batch.core.launch.JobLauncher;
 import org.springframework.batch.core.repository.JobRepository;
 import org.springframework.batch.core.step.builder.StepBuilder;
 import org.springframework.stereotype.Service;
+import org.springframework.core.env.Environment;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.support.TransactionTemplate;
 
@@ -35,14 +36,16 @@ public final class CloseRunService {
     private final JobLauncher launcher;
     private final PlatformTransactionManager manager;
     private final GroupWriter.CommitHook hook;
+    private final Environment environment;
 
     public CloseRunService(CloseStore store, SnapshotIntake intake, CloseExporter exporter, InterestRules rules,
-            JobRepository repository, JobLauncher launcher, PlatformTransactionManager manager, GroupWriter.CommitHook hook) {
+            JobRepository repository, JobLauncher launcher, PlatformTransactionManager manager, GroupWriter.CommitHook hook, Environment environment) {
         this.store = store; this.intake = intake; this.exporter = exporter; this.rules = rules;
         this.repository = repository; this.launcher = launcher; this.manager = manager; this.hook = hook;
+        this.environment = environment;
     }
 
-    /** INT-H06: only an explicit FAILED run ID authorizes private resume; fresh launches never auto-restart. */
+    /** INT-H06: explicit resume only; COMPUTING additionally requires operator confirmation of abandonment. */
     public Result run(Path input, Path output, Identity identity, UUID resume) throws Exception {
         UUID run = resume == null ? UUID.randomUUID() : resume;
         UUID snapshot;
@@ -67,8 +70,10 @@ public final class CloseRunService {
                 if (rows.size() != 1) throw new IllegalArgumentException("Unknown resume run");
                 var row = rows.getFirst();
                 List<Object> saved = List.of(row.get("parm"), row.get("cycle"), row.get("feed"), row.get("build_revision"), row.get("rule_revision"), row.get("clock_profile"));
-                if (!saved.equals(identity.values()) || !"shadow".equals(row.get("mode")) || !"FAILED".equals(row.get("state")))
-                    throw new IllegalArgumentException("Resume requires FAILED run and identical identity");
+                boolean abandoned = "COMPUTING".equals(row.get("state"))
+                        && environment.getProperty("interest.close.abandoned", Boolean.class, false);
+                if (!saved.equals(identity.values()) || !"shadow".equals(row.get("mode")) || !("FAILED".equals(row.get("state")) || abandoned))
+                    throw new IllegalArgumentException("Resume requires FAILED or explicitly abandoned COMPUTING run and identical identity");
                 UUID sealed = (UUID) row.get("snapshot_id");
                 if (!"SEALED/LAB_ASCII".equals(store.jdbc().queryForObject("SELECT state || '/' || codec_profile FROM interest.snapshot WHERE snapshot_id=?", String.class, sealed)))
                     throw new IllegalArgumentException("Resume requires SEALED snapshot");
@@ -80,6 +85,10 @@ public final class CloseRunService {
                             String.class, entry.getValue(), sealed);
                     if (!SnapshotIntake.recordDigest(store.rows(sealed, entry.getKey())).equals(expected))
                         throw new IllegalArgumentException("Resume snapshot digest mismatch");
+                }
+                if (abandoned) {
+                    store.jdbc().update("UPDATE interest.run SET state='FAILED' WHERE run_id=?", run);
+                    LoggerFactory.getLogger(CloseRunService.class).info("event=run-abandoned run={} category=TARGET_RUN_ABANDONED", run);
                 }
                 store.jdbc().update("UPDATE interest.run SET state='COMPUTING' WHERE run_id=?", run);
                 return sealed;
