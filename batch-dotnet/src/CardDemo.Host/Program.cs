@@ -1,6 +1,12 @@
 using CardDemo.Data;
 using CardDemo.Orchestration;
 
+if (args.Length == 1 && args[0] == "describe")
+{
+    var jobs = JobCatalog.Jobs.ToDictionary(j => j.Key, j => j.Value.Steps.Select(s => new { step = s.Name, program = s.ProgramName, parm = s.Parm, dd = s.Dd }));
+    Console.WriteLine(System.Text.Json.JsonSerializer.Serialize(new { jobs, chains = JobCatalog.Chains.ToDictionary(c => c.Key, c => new { setup = c.Value.Setup, jobs = c.Value.Jobs }) }));
+    return 0;
+}
 // carddemo-batch run-chain <chain> <fixture-case-dir> <out-dir> [--postgres <conn>] [--restart] [--quiet]
 if (args.Length < 4 || args[0] != "run-chain")
 {

@@ -18,6 +18,7 @@ public sealed class Cbtrn03c : IBatchProgram
         var types = cat.Cluster(ctx.Dsn("TRANTYPE"));
         var cats = cat.Cluster(ctx.Dsn("TRANCATG"));
         var parm = cat.ReadSequential(ctx.Dsn("DATEPARM"), 80).FirstOrDefault() ?? Enumerable.Repeat((byte)' ', 80).ToArray();
+        // 0550-DATEPARM-READ [BR-RPT-001]
         var startDate = CobolCodec.Text(parm.AsSpan(0, 10));
         var endDate = CobolCodec.Text(parm.AsSpan(11, 10));
         var report = new List<string>();
@@ -46,6 +47,7 @@ public sealed class Cbtrn03c : IBatchProgram
             Write("Transaction ID".PadRight(17) + "Account ID".PadRight(12) + "Transaction Type".PadRight(19) + "Tran Category".PadRight(35) + "Tran Source".PadRight(14) + " " + "        Amount".PadRight(16));
             Write(Dashes);
         }
+        // BR-RPT-005: page totals roll into the grand total; account totals reset independently
         void PageTotals()
         {
             Write("Page Total".PadRight(11) + new string('.', 86) + CobolCodec.Edit(pageTotal, "+ZZZ,ZZZ,ZZZ.ZZ"));
@@ -83,7 +85,7 @@ public sealed class Cbtrn03c : IBatchProgram
                 var card = tran.Raw("TRAN-CARD-NUM");
                 if (card != currCard)
                 {
-                    if (!firstTime)
+                    if (!firstTime) // BR-RPT-003
                     {
                         AccountTotals();
                     }
@@ -142,6 +144,7 @@ public sealed class Cbtrn03c : IBatchProgram
         + tran.Raw("TRAN-CAT-CD") + "-" + category.Raw("TRAN-CAT-TYPE-DESC")[..29] + " " + tran.Raw("TRAN-SOURCE") + "    "
         + CobolCodec.Edit(tran.Number("TRAN-AMT"), "-ZZZ,ZZZ,ZZZ.ZZ") + "  ";
 
+    [Trace("CBTRN03C 9999-ABEND-PROGRAM", "BR-RPT-007")]
     private static void Abend(StepContext ctx, string message)
     {
         ctx.Display(message);

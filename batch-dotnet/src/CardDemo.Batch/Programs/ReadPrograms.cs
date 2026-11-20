@@ -32,6 +32,7 @@ public sealed class Cbact01c : IBatchProgram
         foreach (var a in accounts.Scan())
         {
             ctx.RecordsRead++;
+            // 1100-DISPLAY-ACCT-RECORD [BR-RAC-001]
             foreach (var f in new[] { "ACCT-ID", "ACCT-ACTIVE-STATUS", "ACCT-CURR-BAL", "ACCT-CREDIT-LIMIT", "ACCT-CASH-CREDIT-LIMIT", "ACCT-OPEN-DATE", "ACCT-EXPIRAION-DATE", "ACCT-REISSUE-DATE", "ACCT-CURR-CYC-CREDIT", "ACCT-CURR-CYC-DEBIT", "ACCT-GROUP-ID" })
             {
                 var spec = a.Layout[f];

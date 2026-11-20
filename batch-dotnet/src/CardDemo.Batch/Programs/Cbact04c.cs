@@ -44,14 +44,14 @@ public sealed class Cbact04c : IBatchProgram
                     ctx.Display("ACCOUNT NOT FOUND: " + acctId);
                     Abend(ctx, "ERROR READING ACCOUNT FILE");
                 }
-                if (!xref.TryReadAlternate(acctId, out xrefRec))
+                if (!xref.TryReadAlternate(acctId, out xrefRec)) // BR-INT-011 (GAP-003)
                 {
                     ctx.Display("ACCOUNT NOT FOUND: " + acctId);
                     Abend(ctx, "ERROR READING XREF FILE");
                 }
             }
             var rate = InterestRate(ctx, discgrp, account.Raw("ACCT-GROUP-ID"), bal);
-            if (rate != 0)
+            if (rate != 0) // BR-INT-002
             {
                 var monthly = MonthlyInterest(bal.Number("TRAN-CAT-BAL"), rate);
                 totalInt += monthly;
