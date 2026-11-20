@@ -6,6 +6,24 @@ on:
   pull_request:
 
 jobs:
+  java:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up JDK 21 with Maven cache
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '21'
+          cache: maven
+          cache-dependency-path: java/**/pom.xml
+
+      - name: Spring Batch skeleton verification
+        working-directory: java
+        run: mvn -B verify
+
   parity:
     runs-on: ubuntu-latest
     timeout-minutes: 45
