@@ -11,7 +11,7 @@ public static class ChainRunner
     public static readonly DateTime FrozenClock = new(2022, 7, 5, 10, 0, 0, DateTimeKind.Unspecified);
 
     public static int Run(string chain, string caseDir, string outDir, IKsdsPersistence? persistence = null, Action<string>? log = null,
-        bool restart = false, Func<string, string, Batch.IBatchProgram?>? programOverride = null, int chunkSize = 1000, Action<string>? commitHook = null)
+        bool restart = false, Func<string, string, Batch.IBatchProgram?>? programOverride = null, int chunkSize = 1000, Action<string>? commitHook = null, string? db2 = null)
     {
         var (setup, jobs) = JobCatalog.Chains[chain];
         if (!restart)
@@ -26,7 +26,16 @@ public static class ChainRunner
                 File.Copy(input, Path.Combine(outDir, "datasets", Path.GetFileName(input)));
             }
         }
-        var catalog = new DatasetCatalog(outDir, persistence) { CommitHook = commitHook };
+        JobCatalog.Db2Tables.TryGetValue(chain, out var db2Tables);
+        if (db2Tables is not null && db2 is null)
+        {
+            throw new InvalidOperationException($"chain {chain} runs Db2 programs: pass a PostgreSQL connection (--db2)");
+        }
+        if (db2Tables is not null && !restart)
+        {
+            Db2Fixture.Reset(db2!, db2Tables.Select(t => t.Table), Path.Combine(caseDir, "input", "db", "seed.sql"));
+        }
+        var catalog = new DatasetCatalog(outDir, persistence) { CommitHook = commitHook, Db2ConnectionString = db2 };
         if (restart)
         {
             catalog.RecoverPendingCommit();
@@ -99,6 +108,10 @@ public static class ChainRunner
         if (persistence is PostgresPersistence)
         {
             catalog.UnloadClusters();
+        }
+        if (db2Tables is not null)
+        {
+            Db2Fixture.Snapshot(db2!, db2Tables, Path.Combine(outDir, "db"));
         }
         File.WriteAllText(Path.Combine(outDir, "rc.json"), RcJson(rcs));
         if (overall <= 8 && File.Exists(statePath))

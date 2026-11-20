@@ -55,6 +55,10 @@ public static class JobCatalog
     public static readonly IReadOnlyDictionary<string, JobDefinition> Jobs = new Dictionary<string, JobDefinition>(StringComparer.Ordinal)
     {
         ["DEFGDGB"] = new("DEFGDGB", [Idcams("STEP05", IdcamsAction.DefineGdg)]),
+        ["MNTTRDB2"] = new("MNTTRDB2", [new StepDefinition("STEP1", () => new Dsnrun("COBTUPDT", null),
+            new Dictionary<string, string>(StringComparer.Ordinal) { ["INPFILE"] = "INPFILE" }) { ProgramName = "IKJEFT01" }]),
+        ["MNTTRDYN"] = new("MNTTRDYN", [new StepDefinition("STEP1", () => new Dsnrun("CBTRNDYN", "COBTUPDT"),
+            new Dictionary<string, string>(StringComparer.Ordinal) { ["DYNSQL"] = "DYNSQL", ["INPFILE"] = "INPFILE" }) { ProgramName = "IKJEFT01" }]),
         ["DALYREJS"] = new("DALYREJS", [Idcams("STEP05", IdcamsAction.DefineGdg)]),
         ["ACCTFILE"] = Cluster("ACCTFILE", "ACCTDATA", 300),
         ["TCATBALF"] = Cluster("TCATBALF", "TCATBALF", 50),
@@ -100,5 +104,14 @@ public static class JobCatalog
         ["interest"] = (["DEFGDGB", "ACCTFILE", "XREFFILE", "TCATBALF", "DISCGRP"], ["INTCALC"]),
         ["readacct"] = (["ACCTFILE"], ["READACCT"]),
         ["readcard"] = (["CARDFILE"], ["READCARD"]),
+        ["trantype-update"] = ([], ["MNTTRDB2"]),
+        ["trantype-dynamic"] = ([], ["MNTTRDYN"]),
+    };
+
+    /// <summary>Tables reset from input/db/seed.sql and snapshotted (ORDER BY as in chains.json) for Db2 chains.</summary>
+    public static readonly IReadOnlyDictionary<string, (string Table, string Order)[]> Db2Tables = new Dictionary<string, (string, string)[]>(StringComparer.Ordinal)
+    {
+        ["trantype-update"] = [("carddemo.transaction_type", "tr_type"), ("carddemo.transaction_type_categor", "trc_type_code, trc_type_category")],
+        ["trantype-dynamic"] = [("carddemo.transaction_type", "tr_type"), ("carddemo.transaction_type_categor", "trc_type_code, trc_type_category")],
     };
 }

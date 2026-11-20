@@ -10,11 +10,11 @@ mkdir -p "$ROOT/work/parity"; rm -f "$REPORT"
 "$DOTNET" build "$ROOT/batch-dotnet/src/CardDemo.Host" -c Release --nologo -v q >/dev/null || exit 2
 HOST_DLL="$ROOT/batch-dotnet/src/CardDemo.Host/bin/Release/net8.0/carddemo-batch.dll"
 fail=0; n=0
-for chain in ${1:-posting interest}; do
+for chain in ${1:-posting interest${CARDDEMO_DB2:+ trantype-update trantype-dynamic}}; do
   for dir in "$ROOT"/fixtures/$chain/${2:-*}/; do
     case=$(basename "$dir"); n=$((n+1))
     out="$ROOT/work/parity-dotnet/$chain/$case"
-    "$DOTNET" "$HOST_DLL" run-chain "$chain" "$dir" "$out" --quiet ${CARDDEMO_PG:+--postgres "$CARDDEMO_PG"} || { echo "$chain/$case: run failed"; fail=1; continue; }
+    "$DOTNET" "$HOST_DLL" run-chain "$chain" "$dir" "$out" --quiet ${CARDDEMO_PG:+--postgres "$CARDDEMO_PG"} ${CARDDEMO_DB2:+--db2 "$CARDDEMO_DB2"} || { echo "$chain/$case: run failed"; fail=1; continue; }
     python3 "$ROOT/tools/parity/compare.py" "$chain" "$case" --actual "$out" --report "$REPORT" --label "${LABEL:-.NET 8 target}" || fail=1
   done
 done

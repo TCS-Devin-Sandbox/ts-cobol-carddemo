@@ -28,6 +28,9 @@ public sealed partial class DatasetCatalog(string workDir, IKsdsPersistence? ksd
         };
 
     public string WorkDir { get; } = workDir;
+
+    /// <summary>Connection used by DSN tasks (IKJEFT01 steps); null when the chain has no Db2 work.</summary>
+    public string? Db2ConnectionString { get; init; }
     public string DatasetDir => Path.Combine(WorkDir, "datasets");
     public IKsdsPersistence Persistence { get; } = ksdsPersistence ?? new FilePersistence(Path.Combine(workDir, "datasets"));
 
