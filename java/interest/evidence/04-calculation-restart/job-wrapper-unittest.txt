@@ -1,0 +1,7 @@
+test_INT_R10_translation_and_exit_passthrough_exec_contract (test_close_java.LauncherTest.test_INT_R10_translation_and_exit_passthrough_exec_contract) ... ok
+test_empty_or_invalid_launch_is_rejected (test_close_java.LauncherTest.test_empty_or_invalid_launch_is_rejected) ... ok
+
+----------------------------------------------------------------------
+Ran 2 tests in 0.000s
+
+OK

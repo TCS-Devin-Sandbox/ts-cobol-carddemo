@@ -1,0 +1,74 @@
+Extracted from refreshed Maven reports; suite totals prove no failed/error/skipped cases.
+Integration: crash/restart, input hold, and injected typed operation failures:
+<testsuite xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://maven.apache.org/surefire/maven-failsafe-plugin/xsd/failsafe-test-report-3.0.xsd" version="3.0" name="com.carddemo.interest.job.InterestCloseIT" time="11.619" tests="14" errors="0" skipped="0" failures="0">
+  <testcase name="INT_H02_invalidParmHeldNotReady" classname="com.carddemo.interest.job.InterestCloseIT" time="0.015">
+  <testcase name="INT_H06_A3_crashAfterCommitDoesNotReplayCommittedOrdinalOrClock" classname="com.carddemo.interest.job.InterestCloseIT" time="0.588">
+  <testcase name="INT_R10_INT_H08_missingAccountXrefAndDefaultAreFailedNotComputedWithU999AndNoDatasets" classname="com.carddemo.interest.job.InterestCloseIT" time="0.613">
+  <testcase name="INT_H06_A3_changedSnapshotPayloadOrEncodedKeyRefusesResume" classname="com.carddemo.interest.job.InterestCloseIT" time="0.529">
+  <testcase name="INT_H06_A3_resumeChangedIdentityRefusedAndNoAutomaticRestart" classname="com.carddemo.interest.job.InterestCloseIT" time="0.983">
+  <testcase name="INT_R10_TN_03_TN_04_TN_07_TN_09_typedOperationFailuresRollbackAndPreserveRestrictedSourceOrder" classname="com.carddemo.interest.job.InterestCloseIT" time="1.234">
+  <testcase name="INT_H06_A3_crashBeforeGroupCommitRollsBackWholeGroupAndExplicitResumeSeeksCheckpoint" classname="com.carddemo.interest.job.InterestCloseIT" time="0.646">
+  <testcase name="INT_R10_malformedDuplicateAndBadGeometryIntakeIsHeldWithoutReadyRun" classname="com.carddemo.interest.job.InterestCloseIT" time="0.252"/>
+  <testcase name="INT_H03_multiCardWithoutEvidenceHeldAndSuppliedFirstReturnNotMinimumIsSealed" classname="com.carddemo.interest.job.InterestCloseIT" time="0.047"/>
+Unit: independent numeric/extended/profile and operation diagnostics:
+<testsuite xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://maven.apache.org/surefire/maven-surefire-plugin/xsd/surefire-test-report-3.0.xsd" version="3.0" name="com.carddemo.interest.calc.LegacyStatusTest" time="0.055" tests="6" errors="0" skipped="0" failures="0">
+  <testcase name="TN_04_INT_R10_profileControlsCharacterAndRightByteOverlayWithoutClaimingHostLayout" classname="com.carddemo.interest.calc.LegacyStatusTest" time="0.023"/>
+  <testcase name="TN_03_TN_09_INT_R10_everySupportedOperationUsesItsCobolDisplayText" classname="com.carddemo.interest.calc.LegacyStatusTest" time="0.014"/>
+  <testcase name="INT_R10_INT_H08_TN_07_onlySequentialTcatbalfReadHasEofAndOnlyExactRateMissFallsBack" classname="com.carddemo.interest.calc.LegacyStatusTest" time="0.001"/>
+  <testcase name="TN_04_INT_R10_extendedStatusReinterpretsSecondStorageByteNotItsDigitValue" classname="com.carddemo.interest.calc.LegacyStatusTest" time="0.001"/>
+  <testcase name="TN_04_INT_R10_invalidGeometryRejectedAndFailureProtectsStatusAndRestrictedPrefix" classname="com.carddemo.interest.calc.LegacyStatusTest" time="0.001"/>
+  <testcase name="TN_04_INT_R10_numericStatusUsesExactFourPositionMove" classname="com.carddemo.interest.calc.LegacyStatusTest" time="0.0"/>
+Unit: overflow/suffix, EOF and timestamp:
+<testsuite xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://maven.apache.org/surefire/maven-surefire-plugin/xsd/surefire-test-report-3.0.xsd" version="3.0" name="com.carddemo.interest.calc.GroupCalculationTest" time="0.608" tests="5" errors="0" skipped="0" failures="0">
+  <testcase name="INT_H05_INT_R08_overflowKeepsEveryRowAndWrapsSuffixAndGroupTotal" classname="com.carddemo.interest.calc.GroupCalculationTest" time="0.034">
+  <testcase name="INT_R09_INT_Q02_lookaheadNextKeyAndResumeKeepFinalGroupWithoutFinalDelta" classname="com.carddemo.interest.calc.GroupCalculationTest" time="0.004"/>
+  <testcase name="INT_Q06_INT_R10_emptyTcatbalfIsNormalEofWithoutLookups" classname="com.carddemo.interest.calc.GroupCalculationTest" time="0.006"/>
+  <testcase name="INT_R04_INT_R10_zeroRateDoesNotBypassRequiredAccountOrCardReads" classname="com.carddemo.interest.calc.GroupCalculationTest" time="0.003"/>
+  <testcase name="INT_Q05_TN_02_advancingClockSamplesOncePerEmittedRow" classname="com.carddemo.interest.calc.GroupCalculationTest" time="0.004"/>
+<testsuite xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://maven.apache.org/surefire/maven-surefire-plugin/xsd/surefire-test-report-3.0.xsd" version="3.0" name="com.carddemo.interest.calc.InterestRulesTest" time="0.012" tests="8" errors="0" skipped="0" failures="0">
+  <testcase name="INT_H05_receiverWidthsKeepSignedLowDigitsAtEveryAssignmentAndAddition" classname="com.carddemo.interest.calc.InterestRulesTest" time="0.0"/>
+  <testcase name="INT_R04_INT_Q04_nonzeroRateEmitsZeroCentsAndExactZeroRateSkips" classname="com.carddemo.interest.calc.InterestRulesTest" time="0.001"/>
+  <testcase name="INT_Q02_INT_Q06_lookaheadNotEofControlsDeltaEligibility" classname="com.carddemo.interest.calc.InterestRulesTest" time="0.001"/>
+  <testcase name="INT_Q03_INT_H07_negativeSubCentUsesDownNotFloorAndNegativeRateIsNotFiltered" classname="com.carddemo.interest.calc.InterestRulesTest" time="0.001"/>
+  <testcase name="INT_R05_INT_H01_INT_Q05_TN_06_constantsNoFeesAndOneTimestampSample" classname="com.carddemo.interest.calc.InterestRulesTest" time="0.001"/>
+  <testcase name="INT_R01_INT_Q01_tiesAndI07NonTiesTruncateBeforeSumming" classname="com.carddemo.interest.calc.InterestRulesTest" time="0.0"/>
+  <testcase name="INT_R08_INT_H05_suffixWrapDoesNotLimitOrdinal" classname="com.carddemo.interest.calc.InterestRulesTest" time="0.0"/>
+  <testcase name="INT_H02_opaqueTenPrintableBytesOnly" classname="com.carddemo.interest.calc.InterestRulesTest" time="0.001"/>
+Expected negative-path diagnostics from fresh integration execution:
+java.lang.IllegalStateException: injected-after-commit
+2026-11-20T07:39:23.911Z  INFO 56326 --- [           main] c.carddemo.interest.job.CloseRunService  : event=run-finished run=14ea1a39-94e7-422e-a0c4-272e730efea6 phase=compute category=TARGET_COMPUTE_FAILED rc=12
+com.carddemo.interest.calc.GroupCalculation$MissingLookup: dd=ACCTFILE op=READ status-hex=3233
+2026-11-20T07:39:28.175Z  WARN 56326 --- [           main] c.carddemo.interest.job.CloseRunService  : event=legacy-io-failed run=868902af-a3aa-4d90-a2c2-83736ed50c98 dd=ACCTFILE op=READ status-hex=3233
+2026-11-20T07:39:28.200Z  INFO 56326 --- [           main] c.carddemo.interest.job.CloseRunService  : event=run-finished run=868902af-a3aa-4d90-a2c2-83736ed50c98 phase=compute category=REQUIRED_LOOKUP_MISSING rc=12
+com.carddemo.interest.calc.GroupCalculation$MissingLookup: dd=XREFFILE op=READ status-hex=3233
+2026-11-20T07:39:28.364Z  WARN 56326 --- [           main] c.carddemo.interest.job.CloseRunService  : event=legacy-io-failed run=ade57b10-fdfa-4380-afd1-243c2bdd63c2 dd=XREFFILE op=READ status-hex=3233
+2026-11-20T07:39:28.396Z  INFO 56326 --- [           main] c.carddemo.interest.job.CloseRunService  : event=run-finished run=ade57b10-fdfa-4380-afd1-243c2bdd63c2 phase=compute category=REQUIRED_LOOKUP_MISSING rc=12
+com.carddemo.interest.calc.GroupCalculation$MissingLookup: dd=DISCGRP op=READ status-hex=3233
+2026-11-20T07:39:28.561Z  WARN 56326 --- [           main] c.carddemo.interest.job.CloseRunService  : event=legacy-io-failed run=69a80ee0-e629-4d17-9785-dfc96c94622d dd=DISCGRP op=READ status-hex=3233
+2026-11-20T07:39:28.608Z  INFO 56326 --- [           main] c.carddemo.interest.job.CloseRunService  : event=run-finished run=69a80ee0-e629-4d17-9785-dfc96c94622d phase=compute category=REQUIRED_LOOKUP_MISSING rc=12
+java.lang.IllegalStateException: injected-before-commit
+2026-11-20T07:39:28.842Z  INFO 56326 --- [           main] c.carddemo.interest.job.CloseRunService  : event=run-finished run=2896d895-f485-4d97-afff-c01a9a3d2306 phase=compute category=TARGET_COMPUTE_FAILED rc=12
+java.lang.IllegalStateException: injected-before-commit
+2026-11-20T07:39:29.105Z  INFO 56326 --- [           main] c.carddemo.interest.job.CloseRunService  : event=run-finished run=4cea84ab-9ba6-4931-a38d-acde7d0b71f6 phase=compute category=TARGET_COMPUTE_FAILED rc=12
+java.lang.IllegalStateException: injected-before-commit
+2026-11-20T07:39:29.844Z  INFO 56326 --- [           main] c.carddemo.interest.job.CloseRunService  : event=run-finished run=f066b47c-a4b2-4baa-8607-a46bbcae59e2 phase=compute category=TARGET_COMPUTE_FAILED rc=12
+com.carddemo.interest.calc.LegacyStatus$Failure: dd=DISCGRP op=OPEN status-hex=3335
+2026-11-20T07:39:30.757Z  WARN 56326 --- [           main] c.carddemo.interest.job.CloseRunService  : event=legacy-io-failed run=121ad7aa-d91b-4383-846c-9b0823f53f59 dd=DISCGRP op=OPEN status-hex=3335
+2026-11-20T07:39:30.766Z  INFO 56326 --- [           main] c.carddemo.interest.job.CloseRunService  : event=run-finished run=121ad7aa-d91b-4383-846c-9b0823f53f59 phase=compute category=LEGACY_IO_FAILURE rc=12
+com.carddemo.interest.calc.LegacyStatus$Failure: dd=XREFFILE op=READ status-hex=3130
+2026-11-20T07:39:30.964Z  WARN 56326 --- [           main] c.carddemo.interest.job.CloseRunService  : event=legacy-io-failed run=2dce153c-8624-4dcf-94bc-40cd2f4e89f7 dd=XREFFILE op=READ status-hex=3130
+2026-11-20T07:39:30.972Z  INFO 56326 --- [           main] c.carddemo.interest.job.CloseRunService  : event=run-finished run=2dce153c-8624-4dcf-94bc-40cd2f4e89f7 phase=compute category=LEGACY_IO_FAILURE rc=12
+com.carddemo.interest.calc.LegacyStatus$Failure: dd=TRANSACT op=WRITE status-hex=3935
+2026-11-20T07:39:31.167Z  WARN 56326 --- [           main] c.carddemo.interest.job.CloseRunService  : event=legacy-io-failed run=9bd80bae-7ba2-4a90-bd86-2e7bc5936de9 dd=TRANSACT op=WRITE status-hex=3935
+2026-11-20T07:39:31.177Z  INFO 56326 --- [           main] c.carddemo.interest.job.CloseRunService  : event=run-finished run=9bd80bae-7ba2-4a90-bd86-2e7bc5936de9 phase=compute category=LEGACY_IO_FAILURE rc=12
+com.carddemo.interest.calc.LegacyStatus$Failure: dd=ACCTFILE op=REWRITE status-hex=3939
+2026-11-20T07:39:31.380Z  WARN 56326 --- [           main] c.carddemo.interest.job.CloseRunService  : event=legacy-io-failed run=a99948f2-aa93-4ddb-99b8-6cd38519092d dd=ACCTFILE op=REWRITE status-hex=3939
+2026-11-20T07:39:31.388Z  INFO 56326 --- [           main] c.carddemo.interest.job.CloseRunService  : event=run-finished run=a99948f2-aa93-4ddb-99b8-6cd38519092d phase=compute category=LEGACY_IO_FAILURE rc=12
+com.carddemo.interest.calc.LegacyStatus$Failure: dd=TCATBALF op=CLOSE status-hex=3330
+2026-11-20T07:39:31.581Z  WARN 56326 --- [           main] c.carddemo.interest.job.CloseRunService  : event=legacy-io-failed run=f3e16471-df76-490c-8398-66cd3b54a7a2 dd=TCATBALF op=CLOSE status-hex=3330
+2026-11-20T07:39:31.589Z  INFO 56326 --- [           main] c.carddemo.interest.job.CloseRunService  : event=run-finished run=f3e16471-df76-490c-8398-66cd3b54a7a2 phase=compute category=LEGACY_IO_FAILURE rc=12
+com.carddemo.interest.calc.LegacyStatus$Failure: dd=DISCGRP op=READ status-hex=3431
+2026-11-20T07:39:31.782Z  WARN 56326 --- [           main] c.carddemo.interest.job.CloseRunService  : event=legacy-io-failed run=c21ea94d-8175-4773-a8b0-4d9bce42aa18 dd=DISCGRP op=READ status-hex=3431
+2026-11-20T07:39:31.791Z  INFO 56326 --- [           main] c.carddemo.interest.job.CloseRunService  : event=run-finished run=c21ea94d-8175-4773-a8b0-4d9bce42aa18 phase=compute category=LEGACY_IO_FAILURE rc=12
+java.lang.IllegalStateException: injected-before-commit
+2026-11-20T07:39:32.817Z  INFO 56326 --- [           main] c.carddemo.interest.job.CloseRunService  : event=run-finished run=a539ade9-6511-45cc-aa87-f9024e9ab071 phase=compute category=TARGET_COMPUTE_FAILED rc=12
