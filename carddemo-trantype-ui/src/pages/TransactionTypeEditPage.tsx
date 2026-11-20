@@ -1,7 +1,9 @@
 import { useState } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
-import { Box, Button, Stack, TextField } from '@mui/material';
+import { Box, Stack, TextField } from '@mui/material';
 import { api, ApiError } from '../api/client';
+import { FunctionKeyBar } from '../components/FunctionKeyBar';
+import { useFunctionKeys } from '../hooks/useFunctionKeys';
 import { MessageLine } from '../components/MessageLine';
 import { ScreenHeader } from '../components/ScreenHeader';
 import { descriptionError, padTypeCode, sameDescription, typeCodeError } from '../validation';
@@ -142,6 +144,14 @@ export function TransactionTypeEditPage() {
 
   const exit = () => (fromList ? navigate('/transaction-types') : navigate('/admin'));
 
+  useFunctionKeys({
+    Enter: state !== 'CONFIRM_DELETE' ? () => void enter() : undefined,
+    F3: exit,
+    F4: state === 'SHOW_DETAILS' || state === 'CONFIRM_DELETE' ? () => void f4() : undefined,
+    F5: state === 'CHANGES_OK_NOT_CONFIRMED' || state === 'DETAILS_NOT_FOUND' ? () => void f5() : undefined,
+    F12: F12_STATES.includes(state) ? f12 : undefined,
+  });
+
   return (
     <Box sx={{ maxWidth: 800, mx: 'auto', p: 2 }}>
       <ScreenHeader tranId="CTTU" program="COTRTUPC" title="Maintain Transaction Type" />
@@ -166,17 +176,15 @@ export function TransactionTypeEditPage() {
         />
       </Stack>
       <MessageLine info={INFO[state]} error={error} />
-      <Stack direction="row" spacing={1} sx={{ mt: 1 }}>
-        {state !== 'CONFIRM_DELETE' && <Button variant="contained" onClick={() => void enter()}>ENTER=Process</Button>}
-        <Button onClick={exit}>F3=Exit</Button>
-        {(state === 'SHOW_DETAILS' || state === 'CONFIRM_DELETE') && (
-          <Button onClick={() => void f4()}>F4=Delete</Button>
-        )}
-        {(state === 'CHANGES_OK_NOT_CONFIRMED' || state === 'DETAILS_NOT_FOUND') && (
-          <Button onClick={() => void f5()}>F5=Save</Button>
-        )}
-        {F12_STATES.includes(state) && <Button onClick={f12}>F12=Cancel</Button>}
-      </Stack>
+      <FunctionKeyBar keys={[
+        { label: 'ENTER=Process', onClick: () => void enter(), hidden: state === 'CONFIRM_DELETE' },
+        { label: 'F3=Exit', onClick: exit },
+        { label: 'F4=Delete', onClick: () => void f4(),
+          hidden: state !== 'SHOW_DETAILS' && state !== 'CONFIRM_DELETE' },
+        { label: 'F5=Save', onClick: () => void f5(),
+          hidden: state !== 'CHANGES_OK_NOT_CONFIRMED' && state !== 'DETAILS_NOT_FOUND' },
+        { label: 'F12=Cancel', onClick: f12, hidden: !F12_STATES.includes(state) },
+      ]} />
     </Box>
   );
 }

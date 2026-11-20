@@ -11,6 +11,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.dao.DataAccessException;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.dao.PessimisticLockingFailureException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
@@ -21,12 +22,12 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 
 @RestControllerAdvice
-public class ApiExceptionHandler {
+public class GlobalExceptionHandler {
 
     static final String FK_VIOLATION = "23503";
     static final String UNIQUE_VIOLATION = "23505";
     private static final List<String> FIELD_ORDER = List.of("trType", "trDescription");
-    private static final Logger log = LoggerFactory.getLogger(ApiExceptionHandler.class);
+    private static final Logger log = LoggerFactory.getLogger(GlobalExceptionHandler.class);
 
     @ExceptionHandler(ApiException.class)
     ResponseEntity<ErrorResponse> api(ApiException e) {
@@ -63,6 +64,11 @@ public class ApiExceptionHandler {
             return error(HttpStatus.CONFLICT, "DUPLICATE_KEY", INSERT_FAILED + "-803");
         }
         return dataAccess(e);
+    }
+
+    @ExceptionHandler(PessimisticLockingFailureException.class)
+    ResponseEntity<ErrorResponse> lock(PessimisticLockingFailureException e) {
+        return api(ApiException.lockError(DEADLOCK));
     }
 
     @ExceptionHandler(DataAccessException.class)
