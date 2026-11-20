@@ -2,6 +2,20 @@ import { act, renderHook } from '@testing-library/react';
 import { useFunctionKeys, type KeyHandlers } from './useFunctionKeys';
 
 describe('useFunctionKeys', () => {
+  it('does not confirm delete when F4 auto-repeats', () => {
+    const handler = vi.fn();
+    renderHook(() => useFunctionKeys({ F4: handler }));
+    const first = new KeyboardEvent('keydown', { key: 'F4', cancelable: true });
+    const repeat = new KeyboardEvent('keydown', { key: 'F4', repeat: true, cancelable: true });
+    act(() => {
+      window.dispatchEvent(first);
+      window.dispatchEvent(repeat);
+    });
+    expect(handler).toHaveBeenCalledOnce();
+    expect(first.defaultPrevented).toBe(true);
+    expect(repeat.defaultPrevented).toBe(true);
+  });
+
   it.each(['Enter', 'F2', 'F3', 'F4', 'F5', 'F7', 'F8', 'F10', 'F12'] as const)(
     'dispatches %s and prevents the browser action', (key) => {
       const handler = vi.fn();

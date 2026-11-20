@@ -11,7 +11,7 @@ export function useFunctionKeys(handlers: KeyHandlers) {
       const handler = ref.current[e.key as keyof KeyHandlers];
       if (handler) {
         e.preventDefault();
-        handler();
+        if (!e.repeat) handler();
       }
     };
     window.addEventListener('keydown', onKey);
