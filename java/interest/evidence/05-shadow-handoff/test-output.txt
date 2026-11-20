@@ -35,13 +35,13 @@ NOTE: Picked up JDK_JAVA_OPTIONS: -XX:+IgnoreUnrecognizedVMOptions -XX:+UnlockDi
 [INFO] -------------------------------------------------------
 NOTE: Picked up JDK_JAVA_OPTIONS: -XX:+IgnoreUnrecognizedVMOptions -XX:+UnlockDiagnosticVMOptions -XX:-UseBASE64Intrinsics
 [INFO] Running com.carddemo.interest.handoff.HandoffRulesTest
-[INFO] Tests run: 7, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.090 s -- in com.carddemo.interest.handoff.HandoffRulesTest
+[INFO] Tests run: 7, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.084 s -- in com.carddemo.interest.handoff.HandoffRulesTest
 [INFO] Running com.carddemo.interest.codec.FixedRecordCodecTest
-[INFO] Tests run: 8, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.047 s -- in com.carddemo.interest.codec.FixedRecordCodecTest
+[INFO] Tests run: 8, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.042 s -- in com.carddemo.interest.codec.FixedRecordCodecTest
 [INFO] Running com.carddemo.interest.pilot.LegacyTimestampTest
-[INFO] Tests run: 3, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.027 s -- in com.carddemo.interest.pilot.LegacyTimestampTest
+[INFO] Tests run: 3, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.026 s -- in com.carddemo.interest.pilot.LegacyTimestampTest
 [INFO] Running com.carddemo.interest.pilot.InterestCalculatorTest
-[INFO] Tests run: 10, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.007 s -- in com.carddemo.interest.pilot.InterestCalculatorTest
+[INFO] Tests run: 10, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.008 s -- in com.carddemo.interest.pilot.InterestCalculatorTest
 [INFO] Running com.carddemo.interest.pilot.PilotRecordLayoutTest
 [INFO] Tests run: 6, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.010 s -- in com.carddemo.interest.pilot.PilotRecordLayoutTest
 [INFO] Running com.carddemo.interest.pilot.InterestGroupProcessorTest
@@ -50,12 +50,12 @@ WARNING: A Java agent has been loaded dynamically (/home/ubuntu/.m2/repository/n
 WARNING: If a serviceability tool is in use, please run with -XX:+EnableDynamicAgentLoading to hide this warning
 WARNING: If a serviceability tool is not in use, please run with -Djdk.instrument.traceUsage for more information
 WARNING: Dynamic loading of agents will be disallowed by default in a future release
-07:25:59.736 [main] INFO com.carddemo.interest.pilot.InterestGroupProcessor -- event=rate-fallback run=00000000-0000-0000-0000-000000000001 dd=DISCGRP op=READ status=23
-[INFO] Tests run: 9, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.582 s -- in com.carddemo.interest.pilot.InterestGroupProcessorTest
+07:32:14.089 [main] INFO com.carddemo.interest.pilot.InterestGroupProcessor -- event=rate-fallback run=00000000-0000-0000-0000-000000000001 dd=DISCGRP op=READ status=23
+[INFO] Tests run: 9, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.573 s -- in com.carddemo.interest.pilot.InterestGroupProcessorTest
 [INFO] Running com.carddemo.interest.pilot.TransactionIdSourceTest
-[INFO] Tests run: 4, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.006 s -- in com.carddemo.interest.pilot.TransactionIdSourceTest
+[INFO] Tests run: 4, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.004 s -- in com.carddemo.interest.pilot.TransactionIdSourceTest
 [INFO] Running com.carddemo.interest.pilot.PilotReviewHardeningTest
-[INFO] Tests run: 4, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.014 s -- in com.carddemo.interest.pilot.PilotReviewHardeningTest
+[INFO] Tests run: 4, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.013 s -- in com.carddemo.interest.pilot.PilotReviewHardeningTest
 [INFO] 
 [INFO] Results:
 [INFO] 
@@ -77,101 +77,112 @@ WARNING: Dynamic loading of agents will be disallowed by default in a future rel
 [INFO] -------------------------------------------------------
 NOTE: Picked up JDK_JAVA_OPTIONS: -XX:+IgnoreUnrecognizedVMOptions -XX:+UnlockDiagnosticVMOptions -XX:-UseBASE64Intrinsics
 [INFO] Running com.carddemo.interest.handoff.HandoffIT
-07:26:00.613 [main] INFO org.testcontainers.images.PullPolicy -- Image pull policy will be performed by: DefaultPullPolicy()
-07:26:00.615 [main] INFO org.testcontainers.utility.ImageNameSubstitutor -- Image name substitution will be performed by: DefaultImageNameSubstitutor (composite of 'ConfigurationFileImageNameSubstitutor' and 'PrefixingImageNameSubstitutor')
-07:26:00.638 [main] INFO org.testcontainers.DockerClientFactory -- Testcontainers version: 1.21.4
-07:26:00.720 [main] INFO org.testcontainers.dockerclient.DockerClientProviderStrategy -- Loaded org.testcontainers.dockerclient.UnixSocketClientProviderStrategy from ~/.testcontainers.properties, will try it first
-07:26:00.865 [main] INFO org.testcontainers.dockerclient.DockerClientProviderStrategy -- Found Docker environment with local Unix socket (unix:///var/run/docker.sock)
-07:26:00.866 [main] INFO org.testcontainers.DockerClientFactory -- Docker host IP address is localhost
-07:26:00.875 [main] INFO org.testcontainers.DockerClientFactory -- Connected to docker: 
+07:32:14.950 [main] INFO org.testcontainers.images.PullPolicy -- Image pull policy will be performed by: DefaultPullPolicy()
+07:32:14.953 [main] INFO org.testcontainers.utility.ImageNameSubstitutor -- Image name substitution will be performed by: DefaultImageNameSubstitutor (composite of 'ConfigurationFileImageNameSubstitutor' and 'PrefixingImageNameSubstitutor')
+07:32:14.969 [main] INFO org.testcontainers.DockerClientFactory -- Testcontainers version: 1.21.4
+07:32:15.051 [main] INFO org.testcontainers.dockerclient.DockerClientProviderStrategy -- Loaded org.testcontainers.dockerclient.UnixSocketClientProviderStrategy from ~/.testcontainers.properties, will try it first
+07:32:15.192 [main] INFO org.testcontainers.dockerclient.DockerClientProviderStrategy -- Found Docker environment with local Unix socket (unix:///var/run/docker.sock)
+07:32:15.193 [main] INFO org.testcontainers.DockerClientFactory -- Docker host IP address is localhost
+07:32:15.203 [main] INFO org.testcontainers.DockerClientFactory -- Connected to docker: 
   Server Version: 29.9.2
   API Version: 1.56
   Operating System: Ubuntu 22.04.5 LTS
   Total Memory: 32096 MB
-07:26:00.922 [main] INFO tc.testcontainers/ryuk:0.12.0 -- Creating container for image: testcontainers/ryuk:0.12.0
-07:26:00.925 [main] INFO org.testcontainers.utility.RegistryAuthLocator -- Failure when attempting to lookup auth config. Please ignore if you don't have images in an authenticated registry. Details: (dockerImageName: testcontainers/ryuk:0.12.0, configFile: /home/ubuntu/.docker/config.json, configEnv: DOCKER_AUTH_CONFIG). Falling back to docker-java default behaviour. Exception message: Status 404: No config supplied. Checked in order: /home/ubuntu/.docker/config.json (file not found), DOCKER_AUTH_CONFIG (not set)
-07:26:00.995 [main] INFO tc.testcontainers/ryuk:0.12.0 -- Container testcontainers/ryuk:0.12.0 is starting: e887f43f7e111d33a1e39965d960bcab664091a4a90f3269b4c5507ab949b62c
-07:26:01.170 [main] INFO tc.testcontainers/ryuk:0.12.0 -- Container testcontainers/ryuk:0.12.0 started in PT0.247375474S
-07:26:01.173 [main] INFO org.testcontainers.utility.RyukResourceReaper -- Ryuk started - will monitor and terminate Testcontainers containers on JVM exit
-07:26:01.173 [main] INFO org.testcontainers.DockerClientFactory -- Checking the system...
-07:26:01.173 [main] INFO org.testcontainers.DockerClientFactory -- ✔︎ Docker server version should be at least 1.6.0
-07:26:01.174 [main] INFO tc.postgres:15-alpine -- Creating container for image: postgres:15-alpine
-07:26:01.207 [main] INFO tc.postgres:15-alpine -- Container postgres:15-alpine is starting: 661bcba05805889d2635775849f54cae269cd864f1128e6e6ba1f3b046cd96a7
-07:26:02.211 [main] INFO tc.postgres:15-alpine -- Container postgres:15-alpine started in PT1.037551259S
-07:26:02.212 [main] INFO tc.postgres:15-alpine -- Container is started (JDBC URL: jdbc:postgresql://localhost:32777/test?loggerLevel=OFF)
+07:32:15.251 [main] INFO tc.testcontainers/ryuk:0.12.0 -- Creating container for image: testcontainers/ryuk:0.12.0
+07:32:15.254 [main] INFO org.testcontainers.utility.RegistryAuthLocator -- Failure when attempting to lookup auth config. Please ignore if you don't have images in an authenticated registry. Details: (dockerImageName: testcontainers/ryuk:0.12.0, configFile: /home/ubuntu/.docker/config.json, configEnv: DOCKER_AUTH_CONFIG). Falling back to docker-java default behaviour. Exception message: Status 404: No config supplied. Checked in order: /home/ubuntu/.docker/config.json (file not found), DOCKER_AUTH_CONFIG (not set)
+07:32:15.323 [main] INFO tc.testcontainers/ryuk:0.12.0 -- Container testcontainers/ryuk:0.12.0 is starting: d221df5f254413fe3be6f75243923f4be3a8d8a1c894458357e625dbe6fc3ee8
+07:32:15.498 [main] INFO tc.testcontainers/ryuk:0.12.0 -- Container testcontainers/ryuk:0.12.0 started in PT0.247112343S
+07:32:15.502 [main] INFO org.testcontainers.utility.RyukResourceReaper -- Ryuk started - will monitor and terminate Testcontainers containers on JVM exit
+07:32:15.502 [main] INFO org.testcontainers.DockerClientFactory -- Checking the system...
+07:32:15.502 [main] INFO org.testcontainers.DockerClientFactory -- ✔︎ Docker server version should be at least 1.6.0
+07:32:15.503 [main] INFO tc.postgres:15-alpine -- Creating container for image: postgres:15-alpine
+07:32:15.538 [main] INFO tc.postgres:15-alpine -- Container postgres:15-alpine is starting: 14970beb68e574acfb1bc28c962e0e52b8f2f53a97899b217d94da4fdb69357c
+07:32:16.547 [main] INFO tc.postgres:15-alpine -- Container postgres:15-alpine started in PT1.044169728S
+07:32:16.547 [main] INFO tc.postgres:15-alpine -- Container is started (JDBC URL: jdbc:postgresql://localhost:32789/test?loggerLevel=OFF)
 DB PostgreSQL 15.20 on x86_64-pc-linux-musl, compiled by gcc (Alpine 15.2.0) 15.2.0, 64-bit
 ROLE interest_publish
-07:26:02.499 [main] INFO com.carddemo.interest.handoff.HandoffCoordinator -- event=handoff-shadow run=b984ea62-7732-46d4-942d-c018067afaf6 records=2 deltas=1
+07:32:16.859 [main] INFO com.carddemo.interest.handoff.HandoffCoordinator -- event=handoff-shadow run=ebe349f5-e739-4a0f-a05c-9b5d3ae7fe04 records=2 deltas=1
 FAULT shadow outcome=ShadowRehearsed publication=PRIVATE run=COMPUTED signals=0 host_calls=0 host_mutations=0 generations=0
 SQL released_without_verified_receipt=0 live_claims_per_destination_cycle_gt1=0 publication_rows_for_run=0
-07:26:02.542 [main] INFO com.carddemo.interest.handoff.HandoffCoordinator -- event=handoff-held run=76213f0d-dbd2-4ece-8ad1-e0d4e3274bac reason=FENCE_MISSING
+07:32:16.906 [main] INFO com.carddemo.interest.handoff.HandoffCoordinator -- event=handoff-held run=bac230ab-e174-4d64-a855-12c3acfe2fd8 reason=FENCE_MISSING
 FAULT missing-fence outcome=Held reason=FENCE_MISSING publication=HELD run=HELD signals=0 host_calls=2 host_mutations=0 generations=0
 SQL released_without_verified_receipt=0 live_claims_per_destination_cycle_gt1=0 publication_rows_for_run=1
-07:26:02.568 [main] INFO com.carddemo.interest.handoff.HandoffCoordinator -- event=handoff-held run=e7ee213d-36b9-43e8-b747-6c2a01cce131 reason=TXN_ID_COLLISION
+07:32:16.923 [main] INFO com.carddemo.interest.handoff.HandoffCoordinator -- event=handoff-held run=e5f2a239-c0fd-4c1f-9e32-ca2648fdb839 reason=TXN_ID_COLLISION
 FAULT txn-id-collision outcome=Held reason=TXN_ID_COLLISION publication=HELD run=HELD signals=0 host_calls=4 host_mutations=0 generations=0
 SQL released_without_verified_receipt=0 live_claims_per_destination_cycle_gt1=0 publication_rows_for_run=1
-PACKET records=2 bytes=700 payload_sha256=4808df2ada1f74834f16ea24b136b50cf4e557118f24faad56d77cb3a856ea01 manifest_sha256=9a3a3ff86e696c9dc2e6a485b9de1cd0fea4a05c7ab7b75315a80b0191f05dde deltas=1
+PACKET records=2 bytes=700 payload_sha256=4808df2ada1f74834f16ea24b136b50cf4e557118f24faad56d77cb3a856ea01 manifest_sha256=50677b242d04c83e629aa7065ca19650a8388c5896a32da82087191c0b24b3a9 deltas=1
 MANIFEST {"format":"INT-05/1","run_id":"<run>","snapshot_id":"<snapshot>","mode":"live","destination":"AWS.M2.CARDDEMO.SYSTRAN","cycle":"<cycle>","feed":"SYSTRAN","parm":"2022071800","codec_profile":"lab-ascii","build_revision":"INT-05","rule_revision":"legacy-A","clock_profile":"frozen","recfm":"F","lrecl":350,"record_count":2,"payload_sha256":"4808df2ada1f74834f16ea24b136b50cf4e557118f24faad56d77cb3a856ea01","txn_ids":["2022071800000001","2022071800000002"],"deltas":[{"acct_id":"00000002001","preimage_sha256":"df2c204a022231ab7b0e3ccf15307b3d8fc652f1bfc918387cf6d11056f70f4a","postimage_sha256":"f375a8a1332f4c998002fe718393a29a19c3cc3234dc7d113b5d86861194d59e","old_current_balance":"1000.00","new_current_balance":"1010.00","old_cycle_credit":"1000.00","new_cycle_credit":"0.00","old_cycle_debit":"0.00","new_cycle_debit":"0.00"}]}
 SQL released_without_verified_receipt=0 live_claims_per_destination_cycle_gt1=0 publication_rows_for_run=0
-07:26:02.599 [main] INFO com.carddemo.interest.handoff.HandoffCoordinator -- event=handoff-held run=e32d7707-6bde-4102-8279-3e0e0e3c544e reason=FENCE_STALE
+07:32:16.950 [main] INFO com.carddemo.interest.handoff.HandoffCoordinator -- event=handoff-held run=3b2deb0b-337e-4e2c-a818-93d83064e535 reason=FENCE_STALE
 FAULT stale-fence-cycle outcome=Held reason=FENCE_STALE publication=HELD run=HELD signals=0 host_calls=2 host_mutations=0 generations=0
 SQL released_without_verified_receipt=0 live_claims_per_destination_cycle_gt1=0 publication_rows_for_run=1
-07:26:02.622 [main] INFO com.carddemo.interest.handoff.HandoffCoordinator -- event=handoff-held run=705e4d9f-a5ea-44a0-b6a9-0706e68236ea reason=APPLY_UNCERTAIN
-07:26:02.627 [main] INFO com.carddemo.interest.handoff.HandoffCoordinator -- event=handoff-held run=705e4d9f-a5ea-44a0-b6a9-0706e68236ea reason=RECEIPT_MISSING
+07:32:16.965 [main] INFO com.carddemo.interest.handoff.HandoffCoordinator -- event=handoff-held run=fadac4ae-d60f-4271-9506-48af4173493f reason=CATALOG_AMBIGUOUS
+07:32:16.968 [main] INFO com.carddemo.interest.handoff.HandoffCoordinator -- event=handoff-held run=fadac4ae-d60f-4271-9506-48af4173493f reason=GENERATION_MOVED
+FAULT receipt-generation-not-current outcome=Held reason=GENERATION_MOVED publication=HELD run=HELD signals=0 host_calls=11 host_mutations=2 generations=2
+SQL released_without_verified_receipt=0 live_claims_per_destination_cycle_gt1=0 publication_rows_for_run=1
+07:32:16.984 [main] INFO com.carddemo.interest.handoff.HandoffCoordinator -- event=handoff-held run=ab543d0d-4446-4591-9286-7c15e966e637 reason=APPLY_UNCERTAIN
+07:32:16.987 [main] INFO com.carddemo.interest.handoff.HandoffCoordinator -- event=handoff-held run=ab543d0d-4446-4591-9286-7c15e966e637 reason=RECEIPT_MISSING
 FAULT partial-apply outcome=Held reason=APPLY_UNCERTAIN publication=HELD run=HELD signals=0 host_calls=10 host_mutations=2 generations=0
 SQL released_without_verified_receipt=0 live_claims_per_destination_cycle_gt1=0 publication_rows_for_run=0
-07:26:02.641 [main] INFO com.carddemo.interest.handoff.HandoffCoordinator -- event=handoff-held run=f73d0926-0b9a-4a11-a254-8ce5109c4847 reason=FENCE_STALE
+07:32:16.998 [main] INFO com.carddemo.interest.handoff.HandoffCoordinator -- event=handoff-held run=d09556ab-edd8-4859-88b0-f2b0d931ab66 reason=FENCE_STALE
 FAULT fence-changed outcome=Held reason=FENCE_STALE publication=HELD run=HELD signals=0 host_calls=5 host_mutations=0 generations=0
 SQL released_without_verified_receipt=0 live_claims_per_destination_cycle_gt1=0 publication_rows_for_run=1
-07:26:02.653 [main] INFO com.carddemo.interest.handoff.HandoffCoordinator -- event=handoff-held run=213162a0-151f-4b0f-83d9-01996966812d reason=CATALOG_AMBIGUOUS
-07:26:02.659 [main] INFO com.carddemo.interest.handoff.HandoffCoordinator -- event=handoff-released run=213162a0-151f-4b0f-83d9-01996966812d records=2 deltas=1
-FAULT ambiguous-catalog outcome=Held reason=CATALOG_AMBIGUOUS publication=RECEIVED run=RELEASED signals=1 host_calls=10 host_mutations=2 generations=1
+07:32:17.008 [main] INFO com.carddemo.interest.handoff.HandoffCoordinator -- event=handoff-held run=e8bc0041-4217-4e26-8960-5bdc752f47de reason=CATALOG_AMBIGUOUS
+07:32:17.014 [main] INFO com.carddemo.interest.handoff.HandoffCoordinator -- event=handoff-released run=e8bc0041-4217-4e26-8960-5bdc752f47de records=2 deltas=1
+FAULT ambiguous-catalog outcome=Held reason=CATALOG_AMBIGUOUS publication=RECEIVED run=RELEASED signals=1 host_calls=11 host_mutations=2 generations=1
 SQL released_without_verified_receipt=0 live_claims_per_destination_cycle_gt1=0 publication_rows_for_run=1
 SQL released_without_verified_receipt=0 live_claims_per_destination_cycle_gt1=0 publication_rows_for_run=0
-07:26:02.675 [main] INFO com.carddemo.interest.handoff.HandoffCoordinator -- event=handoff-held run=f2af8f5f-34a3-4986-9a30-c54e5f762ab2 reason=FENCE_STALE
+07:32:17.033 [main] INFO com.carddemo.interest.handoff.HandoffCoordinator -- event=handoff-held run=0c0d6f48-1a06-49eb-9465-9f833c0071fc reason=FENCE_STALE
 FAULT inactive-fence outcome=Held reason=FENCE_STALE publication=HELD run=HELD signals=0 host_calls=2 host_mutations=0 generations=0
 SQL released_without_verified_receipt=0 live_claims_per_destination_cycle_gt1=0 publication_rows_for_run=1
-07:26:02.686 [main] INFO com.carddemo.interest.handoff.HandoffCoordinator -- event=handoff-released run=8588b08b-1f17-4301-8e82-315bcc505636 records=2 deltas=1
-FAULT repeat-receipt outcome=Released publication=RECEIVED run=RELEASED signals=1 host_calls=10 host_mutations=2 generations=1
+07:32:17.045 [main] INFO com.carddemo.interest.handoff.HandoffCoordinator -- event=handoff-held run=7ac2d163-7d52-48c2-8d3e-8e24afddc643 reason=HOST_ERROR
+FAULT host-error-after-apply outcome=Held reason=HOST_ERROR publication=HELD run=HELD signals=0 host_calls=8 host_mutations=1 generations=0
 SQL released_without_verified_receipt=0 live_claims_per_destination_cycle_gt1=0 publication_rows_for_run=1
-07:26:02.694 [main] INFO com.carddemo.interest.handoff.HandoffCoordinator -- event=handoff-held run=9fbd60d7-1d15-47c3-b7ca-0acee1671d58 reason=RECEIPT_MISSING
-07:26:02.696 [main] INFO com.carddemo.interest.handoff.HandoffCoordinator -- event=handoff-held run=9fbd60d7-1d15-47c3-b7ca-0acee1671d58 reason=RECEIPT_MISSING
-07:26:02.698 [main] INFO com.carddemo.interest.handoff.HandoffCoordinator -- event=handoff-released run=9fbd60d7-1d15-47c3-b7ca-0acee1671d58 records=2 deltas=1
-FAULT missing-receipt outcome=Held reason=RECEIPT_MISSING publication=RECEIVED run=RELEASED signals=1 host_calls=12 host_mutations=2 generations=1
+07:32:17.055 [main] INFO com.carddemo.interest.handoff.HandoffCoordinator -- event=handoff-released run=a6322eba-3fc6-4109-a0f0-0fce89a07452 records=2 deltas=1
+FAULT repeat-receipt outcome=Released publication=RECEIVED run=RELEASED signals=1 host_calls=11 host_mutations=2 generations=1
 SQL released_without_verified_receipt=0 live_claims_per_destination_cycle_gt1=0 publication_rows_for_run=1
-07:26:02.706 [main] INFO com.carddemo.interest.handoff.HandoffCoordinator -- event=handoff-held run=41216663-4eb6-4c0d-9d92-aac911b45c00 reason=PREIMAGE_MISMATCH
+SQL released_without_verified_receipt=0 live_claims_per_destination_cycle_gt1=0 publication_rows_for_run=0
+FAULT signal-redelivered outcome=Released publication=RECEIVED run=RELEASED signals=1 host_calls=11 host_mutations=2 generations=1
+SQL released_without_verified_receipt=0 live_claims_per_destination_cycle_gt1=0 publication_rows_for_run=1
+07:32:17.088 [main] INFO com.carddemo.interest.handoff.HandoffCoordinator -- event=handoff-held run=4745e598-2253-4f78-b228-a00a4f85e6c6 reason=RECEIPT_MISSING
+07:32:17.095 [main] INFO com.carddemo.interest.handoff.HandoffCoordinator -- event=handoff-held run=4745e598-2253-4f78-b228-a00a4f85e6c6 reason=RECEIPT_MISSING
+07:32:17.098 [main] INFO com.carddemo.interest.handoff.HandoffCoordinator -- event=handoff-released run=4745e598-2253-4f78-b228-a00a4f85e6c6 records=2 deltas=1
+FAULT missing-receipt outcome=Held reason=RECEIPT_MISSING publication=RECEIVED run=RELEASED signals=1 host_calls=13 host_mutations=2 generations=1
+SQL released_without_verified_receipt=0 live_claims_per_destination_cycle_gt1=0 publication_rows_for_run=1
+07:32:17.106 [main] INFO com.carddemo.interest.handoff.HandoffCoordinator -- event=handoff-held run=6990c2ab-148d-4e2d-ae1a-045dd89aafc8 reason=PREIMAGE_MISMATCH
 FAULT wrong-preimage outcome=Held reason=PREIMAGE_MISMATCH publication=HELD run=HELD signals=0 host_calls=3 host_mutations=0 generations=0
 SQL released_without_verified_receipt=0 live_claims_per_destination_cycle_gt1=0 publication_rows_for_run=1
-07:26:02.716 [main] INFO com.carddemo.interest.handoff.HandoffCoordinator -- event=handoff-held run=d12299f1-6a38-4862-99fb-1fca039e3951 reason=RECEIPT_MISMATCH
-07:26:02.718 [main] INFO com.carddemo.interest.handoff.HandoffCoordinator -- event=handoff-held run=d12299f1-6a38-4862-99fb-1fca039e3951 reason=RECEIPT_MISMATCH
+07:32:17.115 [main] INFO com.carddemo.interest.handoff.HandoffCoordinator -- event=handoff-held run=e0acf541-7fcd-4fe6-9ba1-a3f31ea942a9 reason=RECEIPT_MISMATCH
+07:32:17.116 [main] INFO com.carddemo.interest.handoff.HandoffCoordinator -- event=handoff-held run=e0acf541-7fcd-4fe6-9ba1-a3f31ea942a9 reason=RECEIPT_MISMATCH
 FAULT receipt-mismatch outcome=Held reason=RECEIPT_MISMATCH publication=HELD run=HELD signals=0 host_calls=11 host_mutations=2 generations=1
 SQL released_without_verified_receipt=0 live_claims_per_destination_cycle_gt1=0 publication_rows_for_run=1
 SQL released_without_verified_receipt=0 live_claims_per_destination_cycle_gt1=0 publication_rows_for_run=0
-07:26:02.734 [main] INFO com.carddemo.interest.handoff.HandoffCoordinator -- event=handoff-released run=ab476ca9-3dd8-4c5b-81aa-357a7ee7df35 records=2 deltas=1
-07:26:02.737 [main] INFO com.carddemo.interest.handoff.HandoffCoordinator -- event=handoff-refused run=85e32f25-87aa-4161-87ca-365dd720973c reason=CLAIM_CONFLICT
+07:32:17.133 [main] INFO com.carddemo.interest.handoff.HandoffCoordinator -- event=handoff-released run=87438e19-1a66-47eb-b9bc-e2380996b48d records=2 deltas=1
+07:32:17.139 [main] INFO com.carddemo.interest.handoff.HandoffCoordinator -- event=handoff-refused run=940a115e-e11f-4a66-8a87-d6459a77bd0d reason=CLAIM_CONFLICT
 FAULT claim-conflict outcome=Held reason=CLAIM_CONFLICT publication=NONE run=COMPUTED signals=1 host_calls=1 host_mutations=0 generations=0
 SQL released_without_verified_receipt=0 live_claims_per_destination_cycle_gt1=0 publication_rows_for_run=1
 SQL released_without_verified_receipt=0 live_claims_per_destination_cycle_gt1=0 publication_rows_for_run=0
-07:26:02.754 [main] INFO com.carddemo.interest.handoff.HandoffCoordinator -- event=handoff-released run=f507f778-7d93-4a4f-abe0-7e419fbddc37 records=2 deltas=1
-FAULT verified-receipt outcome=Released publication=RECEIVED run=RELEASED signals=1 host_calls=10 host_mutations=2 generations=1
+07:32:17.155 [main] INFO com.carddemo.interest.handoff.HandoffCoordinator -- event=handoff-released run=73ff788f-cfb6-4ab0-a48b-0031fc10b7de records=2 deltas=1
+FAULT verified-receipt outcome=Released publication=RECEIVED run=RELEASED signals=1 host_calls=11 host_mutations=2 generations=1
 SQL released_without_verified_receipt=0 live_claims_per_destination_cycle_gt1=0 publication_rows_for_run=1
-07:26:02.762 [main] INFO com.carddemo.interest.handoff.HandoffCoordinator -- event=handoff-held run=e9716667-959d-4690-8fce-cefbae0a5f7d reason=APPLY_UNCERTAIN
+07:32:17.168 [main] INFO com.carddemo.interest.handoff.HandoffCoordinator -- event=handoff-held run=2e4e87c4-3c08-4186-a566-2af583ff5fae reason=APPLY_UNCERTAIN
 FAULT unknown-apply outcome=Held reason=APPLY_UNCERTAIN publication=HELD run=HELD signals=0 host_calls=6 host_mutations=1 generations=0
 SQL released_without_verified_receipt=0 live_claims_per_destination_cycle_gt1=0 publication_rows_for_run=1
-07:26:02.770 [main] INFO com.carddemo.interest.handoff.HandoffCoordinator -- event=handoff-held run=07b18133-0c04-4789-b60b-1cc06bcbfddd reason=GENERATION_MOVED
+SQL released_without_verified_receipt=0 live_claims_per_destination_cycle_gt1=0 publication_rows_for_run=0
+07:32:17.184 [main] INFO com.carddemo.interest.handoff.HandoffCoordinator -- event=handoff-held run=f3c8d06a-2461-440b-9e9e-fa3afadb5112 reason=GENERATION_MOVED
 FAULT generation-moved outcome=Held reason=GENERATION_MOVED publication=HELD run=HELD signals=0 host_calls=8 host_mutations=1 generations=1
 SQL released_without_verified_receipt=0 live_claims_per_destination_cycle_gt1=0 publication_rows_for_run=1
-07:26:02.778 [main] INFO com.carddemo.interest.handoff.HandoffCoordinator -- event=handoff-held run=592df815-d552-417d-8059-de0081e4b486 reason=CATALOG_AMBIGUOUS
-07:26:02.780 [main] INFO com.carddemo.interest.handoff.HandoffCoordinator -- event=handoff-held run=592df815-d552-417d-8059-de0081e4b486 reason=RECEIPT_MISSING
+07:32:17.193 [main] INFO com.carddemo.interest.handoff.HandoffCoordinator -- event=handoff-held run=e8ebc521-c6a7-44ef-9e65-d56cd6b9d1b2 reason=CATALOG_AMBIGUOUS
+07:32:17.195 [main] INFO com.carddemo.interest.handoff.HandoffCoordinator -- event=handoff-held run=e8ebc521-c6a7-44ef-9e65-d56cd6b9d1b2 reason=RECEIPT_MISSING
 FAULT failed-catalog outcome=Held reason=CATALOG_AMBIGUOUS publication=HELD run=HELD signals=0 host_calls=10 host_mutations=2 generations=0
 SQL released_without_verified_receipt=0 live_claims_per_destination_cycle_gt1=0 publication_rows_for_run=1
 SQL released_without_verified_receipt=0 live_claims_per_destination_cycle_gt1=0 publication_rows_for_run=0
-[INFO] Tests run: 22, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 2.247 s -- in com.carddemo.interest.handoff.HandoffIT
+[INFO] Tests run: 27, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 2.315 s -- in com.carddemo.interest.handoff.HandoffIT
 [INFO] Running com.carddemo.interest.schema.SchemaIT
-07:26:02.792 [main] INFO tc.postgres:15-alpine -- Creating container for image: postgres:15-alpine
-07:26:02.827 [main] INFO tc.postgres:15-alpine -- Container postgres:15-alpine is starting: 6618240d40782c77fb5e1881adbb636b5afd84efa92099ec894053a2ae69511e
-07:26:03.831 [main] INFO tc.postgres:15-alpine -- Container postgres:15-alpine started in PT1.0388985S
-07:26:03.831 [main] INFO tc.postgres:15-alpine -- Container is started (JDBC URL: jdbc:postgresql://localhost:32778/test?loggerLevel=OFF)
+07:32:17.208 [main] INFO tc.postgres:15-alpine -- Creating container for image: postgres:15-alpine
+07:32:17.256 [main] INFO tc.postgres:15-alpine -- Container postgres:15-alpine is starting: 3c4b80656abe81f43f49e1cb2e5d835ff8999710c66bd6ed12f48f456e42e3e7
+07:32:18.264 [main] INFO tc.postgres:15-alpine -- Container postgres:15-alpine started in PT1.056228646S
+07:32:18.265 [main] INFO tc.postgres:15-alpine -- Container is started (JDBC URL: jdbc:postgresql://localhost:32790/test?loggerLevel=OFF)
 MIGRATION V001__interest.sql applied
 MIGRATION V002__batch_repository.sql applied
 TN-08 carddemo tables, contents and ACL unchanged: transaction_type:NULL,transaction_type_categor:NULL,transaction_type_categor_pkey:NULL,transaction_type_pkey:NULL010005
@@ -377,14 +388,14 @@ PASS INT-R09 unique snapshot/BYTEA btree; unsigned order 00,7f,80,ff
 REJECT 23505 ERROR: duplicate key value violates unique constraint "category_balance_input_snapshot_id_legacy_key_key"
 REJECT 23505 ERROR: duplicate key value violates unique constraint "disclosure_rate_input_snapshot_id_legacy_key_key"
 PASS INT-MAP duplicate encoded keys rejected independently of decoded PK
-[INFO] Tests run: 6, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 1.295 s -- in com.carddemo.interest.schema.SchemaIT
+[INFO] Tests run: 6, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 1.316 s -- in com.carddemo.interest.schema.SchemaIT
 [INFO] Running com.carddemo.interest.pilot.PilotI01IT
-07:26:04.121 [main] INFO org.springframework.test.context.support.AnnotationConfigContextLoaderUtils -- Could not detect default configuration classes for test class [com.carddemo.interest.pilot.PilotI01IT]: PilotI01IT does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
-07:26:04.134 [main] INFO tc.postgres:15-alpine -- Creating container for image: postgres:15-alpine
-07:26:04.174 [main] INFO tc.postgres:15-alpine -- Container postgres:15-alpine is starting: ac87548905586886361a3af179f2320b3bb12376902a4aec0b2a99b76ed268b2
-07:26:05.167 [main] INFO tc.postgres:15-alpine -- Container postgres:15-alpine started in PT1.033118424S
-07:26:05.167 [main] INFO tc.postgres:15-alpine -- Container is started (JDBC URL: jdbc:postgresql://localhost:32779/test?loggerLevel=OFF)
-07:26:05.231 [main] INFO org.springframework.boot.test.context.SpringBootTestContextBootstrapper -- Found @SpringBootConfiguration com.carddemo.interest.pilot.InterestPilotApplication for test class com.carddemo.interest.pilot.PilotI01IT
+07:32:18.564 [main] INFO org.springframework.test.context.support.AnnotationConfigContextLoaderUtils -- Could not detect default configuration classes for test class [com.carddemo.interest.pilot.PilotI01IT]: PilotI01IT does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
+07:32:18.577 [main] INFO tc.postgres:15-alpine -- Creating container for image: postgres:15-alpine
+07:32:18.630 [main] INFO tc.postgres:15-alpine -- Container postgres:15-alpine is starting: a7f089858f9abe14fb98376a90ecf40ad9e01bd0d3499dd1f241959f2293cd77
+07:32:19.636 [main] INFO tc.postgres:15-alpine -- Container postgres:15-alpine started in PT1.059464443S
+07:32:19.636 [main] INFO tc.postgres:15-alpine -- Container is started (JDBC URL: jdbc:postgresql://localhost:32791/test?loggerLevel=OFF)
+07:32:19.691 [main] INFO org.springframework.boot.test.context.SpringBootTestContextBootstrapper -- Found @SpringBootConfiguration com.carddemo.interest.pilot.InterestPilotApplication for test class com.carddemo.interest.pilot.PilotI01IT
 
   .   ____          _            __ _ _
  /\\ / ___'_ __ _ _(_)_ __  __ _ \ \ \ \
@@ -395,47 +406,47 @@ PASS INT-MAP duplicate encoded keys rejected independently of decoded PK
 
  :: Spring Boot ::                (v3.3.5)
 
-2026-11-20T07:26:05.428Z  INFO 34546 --- [           main] com.carddemo.interest.pilot.PilotI01IT   : Starting PilotI01IT using Java 21.0.13.1 with PID 34546 (started by ubuntu in /home/ubuntu/repos/ts-cobol-carddemo/java/interest/interest-batch)
-2026-11-20T07:26:05.428Z  INFO 34546 --- [           main] com.carddemo.interest.pilot.PilotI01IT   : No active profile set, falling back to 1 default profile: "default"
-2026-11-20T07:26:05.701Z  WARN 34546 --- [           main] trationDelegate$BeanPostProcessorChecker : Bean 'org.springframework.boot.autoconfigure.jdbc.DataSourceConfiguration$Hikari' of type [org.springframework.boot.autoconfigure.jdbc.DataSourceConfiguration$Hikari] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying). Is this bean getting eagerly injected/applied to a currently created BeanPostProcessor [jobRegistryBeanPostProcessor]? Check the corresponding BeanPostProcessor declaration and its dependencies/advisors. If this bean does not have to be post-processed, declare it with ROLE_INFRASTRUCTURE.
-2026-11-20T07:26:05.720Z  WARN 34546 --- [           main] trationDelegate$BeanPostProcessorChecker : Bean 'spring.datasource-org.springframework.boot.autoconfigure.jdbc.DataSourceProperties' of type [org.springframework.boot.autoconfigure.jdbc.DataSourceProperties] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying). Is this bean getting eagerly injected/applied to a currently created BeanPostProcessor [jobRegistryBeanPostProcessor]? Check the corresponding BeanPostProcessor declaration and its dependencies/advisors. If this bean does not have to be post-processed, declare it with ROLE_INFRASTRUCTURE.
-2026-11-20T07:26:05.721Z  WARN 34546 --- [           main] trationDelegate$BeanPostProcessorChecker : Bean 'jdbcContainerConnectionDetailsForTest' of type [org.springframework.boot.testcontainers.service.connection.jdbc.JdbcContainerConnectionDetailsFactory$JdbcContainerConnectionDetails] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying). Is this bean getting eagerly injected/applied to a currently created BeanPostProcessor [jobRegistryBeanPostProcessor]? Check the corresponding BeanPostProcessor declaration and its dependencies/advisors. If this bean does not have to be post-processed, declare it with ROLE_INFRASTRUCTURE.
-2026-11-20T07:26:05.748Z  WARN 34546 --- [           main] trationDelegate$BeanPostProcessorChecker : Bean 'dataSource' of type [com.zaxxer.hikari.HikariDataSource] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying). Is this bean getting eagerly injected/applied to a currently created BeanPostProcessor [jobRegistryBeanPostProcessor]? Check the corresponding BeanPostProcessor declaration and its dependencies/advisors. If this bean does not have to be post-processed, declare it with ROLE_INFRASTRUCTURE.
-2026-11-20T07:26:05.752Z  WARN 34546 --- [           main] trationDelegate$BeanPostProcessorChecker : Bean 'org.springframework.boot.autoconfigure.jdbc.DataSourceTransactionManagerAutoConfiguration$JdbcTransactionManagerConfiguration' of type [org.springframework.boot.autoconfigure.jdbc.DataSourceTransactionManagerAutoConfiguration$JdbcTransactionManagerConfiguration] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying). Is this bean getting eagerly injected/applied to a currently created BeanPostProcessor [jobRegistryBeanPostProcessor]? Check the corresponding BeanPostProcessor declaration and its dependencies/advisors. If this bean does not have to be post-processed, declare it with ROLE_INFRASTRUCTURE.
-2026-11-20T07:26:05.756Z  WARN 34546 --- [           main] trationDelegate$BeanPostProcessorChecker : Bean 'org.springframework.boot.autoconfigure.transaction.TransactionManagerCustomizationAutoConfiguration' of type [org.springframework.boot.autoconfigure.transaction.TransactionManagerCustomizationAutoConfiguration] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying). Is this bean getting eagerly injected/applied to a currently created BeanPostProcessor [jobRegistryBeanPostProcessor]? Check the corresponding BeanPostProcessor declaration and its dependencies/advisors. If this bean does not have to be post-processed, declare it with ROLE_INFRASTRUCTURE.
-2026-11-20T07:26:05.759Z  WARN 34546 --- [           main] trationDelegate$BeanPostProcessorChecker : Bean 'transactionExecutionListeners' of type [org.springframework.boot.autoconfigure.transaction.ExecutionListenersTransactionManagerCustomizer] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying). Is this bean getting eagerly injected/applied to a currently created BeanPostProcessor [jobRegistryBeanPostProcessor]? Check the corresponding BeanPostProcessor declaration and its dependencies/advisors. If this bean does not have to be post-processed, declare it with ROLE_INFRASTRUCTURE.
-2026-11-20T07:26:05.761Z  WARN 34546 --- [           main] trationDelegate$BeanPostProcessorChecker : Bean 'spring.transaction-org.springframework.boot.autoconfigure.transaction.TransactionProperties' of type [org.springframework.boot.autoconfigure.transaction.TransactionProperties] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying). Is this bean getting eagerly injected/applied to a currently created BeanPostProcessor [jobRegistryBeanPostProcessor]? Check the corresponding BeanPostProcessor declaration and its dependencies/advisors. If this bean does not have to be post-processed, declare it with ROLE_INFRASTRUCTURE.
-2026-11-20T07:26:05.761Z  WARN 34546 --- [           main] trationDelegate$BeanPostProcessorChecker : Bean 'platformTransactionManagerCustomizers' of type [org.springframework.boot.autoconfigure.transaction.TransactionManagerCustomizers] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying). Is this bean getting eagerly injected/applied to a currently created BeanPostProcessor [jobRegistryBeanPostProcessor]? Check the corresponding BeanPostProcessor declaration and its dependencies/advisors. If this bean does not have to be post-processed, declare it with ROLE_INFRASTRUCTURE.
-2026-11-20T07:26:05.764Z  WARN 34546 --- [           main] trationDelegate$BeanPostProcessorChecker : Bean 'transactionManager' of type [org.springframework.jdbc.support.JdbcTransactionManager] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying). Is this bean getting eagerly injected/applied to a currently created BeanPostProcessor [jobRegistryBeanPostProcessor]? Check the corresponding BeanPostProcessor declaration and its dependencies/advisors. If this bean does not have to be post-processed, declare it with ROLE_INFRASTRUCTURE.
-2026-11-20T07:26:05.769Z  WARN 34546 --- [           main] trationDelegate$BeanPostProcessorChecker : Bean 'spring.batch-org.springframework.boot.autoconfigure.batch.BatchProperties' of type [org.springframework.boot.autoconfigure.batch.BatchProperties] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying). Is this bean getting eagerly injected/applied to a currently created BeanPostProcessor [jobRegistryBeanPostProcessor]? Check the corresponding BeanPostProcessor declaration and its dependencies/advisors. If this bean does not have to be post-processed, declare it with ROLE_INFRASTRUCTURE.
-2026-11-20T07:26:05.775Z  WARN 34546 --- [           main] trationDelegate$BeanPostProcessorChecker : Bean 'org.springframework.boot.autoconfigure.batch.BatchAutoConfiguration$SpringBootBatchConfiguration' of type [org.springframework.boot.autoconfigure.batch.BatchAutoConfiguration$SpringBootBatchConfiguration] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying). The currently created BeanPostProcessor [jobRegistryBeanPostProcessor] is declared through a non-static factory method on that class; consider declaring it as static instead.
-2026-11-20T07:26:05.785Z  INFO 34546 --- [           main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
-2026-11-20T07:26:05.804Z  INFO 34546 --- [           main] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Added connection org.postgresql.jdbc.PgConnection@10618775
-2026-11-20T07:26:05.805Z  INFO 34546 --- [           main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
-2026-11-20T07:26:05.981Z  INFO 34546 --- [           main] com.carddemo.interest.pilot.PilotI01IT   : Started PilotI01IT in 0.682 seconds (process running for 5.765)
+2026-11-20T07:32:19.879Z  INFO 50552 --- [           main] com.carddemo.interest.pilot.PilotI01IT   : Starting PilotI01IT using Java 21.0.13.1 with PID 50552 (started by ubuntu in /home/ubuntu/repos/ts-cobol-carddemo/java/interest/interest-batch)
+2026-11-20T07:32:19.879Z  INFO 50552 --- [           main] com.carddemo.interest.pilot.PilotI01IT   : No active profile set, falling back to 1 default profile: "default"
+2026-11-20T07:32:20.234Z  WARN 50552 --- [           main] trationDelegate$BeanPostProcessorChecker : Bean 'org.springframework.boot.autoconfigure.jdbc.DataSourceConfiguration$Hikari' of type [org.springframework.boot.autoconfigure.jdbc.DataSourceConfiguration$Hikari] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying). Is this bean getting eagerly injected/applied to a currently created BeanPostProcessor [jobRegistryBeanPostProcessor]? Check the corresponding BeanPostProcessor declaration and its dependencies/advisors. If this bean does not have to be post-processed, declare it with ROLE_INFRASTRUCTURE.
+2026-11-20T07:32:20.277Z  WARN 50552 --- [           main] trationDelegate$BeanPostProcessorChecker : Bean 'spring.datasource-org.springframework.boot.autoconfigure.jdbc.DataSourceProperties' of type [org.springframework.boot.autoconfigure.jdbc.DataSourceProperties] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying). Is this bean getting eagerly injected/applied to a currently created BeanPostProcessor [jobRegistryBeanPostProcessor]? Check the corresponding BeanPostProcessor declaration and its dependencies/advisors. If this bean does not have to be post-processed, declare it with ROLE_INFRASTRUCTURE.
+2026-11-20T07:32:20.279Z  WARN 50552 --- [           main] trationDelegate$BeanPostProcessorChecker : Bean 'jdbcContainerConnectionDetailsForTest' of type [org.springframework.boot.testcontainers.service.connection.jdbc.JdbcContainerConnectionDetailsFactory$JdbcContainerConnectionDetails] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying). Is this bean getting eagerly injected/applied to a currently created BeanPostProcessor [jobRegistryBeanPostProcessor]? Check the corresponding BeanPostProcessor declaration and its dependencies/advisors. If this bean does not have to be post-processed, declare it with ROLE_INFRASTRUCTURE.
+2026-11-20T07:32:20.295Z  WARN 50552 --- [           main] trationDelegate$BeanPostProcessorChecker : Bean 'dataSource' of type [com.zaxxer.hikari.HikariDataSource] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying). Is this bean getting eagerly injected/applied to a currently created BeanPostProcessor [jobRegistryBeanPostProcessor]? Check the corresponding BeanPostProcessor declaration and its dependencies/advisors. If this bean does not have to be post-processed, declare it with ROLE_INFRASTRUCTURE.
+2026-11-20T07:32:20.298Z  WARN 50552 --- [           main] trationDelegate$BeanPostProcessorChecker : Bean 'org.springframework.boot.autoconfigure.jdbc.DataSourceTransactionManagerAutoConfiguration$JdbcTransactionManagerConfiguration' of type [org.springframework.boot.autoconfigure.jdbc.DataSourceTransactionManagerAutoConfiguration$JdbcTransactionManagerConfiguration] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying). Is this bean getting eagerly injected/applied to a currently created BeanPostProcessor [jobRegistryBeanPostProcessor]? Check the corresponding BeanPostProcessor declaration and its dependencies/advisors. If this bean does not have to be post-processed, declare it with ROLE_INFRASTRUCTURE.
+2026-11-20T07:32:20.301Z  WARN 50552 --- [           main] trationDelegate$BeanPostProcessorChecker : Bean 'org.springframework.boot.autoconfigure.transaction.TransactionManagerCustomizationAutoConfiguration' of type [org.springframework.boot.autoconfigure.transaction.TransactionManagerCustomizationAutoConfiguration] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying). Is this bean getting eagerly injected/applied to a currently created BeanPostProcessor [jobRegistryBeanPostProcessor]? Check the corresponding BeanPostProcessor declaration and its dependencies/advisors. If this bean does not have to be post-processed, declare it with ROLE_INFRASTRUCTURE.
+2026-11-20T07:32:20.304Z  WARN 50552 --- [           main] trationDelegate$BeanPostProcessorChecker : Bean 'transactionExecutionListeners' of type [org.springframework.boot.autoconfigure.transaction.ExecutionListenersTransactionManagerCustomizer] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying). Is this bean getting eagerly injected/applied to a currently created BeanPostProcessor [jobRegistryBeanPostProcessor]? Check the corresponding BeanPostProcessor declaration and its dependencies/advisors. If this bean does not have to be post-processed, declare it with ROLE_INFRASTRUCTURE.
+2026-11-20T07:32:20.306Z  WARN 50552 --- [           main] trationDelegate$BeanPostProcessorChecker : Bean 'spring.transaction-org.springframework.boot.autoconfigure.transaction.TransactionProperties' of type [org.springframework.boot.autoconfigure.transaction.TransactionProperties] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying). Is this bean getting eagerly injected/applied to a currently created BeanPostProcessor [jobRegistryBeanPostProcessor]? Check the corresponding BeanPostProcessor declaration and its dependencies/advisors. If this bean does not have to be post-processed, declare it with ROLE_INFRASTRUCTURE.
+2026-11-20T07:32:20.306Z  WARN 50552 --- [           main] trationDelegate$BeanPostProcessorChecker : Bean 'platformTransactionManagerCustomizers' of type [org.springframework.boot.autoconfigure.transaction.TransactionManagerCustomizers] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying). Is this bean getting eagerly injected/applied to a currently created BeanPostProcessor [jobRegistryBeanPostProcessor]? Check the corresponding BeanPostProcessor declaration and its dependencies/advisors. If this bean does not have to be post-processed, declare it with ROLE_INFRASTRUCTURE.
+2026-11-20T07:32:20.309Z  WARN 50552 --- [           main] trationDelegate$BeanPostProcessorChecker : Bean 'transactionManager' of type [org.springframework.jdbc.support.JdbcTransactionManager] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying). Is this bean getting eagerly injected/applied to a currently created BeanPostProcessor [jobRegistryBeanPostProcessor]? Check the corresponding BeanPostProcessor declaration and its dependencies/advisors. If this bean does not have to be post-processed, declare it with ROLE_INFRASTRUCTURE.
+2026-11-20T07:32:20.312Z  WARN 50552 --- [           main] trationDelegate$BeanPostProcessorChecker : Bean 'spring.batch-org.springframework.boot.autoconfigure.batch.BatchProperties' of type [org.springframework.boot.autoconfigure.batch.BatchProperties] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying). Is this bean getting eagerly injected/applied to a currently created BeanPostProcessor [jobRegistryBeanPostProcessor]? Check the corresponding BeanPostProcessor declaration and its dependencies/advisors. If this bean does not have to be post-processed, declare it with ROLE_INFRASTRUCTURE.
+2026-11-20T07:32:20.316Z  WARN 50552 --- [           main] trationDelegate$BeanPostProcessorChecker : Bean 'org.springframework.boot.autoconfigure.batch.BatchAutoConfiguration$SpringBootBatchConfiguration' of type [org.springframework.boot.autoconfigure.batch.BatchAutoConfiguration$SpringBootBatchConfiguration] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying). The currently created BeanPostProcessor [jobRegistryBeanPostProcessor] is declared through a non-static factory method on that class; consider declaring it as static instead.
+2026-11-20T07:32:20.325Z  INFO 50552 --- [           main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2026-11-20T07:32:20.349Z  INFO 50552 --- [           main] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Added connection org.postgresql.jdbc.PgConnection@120df990
+2026-11-20T07:32:20.350Z  INFO 50552 --- [           main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+2026-11-20T07:32:20.516Z  INFO 50552 --- [           main] com.carddemo.interest.pilot.PilotI01IT   : Started PilotI01IT in 0.773 seconds (process running for 5.919)
 OpenJDK 64-Bit Server VM warning: Sharing is only supported for boot loader classes because bootstrap classpath has been appended
 WARNING: A Java agent has been loaded dynamically (/home/ubuntu/.m2/repository/net/bytebuddy/byte-buddy-agent/1.14.19/byte-buddy-agent-1.14.19.jar)
 WARNING: If a serviceability tool is in use, please run with -XX:+EnableDynamicAgentLoading to hide this warning
 WARNING: If a serviceability tool is not in use, please run with -Djdk.instrument.traceUsage for more information
 WARNING: Dynamic loading of agents will be disallowed by default in a future release
-2026-11-20T07:26:06.425Z  INFO 34546 --- [           main] o.s.b.c.l.support.SimpleJobLauncher      : Job: [SimpleJob: [name=interestPilot]] launched with the following parameters: [{'parm':'{value=2022071800, type=class java.lang.String, identifying=true}','inputDir':'{value=/home/ubuntu/repos/ts-cobol-carddemo/fixtures/interest/i01-baseline/input, type=class java.lang.String, identifying=true}','runId':'{value=060bad23-8cba-4d03-8a5f-b12936b25128, type=class java.lang.String, identifying=true}'}]
-2026-11-20T07:26:06.438Z  INFO 34546 --- [           main] o.s.batch.core.job.SimpleStepHandler     : Executing step: [interestPilotIntake]
-2026-11-20T07:26:06.464Z  INFO 34546 --- [           main] c.c.interest.pilot.SnapshotIntake        : event=intake run=060bad23-8cba-4d03-8a5f-b12936b25128 accounts=2 xrefs=2 balances=2 rates=15
-2026-11-20T07:26:06.468Z  INFO 34546 --- [           main] o.s.batch.core.step.AbstractStep         : Step: [interestPilotIntake] executed in 29ms
-2026-11-20T07:26:06.473Z  INFO 34546 --- [           main] o.s.batch.core.job.SimpleStepHandler     : Executing step: [interestPilotStep]
-2026-11-20T07:26:06.503Z  INFO 34546 --- [           main] o.s.batch.core.step.AbstractStep         : Step: [interestPilotStep] executed in 29ms
-2026-11-20T07:26:06.507Z  INFO 34546 --- [           main] o.s.b.c.l.support.SimpleJobLauncher      : Job: [SimpleJob: [name=interestPilot]] completed with the following parameters: [{'parm':'{value=2022071800, type=class java.lang.String, identifying=true}','inputDir':'{value=/home/ubuntu/repos/ts-cobol-carddemo/fixtures/interest/i01-baseline/input, type=class java.lang.String, identifying=true}','runId':'{value=060bad23-8cba-4d03-8a5f-b12936b25128, type=class java.lang.String, identifying=true}'}] and the following status: [COMPLETED] in 74ms
-2026-11-20T07:26:06.512Z  INFO 34546 --- [           main] c.c.interest.pilot.PilotRunService       : event=run-completed run=060bad23-8cba-4d03-8a5f-b12936b25128 rc=0
-[INFO] Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 2.469 s -- in com.carddemo.interest.pilot.PilotI01IT
+2026-11-20T07:32:20.952Z  INFO 50552 --- [           main] o.s.b.c.l.support.SimpleJobLauncher      : Job: [SimpleJob: [name=interestPilot]] launched with the following parameters: [{'parm':'{value=2022071800, type=class java.lang.String, identifying=true}','inputDir':'{value=/home/ubuntu/repos/ts-cobol-carddemo/fixtures/interest/i01-baseline/input, type=class java.lang.String, identifying=true}','runId':'{value=85862add-e2e4-42e0-80fd-b76f0ef76de8, type=class java.lang.String, identifying=true}'}]
+2026-11-20T07:32:20.967Z  INFO 50552 --- [           main] o.s.batch.core.job.SimpleStepHandler     : Executing step: [interestPilotIntake]
+2026-11-20T07:32:20.992Z  INFO 50552 --- [           main] c.c.interest.pilot.SnapshotIntake        : event=intake run=85862add-e2e4-42e0-80fd-b76f0ef76de8 accounts=2 xrefs=2 balances=2 rates=15
+2026-11-20T07:32:20.995Z  INFO 50552 --- [           main] o.s.batch.core.step.AbstractStep         : Step: [interestPilotIntake] executed in 27ms
+2026-11-20T07:32:21.000Z  INFO 50552 --- [           main] o.s.batch.core.job.SimpleStepHandler     : Executing step: [interestPilotStep]
+2026-11-20T07:32:21.025Z  INFO 50552 --- [           main] o.s.batch.core.step.AbstractStep         : Step: [interestPilotStep] executed in 24ms
+2026-11-20T07:32:21.029Z  INFO 50552 --- [           main] o.s.b.c.l.support.SimpleJobLauncher      : Job: [SimpleJob: [name=interestPilot]] completed with the following parameters: [{'parm':'{value=2022071800, type=class java.lang.String, identifying=true}','inputDir':'{value=/home/ubuntu/repos/ts-cobol-carddemo/fixtures/interest/i01-baseline/input, type=class java.lang.String, identifying=true}','runId':'{value=85862add-e2e4-42e0-80fd-b76f0ef76de8, type=class java.lang.String, identifying=true}'}] and the following status: [COMPLETED] in 69ms
+2026-11-20T07:32:21.034Z  INFO 50552 --- [           main] c.c.interest.pilot.PilotRunService       : event=run-completed run=85862add-e2e4-42e0-80fd-b76f0ef76de8 rc=0
+[INFO] Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 2.544 s -- in com.carddemo.interest.pilot.PilotI01IT
 [INFO] Running com.carddemo.interest.pilot.PilotRollbackIT
-2026-11-20T07:26:06.561Z  INFO 34546 --- [           main] t.c.s.AnnotationConfigContextLoaderUtils : Could not detect default configuration classes for test class [com.carddemo.interest.pilot.PilotRollbackIT]: PilotRollbackIT does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
-2026-11-20T07:26:06.565Z  INFO 34546 --- [           main] .b.t.c.SpringBootTestContextBootstrapper : Found @SpringBootConfiguration com.carddemo.interest.pilot.InterestPilotApplication for test class com.carddemo.interest.pilot.PilotRollbackIT
-2026-11-20T07:26:06.576Z  INFO 34546 --- [           main] o.s.b.c.l.support.SimpleJobLauncher      : Job: [SimpleJob: [name=interestPilot]] launched with the following parameters: [{'parm':'{value=2022071800, type=class java.lang.String, identifying=true}','inputDir':'{value=/home/ubuntu/repos/ts-cobol-carddemo/java/interest/interest-batch/src/test/resources/pilot/specimens/missing-xref, type=class java.lang.String, identifying=true}','runId':'{value=b7cfaa7b-fafa-4e79-a3c2-fe342195e8ed, type=class java.lang.String, identifying=true}'}]
-2026-11-20T07:26:06.581Z  INFO 34546 --- [           main] o.s.batch.core.job.SimpleStepHandler     : Executing step: [interestPilotIntake]
-2026-11-20T07:26:06.586Z  INFO 34546 --- [           main] c.c.interest.pilot.SnapshotIntake        : event=intake run=b7cfaa7b-fafa-4e79-a3c2-fe342195e8ed accounts=2 xrefs=1 balances=2 rates=15
-2026-11-20T07:26:06.588Z  INFO 34546 --- [           main] o.s.batch.core.step.AbstractStep         : Step: [interestPilotIntake] executed in 6ms
-2026-11-20T07:26:06.593Z  INFO 34546 --- [           main] o.s.batch.core.job.SimpleStepHandler     : Executing step: [interestPilotStep]
-2026-11-20T07:26:06.600Z ERROR 34546 --- [           main] o.s.batch.core.step.AbstractStep         : Encountered an error executing step interestPilotStep in job interestPilot
+2026-11-20T07:32:21.077Z  INFO 50552 --- [           main] t.c.s.AnnotationConfigContextLoaderUtils : Could not detect default configuration classes for test class [com.carddemo.interest.pilot.PilotRollbackIT]: PilotRollbackIT does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
+2026-11-20T07:32:21.079Z  INFO 50552 --- [           main] .b.t.c.SpringBootTestContextBootstrapper : Found @SpringBootConfiguration com.carddemo.interest.pilot.InterestPilotApplication for test class com.carddemo.interest.pilot.PilotRollbackIT
+2026-11-20T07:32:21.089Z  INFO 50552 --- [           main] o.s.b.c.l.support.SimpleJobLauncher      : Job: [SimpleJob: [name=interestPilot]] launched with the following parameters: [{'parm':'{value=2022071800, type=class java.lang.String, identifying=true}','inputDir':'{value=/home/ubuntu/repos/ts-cobol-carddemo/java/interest/interest-batch/src/test/resources/pilot/specimens/missing-xref, type=class java.lang.String, identifying=true}','runId':'{value=b0bf8103-6609-4976-9901-5d2a32245ea6, type=class java.lang.String, identifying=true}'}]
+2026-11-20T07:32:21.095Z  INFO 50552 --- [           main] o.s.batch.core.job.SimpleStepHandler     : Executing step: [interestPilotIntake]
+2026-11-20T07:32:21.099Z  INFO 50552 --- [           main] c.c.interest.pilot.SnapshotIntake        : event=intake run=b0bf8103-6609-4976-9901-5d2a32245ea6 accounts=2 xrefs=1 balances=2 rates=15
+2026-11-20T07:32:21.101Z  INFO 50552 --- [           main] o.s.batch.core.step.AbstractStep         : Step: [interestPilotIntake] executed in 5ms
+2026-11-20T07:32:21.105Z  INFO 50552 --- [           main] o.s.batch.core.job.SimpleStepHandler     : Executing step: [interestPilotStep]
+2026-11-20T07:32:21.111Z ERROR 50552 --- [           main] o.s.batch.core.step.AbstractStep         : Encountered an error executing step interestPilotStep in job interestPilot
 
 com.carddemo.interest.pilot.PilotFailure$RequiredLookupMissing: dd=XREFFILE op=READ status=23
 	at com.carddemo.interest.pilot.InterestGroupProcessor.cardFor(InterestGroupProcessor.java:81) ~[classes/:na]
@@ -547,23 +558,23 @@ com.carddemo.interest.pilot.PilotFailure$RequiredLookupMissing: dd=XREFFILE op=R
 	at org.apache.maven.surefire.booter.ForkedBooter.run(ForkedBooter.java:507) ~[surefire-booter-3.2.5.jar:3.2.5]
 	at org.apache.maven.surefire.booter.ForkedBooter.main(ForkedBooter.java:495) ~[surefire-booter-3.2.5.jar:3.2.5]
 
-2026-11-20T07:26:06.603Z  INFO 34546 --- [           main] o.s.batch.core.step.AbstractStep         : Step: [interestPilotStep] executed in 10ms
-2026-11-20T07:26:06.607Z  INFO 34546 --- [           main] o.s.b.c.l.support.SimpleJobLauncher      : Job: [SimpleJob: [name=interestPilot]] completed with the following parameters: [{'parm':'{value=2022071800, type=class java.lang.String, identifying=true}','inputDir':'{value=/home/ubuntu/repos/ts-cobol-carddemo/java/interest/interest-batch/src/test/resources/pilot/specimens/missing-xref, type=class java.lang.String, identifying=true}','runId':'{value=b7cfaa7b-fafa-4e79-a3c2-fe342195e8ed, type=class java.lang.String, identifying=true}'}] and the following status: [FAILED] in 28ms
-2026-11-20T07:26:06.607Z  WARN 34546 --- [           main] c.c.interest.pilot.PilotRunService       : event=run-failed run=b7cfaa7b-fafa-4e79-a3c2-fe342195e8ed category=REQUIRED_LOOKUP_MISSING detail=dd=XREFFILE op=READ status=23
-2026-11-20T07:26:06.621Z  INFO 34546 --- [           main] o.s.b.c.l.support.SimpleJobLauncher      : Job: [SimpleJob: [name=interestPilot]] launched with the following parameters: [{'parm':'{value=2022071800, type=class java.lang.String, identifying=true}','inputDir':'{value=/home/ubuntu/repos/ts-cobol-carddemo/java/interest/interest-batch/src/test/resources/pilot/specimens/empty-tcatbalf, type=class java.lang.String, identifying=true}','runId':'{value=d223b364-45e3-4864-9ee0-0e98b221b226, type=class java.lang.String, identifying=true}'}]
-2026-11-20T07:26:06.626Z  INFO 34546 --- [           main] o.s.batch.core.job.SimpleStepHandler     : Executing step: [interestPilotIntake]
-2026-11-20T07:26:06.629Z  INFO 34546 --- [           main] c.c.interest.pilot.SnapshotIntake        : event=intake run=d223b364-45e3-4864-9ee0-0e98b221b226 accounts=2 xrefs=2 balances=0 rates=15
-2026-11-20T07:26:06.632Z  INFO 34546 --- [           main] o.s.batch.core.step.AbstractStep         : Step: [interestPilotIntake] executed in 5ms
-2026-11-20T07:26:06.635Z  INFO 34546 --- [           main] o.s.batch.core.job.SimpleStepHandler     : Executing step: [interestPilotStep]
-2026-11-20T07:26:06.640Z  INFO 34546 --- [           main] o.s.batch.core.step.AbstractStep         : Step: [interestPilotStep] executed in 4ms
-2026-11-20T07:26:06.643Z  INFO 34546 --- [           main] o.s.b.c.l.support.SimpleJobLauncher      : Job: [SimpleJob: [name=interestPilot]] completed with the following parameters: [{'parm':'{value=2022071800, type=class java.lang.String, identifying=true}','inputDir':'{value=/home/ubuntu/repos/ts-cobol-carddemo/java/interest/interest-batch/src/test/resources/pilot/specimens/empty-tcatbalf, type=class java.lang.String, identifying=true}','runId':'{value=d223b364-45e3-4864-9ee0-0e98b221b226, type=class java.lang.String, identifying=true}'}] and the following status: [COMPLETED] in 20ms
-2026-11-20T07:26:06.646Z  INFO 34546 --- [           main] c.c.interest.pilot.PilotRunService       : event=run-completed run=d223b364-45e3-4864-9ee0-0e98b221b226 rc=0
-2026-11-20T07:26:06.654Z  INFO 34546 --- [           main] o.s.b.c.l.support.SimpleJobLauncher      : Job: [SimpleJob: [name=interestPilot]] launched with the following parameters: [{'parm':'{value=2022071800, type=class java.lang.String, identifying=true}','inputDir':'{value=/home/ubuntu/repos/ts-cobol-carddemo/java/interest/interest-batch/src/test/resources/pilot/specimens/missing-account, type=class java.lang.String, identifying=true}','runId':'{value=e22235cf-7772-4e6b-baa2-d6ef16dc1d6e, type=class java.lang.String, identifying=true}'}]
-2026-11-20T07:26:06.659Z  INFO 34546 --- [           main] o.s.batch.core.job.SimpleStepHandler     : Executing step: [interestPilotIntake]
-2026-11-20T07:26:06.663Z  INFO 34546 --- [           main] c.c.interest.pilot.SnapshotIntake        : event=intake run=e22235cf-7772-4e6b-baa2-d6ef16dc1d6e accounts=1 xrefs=2 balances=2 rates=15
-2026-11-20T07:26:06.665Z  INFO 34546 --- [           main] o.s.batch.core.step.AbstractStep         : Step: [interestPilotIntake] executed in 5ms
-2026-11-20T07:26:06.669Z  INFO 34546 --- [           main] o.s.batch.core.job.SimpleStepHandler     : Executing step: [interestPilotStep]
-2026-11-20T07:26:06.674Z ERROR 34546 --- [           main] o.s.batch.core.step.AbstractStep         : Encountered an error executing step interestPilotStep in job interestPilot
+2026-11-20T07:32:21.114Z  INFO 50552 --- [           main] o.s.batch.core.step.AbstractStep         : Step: [interestPilotStep] executed in 8ms
+2026-11-20T07:32:21.117Z  INFO 50552 --- [           main] o.s.b.c.l.support.SimpleJobLauncher      : Job: [SimpleJob: [name=interestPilot]] completed with the following parameters: [{'parm':'{value=2022071800, type=class java.lang.String, identifying=true}','inputDir':'{value=/home/ubuntu/repos/ts-cobol-carddemo/java/interest/interest-batch/src/test/resources/pilot/specimens/missing-xref, type=class java.lang.String, identifying=true}','runId':'{value=b0bf8103-6609-4976-9901-5d2a32245ea6, type=class java.lang.String, identifying=true}'}] and the following status: [FAILED] in 26ms
+2026-11-20T07:32:21.117Z  WARN 50552 --- [           main] c.c.interest.pilot.PilotRunService       : event=run-failed run=b0bf8103-6609-4976-9901-5d2a32245ea6 category=REQUIRED_LOOKUP_MISSING detail=dd=XREFFILE op=READ status=23
+2026-11-20T07:32:21.130Z  INFO 50552 --- [           main] o.s.b.c.l.support.SimpleJobLauncher      : Job: [SimpleJob: [name=interestPilot]] launched with the following parameters: [{'parm':'{value=2022071800, type=class java.lang.String, identifying=true}','inputDir':'{value=/home/ubuntu/repos/ts-cobol-carddemo/java/interest/interest-batch/src/test/resources/pilot/specimens/empty-tcatbalf, type=class java.lang.String, identifying=true}','runId':'{value=50cfa407-02d0-45a1-ba29-a557a087ac31, type=class java.lang.String, identifying=true}'}]
+2026-11-20T07:32:21.133Z  INFO 50552 --- [           main] o.s.batch.core.job.SimpleStepHandler     : Executing step: [interestPilotIntake]
+2026-11-20T07:32:21.137Z  INFO 50552 --- [           main] c.c.interest.pilot.SnapshotIntake        : event=intake run=50cfa407-02d0-45a1-ba29-a557a087ac31 accounts=2 xrefs=2 balances=0 rates=15
+2026-11-20T07:32:21.140Z  INFO 50552 --- [           main] o.s.batch.core.step.AbstractStep         : Step: [interestPilotIntake] executed in 7ms
+2026-11-20T07:32:21.143Z  INFO 50552 --- [           main] o.s.batch.core.job.SimpleStepHandler     : Executing step: [interestPilotStep]
+2026-11-20T07:32:21.147Z  INFO 50552 --- [           main] o.s.batch.core.step.AbstractStep         : Step: [interestPilotStep] executed in 4ms
+2026-11-20T07:32:21.150Z  INFO 50552 --- [           main] o.s.b.c.l.support.SimpleJobLauncher      : Job: [SimpleJob: [name=interestPilot]] completed with the following parameters: [{'parm':'{value=2022071800, type=class java.lang.String, identifying=true}','inputDir':'{value=/home/ubuntu/repos/ts-cobol-carddemo/java/interest/interest-batch/src/test/resources/pilot/specimens/empty-tcatbalf, type=class java.lang.String, identifying=true}','runId':'{value=50cfa407-02d0-45a1-ba29-a557a087ac31, type=class java.lang.String, identifying=true}'}] and the following status: [COMPLETED] in 18ms
+2026-11-20T07:32:21.152Z  INFO 50552 --- [           main] c.c.interest.pilot.PilotRunService       : event=run-completed run=50cfa407-02d0-45a1-ba29-a557a087ac31 rc=0
+2026-11-20T07:32:21.162Z  INFO 50552 --- [           main] o.s.b.c.l.support.SimpleJobLauncher      : Job: [SimpleJob: [name=interestPilot]] launched with the following parameters: [{'parm':'{value=2022071800, type=class java.lang.String, identifying=true}','inputDir':'{value=/home/ubuntu/repos/ts-cobol-carddemo/java/interest/interest-batch/src/test/resources/pilot/specimens/missing-account, type=class java.lang.String, identifying=true}','runId':'{value=76837224-1ed2-432c-a39d-4449f0131af0, type=class java.lang.String, identifying=true}'}]
+2026-11-20T07:32:21.164Z  INFO 50552 --- [           main] o.s.batch.core.job.SimpleStepHandler     : Executing step: [interestPilotIntake]
+2026-11-20T07:32:21.167Z  INFO 50552 --- [           main] c.c.interest.pilot.SnapshotIntake        : event=intake run=76837224-1ed2-432c-a39d-4449f0131af0 accounts=1 xrefs=2 balances=2 rates=15
+2026-11-20T07:32:21.169Z  INFO 50552 --- [           main] o.s.batch.core.step.AbstractStep         : Step: [interestPilotIntake] executed in 4ms
+2026-11-20T07:32:21.173Z  INFO 50552 --- [           main] o.s.batch.core.job.SimpleStepHandler     : Executing step: [interestPilotStep]
+2026-11-20T07:32:21.178Z ERROR 50552 --- [           main] o.s.batch.core.step.AbstractStep         : Encountered an error executing step interestPilotStep in job interestPilot
 
 com.carddemo.interest.pilot.PilotFailure$RequiredLookupMissing: dd=ACCTFILE op=READ status=23
 	at com.carddemo.interest.pilot.InterestGroupProcessor.lambda$process$0(InterestGroupProcessor.java:41) ~[classes/:na]
@@ -676,23 +687,23 @@ com.carddemo.interest.pilot.PilotFailure$RequiredLookupMissing: dd=ACCTFILE op=R
 	at org.apache.maven.surefire.booter.ForkedBooter.run(ForkedBooter.java:507) ~[surefire-booter-3.2.5.jar:3.2.5]
 	at org.apache.maven.surefire.booter.ForkedBooter.main(ForkedBooter.java:495) ~[surefire-booter-3.2.5.jar:3.2.5]
 
-2026-11-20T07:26:06.675Z  INFO 34546 --- [           main] o.s.batch.core.step.AbstractStep         : Step: [interestPilotStep] executed in 6ms
-2026-11-20T07:26:06.678Z  INFO 34546 --- [           main] o.s.b.c.l.support.SimpleJobLauncher      : Job: [SimpleJob: [name=interestPilot]] completed with the following parameters: [{'parm':'{value=2022071800, type=class java.lang.String, identifying=true}','inputDir':'{value=/home/ubuntu/repos/ts-cobol-carddemo/java/interest/interest-batch/src/test/resources/pilot/specimens/missing-account, type=class java.lang.String, identifying=true}','runId':'{value=e22235cf-7772-4e6b-baa2-d6ef16dc1d6e, type=class java.lang.String, identifying=true}'}] and the following status: [FAILED] in 21ms
-2026-11-20T07:26:06.678Z  WARN 34546 --- [           main] c.c.interest.pilot.PilotRunService       : event=run-failed run=e22235cf-7772-4e6b-baa2-d6ef16dc1d6e category=REQUIRED_LOOKUP_MISSING detail=dd=ACCTFILE op=READ status=23
-2026-11-20T07:26:06.687Z  INFO 34546 --- [           main] o.s.b.c.l.support.SimpleJobLauncher      : Job: [SimpleJob: [name=interestPilot]] launched with the following parameters: [{'parm':'{value=2022071800, type=class java.lang.String, identifying=true}','inputDir':'{value=/home/ubuntu/repos/ts-cobol-carddemo/fixtures/interest/i01-baseline/input, type=class java.lang.String, identifying=true}','runId':'{value=2efbd077-232e-431c-9d7d-4a7f4fc5f6c1, type=class java.lang.String, identifying=true}'}]
-2026-11-20T07:26:06.690Z  INFO 34546 --- [           main] o.s.batch.core.job.SimpleStepHandler     : Executing step: [interestPilotIntake]
-2026-11-20T07:26:06.692Z  INFO 34546 --- [           main] c.c.interest.pilot.SnapshotIntake        : event=intake run=2efbd077-232e-431c-9d7d-4a7f4fc5f6c1 accounts=2 xrefs=2 balances=2 rates=15
-2026-11-20T07:26:06.694Z  INFO 34546 --- [           main] o.s.batch.core.step.AbstractStep         : Step: [interestPilotIntake] executed in 4ms
-2026-11-20T07:26:06.697Z  INFO 34546 --- [           main] o.s.batch.core.job.SimpleStepHandler     : Executing step: [interestPilotStep]
-2026-11-20T07:26:06.706Z  INFO 34546 --- [           main] o.s.batch.core.step.AbstractStep         : Step: [interestPilotStep] executed in 8ms
-2026-11-20T07:26:06.709Z  INFO 34546 --- [           main] o.s.b.c.l.support.SimpleJobLauncher      : Job: [SimpleJob: [name=interestPilot]] completed with the following parameters: [{'parm':'{value=2022071800, type=class java.lang.String, identifying=true}','inputDir':'{value=/home/ubuntu/repos/ts-cobol-carddemo/fixtures/interest/i01-baseline/input, type=class java.lang.String, identifying=true}','runId':'{value=2efbd077-232e-431c-9d7d-4a7f4fc5f6c1, type=class java.lang.String, identifying=true}'}] and the following status: [COMPLETED] in 20ms
-2026-11-20T07:26:06.711Z  INFO 34546 --- [           main] c.c.interest.pilot.PilotRunService       : event=run-completed run=2efbd077-232e-431c-9d7d-4a7f4fc5f6c1 rc=0
-2026-11-20T07:26:06.715Z  INFO 34546 --- [           main] o.s.b.c.l.support.SimpleJobLauncher      : Job: [SimpleJob: [name=interestPilot]] launched with the following parameters: [{'parm':'{value=2022071800, type=class java.lang.String, identifying=true}','inputDir':'{value=/home/ubuntu/repos/ts-cobol-carddemo/java/interest/interest-batch/src/test/resources/pilot/specimens/missing-account, type=class java.lang.String, identifying=true}','runId':'{value=897c5ff8-3c7d-42f5-8e16-29517bf36d1e, type=class java.lang.String, identifying=true}'}]
-2026-11-20T07:26:06.718Z  INFO 34546 --- [           main] o.s.batch.core.job.SimpleStepHandler     : Executing step: [interestPilotIntake]
-2026-11-20T07:26:06.720Z  INFO 34546 --- [           main] c.c.interest.pilot.SnapshotIntake        : event=intake run=897c5ff8-3c7d-42f5-8e16-29517bf36d1e accounts=1 xrefs=2 balances=2 rates=15
-2026-11-20T07:26:06.722Z  INFO 34546 --- [           main] o.s.batch.core.step.AbstractStep         : Step: [interestPilotIntake] executed in 4ms
-2026-11-20T07:26:06.724Z  INFO 34546 --- [           main] o.s.batch.core.job.SimpleStepHandler     : Executing step: [interestPilotStep]
-2026-11-20T07:26:06.728Z ERROR 34546 --- [           main] o.s.batch.core.step.AbstractStep         : Encountered an error executing step interestPilotStep in job interestPilot
+2026-11-20T07:32:21.179Z  INFO 50552 --- [           main] o.s.batch.core.step.AbstractStep         : Step: [interestPilotStep] executed in 6ms
+2026-11-20T07:32:21.181Z  INFO 50552 --- [           main] o.s.b.c.l.support.SimpleJobLauncher      : Job: [SimpleJob: [name=interestPilot]] completed with the following parameters: [{'parm':'{value=2022071800, type=class java.lang.String, identifying=true}','inputDir':'{value=/home/ubuntu/repos/ts-cobol-carddemo/java/interest/interest-batch/src/test/resources/pilot/specimens/missing-account, type=class java.lang.String, identifying=true}','runId':'{value=76837224-1ed2-432c-a39d-4449f0131af0, type=class java.lang.String, identifying=true}'}] and the following status: [FAILED] in 18ms
+2026-11-20T07:32:21.182Z  WARN 50552 --- [           main] c.c.interest.pilot.PilotRunService       : event=run-failed run=76837224-1ed2-432c-a39d-4449f0131af0 category=REQUIRED_LOOKUP_MISSING detail=dd=ACCTFILE op=READ status=23
+2026-11-20T07:32:21.188Z  INFO 50552 --- [           main] o.s.b.c.l.support.SimpleJobLauncher      : Job: [SimpleJob: [name=interestPilot]] launched with the following parameters: [{'parm':'{value=2022071800, type=class java.lang.String, identifying=true}','inputDir':'{value=/home/ubuntu/repos/ts-cobol-carddemo/fixtures/interest/i01-baseline/input, type=class java.lang.String, identifying=true}','runId':'{value=e6fd1682-801f-4ecb-af60-20d0589cc72a, type=class java.lang.String, identifying=true}'}]
+2026-11-20T07:32:21.191Z  INFO 50552 --- [           main] o.s.batch.core.job.SimpleStepHandler     : Executing step: [interestPilotIntake]
+2026-11-20T07:32:21.194Z  INFO 50552 --- [           main] c.c.interest.pilot.SnapshotIntake        : event=intake run=e6fd1682-801f-4ecb-af60-20d0589cc72a accounts=2 xrefs=2 balances=2 rates=15
+2026-11-20T07:32:21.196Z  INFO 50552 --- [           main] o.s.batch.core.step.AbstractStep         : Step: [interestPilotIntake] executed in 4ms
+2026-11-20T07:32:21.198Z  INFO 50552 --- [           main] o.s.batch.core.job.SimpleStepHandler     : Executing step: [interestPilotStep]
+2026-11-20T07:32:21.206Z  INFO 50552 --- [           main] o.s.batch.core.step.AbstractStep         : Step: [interestPilotStep] executed in 7ms
+2026-11-20T07:32:21.209Z  INFO 50552 --- [           main] o.s.b.c.l.support.SimpleJobLauncher      : Job: [SimpleJob: [name=interestPilot]] completed with the following parameters: [{'parm':'{value=2022071800, type=class java.lang.String, identifying=true}','inputDir':'{value=/home/ubuntu/repos/ts-cobol-carddemo/fixtures/interest/i01-baseline/input, type=class java.lang.String, identifying=true}','runId':'{value=e6fd1682-801f-4ecb-af60-20d0589cc72a, type=class java.lang.String, identifying=true}'}] and the following status: [COMPLETED] in 19ms
+2026-11-20T07:32:21.211Z  INFO 50552 --- [           main] c.c.interest.pilot.PilotRunService       : event=run-completed run=e6fd1682-801f-4ecb-af60-20d0589cc72a rc=0
+2026-11-20T07:32:21.214Z  INFO 50552 --- [           main] o.s.b.c.l.support.SimpleJobLauncher      : Job: [SimpleJob: [name=interestPilot]] launched with the following parameters: [{'parm':'{value=2022071800, type=class java.lang.String, identifying=true}','inputDir':'{value=/home/ubuntu/repos/ts-cobol-carddemo/java/interest/interest-batch/src/test/resources/pilot/specimens/missing-account, type=class java.lang.String, identifying=true}','runId':'{value=4641694b-c37a-4e05-bf85-925f1809eaa5, type=class java.lang.String, identifying=true}'}]
+2026-11-20T07:32:21.215Z  INFO 50552 --- [           main] o.s.batch.core.job.SimpleStepHandler     : Executing step: [interestPilotIntake]
+2026-11-20T07:32:21.218Z  INFO 50552 --- [           main] c.c.interest.pilot.SnapshotIntake        : event=intake run=4641694b-c37a-4e05-bf85-925f1809eaa5 accounts=1 xrefs=2 balances=2 rates=15
+2026-11-20T07:32:21.219Z  INFO 50552 --- [           main] o.s.batch.core.step.AbstractStep         : Step: [interestPilotIntake] executed in 3ms
+2026-11-20T07:32:21.220Z  INFO 50552 --- [           main] o.s.batch.core.job.SimpleStepHandler     : Executing step: [interestPilotStep]
+2026-11-20T07:32:21.224Z ERROR 50552 --- [           main] o.s.batch.core.step.AbstractStep         : Encountered an error executing step interestPilotStep in job interestPilot
 
 com.carddemo.interest.pilot.PilotFailure$RequiredLookupMissing: dd=ACCTFILE op=READ status=23
 	at com.carddemo.interest.pilot.InterestGroupProcessor.lambda$process$0(InterestGroupProcessor.java:41) ~[classes/:na]
@@ -804,12 +815,12 @@ com.carddemo.interest.pilot.PilotFailure$RequiredLookupMissing: dd=ACCTFILE op=R
 	at org.apache.maven.surefire.booter.ForkedBooter.run(ForkedBooter.java:507) ~[surefire-booter-3.2.5.jar:3.2.5]
 	at org.apache.maven.surefire.booter.ForkedBooter.main(ForkedBooter.java:495) ~[surefire-booter-3.2.5.jar:3.2.5]
 
-2026-11-20T07:26:06.730Z  INFO 34546 --- [           main] o.s.batch.core.step.AbstractStep         : Step: [interestPilotStep] executed in 5ms
-2026-11-20T07:26:06.732Z  INFO 34546 --- [           main] o.s.b.c.l.support.SimpleJobLauncher      : Job: [SimpleJob: [name=interestPilot]] completed with the following parameters: [{'parm':'{value=2022071800, type=class java.lang.String, identifying=true}','inputDir':'{value=/home/ubuntu/repos/ts-cobol-carddemo/java/interest/interest-batch/src/test/resources/pilot/specimens/missing-account, type=class java.lang.String, identifying=true}','runId':'{value=897c5ff8-3c7d-42f5-8e16-29517bf36d1e, type=class java.lang.String, identifying=true}'}] and the following status: [FAILED] in 16ms
-2026-11-20T07:26:06.733Z  WARN 34546 --- [           main] c.c.interest.pilot.PilotRunService       : event=run-failed run=897c5ff8-3c7d-42f5-8e16-29517bf36d1e category=REQUIRED_LOOKUP_MISSING detail=dd=ACCTFILE op=READ status=23
-2026-11-20T07:26:06.742Z  INFO 34546 --- [           main] o.s.b.c.l.support.SimpleJobLauncher      : Job: [SimpleJob: [name=interestPilot]] launched with the following parameters: [{'parm':'{value=2022071800, type=class java.lang.String, identifying=true}','inputDir':'{value=/home/ubuntu/repos/ts-cobol-carddemo/java/interest/interest-batch/src/test/resources/pilot/specimens/malformed-tcatbalf, type=class java.lang.String, identifying=true}','runId':'{value=0790464c-46f5-496a-a16c-30935c1e5dfc, type=class java.lang.String, identifying=true}'}]
-2026-11-20T07:26:06.746Z  INFO 34546 --- [           main] o.s.batch.core.job.SimpleStepHandler     : Executing step: [interestPilotIntake]
-2026-11-20T07:26:06.751Z ERROR 34546 --- [           main] o.s.batch.core.step.AbstractStep         : Encountered an error executing step interestPilotIntake in job interestPilot
+2026-11-20T07:32:21.225Z  INFO 50552 --- [           main] o.s.batch.core.step.AbstractStep         : Step: [interestPilotStep] executed in 4ms
+2026-11-20T07:32:21.228Z  INFO 50552 --- [           main] o.s.b.c.l.support.SimpleJobLauncher      : Job: [SimpleJob: [name=interestPilot]] completed with the following parameters: [{'parm':'{value=2022071800, type=class java.lang.String, identifying=true}','inputDir':'{value=/home/ubuntu/repos/ts-cobol-carddemo/java/interest/interest-batch/src/test/resources/pilot/specimens/missing-account, type=class java.lang.String, identifying=true}','runId':'{value=4641694b-c37a-4e05-bf85-925f1809eaa5, type=class java.lang.String, identifying=true}'}] and the following status: [FAILED] in 12ms
+2026-11-20T07:32:21.228Z  WARN 50552 --- [           main] c.c.interest.pilot.PilotRunService       : event=run-failed run=4641694b-c37a-4e05-bf85-925f1809eaa5 category=REQUIRED_LOOKUP_MISSING detail=dd=ACCTFILE op=READ status=23
+2026-11-20T07:32:21.241Z  INFO 50552 --- [           main] o.s.b.c.l.support.SimpleJobLauncher      : Job: [SimpleJob: [name=interestPilot]] launched with the following parameters: [{'parm':'{value=2022071800, type=class java.lang.String, identifying=true}','inputDir':'{value=/home/ubuntu/repos/ts-cobol-carddemo/java/interest/interest-batch/src/test/resources/pilot/specimens/malformed-tcatbalf, type=class java.lang.String, identifying=true}','runId':'{value=21bd5f59-a195-453b-89cd-2806869d7f73, type=class java.lang.String, identifying=true}'}]
+2026-11-20T07:32:21.245Z  INFO 50552 --- [           main] o.s.batch.core.job.SimpleStepHandler     : Executing step: [interestPilotIntake]
+2026-11-20T07:32:21.249Z ERROR 50552 --- [           main] o.s.batch.core.step.AbstractStep         : Encountered an error executing step interestPilotIntake in job interestPilot
 
 com.carddemo.interest.pilot.PilotFailure$UnreadableInput: dataset=TCATBALF record=2 offset=27 reason=sign byte outside the lab overpunch profile
 	at com.carddemo.interest.pilot.PilotFieldCodec.signedZoned(PilotFieldCodec.java:55) ~[classes/:na]
@@ -930,32 +941,32 @@ com.carddemo.interest.pilot.PilotFailure$UnreadableInput: dataset=TCATBALF recor
 	at org.apache.maven.surefire.booter.ForkedBooter.run(ForkedBooter.java:507) ~[surefire-booter-3.2.5.jar:3.2.5]
 	at org.apache.maven.surefire.booter.ForkedBooter.main(ForkedBooter.java:495) ~[surefire-booter-3.2.5.jar:3.2.5]
 
-2026-11-20T07:26:06.752Z  INFO 34546 --- [           main] o.s.batch.core.step.AbstractStep         : Step: [interestPilotIntake] executed in 5ms
-2026-11-20T07:26:06.755Z  INFO 34546 --- [           main] o.s.b.c.l.support.SimpleJobLauncher      : Job: [SimpleJob: [name=interestPilot]] completed with the following parameters: [{'parm':'{value=2022071800, type=class java.lang.String, identifying=true}','inputDir':'{value=/home/ubuntu/repos/ts-cobol-carddemo/java/interest/interest-batch/src/test/resources/pilot/specimens/malformed-tcatbalf, type=class java.lang.String, identifying=true}','runId':'{value=0790464c-46f5-496a-a16c-30935c1e5dfc, type=class java.lang.String, identifying=true}'}] and the following status: [FAILED] in 11ms
-2026-11-20T07:26:06.755Z  WARN 34546 --- [           main] c.c.interest.pilot.PilotRunService       : event=run-failed run=0790464c-46f5-496a-a16c-30935c1e5dfc category=UNREADABLE_INPUT detail=dataset=TCATBALF record=2 offset=27 reason=sign byte outside the lab overpunch profile
-2026-11-20T07:26:06.767Z  INFO 34546 --- [           main] o.s.b.c.l.support.SimpleJobLauncher      : Job: [SimpleJob: [name=interestPilot]] launched with the following parameters: [{'parm':'{value=2022071800, type=class java.lang.String, identifying=true}','inputDir':'{value=/home/ubuntu/repos/ts-cobol-carddemo/java/interest/interest-batch/src/test/resources/pilot/specimens/default-fallback, type=class java.lang.String, identifying=true}','runId':'{value=7bf36edb-75ac-460d-9cec-96bd6d6694bb, type=class java.lang.String, identifying=true}'}]
-2026-11-20T07:26:06.769Z  INFO 34546 --- [           main] o.s.batch.core.job.SimpleStepHandler     : Executing step: [interestPilotIntake]
-2026-11-20T07:26:06.772Z  INFO 34546 --- [           main] c.c.interest.pilot.SnapshotIntake        : event=intake run=7bf36edb-75ac-460d-9cec-96bd6d6694bb accounts=2 xrefs=2 balances=2 rates=15
-2026-11-20T07:26:06.774Z  INFO 34546 --- [           main] o.s.batch.core.step.AbstractStep         : Step: [interestPilotIntake] executed in 4ms
-2026-11-20T07:26:06.776Z  INFO 34546 --- [           main] o.s.batch.core.job.SimpleStepHandler     : Executing step: [interestPilotStep]
-2026-11-20T07:26:06.780Z  INFO 34546 --- [           main] c.c.i.pilot.InterestGroupProcessor       : event=rate-fallback run=7bf36edb-75ac-460d-9cec-96bd6d6694bb dd=DISCGRP op=READ status=23
-2026-11-20T07:26:06.786Z  INFO 34546 --- [           main] o.s.batch.core.step.AbstractStep         : Step: [interestPilotStep] executed in 9ms
-2026-11-20T07:26:06.787Z  INFO 34546 --- [           main] o.s.b.c.l.support.SimpleJobLauncher      : Job: [SimpleJob: [name=interestPilot]] completed with the following parameters: [{'parm':'{value=2022071800, type=class java.lang.String, identifying=true}','inputDir':'{value=/home/ubuntu/repos/ts-cobol-carddemo/java/interest/interest-batch/src/test/resources/pilot/specimens/default-fallback, type=class java.lang.String, identifying=true}','runId':'{value=7bf36edb-75ac-460d-9cec-96bd6d6694bb, type=class java.lang.String, identifying=true}'}] and the following status: [COMPLETED] in 20ms
-2026-11-20T07:26:06.789Z  INFO 34546 --- [           main] c.c.interest.pilot.PilotRunService       : event=run-completed run=7bf36edb-75ac-460d-9cec-96bd6d6694bb rc=0
-2026-11-20T07:26:06.795Z  INFO 34546 --- [           main] o.s.b.c.l.support.SimpleJobLauncher      : Job: [SimpleJob: [name=interestPilot]] launched with the following parameters: [{'parm':'{value=2022071800, type=class java.lang.String, identifying=true}','inputDir':'{value=/home/ubuntu/repos/ts-cobol-carddemo/fixtures/interest/i01-baseline/input, type=class java.lang.String, identifying=true}','runId':'{value=3431e092-f0ad-4bcc-8e45-f9a5568f3cb9, type=class java.lang.String, identifying=true}'}]
-2026-11-20T07:26:06.798Z  INFO 34546 --- [           main] o.s.batch.core.job.SimpleStepHandler     : Executing step: [interestPilotIntake]
-2026-11-20T07:26:06.802Z  INFO 34546 --- [           main] c.c.interest.pilot.SnapshotIntake        : event=intake run=3431e092-f0ad-4bcc-8e45-f9a5568f3cb9 accounts=2 xrefs=2 balances=2 rates=15
-2026-11-20T07:26:06.803Z  INFO 34546 --- [           main] o.s.batch.core.step.AbstractStep         : Step: [interestPilotIntake] executed in 5ms
-2026-11-20T07:26:06.807Z  INFO 34546 --- [           main] o.s.batch.core.job.SimpleStepHandler     : Executing step: [interestPilotStep]
-2026-11-20T07:26:06.814Z  INFO 34546 --- [           main] o.s.batch.core.step.AbstractStep         : Step: [interestPilotStep] executed in 7ms
-2026-11-20T07:26:06.816Z  INFO 34546 --- [           main] o.s.b.c.l.support.SimpleJobLauncher      : Job: [SimpleJob: [name=interestPilot]] completed with the following parameters: [{'parm':'{value=2022071800, type=class java.lang.String, identifying=true}','inputDir':'{value=/home/ubuntu/repos/ts-cobol-carddemo/fixtures/interest/i01-baseline/input, type=class java.lang.String, identifying=true}','runId':'{value=3431e092-f0ad-4bcc-8e45-f9a5568f3cb9, type=class java.lang.String, identifying=true}'}] and the following status: [COMPLETED] in 19ms
-2026-11-20T07:26:06.818Z  INFO 34546 --- [           main] c.c.interest.pilot.PilotRunService       : event=run-completed run=3431e092-f0ad-4bcc-8e45-f9a5568f3cb9 rc=0
-2026-11-20T07:26:06.822Z  INFO 34546 --- [           main] o.s.b.c.l.support.SimpleJobLauncher      : Job: [SimpleJob: [name=interestPilot]] launched with the following parameters: [{'parm':'{value=2022071800, type=class java.lang.String, identifying=true}','inputDir':'{value=/home/ubuntu/repos/ts-cobol-carddemo/java/interest/interest-batch/src/test/resources/pilot/specimens/missing-account, type=class java.lang.String, identifying=true}','runId':'{value=8bbc1fad-c3a8-45bc-8bfe-64beeb060680, type=class java.lang.String, identifying=true}'}]
-2026-11-20T07:26:06.824Z  INFO 34546 --- [           main] o.s.batch.core.job.SimpleStepHandler     : Executing step: [interestPilotIntake]
-2026-11-20T07:26:06.827Z  INFO 34546 --- [           main] c.c.interest.pilot.SnapshotIntake        : event=intake run=8bbc1fad-c3a8-45bc-8bfe-64beeb060680 accounts=1 xrefs=2 balances=2 rates=15
-2026-11-20T07:26:06.828Z  INFO 34546 --- [           main] o.s.batch.core.step.AbstractStep         : Step: [interestPilotIntake] executed in 4ms
-2026-11-20T07:26:06.831Z  INFO 34546 --- [           main] o.s.batch.core.job.SimpleStepHandler     : Executing step: [interestPilotStep]
-2026-11-20T07:26:06.836Z ERROR 34546 --- [           main] o.s.batch.core.step.AbstractStep         : Encountered an error executing step interestPilotStep in job interestPilot
+2026-11-20T07:32:21.250Z  INFO 50552 --- [           main] o.s.batch.core.step.AbstractStep         : Step: [interestPilotIntake] executed in 4ms
+2026-11-20T07:32:21.252Z  INFO 50552 --- [           main] o.s.b.c.l.support.SimpleJobLauncher      : Job: [SimpleJob: [name=interestPilot]] completed with the following parameters: [{'parm':'{value=2022071800, type=class java.lang.String, identifying=true}','inputDir':'{value=/home/ubuntu/repos/ts-cobol-carddemo/java/interest/interest-batch/src/test/resources/pilot/specimens/malformed-tcatbalf, type=class java.lang.String, identifying=true}','runId':'{value=21bd5f59-a195-453b-89cd-2806869d7f73, type=class java.lang.String, identifying=true}'}] and the following status: [FAILED] in 10ms
+2026-11-20T07:32:21.252Z  WARN 50552 --- [           main] c.c.interest.pilot.PilotRunService       : event=run-failed run=21bd5f59-a195-453b-89cd-2806869d7f73 category=UNREADABLE_INPUT detail=dataset=TCATBALF record=2 offset=27 reason=sign byte outside the lab overpunch profile
+2026-11-20T07:32:21.263Z  INFO 50552 --- [           main] o.s.b.c.l.support.SimpleJobLauncher      : Job: [SimpleJob: [name=interestPilot]] launched with the following parameters: [{'parm':'{value=2022071800, type=class java.lang.String, identifying=true}','inputDir':'{value=/home/ubuntu/repos/ts-cobol-carddemo/java/interest/interest-batch/src/test/resources/pilot/specimens/default-fallback, type=class java.lang.String, identifying=true}','runId':'{value=9593054f-fdf0-41b7-8f16-c5b351caafbd, type=class java.lang.String, identifying=true}'}]
+2026-11-20T07:32:21.265Z  INFO 50552 --- [           main] o.s.batch.core.job.SimpleStepHandler     : Executing step: [interestPilotIntake]
+2026-11-20T07:32:21.267Z  INFO 50552 --- [           main] c.c.interest.pilot.SnapshotIntake        : event=intake run=9593054f-fdf0-41b7-8f16-c5b351caafbd accounts=2 xrefs=2 balances=2 rates=15
+2026-11-20T07:32:21.269Z  INFO 50552 --- [           main] o.s.batch.core.step.AbstractStep         : Step: [interestPilotIntake] executed in 2ms
+2026-11-20T07:32:21.270Z  INFO 50552 --- [           main] o.s.batch.core.job.SimpleStepHandler     : Executing step: [interestPilotStep]
+2026-11-20T07:32:21.272Z  INFO 50552 --- [           main] c.c.i.pilot.InterestGroupProcessor       : event=rate-fallback run=9593054f-fdf0-41b7-8f16-c5b351caafbd dd=DISCGRP op=READ status=23
+2026-11-20T07:32:21.278Z  INFO 50552 --- [           main] o.s.batch.core.step.AbstractStep         : Step: [interestPilotStep] executed in 7ms
+2026-11-20T07:32:21.279Z  INFO 50552 --- [           main] o.s.b.c.l.support.SimpleJobLauncher      : Job: [SimpleJob: [name=interestPilot]] completed with the following parameters: [{'parm':'{value=2022071800, type=class java.lang.String, identifying=true}','inputDir':'{value=/home/ubuntu/repos/ts-cobol-carddemo/java/interest/interest-batch/src/test/resources/pilot/specimens/default-fallback, type=class java.lang.String, identifying=true}','runId':'{value=9593054f-fdf0-41b7-8f16-c5b351caafbd, type=class java.lang.String, identifying=true}'}] and the following status: [COMPLETED] in 15ms
+2026-11-20T07:32:21.282Z  INFO 50552 --- [           main] c.c.interest.pilot.PilotRunService       : event=run-completed run=9593054f-fdf0-41b7-8f16-c5b351caafbd rc=0
+2026-11-20T07:32:21.288Z  INFO 50552 --- [           main] o.s.b.c.l.support.SimpleJobLauncher      : Job: [SimpleJob: [name=interestPilot]] launched with the following parameters: [{'parm':'{value=2022071800, type=class java.lang.String, identifying=true}','inputDir':'{value=/home/ubuntu/repos/ts-cobol-carddemo/fixtures/interest/i01-baseline/input, type=class java.lang.String, identifying=true}','runId':'{value=6dd0f723-ac38-40f7-b053-b323555b6a81, type=class java.lang.String, identifying=true}'}]
+2026-11-20T07:32:21.290Z  INFO 50552 --- [           main] o.s.batch.core.job.SimpleStepHandler     : Executing step: [interestPilotIntake]
+2026-11-20T07:32:21.293Z  INFO 50552 --- [           main] c.c.interest.pilot.SnapshotIntake        : event=intake run=6dd0f723-ac38-40f7-b053-b323555b6a81 accounts=2 xrefs=2 balances=2 rates=15
+2026-11-20T07:32:21.295Z  INFO 50552 --- [           main] o.s.batch.core.step.AbstractStep         : Step: [interestPilotIntake] executed in 4ms
+2026-11-20T07:32:21.297Z  INFO 50552 --- [           main] o.s.batch.core.job.SimpleStepHandler     : Executing step: [interestPilotStep]
+2026-11-20T07:32:21.304Z  INFO 50552 --- [           main] o.s.batch.core.step.AbstractStep         : Step: [interestPilotStep] executed in 6ms
+2026-11-20T07:32:21.305Z  INFO 50552 --- [           main] o.s.b.c.l.support.SimpleJobLauncher      : Job: [SimpleJob: [name=interestPilot]] completed with the following parameters: [{'parm':'{value=2022071800, type=class java.lang.String, identifying=true}','inputDir':'{value=/home/ubuntu/repos/ts-cobol-carddemo/fixtures/interest/i01-baseline/input, type=class java.lang.String, identifying=true}','runId':'{value=6dd0f723-ac38-40f7-b053-b323555b6a81, type=class java.lang.String, identifying=true}'}] and the following status: [COMPLETED] in 16ms
+2026-11-20T07:32:21.308Z  INFO 50552 --- [           main] c.c.interest.pilot.PilotRunService       : event=run-completed run=6dd0f723-ac38-40f7-b053-b323555b6a81 rc=0
+2026-11-20T07:32:21.311Z  INFO 50552 --- [           main] o.s.b.c.l.support.SimpleJobLauncher      : Job: [SimpleJob: [name=interestPilot]] launched with the following parameters: [{'parm':'{value=2022071800, type=class java.lang.String, identifying=true}','inputDir':'{value=/home/ubuntu/repos/ts-cobol-carddemo/java/interest/interest-batch/src/test/resources/pilot/specimens/missing-account, type=class java.lang.String, identifying=true}','runId':'{value=83ecd0b2-096a-4447-8b3a-9f20e557bb84, type=class java.lang.String, identifying=true}'}]
+2026-11-20T07:32:21.313Z  INFO 50552 --- [           main] o.s.batch.core.job.SimpleStepHandler     : Executing step: [interestPilotIntake]
+2026-11-20T07:32:21.316Z  INFO 50552 --- [           main] c.c.interest.pilot.SnapshotIntake        : event=intake run=83ecd0b2-096a-4447-8b3a-9f20e557bb84 accounts=1 xrefs=2 balances=2 rates=15
+2026-11-20T07:32:21.318Z  INFO 50552 --- [           main] o.s.batch.core.step.AbstractStep         : Step: [interestPilotIntake] executed in 5ms
+2026-11-20T07:32:21.320Z  INFO 50552 --- [           main] o.s.batch.core.job.SimpleStepHandler     : Executing step: [interestPilotStep]
+2026-11-20T07:32:21.324Z ERROR 50552 --- [           main] o.s.batch.core.step.AbstractStep         : Encountered an error executing step interestPilotStep in job interestPilot
 
 com.carddemo.interest.pilot.PilotFailure$RequiredLookupMissing: dd=ACCTFILE op=READ status=23
 	at com.carddemo.interest.pilot.InterestGroupProcessor.lambda$process$0(InterestGroupProcessor.java:41) ~[classes/:na]
@@ -1067,13 +1078,13 @@ com.carddemo.interest.pilot.PilotFailure$RequiredLookupMissing: dd=ACCTFILE op=R
 	at org.apache.maven.surefire.booter.ForkedBooter.run(ForkedBooter.java:507) ~[surefire-booter-3.2.5.jar:3.2.5]
 	at org.apache.maven.surefire.booter.ForkedBooter.main(ForkedBooter.java:495) ~[surefire-booter-3.2.5.jar:3.2.5]
 
-2026-11-20T07:26:06.837Z  INFO 34546 --- [           main] o.s.batch.core.step.AbstractStep         : Step: [interestPilotStep] executed in 5ms
-2026-11-20T07:26:06.840Z  INFO 34546 --- [           main] o.s.b.c.l.support.SimpleJobLauncher      : Job: [SimpleJob: [name=interestPilot]] completed with the following parameters: [{'parm':'{value=2022071800, type=class java.lang.String, identifying=true}','inputDir':'{value=/home/ubuntu/repos/ts-cobol-carddemo/java/interest/interest-batch/src/test/resources/pilot/specimens/missing-account, type=class java.lang.String, identifying=true}','runId':'{value=8bbc1fad-c3a8-45bc-8bfe-64beeb060680, type=class java.lang.String, identifying=true}'}] and the following status: [FAILED] in 16ms
-2026-11-20T07:26:06.840Z  WARN 34546 --- [           main] c.c.interest.pilot.PilotRunService       : event=run-failed run=8bbc1fad-c3a8-45bc-8bfe-64beeb060680 category=REQUIRED_LOOKUP_MISSING detail=dd=ACCTFILE op=READ status=23
-2026-11-20T07:26:06.840Z  WARN 34546 --- [           main] c.c.interest.pilot.PilotRunService       : event=publish-failed run=8bbc1fad-c3a8-45bc-8bfe-64beeb060680 detail=AccessDeniedException
-2026-11-20T07:26:06.846Z  INFO 34546 --- [           main] o.s.b.c.l.support.SimpleJobLauncher      : Job: [SimpleJob: [name=interestPilot]] launched with the following parameters: [{'parm':'{value=2022071800, type=class java.lang.String, identifying=true}','inputDir':'{value=/home/ubuntu/repos/ts-cobol-carddemo/java/interest/interest-batch/src/test/resources/pilot/specimens/missing-input, type=class java.lang.String, identifying=true}','runId':'{value=8c9f5fc4-5eaa-457c-9ca7-068d9c63e019, type=class java.lang.String, identifying=true}'}]
-2026-11-20T07:26:06.848Z  INFO 34546 --- [           main] o.s.batch.core.job.SimpleStepHandler     : Executing step: [interestPilotIntake]
-2026-11-20T07:26:06.850Z ERROR 34546 --- [           main] o.s.batch.core.step.AbstractStep         : Encountered an error executing step interestPilotIntake in job interestPilot
+2026-11-20T07:32:21.325Z  INFO 50552 --- [           main] o.s.batch.core.step.AbstractStep         : Step: [interestPilotStep] executed in 4ms
+2026-11-20T07:32:21.327Z  INFO 50552 --- [           main] o.s.b.c.l.support.SimpleJobLauncher      : Job: [SimpleJob: [name=interestPilot]] completed with the following parameters: [{'parm':'{value=2022071800, type=class java.lang.String, identifying=true}','inputDir':'{value=/home/ubuntu/repos/ts-cobol-carddemo/java/interest/interest-batch/src/test/resources/pilot/specimens/missing-account, type=class java.lang.String, identifying=true}','runId':'{value=83ecd0b2-096a-4447-8b3a-9f20e557bb84, type=class java.lang.String, identifying=true}'}] and the following status: [FAILED] in 15ms
+2026-11-20T07:32:21.327Z  WARN 50552 --- [           main] c.c.interest.pilot.PilotRunService       : event=run-failed run=83ecd0b2-096a-4447-8b3a-9f20e557bb84 category=REQUIRED_LOOKUP_MISSING detail=dd=ACCTFILE op=READ status=23
+2026-11-20T07:32:21.327Z  WARN 50552 --- [           main] c.c.interest.pilot.PilotRunService       : event=publish-failed run=83ecd0b2-096a-4447-8b3a-9f20e557bb84 detail=AccessDeniedException
+2026-11-20T07:32:21.332Z  INFO 50552 --- [           main] o.s.b.c.l.support.SimpleJobLauncher      : Job: [SimpleJob: [name=interestPilot]] launched with the following parameters: [{'parm':'{value=2022071800, type=class java.lang.String, identifying=true}','inputDir':'{value=/home/ubuntu/repos/ts-cobol-carddemo/java/interest/interest-batch/src/test/resources/pilot/specimens/missing-input, type=class java.lang.String, identifying=true}','runId':'{value=ee4bbc95-bfed-4b48-9ac3-7409dbc40953, type=class java.lang.String, identifying=true}'}]
+2026-11-20T07:32:21.334Z  INFO 50552 --- [           main] o.s.batch.core.job.SimpleStepHandler     : Executing step: [interestPilotIntake]
+2026-11-20T07:32:21.336Z ERROR 50552 --- [           main] o.s.batch.core.step.AbstractStep         : Encountered an error executing step interestPilotIntake in job interestPilot
 
 com.carddemo.interest.pilot.PilotFailure$UnreadableInput: dataset=DISCGRP record=0 offset=0 reason=dataset missing
 	at com.carddemo.interest.pilot.FixtureDatasets.readFixed(FixtureDatasets.java:33) ~[classes/:na]
@@ -1182,15 +1193,15 @@ com.carddemo.interest.pilot.PilotFailure$UnreadableInput: dataset=DISCGRP record
 	at org.apache.maven.surefire.booter.ForkedBooter.run(ForkedBooter.java:507) ~[surefire-booter-3.2.5.jar:3.2.5]
 	at org.apache.maven.surefire.booter.ForkedBooter.main(ForkedBooter.java:495) ~[surefire-booter-3.2.5.jar:3.2.5]
 
-2026-11-20T07:26:06.852Z  INFO 34546 --- [           main] o.s.batch.core.step.AbstractStep         : Step: [interestPilotIntake] executed in 3ms
-2026-11-20T07:26:06.854Z  INFO 34546 --- [           main] o.s.b.c.l.support.SimpleJobLauncher      : Job: [SimpleJob: [name=interestPilot]] completed with the following parameters: [{'parm':'{value=2022071800, type=class java.lang.String, identifying=true}','inputDir':'{value=/home/ubuntu/repos/ts-cobol-carddemo/java/interest/interest-batch/src/test/resources/pilot/specimens/missing-input, type=class java.lang.String, identifying=true}','runId':'{value=8c9f5fc4-5eaa-457c-9ca7-068d9c63e019, type=class java.lang.String, identifying=true}'}] and the following status: [FAILED] in 6ms
-2026-11-20T07:26:06.854Z  WARN 34546 --- [           main] c.c.interest.pilot.PilotRunService       : event=run-failed run=8c9f5fc4-5eaa-457c-9ca7-068d9c63e019 category=UNREADABLE_INPUT detail=dataset=DISCGRP record=0 offset=0 reason=dataset missing
-2026-11-20T07:26:06.860Z  INFO 34546 --- [           main] o.s.b.c.l.support.SimpleJobLauncher      : Job: [SimpleJob: [name=interestPilot]] launched with the following parameters: [{'parm':'{value=2022071800, type=class java.lang.String, identifying=true}','inputDir':'{value=/home/ubuntu/repos/ts-cobol-carddemo/java/interest/interest-batch/src/test/resources/pilot/specimens/missing-default-rate, type=class java.lang.String, identifying=true}','runId':'{value=648deb5d-11b7-4ceb-9073-5e112dcebebf, type=class java.lang.String, identifying=true}'}]
-2026-11-20T07:26:06.862Z  INFO 34546 --- [           main] o.s.batch.core.job.SimpleStepHandler     : Executing step: [interestPilotIntake]
-2026-11-20T07:26:06.864Z  INFO 34546 --- [           main] c.c.interest.pilot.SnapshotIntake        : event=intake run=648deb5d-11b7-4ceb-9073-5e112dcebebf accounts=2 xrefs=2 balances=2 rates=14
-2026-11-20T07:26:06.866Z  INFO 34546 --- [           main] o.s.batch.core.step.AbstractStep         : Step: [interestPilotIntake] executed in 3ms
-2026-11-20T07:26:06.867Z  INFO 34546 --- [           main] o.s.batch.core.job.SimpleStepHandler     : Executing step: [interestPilotStep]
-2026-11-20T07:26:06.870Z ERROR 34546 --- [           main] o.s.batch.core.step.AbstractStep         : Encountered an error executing step interestPilotStep in job interestPilot
+2026-11-20T07:32:21.337Z  INFO 50552 --- [           main] o.s.batch.core.step.AbstractStep         : Step: [interestPilotIntake] executed in 2ms
+2026-11-20T07:32:21.340Z  INFO 50552 --- [           main] o.s.b.c.l.support.SimpleJobLauncher      : Job: [SimpleJob: [name=interestPilot]] completed with the following parameters: [{'parm':'{value=2022071800, type=class java.lang.String, identifying=true}','inputDir':'{value=/home/ubuntu/repos/ts-cobol-carddemo/java/interest/interest-batch/src/test/resources/pilot/specimens/missing-input, type=class java.lang.String, identifying=true}','runId':'{value=ee4bbc95-bfed-4b48-9ac3-7409dbc40953, type=class java.lang.String, identifying=true}'}] and the following status: [FAILED] in 6ms
+2026-11-20T07:32:21.340Z  WARN 50552 --- [           main] c.c.interest.pilot.PilotRunService       : event=run-failed run=ee4bbc95-bfed-4b48-9ac3-7409dbc40953 category=UNREADABLE_INPUT detail=dataset=DISCGRP record=0 offset=0 reason=dataset missing
+2026-11-20T07:32:21.349Z  INFO 50552 --- [           main] o.s.b.c.l.support.SimpleJobLauncher      : Job: [SimpleJob: [name=interestPilot]] launched with the following parameters: [{'parm':'{value=2022071800, type=class java.lang.String, identifying=true}','inputDir':'{value=/home/ubuntu/repos/ts-cobol-carddemo/java/interest/interest-batch/src/test/resources/pilot/specimens/missing-default-rate, type=class java.lang.String, identifying=true}','runId':'{value=877b5a87-2371-44c3-ae20-537a521b1ccc, type=class java.lang.String, identifying=true}'}]
+2026-11-20T07:32:21.351Z  INFO 50552 --- [           main] o.s.batch.core.job.SimpleStepHandler     : Executing step: [interestPilotIntake]
+2026-11-20T07:32:21.356Z  INFO 50552 --- [           main] c.c.interest.pilot.SnapshotIntake        : event=intake run=877b5a87-2371-44c3-ae20-537a521b1ccc accounts=2 xrefs=2 balances=2 rates=14
+2026-11-20T07:32:21.358Z  INFO 50552 --- [           main] o.s.batch.core.step.AbstractStep         : Step: [interestPilotIntake] executed in 6ms
+2026-11-20T07:32:21.362Z  INFO 50552 --- [           main] o.s.batch.core.job.SimpleStepHandler     : Executing step: [interestPilotStep]
+2026-11-20T07:32:21.365Z ERROR 50552 --- [           main] o.s.batch.core.step.AbstractStep         : Encountered an error executing step interestPilotStep in job interestPilot
 
 com.carddemo.interest.pilot.PilotFailure$RequiredLookupMissing: dd=DISCGRP op=READ status=23
 	at com.carddemo.interest.pilot.InterestGroupProcessor.lambda$rateFor$1(InterestGroupProcessor.java:101) ~[classes/:na]
@@ -1304,20 +1315,20 @@ com.carddemo.interest.pilot.PilotFailure$RequiredLookupMissing: dd=DISCGRP op=RE
 	at org.apache.maven.surefire.booter.ForkedBooter.run(ForkedBooter.java:507) ~[surefire-booter-3.2.5.jar:3.2.5]
 	at org.apache.maven.surefire.booter.ForkedBooter.main(ForkedBooter.java:495) ~[surefire-booter-3.2.5.jar:3.2.5]
 
-2026-11-20T07:26:06.871Z  INFO 34546 --- [           main] o.s.batch.core.step.AbstractStep         : Step: [interestPilotStep] executed in 3ms
-2026-11-20T07:26:06.873Z  INFO 34546 --- [           main] o.s.b.c.l.support.SimpleJobLauncher      : Job: [SimpleJob: [name=interestPilot]] completed with the following parameters: [{'parm':'{value=2022071800, type=class java.lang.String, identifying=true}','inputDir':'{value=/home/ubuntu/repos/ts-cobol-carddemo/java/interest/interest-batch/src/test/resources/pilot/specimens/missing-default-rate, type=class java.lang.String, identifying=true}','runId':'{value=648deb5d-11b7-4ceb-9073-5e112dcebebf, type=class java.lang.String, identifying=true}'}] and the following status: [FAILED] in 11ms
-2026-11-20T07:26:06.873Z  WARN 34546 --- [           main] c.c.interest.pilot.PilotRunService       : event=run-failed run=648deb5d-11b7-4ceb-9073-5e112dcebebf category=REQUIRED_LOOKUP_MISSING detail=dd=DISCGRP op=READ status=23
-[INFO] Tests run: 9, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.315 s -- in com.carddemo.interest.pilot.PilotRollbackIT
+2026-11-20T07:32:21.366Z  INFO 50552 --- [           main] o.s.batch.core.step.AbstractStep         : Step: [interestPilotStep] executed in 4ms
+2026-11-20T07:32:21.367Z  INFO 50552 --- [           main] o.s.b.c.l.support.SimpleJobLauncher      : Job: [SimpleJob: [name=interestPilot]] completed with the following parameters: [{'parm':'{value=2022071800, type=class java.lang.String, identifying=true}','inputDir':'{value=/home/ubuntu/repos/ts-cobol-carddemo/java/interest/interest-batch/src/test/resources/pilot/specimens/missing-default-rate, type=class java.lang.String, identifying=true}','runId':'{value=877b5a87-2371-44c3-ae20-537a521b1ccc, type=class java.lang.String, identifying=true}'}] and the following status: [FAILED] in 18ms
+2026-11-20T07:32:21.368Z  WARN 50552 --- [           main] c.c.interest.pilot.PilotRunService       : event=run-failed run=877b5a87-2371-44c3-ae20-537a521b1ccc category=REQUIRED_LOOKUP_MISSING detail=dd=DISCGRP op=READ status=23
+[INFO] Tests run: 9, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.294 s -- in com.carddemo.interest.pilot.PilotRollbackIT
 [INFO] 
 [INFO] Results:
 [INFO] 
-[INFO] Tests run: 38, Failures: 0, Errors: 0, Skipped: 0
+[INFO] Tests run: 43, Failures: 0, Errors: 0, Skipped: 0
 [INFO] 
 [INFO] 
 [INFO] --- failsafe:3.2.5:verify (default) @ interest-batch ---
 [INFO] ------------------------------------------------------------------------
 [INFO] BUILD SUCCESS
 [INFO] ------------------------------------------------------------------------
-[INFO] Total time:  10.369 s
-[INFO] Finished at: 2026-11-20T07:26:06Z
+[INFO] Total time:  10.547 s
+[INFO] Finished at: 2026-11-20T07:32:21Z
 [INFO] ------------------------------------------------------------------------

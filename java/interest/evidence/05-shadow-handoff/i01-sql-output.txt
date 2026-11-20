@@ -1,7 +1,7 @@
 SET
  database |        postgres_version         |                run_id                
 ----------+---------------------------------+--------------------------------------
- carddemo | 15.20 (Debian 15.20-1.pgdg13+1) | 86a73104-38ab-43af-9030-ba1e3ead3b6b
+ carddemo | 15.20 (Debian 15.20-1.pgdg13+1) | 9e18ffbf-c35b-4e4b-a54f-192d7869ad5b
 (1 row)
 
  emit_ordinal |      txn_id      | amount |   card_number    |          orig_ts           |          proc_ts           

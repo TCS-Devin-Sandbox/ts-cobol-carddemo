@@ -1,6 +1,6 @@
 # INT-05 standards §9 checklist
 
-Revision: the INT-05 commit containing this file (`git log -1 --format=%H -- java/interest/evidence/05-shadow-handoff/checklist.md`); combined check run on b933d3c (revision.txt).
+Revision: the INT-05 commit containing this file (`git log -1 --format=%H -- java/interest/evidence/05-shadow-handoff/checklist.md`); combined check run on bb33bc9 (revision.txt).
 
 - **S01** · Does the PR trace the assigned ticket and rules through the design/map to the source ranges used?
   **PASS** — Ticket 05-shadow-handoff → INT-ARCH A1 (publication ledger), A2.4/A3 Publish row, A4 bridge; INT-MAP CVTRA05Y T01-T14 (350) and CVACT01Y A03/A09/A10; JCL INTCALC STEP15 TRANSACT DD SYSTRAN(+1) RECFM=F LRECL=350; parity-report.md §Trace.
@@ -23,15 +23,15 @@ Revision: the INT-05 commit containing this file (`git log -1 --format=%H -- jav
 - **S10** · Does each touched quirk/OPEN decision have one named implementation point and an ID in code and test name?
   **PASS** — INT-H06 → HandoffCoordinator / HoldReason (tests INT_H06_*); INT-H05 → TXN_ID_COLLISION (INT_H05_backupTransactionIdCollision...); INT-R06/R07 → GuardedDelta (INT_R06_wrongAccountPreimage...); INT-R08 → emit-ordinal payload order (INT_R08_packetIsDeterministic...).
 - **S11** · Are discrepancies routed to owners, decisions left OPEN and unproven host outcomes held?
-  **PASS** — INT-H05/H06 remain OPEN; HostBridge has no production implementation; unknown apply/catalog/receipt → HELD (INT_H06_unknownApplyOutcome, INT_H06_ambiguousCatalog..., INT_H06_failedCatalog..., INT_H06_missingReceipt...).
+  **PASS** — INT-H05/H06 remain OPEN; HostBridge has no production implementation; unknown apply/catalog/receipt → HELD (INT_H06_unknownApplyOutcome, INT_H06_ambiguousCatalog..., INT_H06_failedCatalog..., INT_H06_missingReceipt..., INT_H06_hostErrorAfterMutationHolds).
 - **S12** · Does each touched status path produce the specified outcome, exit and diagnostic?
   **PASS** — Typed Held reasons per path (handoff-fault-injection.txt FAULT lines); packet rejections typed PacketRejected (tamperedStagedRecord, ordinalGap, stalePreimageFingerprint, runNotComputed); success condition only on Released.
 - **S13** · Do private restart and host hold/reconciliation paths preserve committed state and prevent duplicate effects?
-  **PASS** — One row per run + one live claim per destination/cycle under advisory lock; held runs resolve only via verified receipt, never reapply (INT_H06_repeatedVerifiedReceipt..., INT_H06_partialAccountApply..., INT_H06_secondLiveRunForSame...); SQL invariants after every test.
+  **PASS** — One row per run + one live claim per destination/cycle under advisory lock; held runs resolve only via verified receipt, never reapply (INT_H06_repeatedVerifiedReceipt..., INT_H06_partialAccountApply..., INT_H06_secondLiveRunForSame..., INT_H06_undeliveredSuccessCondition..., INT_H06_receiptForGenerationNoLongerCurrent...); SQL invariants after every test.
 - **S14** · Are ordinary logs masked and parity SYSOUT restricted?
   **PASS** — Handoff logs only run id, counts, reason and generation; no account values, card numbers or raw bytes (HandoffCoordinator log.info calls).
 - **S15** · Do applicable rule-named tests cover their listed fixtures and targeted gaps with independent expectations?
-  **PASS** — 29 rule-named handoff tests (HandoffIT 22, HandoffRulesTest 7) on i01-shaped rows with golden-derived expectations; each fault isolated with a fresh run.
+  **PASS** — 34 rule-named handoff tests (HandoffIT 27, HandoffRulesTest 7) on i01-shaped rows with golden-derived expectations; each fault isolated with a fresh run.
 - **S16** · Is required PostgreSQL 15, field/RC/SYSOUT and byte evidence present at the ticket's scope?
   **PASS** — PostgreSQL 15.20 Testcontainers (test-output.txt DB line); i01-sql-output.txt; compare-report.md 7/7; make-parity.txt 24/24; payload SHA-256 4808df2a… 700 bytes.
 - **S17** · Are legacy source, fixtures, goldens and comparator untouched?
