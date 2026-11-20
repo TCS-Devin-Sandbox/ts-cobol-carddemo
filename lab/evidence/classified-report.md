@@ -1,7 +1,7 @@
 # Interest replay
 
 ```text
-Interest replay | baseline b2962225b345902e7b6b9f338d17b1e99f23afab | clock 2022-07-05 10:00:00.00 | PARM 2022071800
+Interest replay | baseline fb7d603daaa170230b85fb71bae86ad810773a5b | clock 2022-07-05 10:00:00.00 | PARM 2022071800
 i01-baseline: MATCH 53, INTENDED_CHANGE 0, UNRESOLVED 6 (engines agree 6, engines differ 0), UNCLASSIFIED 0; RC observed=0 target=0
 i02-tie-half-cent: MATCH 50, INTENDED_CHANGE 0, UNRESOLVED 9 (engines agree 9, engines differ 0), UNCLASSIFIED 0; RC observed=0 target=0
 i03-zero-rate-skipped: MATCH 26, INTENDED_CHANGE 0, UNRESOLVED 6 (engines agree 6, engines differ 0), UNCLASSIFIED 0; RC observed=0 target=0
@@ -35,7 +35,7 @@ GATE: PASS (no unclassified differences or violations; golden parity 7/7)
 
 ### i01-baseline
 
-Artifacts: `work/lab/runs/acafa2cb6d7943efa34d31501bed4773/i01-baseline`
+Artifacts: `work/lab/runs/49162b5ef9d640d9b3453f3ebed48267/i01-baseline`
 
 | Value | Required | Observed | Target | Class | Decisions |
 |---|---|---|---|---|---|
@@ -72,7 +72,7 @@ Artifacts: `work/lab/runs/acafa2cb6d7943efa34d31501bed4773/i01-baseline`
 | account 00000002001 ACCT-CURR-BAL | 1010.00 | 1010.00 | 1010.00 | MATCH |  |
 | account 00000002001 ACCT-CURR-CYC-CREDIT | 0.00 | 0.00 | 0.00 | MATCH |  |
 | account 00000002001 ACCT-CURR-CYC-DEBIT | 0.00 | 0.00 | 0.00 | MATCH |  |
-| account 00000002001 updated | True | True | True | MATCH |  |
+| account 00000002001 updated (rewrite effects) | {'ACCT-CURR-CYC-CREDIT': Decimal('0.00'), 'ACCT-CURR-CYC-DEBIT': Decimal('0.00')} | {'ACCT-CURR-CYC-CREDIT': Decimal('0.00'), 'ACCT-CURR-CYC-DEBIT': Decimal('0.00')} | {'ACCT-CURR-CYC-CREDIT': Decimal('0.00'), 'ACCT-CURR-CYC-DEBIT': Decimal('0.00')} | MATCH |  |
 | account 00000002001 unchanged ACCT-ID | 2001 | 2001 | 2001 | MATCH |  |
 | account 00000002001 unchanged ACCT-ACTIVE-STATUS | Y | Y | Y | MATCH |  |
 | account 00000002001 unchanged ACCT-CREDIT-LIMIT | 5000.00 | 5000.00 | 5000.00 | MATCH |  |
@@ -85,7 +85,7 @@ Artifacts: `work/lab/runs/acafa2cb6d7943efa34d31501bed4773/i01-baseline`
 | account 00000002002 ACCT-CURR-BAL | 2400.00 | 2400.00 | 2400.00 | UNRESOLVED | INT-Q02 |
 | account 00000002002 ACCT-CURR-CYC-CREDIT | 2400.00 | 2400.00 | 2400.00 | UNRESOLVED | INT-Q02 |
 | account 00000002002 ACCT-CURR-CYC-DEBIT | 0.00 | 0.00 | 0.00 | MATCH |  |
-| account 00000002002 updated | False | False | False | UNRESOLVED | INT-Q02 |
+| account 00000002002 updated (rewrite effects) | {'ACCT-CURR-CYC-CREDIT': Decimal('2400.00'), 'ACCT-CURR-CYC-DEBIT': Decimal('0.00')} | {'ACCT-CURR-CYC-CREDIT': Decimal('2400.00'), 'ACCT-CURR-CYC-DEBIT': Decimal('0.00')} | {'ACCT-CURR-CYC-CREDIT': Decimal('2400.00'), 'ACCT-CURR-CYC-DEBIT': Decimal('0.00')} | UNRESOLVED | INT-Q02 |
 | account 00000002002 unchanged ACCT-ID | 2002 | 2002 | 2002 | MATCH |  |
 | account 00000002002 unchanged ACCT-ACTIVE-STATUS | Y | Y | Y | MATCH |  |
 | account 00000002002 unchanged ACCT-CREDIT-LIMIT | 6000.00 | 6000.00 | 6000.00 | MATCH |  |
@@ -100,7 +100,7 @@ Artifacts: `work/lab/runs/acafa2cb6d7943efa34d31501bed4773/i01-baseline`
 | fee transactions | [] | [] | [] | UNRESOLVED | INT-H01 |
 ### i02-tie-half-cent
 
-Artifacts: `work/lab/runs/acafa2cb6d7943efa34d31501bed4773/i02-tie-half-cent`
+Artifacts: `work/lab/runs/49162b5ef9d640d9b3453f3ebed48267/i02-tie-half-cent`
 
 | Value | Required | Observed | Target | Class | Decisions |
 |---|---|---|---|---|---|
@@ -137,7 +137,7 @@ Artifacts: `work/lab/runs/acafa2cb6d7943efa34d31501bed4773/i02-tie-half-cent`
 | account 00000002003 ACCT-CURR-BAL | 1247.85 | 1247.85 | 1247.85 | UNRESOLVED | INT-Q01 |
 | account 00000002003 ACCT-CURR-CYC-CREDIT | 0.00 | 0.00 | 0.00 | MATCH |  |
 | account 00000002003 ACCT-CURR-CYC-DEBIT | 0.00 | 0.00 | 0.00 | MATCH |  |
-| account 00000002003 updated | True | True | True | MATCH |  |
+| account 00000002003 updated (rewrite effects) | {'ACCT-CURR-CYC-CREDIT': Decimal('0.00'), 'ACCT-CURR-CYC-DEBIT': Decimal('0.00')} | {'ACCT-CURR-CYC-CREDIT': Decimal('0.00'), 'ACCT-CURR-CYC-DEBIT': Decimal('0.00')} | {'ACCT-CURR-CYC-CREDIT': Decimal('0.00'), 'ACCT-CURR-CYC-DEBIT': Decimal('0.00')} | MATCH |  |
 | account 00000002003 unchanged ACCT-ID | 2003 | 2003 | 2003 | MATCH |  |
 | account 00000002003 unchanged ACCT-ACTIVE-STATUS | Y | Y | Y | MATCH |  |
 | account 00000002003 unchanged ACCT-CREDIT-LIMIT | 5000.00 | 5000.00 | 5000.00 | MATCH |  |
@@ -150,7 +150,7 @@ Artifacts: `work/lab/runs/acafa2cb6d7943efa34d31501bed4773/i02-tie-half-cent`
 | account 00000002004 ACCT-CURR-BAL | 1234.50 | 1234.50 | 1234.50 | UNRESOLVED | INT-Q02 |
 | account 00000002004 ACCT-CURR-CYC-CREDIT | 1234.50 | 1234.50 | 1234.50 | UNRESOLVED | INT-Q02 |
 | account 00000002004 ACCT-CURR-CYC-DEBIT | 0.00 | 0.00 | 0.00 | MATCH |  |
-| account 00000002004 updated | False | False | False | UNRESOLVED | INT-Q02 |
+| account 00000002004 updated (rewrite effects) | {'ACCT-CURR-CYC-CREDIT': Decimal('1234.50'), 'ACCT-CURR-CYC-DEBIT': Decimal('0.00')} | {'ACCT-CURR-CYC-CREDIT': Decimal('1234.50'), 'ACCT-CURR-CYC-DEBIT': Decimal('0.00')} | {'ACCT-CURR-CYC-CREDIT': Decimal('1234.50'), 'ACCT-CURR-CYC-DEBIT': Decimal('0.00')} | UNRESOLVED | INT-Q02 |
 | account 00000002004 unchanged ACCT-ID | 2004 | 2004 | 2004 | MATCH |  |
 | account 00000002004 unchanged ACCT-ACTIVE-STATUS | Y | Y | Y | MATCH |  |
 | account 00000002004 unchanged ACCT-CREDIT-LIMIT | 5000.00 | 5000.00 | 5000.00 | MATCH |  |
@@ -165,7 +165,7 @@ Artifacts: `work/lab/runs/acafa2cb6d7943efa34d31501bed4773/i02-tie-half-cent`
 | fee transactions | [] | [] | [] | UNRESOLVED | INT-H01 |
 ### i03-zero-rate-skipped
 
-Artifacts: `work/lab/runs/acafa2cb6d7943efa34d31501bed4773/i03-zero-rate-skipped`
+Artifacts: `work/lab/runs/49162b5ef9d640d9b3453f3ebed48267/i03-zero-rate-skipped`
 
 | Value | Required | Observed | Target | Class | Decisions |
 |---|---|---|---|---|---|
@@ -188,7 +188,7 @@ Artifacts: `work/lab/runs/acafa2cb6d7943efa34d31501bed4773/i03-zero-rate-skipped
 | account 00000002005 ACCT-CURR-BAL | 700.00 | 700.00 | 700.00 | UNRESOLVED | INT-Q02 |
 | account 00000002005 ACCT-CURR-CYC-CREDIT | 1000.00 | 1000.00 | 1000.00 | UNRESOLVED | INT-Q02 |
 | account 00000002005 ACCT-CURR-CYC-DEBIT | 300.00 | 300.00 | 300.00 | UNRESOLVED | INT-Q02 |
-| account 00000002005 updated | False | False | False | UNRESOLVED | INT-Q02 |
+| account 00000002005 updated (rewrite effects) | {'ACCT-CURR-CYC-CREDIT': Decimal('1000.00'), 'ACCT-CURR-CYC-DEBIT': Decimal('300.00')} | {'ACCT-CURR-CYC-CREDIT': Decimal('1000.00'), 'ACCT-CURR-CYC-DEBIT': Decimal('300.00')} | {'ACCT-CURR-CYC-CREDIT': Decimal('1000.00'), 'ACCT-CURR-CYC-DEBIT': Decimal('300.00')} | UNRESOLVED | INT-Q02 |
 | account 00000002005 unchanged ACCT-ID | 2005 | 2005 | 2005 | MATCH |  |
 | account 00000002005 unchanged ACCT-ACTIVE-STATUS | Y | Y | Y | MATCH |  |
 | account 00000002005 unchanged ACCT-CREDIT-LIMIT | 5000.00 | 5000.00 | 5000.00 | MATCH |  |
@@ -203,7 +203,7 @@ Artifacts: `work/lab/runs/acafa2cb6d7943efa34d31501bed4773/i03-zero-rate-skipped
 | fee transactions | [] | [] | [] | UNRESOLVED | INT-H01 |
 ### i04-default-group-fallback
 
-Artifacts: `work/lab/runs/acafa2cb6d7943efa34d31501bed4773/i04-default-group-fallback`
+Artifacts: `work/lab/runs/49162b5ef9d640d9b3453f3ebed48267/i04-default-group-fallback`
 
 | Value | Required | Observed | Target | Class | Decisions |
 |---|---|---|---|---|---|
@@ -226,7 +226,7 @@ Artifacts: `work/lab/runs/acafa2cb6d7943efa34d31501bed4773/i04-default-group-fal
 | account 00000002006 ACCT-CURR-BAL | 1000.00 | 1000.00 | 1000.00 | UNRESOLVED | INT-Q02 |
 | account 00000002006 ACCT-CURR-CYC-CREDIT | 1000.00 | 1000.00 | 1000.00 | UNRESOLVED | INT-Q02 |
 | account 00000002006 ACCT-CURR-CYC-DEBIT | 0.00 | 0.00 | 0.00 | MATCH |  |
-| account 00000002006 updated | False | False | False | UNRESOLVED | INT-Q02 |
+| account 00000002006 updated (rewrite effects) | {'ACCT-CURR-CYC-CREDIT': Decimal('1000.00'), 'ACCT-CURR-CYC-DEBIT': Decimal('0.00')} | {'ACCT-CURR-CYC-CREDIT': Decimal('1000.00'), 'ACCT-CURR-CYC-DEBIT': Decimal('0.00')} | {'ACCT-CURR-CYC-CREDIT': Decimal('1000.00'), 'ACCT-CURR-CYC-DEBIT': Decimal('0.00')} | UNRESOLVED | INT-Q02 |
 | account 00000002006 unchanged ACCT-ID | 2006 | 2006 | 2006 | MATCH |  |
 | account 00000002006 unchanged ACCT-ACTIVE-STATUS | Y | Y | Y | MATCH |  |
 | account 00000002006 unchanged ACCT-CREDIT-LIMIT | 5000.00 | 5000.00 | 5000.00 | MATCH |  |
@@ -241,7 +241,7 @@ Artifacts: `work/lab/runs/acafa2cb6d7943efa34d31501bed4773/i04-default-group-fal
 | fee transactions | [] | [] | [] | UNRESOLVED | INT-H01 |
 ### i05-multi-category
 
-Artifacts: `work/lab/runs/acafa2cb6d7943efa34d31501bed4773/i05-multi-category`
+Artifacts: `work/lab/runs/49162b5ef9d640d9b3453f3ebed48267/i05-multi-category`
 
 | Value | Required | Observed | Target | Class | Decisions |
 |---|---|---|---|---|---|
@@ -278,7 +278,7 @@ Artifacts: `work/lab/runs/acafa2cb6d7943efa34d31501bed4773/i05-multi-category`
 | account 00000002007 ACCT-CURR-BAL | 1500.00 | 1500.00 | 1500.00 | UNRESOLVED | INT-Q02 |
 | account 00000002007 ACCT-CURR-CYC-CREDIT | 1500.00 | 1500.00 | 1500.00 | UNRESOLVED | INT-Q02 |
 | account 00000002007 ACCT-CURR-CYC-DEBIT | 0.00 | 0.00 | 0.00 | MATCH |  |
-| account 00000002007 updated | False | False | False | UNRESOLVED | INT-Q02 |
+| account 00000002007 updated (rewrite effects) | {'ACCT-CURR-CYC-CREDIT': Decimal('1500.00'), 'ACCT-CURR-CYC-DEBIT': Decimal('0.00')} | {'ACCT-CURR-CYC-CREDIT': Decimal('1500.00'), 'ACCT-CURR-CYC-DEBIT': Decimal('0.00')} | {'ACCT-CURR-CYC-CREDIT': Decimal('1500.00'), 'ACCT-CURR-CYC-DEBIT': Decimal('0.00')} | UNRESOLVED | INT-Q02 |
 | account 00000002007 unchanged ACCT-ID | 2007 | 2007 | 2007 | MATCH |  |
 | account 00000002007 unchanged ACCT-ACTIVE-STATUS | Y | Y | Y | MATCH |  |
 | account 00000002007 unchanged ACCT-CREDIT-LIMIT | 5000.00 | 5000.00 | 5000.00 | MATCH |  |
@@ -293,7 +293,7 @@ Artifacts: `work/lab/runs/acafa2cb6d7943efa34d31501bed4773/i05-multi-category`
 | fee transactions | [] | [] | [] | UNRESOLVED | INT-H01 |
 ### i06-negative-balance
 
-Artifacts: `work/lab/runs/acafa2cb6d7943efa34d31501bed4773/i06-negative-balance`
+Artifacts: `work/lab/runs/49162b5ef9d640d9b3453f3ebed48267/i06-negative-balance`
 
 | Value | Required | Observed | Target | Class | Decisions |
 |---|---|---|---|---|---|
@@ -316,7 +316,7 @@ Artifacts: `work/lab/runs/acafa2cb6d7943efa34d31501bed4773/i06-negative-balance`
 | account 00000002008 ACCT-CURR-BAL | -300.00 | -300.00 | -300.00 | UNRESOLVED | INT-Q02 |
 | account 00000002008 ACCT-CURR-CYC-CREDIT | 0.00 | 0.00 | 0.00 | MATCH |  |
 | account 00000002008 ACCT-CURR-CYC-DEBIT | 300.00 | 300.00 | 300.00 | UNRESOLVED | INT-Q02 |
-| account 00000002008 updated | False | False | False | UNRESOLVED | INT-Q02 |
+| account 00000002008 updated (rewrite effects) | {'ACCT-CURR-CYC-CREDIT': Decimal('0.00'), 'ACCT-CURR-CYC-DEBIT': Decimal('300.00')} | {'ACCT-CURR-CYC-CREDIT': Decimal('0.00'), 'ACCT-CURR-CYC-DEBIT': Decimal('300.00')} | {'ACCT-CURR-CYC-CREDIT': Decimal('0.00'), 'ACCT-CURR-CYC-DEBIT': Decimal('300.00')} | UNRESOLVED | INT-Q02 |
 | account 00000002008 unchanged ACCT-ID | 2008 | 2008 | 2008 | MATCH |  |
 | account 00000002008 unchanged ACCT-ACTIVE-STATUS | Y | Y | Y | MATCH |  |
 | account 00000002008 unchanged ACCT-CREDIT-LIMIT | 5000.00 | 5000.00 | 5000.00 | MATCH |  |
@@ -331,7 +331,7 @@ Artifacts: `work/lab/runs/acafa2cb6d7943efa34d31501bed4773/i06-negative-balance`
 | fee transactions | [] | [] | [] | UNRESOLVED | INT-H01 |
 ### i07-nontie-rounding
 
-Artifacts: `work/lab/runs/acafa2cb6d7943efa34d31501bed4773/i07-nontie-rounding`
+Artifacts: `work/lab/runs/49162b5ef9d640d9b3453f3ebed48267/i07-nontie-rounding`
 
 | Value | Required | Observed | Target | Class | Decisions |
 |---|---|---|---|---|---|
@@ -368,7 +368,7 @@ Artifacts: `work/lab/runs/acafa2cb6d7943efa34d31501bed4773/i07-nontie-rounding`
 | account 00000002009 ACCT-CURR-BAL | 1015.75 | 1015.75 | 1015.75 | MATCH |  |
 | account 00000002009 ACCT-CURR-CYC-CREDIT | 0.00 | 0.00 | 0.00 | MATCH |  |
 | account 00000002009 ACCT-CURR-CYC-DEBIT | 0.00 | 0.00 | 0.00 | MATCH |  |
-| account 00000002009 updated | True | True | True | MATCH |  |
+| account 00000002009 updated (rewrite effects) | {'ACCT-CURR-CYC-CREDIT': Decimal('0.00'), 'ACCT-CURR-CYC-DEBIT': Decimal('0.00')} | {'ACCT-CURR-CYC-CREDIT': Decimal('0.00'), 'ACCT-CURR-CYC-DEBIT': Decimal('0.00')} | {'ACCT-CURR-CYC-CREDIT': Decimal('0.00'), 'ACCT-CURR-CYC-DEBIT': Decimal('0.00')} | MATCH |  |
 | account 00000002009 unchanged ACCT-ID | 2009 | 2009 | 2009 | MATCH |  |
 | account 00000002009 unchanged ACCT-ACTIVE-STATUS | Y | Y | Y | MATCH |  |
 | account 00000002009 unchanged ACCT-CREDIT-LIMIT | 5000.00 | 5000.00 | 5000.00 | MATCH |  |
@@ -381,7 +381,7 @@ Artifacts: `work/lab/runs/acafa2cb6d7943efa34d31501bed4773/i07-nontie-rounding`
 | account 00000002010 ACCT-CURR-BAL | 777.77 | 777.77 | 777.77 | UNRESOLVED | INT-Q02 |
 | account 00000002010 ACCT-CURR-CYC-CREDIT | 777.77 | 777.77 | 777.77 | UNRESOLVED | INT-Q02 |
 | account 00000002010 ACCT-CURR-CYC-DEBIT | 0.00 | 0.00 | 0.00 | MATCH |  |
-| account 00000002010 updated | False | False | False | UNRESOLVED | INT-Q02 |
+| account 00000002010 updated (rewrite effects) | {'ACCT-CURR-CYC-CREDIT': Decimal('777.77'), 'ACCT-CURR-CYC-DEBIT': Decimal('0.00')} | {'ACCT-CURR-CYC-CREDIT': Decimal('777.77'), 'ACCT-CURR-CYC-DEBIT': Decimal('0.00')} | {'ACCT-CURR-CYC-CREDIT': Decimal('777.77'), 'ACCT-CURR-CYC-DEBIT': Decimal('0.00')} | UNRESOLVED | INT-Q02 |
 | account 00000002010 unchanged ACCT-ID | 2010 | 2010 | 2010 | MATCH |  |
 | account 00000002010 unchanged ACCT-ACTIVE-STATUS | Y | Y | Y | MATCH |  |
 | account 00000002010 unchanged ACCT-CREDIT-LIMIT | 5000.00 | 5000.00 | 5000.00 | MATCH |  |
@@ -396,7 +396,7 @@ Artifacts: `work/lab/runs/acafa2cb6d7943efa34d31501bed4773/i07-nontie-rounding`
 | fee transactions | [] | [] | [] | UNRESOLVED | INT-H01 |
 ### E01
 
-Artifacts: `work/lab/runs/acafa2cb6d7943efa34d31501bed4773/E01`
+Artifacts: `work/lab/runs/49162b5ef9d640d9b3453f3ebed48267/E01`
 
 | Value | Required | Observed | Target | Class | Decisions |
 |---|---|---|---|---|---|
@@ -461,7 +461,7 @@ Artifacts: `work/lab/runs/acafa2cb6d7943efa34d31501bed4773/E01`
 | account 00000002003 ACCT-CURR-BAL | 1247.85 | 1247.85 | 1247.85 | UNRESOLVED | INT-Q01 |
 | account 00000002003 ACCT-CURR-CYC-CREDIT | 0.00 | 0.00 | 0.00 | MATCH |  |
 | account 00000002003 ACCT-CURR-CYC-DEBIT | 0.00 | 0.00 | 0.00 | MATCH |  |
-| account 00000002003 updated | True | True | True | MATCH |  |
+| account 00000002003 updated (rewrite effects) | {'ACCT-CURR-CYC-CREDIT': Decimal('0.00'), 'ACCT-CURR-CYC-DEBIT': Decimal('0.00')} | {'ACCT-CURR-CYC-CREDIT': Decimal('0.00'), 'ACCT-CURR-CYC-DEBIT': Decimal('0.00')} | {'ACCT-CURR-CYC-CREDIT': Decimal('0.00'), 'ACCT-CURR-CYC-DEBIT': Decimal('0.00')} | MATCH |  |
 | account 00000002003 unchanged ACCT-ID | 2003 | 2003 | 2003 | MATCH |  |
 | account 00000002003 unchanged ACCT-ACTIVE-STATUS | Y | Y | Y | MATCH |  |
 | account 00000002003 unchanged ACCT-CREDIT-LIMIT | 5000.00 | 5000.00 | 5000.00 | MATCH |  |
@@ -474,7 +474,7 @@ Artifacts: `work/lab/runs/acafa2cb6d7943efa34d31501bed4773/E01`
 | account 00000002004 ACCT-CURR-BAL | 1223.15 | 1223.15 | 1223.15 | UNRESOLVED | INT-Q01, INT-Q03 |
 | account 00000002004 ACCT-CURR-CYC-CREDIT | 0.00 | 0.00 | 0.00 | MATCH |  |
 | account 00000002004 ACCT-CURR-CYC-DEBIT | 0.00 | 0.00 | 0.00 | MATCH |  |
-| account 00000002004 updated | True | True | True | MATCH |  |
+| account 00000002004 updated (rewrite effects) | {'ACCT-CURR-CYC-CREDIT': Decimal('0.00'), 'ACCT-CURR-CYC-DEBIT': Decimal('0.00')} | {'ACCT-CURR-CYC-CREDIT': Decimal('0.00'), 'ACCT-CURR-CYC-DEBIT': Decimal('0.00')} | {'ACCT-CURR-CYC-CREDIT': Decimal('0.00'), 'ACCT-CURR-CYC-DEBIT': Decimal('0.00')} | MATCH |  |
 | account 00000002004 unchanged ACCT-ID | 2004 | 2004 | 2004 | MATCH |  |
 | account 00000002004 unchanged ACCT-ACTIVE-STATUS | Y | Y | Y | MATCH |  |
 | account 00000002004 unchanged ACCT-CREDIT-LIMIT | 5000.00 | 5000.00 | 5000.00 | MATCH |  |
@@ -487,7 +487,7 @@ Artifacts: `work/lab/runs/acafa2cb6d7943efa34d31501bed4773/E01`
 | account 00000002005 ACCT-CURR-BAL | 1247.84 | 1247.84 | 1247.84 | UNRESOLVED | INT-Q01 |
 | account 00000002005 ACCT-CURR-CYC-CREDIT | 0.00 | 0.00 | 0.00 | MATCH |  |
 | account 00000002005 ACCT-CURR-CYC-DEBIT | 0.00 | 0.00 | 0.00 | MATCH |  |
-| account 00000002005 updated | True | True | True | MATCH |  |
+| account 00000002005 updated (rewrite effects) | {'ACCT-CURR-CYC-CREDIT': Decimal('0.00'), 'ACCT-CURR-CYC-DEBIT': Decimal('0.00')} | {'ACCT-CURR-CYC-CREDIT': Decimal('0.00'), 'ACCT-CURR-CYC-DEBIT': Decimal('0.00')} | {'ACCT-CURR-CYC-CREDIT': Decimal('0.00'), 'ACCT-CURR-CYC-DEBIT': Decimal('0.00')} | MATCH |  |
 | account 00000002005 unchanged ACCT-ID | 2005 | 2005 | 2005 | MATCH |  |
 | account 00000002005 unchanged ACCT-ACTIVE-STATUS | Y | Y | Y | MATCH |  |
 | account 00000002005 unchanged ACCT-CREDIT-LIMIT | 5000.00 | 5000.00 | 5000.00 | MATCH |  |
@@ -500,7 +500,7 @@ Artifacts: `work/lab/runs/acafa2cb6d7943efa34d31501bed4773/E01`
 | account 00000002006 ACCT-CURR-BAL | 1235.50 | 1235.50 | 1235.50 | UNRESOLVED | INT-Q02 |
 | account 00000002006 ACCT-CURR-CYC-CREDIT | 1235.50 | 1235.50 | 1235.50 | UNRESOLVED | INT-Q02 |
 | account 00000002006 ACCT-CURR-CYC-DEBIT | 0.00 | 0.00 | 0.00 | MATCH |  |
-| account 00000002006 updated | False | False | False | UNRESOLVED | INT-Q02 |
+| account 00000002006 updated (rewrite effects) | {'ACCT-CURR-CYC-CREDIT': Decimal('1235.50'), 'ACCT-CURR-CYC-DEBIT': Decimal('0.00')} | {'ACCT-CURR-CYC-CREDIT': Decimal('1235.50'), 'ACCT-CURR-CYC-DEBIT': Decimal('0.00')} | {'ACCT-CURR-CYC-CREDIT': Decimal('1235.50'), 'ACCT-CURR-CYC-DEBIT': Decimal('0.00')} | UNRESOLVED | INT-Q02 |
 | account 00000002006 unchanged ACCT-ID | 2006 | 2006 | 2006 | MATCH |  |
 | account 00000002006 unchanged ACCT-ACTIVE-STATUS | Y | Y | Y | MATCH |  |
 | account 00000002006 unchanged ACCT-CREDIT-LIMIT | 5000.00 | 5000.00 | 5000.00 | MATCH |  |
@@ -515,7 +515,7 @@ Artifacts: `work/lab/runs/acafa2cb6d7943efa34d31501bed4773/E01`
 | fee transactions | [] | [] | [] | UNRESOLVED | INT-H01 |
 ### E02
 
-Artifacts: `work/lab/runs/acafa2cb6d7943efa34d31501bed4773/E02`
+Artifacts: `work/lab/runs/49162b5ef9d640d9b3453f3ebed48267/E02`
 
 | Value | Required | Observed | Target | Class | Decisions |
 |---|---|---|---|---|---|
@@ -566,7 +566,7 @@ Artifacts: `work/lab/runs/acafa2cb6d7943efa34d31501bed4773/E02`
 | account 00000002003 ACCT-CURR-BAL | 1236.50 | 1236.50 | 1236.50 | MATCH |  |
 | account 00000002003 ACCT-CURR-CYC-CREDIT | 0.00 | 0.00 | 0.00 | MATCH |  |
 | account 00000002003 ACCT-CURR-CYC-DEBIT | 0.00 | 0.00 | 0.00 | MATCH |  |
-| account 00000002003 updated | True | True | True | MATCH |  |
+| account 00000002003 updated (rewrite effects) | {'ACCT-CURR-CYC-CREDIT': Decimal('0.00'), 'ACCT-CURR-CYC-DEBIT': Decimal('0.00')} | {'ACCT-CURR-CYC-CREDIT': Decimal('0.00'), 'ACCT-CURR-CYC-DEBIT': Decimal('0.00')} | {'ACCT-CURR-CYC-CREDIT': Decimal('0.00'), 'ACCT-CURR-CYC-DEBIT': Decimal('0.00')} | MATCH |  |
 | account 00000002003 unchanged ACCT-ID | 2003 | 2003 | 2003 | MATCH |  |
 | account 00000002003 unchanged ACCT-ACTIVE-STATUS | N | N | N | MATCH |  |
 | account 00000002003 unchanged ACCT-CREDIT-LIMIT | 5000.00 | 5000.00 | 5000.00 | MATCH |  |
@@ -579,7 +579,7 @@ Artifacts: `work/lab/runs/acafa2cb6d7943efa34d31501bed4773/E02`
 | account 00000002004 ACCT-CURR-BAL | 1234.50 | 1234.50 | 1234.50 | UNRESOLVED | INT-Q02 |
 | account 00000002004 ACCT-CURR-CYC-CREDIT | 1234.50 | 1234.50 | 1234.50 | UNRESOLVED | INT-Q02 |
 | account 00000002004 ACCT-CURR-CYC-DEBIT | 0.00 | 0.00 | 0.00 | MATCH |  |
-| account 00000002004 updated | False | False | False | UNRESOLVED | INT-Q02 |
+| account 00000002004 updated (rewrite effects) | {'ACCT-CURR-CYC-CREDIT': Decimal('1234.50'), 'ACCT-CURR-CYC-DEBIT': Decimal('0.00')} | {'ACCT-CURR-CYC-CREDIT': Decimal('1234.50'), 'ACCT-CURR-CYC-DEBIT': Decimal('0.00')} | {'ACCT-CURR-CYC-CREDIT': Decimal('1234.50'), 'ACCT-CURR-CYC-DEBIT': Decimal('0.00')} | UNRESOLVED | INT-Q02 |
 | account 00000002004 unchanged ACCT-ID | 2004 | 2004 | 2004 | MATCH |  |
 | account 00000002004 unchanged ACCT-ACTIVE-STATUS | Y | Y | Y | MATCH |  |
 | account 00000002004 unchanged ACCT-CREDIT-LIMIT | 5000.00 | 5000.00 | 5000.00 | MATCH |  |
@@ -592,7 +592,7 @@ Artifacts: `work/lab/runs/acafa2cb6d7943efa34d31501bed4773/E02`
 | account 00000002005 ACCT-CURR-BAL | 1235.50 | 1235.50 | 1235.50 | MATCH |  |
 | account 00000002005 ACCT-CURR-CYC-CREDIT | 1235.50 | 1235.50 | 1235.50 | UNRESOLVED | INT-Q06 |
 | account 00000002005 ACCT-CURR-CYC-DEBIT | 0.00 | 0.00 | 0.00 | MATCH |  |
-| account 00000002005 updated | False | False | False | UNRESOLVED | INT-Q06 |
+| account 00000002005 updated (rewrite effects) | {'ACCT-CURR-CYC-CREDIT': Decimal('1235.50'), 'ACCT-CURR-CYC-DEBIT': Decimal('0.00')} | {'ACCT-CURR-CYC-CREDIT': Decimal('1235.50'), 'ACCT-CURR-CYC-DEBIT': Decimal('0.00')} | {'ACCT-CURR-CYC-CREDIT': Decimal('1235.50'), 'ACCT-CURR-CYC-DEBIT': Decimal('0.00')} | UNRESOLVED | INT-Q06 |
 | account 00000002005 unchanged ACCT-ID | 2005 | 2005 | 2005 | MATCH |  |
 | account 00000002005 unchanged ACCT-ACTIVE-STATUS | N | N | N | MATCH |  |
 | account 00000002005 unchanged ACCT-CREDIT-LIMIT | 5000.00 | 5000.00 | 5000.00 | MATCH |  |
@@ -608,7 +608,7 @@ Artifacts: `work/lab/runs/acafa2cb6d7943efa34d31501bed4773/E02`
 | INT-H04 replay outcome | True | True | True | MATCH |  |
 ### E03
 
-Artifacts: `work/lab/runs/acafa2cb6d7943efa34d31501bed4773/E03`
+Artifacts: `work/lab/runs/49162b5ef9d640d9b3453f3ebed48267/E03`
 
 | Value | Required | Observed | Target | Class | Decisions |
 |---|---|---|---|---|---|
@@ -645,7 +645,7 @@ Artifacts: `work/lab/runs/acafa2cb6d7943efa34d31501bed4773/E03`
 | account 00000002003 ACCT-CURR-BAL | 1237.25 | 1237.25 | 1237.25 | MATCH |  |
 | account 00000002003 ACCT-CURR-CYC-CREDIT | 0.00 | 0.00 | 0.00 | MATCH |  |
 | account 00000002003 ACCT-CURR-CYC-DEBIT | 0.00 | 0.00 | 0.00 | MATCH |  |
-| account 00000002003 updated | True | True | True | MATCH |  |
+| account 00000002003 updated (rewrite effects) | {'ACCT-CURR-CYC-CREDIT': Decimal('0.00'), 'ACCT-CURR-CYC-DEBIT': Decimal('0.00')} | {'ACCT-CURR-CYC-CREDIT': Decimal('0.00'), 'ACCT-CURR-CYC-DEBIT': Decimal('0.00')} | {'ACCT-CURR-CYC-CREDIT': Decimal('0.00'), 'ACCT-CURR-CYC-DEBIT': Decimal('0.00')} | MATCH |  |
 | account 00000002003 unchanged ACCT-ID | 2003 | 2003 | 2003 | MATCH |  |
 | account 00000002003 unchanged ACCT-ACTIVE-STATUS | Y | Y | Y | MATCH |  |
 | account 00000002003 unchanged ACCT-CREDIT-LIMIT | 5000.00 | 5000.00 | 5000.00 | MATCH |  |
@@ -658,7 +658,7 @@ Artifacts: `work/lab/runs/acafa2cb6d7943efa34d31501bed4773/E03`
 | account 00000002004 ACCT-CURR-BAL | 1234.50 | 1234.50 | 1234.50 | UNRESOLVED | INT-Q02 |
 | account 00000002004 ACCT-CURR-CYC-CREDIT | 1234.50 | 1234.50 | 1234.50 | UNRESOLVED | INT-Q02 |
 | account 00000002004 ACCT-CURR-CYC-DEBIT | 0.00 | 0.00 | 0.00 | MATCH |  |
-| account 00000002004 updated | False | False | False | UNRESOLVED | INT-Q02 |
+| account 00000002004 updated (rewrite effects) | {'ACCT-CURR-CYC-CREDIT': Decimal('1234.50'), 'ACCT-CURR-CYC-DEBIT': Decimal('0.00')} | {'ACCT-CURR-CYC-CREDIT': Decimal('1234.50'), 'ACCT-CURR-CYC-DEBIT': Decimal('0.00')} | {'ACCT-CURR-CYC-CREDIT': Decimal('1234.50'), 'ACCT-CURR-CYC-DEBIT': Decimal('0.00')} | UNRESOLVED | INT-Q02 |
 | account 00000002004 unchanged ACCT-ID | 2004 | 2004 | 2004 | MATCH |  |
 | account 00000002004 unchanged ACCT-ACTIVE-STATUS | Y | Y | Y | MATCH |  |
 | account 00000002004 unchanged ACCT-CREDIT-LIMIT | 5000.00 | 5000.00 | 5000.00 | MATCH |  |
@@ -673,7 +673,7 @@ Artifacts: `work/lab/runs/acafa2cb6d7943efa34d31501bed4773/E03`
 | fee transactions | [] | [] | [] | UNRESOLVED | INT-H01 |
 ### E04
 
-Artifacts: `work/lab/runs/acafa2cb6d7943efa34d31501bed4773/E04`
+Artifacts: `work/lab/runs/49162b5ef9d640d9b3453f3ebed48267/E04`
 
 | Value | Required | Observed | Target | Class | Decisions |
 |---|---|---|---|---|---|
@@ -710,7 +710,7 @@ Artifacts: `work/lab/runs/acafa2cb6d7943efa34d31501bed4773/E04`
 | account 00000002003 ACCT-CURR-BAL | 1232.50 | 1232.50 | 1232.50 | UNRESOLVED | INT-Q03 |
 | account 00000002003 ACCT-CURR-CYC-CREDIT | 0.00 | 0.00 | 0.00 | MATCH |  |
 | account 00000002003 ACCT-CURR-CYC-DEBIT | 0.00 | 0.00 | 0.00 | MATCH |  |
-| account 00000002003 updated | True | True | True | MATCH |  |
+| account 00000002003 updated (rewrite effects) | {'ACCT-CURR-CYC-CREDIT': Decimal('0.00'), 'ACCT-CURR-CYC-DEBIT': Decimal('0.00')} | {'ACCT-CURR-CYC-CREDIT': Decimal('0.00'), 'ACCT-CURR-CYC-DEBIT': Decimal('0.00')} | {'ACCT-CURR-CYC-CREDIT': Decimal('0.00'), 'ACCT-CURR-CYC-DEBIT': Decimal('0.00')} | MATCH |  |
 | account 00000002003 unchanged ACCT-ID | 2003 | 2003 | 2003 | MATCH |  |
 | account 00000002003 unchanged ACCT-ACTIVE-STATUS | Y | Y | Y | MATCH |  |
 | account 00000002003 unchanged ACCT-CREDIT-LIMIT | 5000.00 | 5000.00 | 5000.00 | MATCH |  |
@@ -723,7 +723,7 @@ Artifacts: `work/lab/runs/acafa2cb6d7943efa34d31501bed4773/E04`
 | account 00000002004 ACCT-CURR-BAL | 1234.50 | 1234.50 | 1234.50 | UNRESOLVED | INT-Q02 |
 | account 00000002004 ACCT-CURR-CYC-CREDIT | 1234.50 | 1234.50 | 1234.50 | UNRESOLVED | INT-Q02 |
 | account 00000002004 ACCT-CURR-CYC-DEBIT | 0.00 | 0.00 | 0.00 | MATCH |  |
-| account 00000002004 updated | False | False | False | UNRESOLVED | INT-Q02 |
+| account 00000002004 updated (rewrite effects) | {'ACCT-CURR-CYC-CREDIT': Decimal('1234.50'), 'ACCT-CURR-CYC-DEBIT': Decimal('0.00')} | {'ACCT-CURR-CYC-CREDIT': Decimal('1234.50'), 'ACCT-CURR-CYC-DEBIT': Decimal('0.00')} | {'ACCT-CURR-CYC-CREDIT': Decimal('1234.50'), 'ACCT-CURR-CYC-DEBIT': Decimal('0.00')} | UNRESOLVED | INT-Q02 |
 | account 00000002004 unchanged ACCT-ID | 2004 | 2004 | 2004 | MATCH |  |
 | account 00000002004 unchanged ACCT-ACTIVE-STATUS | Y | Y | Y | MATCH |  |
 | account 00000002004 unchanged ACCT-CREDIT-LIMIT | 5000.00 | 5000.00 | 5000.00 | MATCH |  |
@@ -738,7 +738,7 @@ Artifacts: `work/lab/runs/acafa2cb6d7943efa34d31501bed4773/E04`
 | fee transactions | [] | [] | [] | UNRESOLVED | INT-H01 |
 ### E05
 
-Artifacts: `work/lab/runs/acafa2cb6d7943efa34d31501bed4773/E05`
+Artifacts: `work/lab/runs/49162b5ef9d640d9b3453f3ebed48267/E05`
 
 | Value | Required | Observed | Target | Class | Decisions |
 |---|---|---|---|---|---|
@@ -746,7 +746,7 @@ Artifacts: `work/lab/runs/acafa2cb6d7943efa34d31501bed4773/E05`
 | SYSOUT through ABENDING PROGRAM | ['START OF EXECUTION OF PROGRAM CBACT04C', '000000020030100010000001000{                      ', 'ACCOUNT NOT FOUND: 00000002003', 'ERROR READING ACCOUNT FILE', 'FILE STATUS IS: NNNN0023', 'ABENDING PROGRAM'] | ['START OF EXECUTION OF PROGRAM CBACT04C', '000000020030100010000001000{                      ', 'ACCOUNT NOT FOUND: 00000002003', 'ERROR READING ACCOUNT FILE', 'FILE STATUS IS: NNNN0023', 'ABENDING PROGRAM'] | ['START OF EXECUTION OF PROGRAM CBACT04C', '000000020030100010000001000{                      ', 'ACCOUNT NOT FOUND: 00000002003', 'ERROR READING ACCOUNT FILE', 'FILE STATUS IS: NNNN0023', 'ABENDING PROGRAM'] | MATCH |  |
 ### E06
 
-Artifacts: `work/lab/runs/acafa2cb6d7943efa34d31501bed4773/E06`
+Artifacts: `work/lab/runs/49162b5ef9d640d9b3453f3ebed48267/E06`
 
 | Value | Required | Observed | Target | Class | Decisions |
 |---|---|---|---|---|---|
@@ -754,7 +754,7 @@ Artifacts: `work/lab/runs/acafa2cb6d7943efa34d31501bed4773/E06`
 | SYSOUT through ABENDING PROGRAM | ['START OF EXECUTION OF PROGRAM CBACT04C', '000000020030100010000001000{                      ', 'ACCOUNT NOT FOUND: 00000002003', 'ERROR READING XREF FILE', 'FILE STATUS IS: NNNN0023', 'ABENDING PROGRAM'] | ['START OF EXECUTION OF PROGRAM CBACT04C', '000000020030100010000001000{                      ', 'ACCOUNT NOT FOUND: 00000002003', 'ERROR READING XREF FILE', 'FILE STATUS IS: NNNN0023', 'ABENDING PROGRAM'] | ['START OF EXECUTION OF PROGRAM CBACT04C', '000000020030100010000001000{                      ', 'ACCOUNT NOT FOUND: 00000002003', 'ERROR READING XREF FILE', 'FILE STATUS IS: NNNN0023', 'ABENDING PROGRAM'] | MATCH |  |
 ### E07
 
-Artifacts: `work/lab/runs/acafa2cb6d7943efa34d31501bed4773/E07`
+Artifacts: `work/lab/runs/49162b5ef9d640d9b3453f3ebed48267/E07`
 
 | Value | Required | Observed | Target | Class | Decisions |
 |---|---|---|---|---|---|
@@ -762,7 +762,7 @@ Artifacts: `work/lab/runs/acafa2cb6d7943efa34d31501bed4773/E07`
 | SYSOUT through ABENDING PROGRAM | ['START OF EXECUTION OF PROGRAM CBACT04C', '000000020030100010000001000{                      ', 'DISCLOSURE GROUP RECORD MISSING', 'TRY WITH DEFAULT GROUP CODE', 'ERROR READING DEFAULT DISCLOSURE GROUP', 'FILE STATUS IS: NNNN0023', 'ABENDING PROGRAM'] | ['START OF EXECUTION OF PROGRAM CBACT04C', '000000020030100010000001000{                      ', 'DISCLOSURE GROUP RECORD MISSING', 'TRY WITH DEFAULT GROUP CODE', 'ERROR READING DEFAULT DISCLOSURE GROUP', 'FILE STATUS IS: NNNN0023', 'ABENDING PROGRAM'] | ['START OF EXECUTION OF PROGRAM CBACT04C', '000000020030100010000001000{                      ', 'DISCLOSURE GROUP RECORD MISSING', 'TRY WITH DEFAULT GROUP CODE', 'ERROR READING DEFAULT DISCLOSURE GROUP', 'FILE STATUS IS: NNNN0023', 'ABENDING PROGRAM'] | MATCH |  |
 ### E08
 
-Artifacts: `work/lab/runs/acafa2cb6d7943efa34d31501bed4773/E08`
+Artifacts: `work/lab/runs/49162b5ef9d640d9b3453f3ebed48267/E08`
 
 | Value | Required | Observed | Target | Class | Decisions |
 |---|---|---|---|---|---|
@@ -799,7 +799,7 @@ Artifacts: `work/lab/runs/acafa2cb6d7943efa34d31501bed4773/E08`
 | account 00000002003 ACCT-CURR-BAL | 1237.50 | 1237.50 | 1237.50 | MATCH |  |
 | account 00000002003 ACCT-CURR-CYC-CREDIT | 0.00 | 0.00 | 0.00 | MATCH |  |
 | account 00000002003 ACCT-CURR-CYC-DEBIT | 0.00 | 0.00 | 0.00 | MATCH |  |
-| account 00000002003 updated | True | True | True | MATCH |  |
+| account 00000002003 updated (rewrite effects) | {'ACCT-CURR-CYC-CREDIT': Decimal('0.00'), 'ACCT-CURR-CYC-DEBIT': Decimal('0.00')} | {'ACCT-CURR-CYC-CREDIT': Decimal('0.00'), 'ACCT-CURR-CYC-DEBIT': Decimal('0.00')} | {'ACCT-CURR-CYC-CREDIT': Decimal('0.00'), 'ACCT-CURR-CYC-DEBIT': Decimal('0.00')} | MATCH |  |
 | account 00000002003 unchanged ACCT-ID | 2003 | 2003 | 2003 | MATCH |  |
 | account 00000002003 unchanged ACCT-ACTIVE-STATUS | Y | Y | Y | MATCH |  |
 | account 00000002003 unchanged ACCT-CREDIT-LIMIT | 5000.00 | 5000.00 | 5000.00 | MATCH |  |
@@ -812,7 +812,7 @@ Artifacts: `work/lab/runs/acafa2cb6d7943efa34d31501bed4773/E08`
 | account 00000002004 ACCT-CURR-BAL | 1234.50 | 1234.50 | 1234.50 | UNRESOLVED | INT-Q02 |
 | account 00000002004 ACCT-CURR-CYC-CREDIT | 1234.50 | 1234.50 | 1234.50 | UNRESOLVED | INT-Q02 |
 | account 00000002004 ACCT-CURR-CYC-DEBIT | 0.00 | 0.00 | 0.00 | MATCH |  |
-| account 00000002004 updated | False | False | False | UNRESOLVED | INT-Q02 |
+| account 00000002004 updated (rewrite effects) | {'ACCT-CURR-CYC-CREDIT': Decimal('1234.50'), 'ACCT-CURR-CYC-DEBIT': Decimal('0.00')} | {'ACCT-CURR-CYC-CREDIT': Decimal('1234.50'), 'ACCT-CURR-CYC-DEBIT': Decimal('0.00')} | {'ACCT-CURR-CYC-CREDIT': Decimal('1234.50'), 'ACCT-CURR-CYC-DEBIT': Decimal('0.00')} | UNRESOLVED | INT-Q02 |
 | account 00000002004 unchanged ACCT-ID | 2004 | 2004 | 2004 | MATCH |  |
 | account 00000002004 unchanged ACCT-ACTIVE-STATUS | Y | Y | Y | MATCH |  |
 | account 00000002004 unchanged ACCT-CREDIT-LIMIT | 5000.00 | 5000.00 | 5000.00 | MATCH |  |
@@ -828,7 +828,7 @@ Artifacts: `work/lab/runs/acafa2cb6d7943efa34d31501bed4773/E08`
 | INT-H06 replay outcome | True | True | True | MATCH |  |
 ### E09
 
-Artifacts: `work/lab/runs/acafa2cb6d7943efa34d31501bed4773/E09`
+Artifacts: `work/lab/runs/49162b5ef9d640d9b3453f3ebed48267/E09`
 
 | Value | Required | Observed | Target | Class | Decisions |
 |---|---|---|---|---|---|
@@ -836,7 +836,7 @@ Artifacts: `work/lab/runs/acafa2cb6d7943efa34d31501bed4773/E09`
 | SYSOUT through ABENDING PROGRAM | ['START OF EXECUTION OF PROGRAM CBACT04C', '000000020030100010000001000{                      ', '000000020040100010000001000{                      ', 'END OF EXECUTION OF PROGRAM CBACT04C'] | ['START OF EXECUTION OF PROGRAM CBACT04C', '000000020030100010000001000{                      ', '000000020040100010000001000{                      ', 'END OF EXECUTION OF PROGRAM CBACT04C'] | ['START OF EXECUTION OF PROGRAM CBACT04C'] | UNRESOLVED | INT-H03 |
 ### E10
 
-Artifacts: `work/lab/runs/acafa2cb6d7943efa34d31501bed4773/E10`
+Artifacts: `work/lab/runs/49162b5ef9d640d9b3453f3ebed48267/E10`
 
 | Value | Required | Observed | Target | Class | Decisions |
 |---|---|---|---|---|---|
@@ -873,7 +873,7 @@ Artifacts: `work/lab/runs/acafa2cb6d7943efa34d31501bed4773/E10`
 | account 00000002003 ACCT-CURR-BAL | 1235.50 | 1235.50 | 1235.50 | MATCH |  |
 | account 00000002003 ACCT-CURR-CYC-CREDIT | 0.00 | 0.00 | 0.00 | MATCH |  |
 | account 00000002003 ACCT-CURR-CYC-DEBIT | 0.00 | 0.00 | 0.00 | MATCH |  |
-| account 00000002003 updated | True | True | True | MATCH |  |
+| account 00000002003 updated (rewrite effects) | {'ACCT-CURR-CYC-CREDIT': Decimal('0.00'), 'ACCT-CURR-CYC-DEBIT': Decimal('0.00')} | {'ACCT-CURR-CYC-CREDIT': Decimal('0.00'), 'ACCT-CURR-CYC-DEBIT': Decimal('0.00')} | {'ACCT-CURR-CYC-CREDIT': Decimal('0.00'), 'ACCT-CURR-CYC-DEBIT': Decimal('0.00')} | MATCH |  |
 | account 00000002003 unchanged ACCT-ID | 2003 | 2003 | 2003 | MATCH |  |
 | account 00000002003 unchanged ACCT-ACTIVE-STATUS | Y | Y | Y | MATCH |  |
 | account 00000002003 unchanged ACCT-CREDIT-LIMIT | 5000.00 | 5000.00 | 5000.00 | MATCH |  |
@@ -886,7 +886,7 @@ Artifacts: `work/lab/runs/acafa2cb6d7943efa34d31501bed4773/E10`
 | account 00000002004 ACCT-CURR-BAL | 1234.50 | 1234.50 | 1234.50 | MATCH |  |
 | account 00000002004 ACCT-CURR-CYC-CREDIT | 1234.50 | 1234.50 | 1234.50 | UNRESOLVED | INT-Q02 |
 | account 00000002004 ACCT-CURR-CYC-DEBIT | 0.00 | 0.00 | 0.00 | MATCH |  |
-| account 00000002004 updated | False | False | False | UNRESOLVED | INT-Q02 |
+| account 00000002004 updated (rewrite effects) | {'ACCT-CURR-CYC-CREDIT': Decimal('1234.50'), 'ACCT-CURR-CYC-DEBIT': Decimal('0.00')} | {'ACCT-CURR-CYC-CREDIT': Decimal('1234.50'), 'ACCT-CURR-CYC-DEBIT': Decimal('0.00')} | {'ACCT-CURR-CYC-CREDIT': Decimal('1234.50'), 'ACCT-CURR-CYC-DEBIT': Decimal('0.00')} | UNRESOLVED | INT-Q02 |
 | account 00000002004 unchanged ACCT-ID | 2004 | 2004 | 2004 | MATCH |  |
 | account 00000002004 unchanged ACCT-ACTIVE-STATUS | Y | Y | Y | MATCH |  |
 | account 00000002004 unchanged ACCT-CREDIT-LIMIT | 5000.00 | 5000.00 | 5000.00 | MATCH |  |
@@ -901,7 +901,7 @@ Artifacts: `work/lab/runs/acafa2cb6d7943efa34d31501bed4773/E10`
 | fee transactions | [] | [] | [] | UNRESOLVED | INT-H01 |
 ### E11
 
-Artifacts: `work/lab/runs/acafa2cb6d7943efa34d31501bed4773/E11`
+Artifacts: `work/lab/runs/49162b5ef9d640d9b3453f3ebed48267/E11`
 
 | Value | Required | Observed | Target | Class | Decisions |
 |---|---|---|---|---|---|
@@ -938,7 +938,7 @@ Artifacts: `work/lab/runs/acafa2cb6d7943efa34d31501bed4773/E11`
 | account 00000002003 ACCT-CURR-BAL | 1234.50 | 1234.50 | 1234.50 | MATCH |  |
 | account 00000002003 ACCT-CURR-CYC-CREDIT | 0.00 | 0.00 | 0.00 | MATCH |  |
 | account 00000002003 ACCT-CURR-CYC-DEBIT | 0.00 | 0.00 | 0.00 | MATCH |  |
-| account 00000002003 updated | True | True | True | MATCH |  |
+| account 00000002003 updated (rewrite effects) | {'ACCT-CURR-CYC-CREDIT': Decimal('0.00'), 'ACCT-CURR-CYC-DEBIT': Decimal('0.00')} | {'ACCT-CURR-CYC-CREDIT': Decimal('0.00'), 'ACCT-CURR-CYC-DEBIT': Decimal('0.00')} | {'ACCT-CURR-CYC-CREDIT': Decimal('0.00'), 'ACCT-CURR-CYC-DEBIT': Decimal('0.00')} | MATCH |  |
 | account 00000002003 unchanged ACCT-ID | 2003 | 2003 | 2003 | MATCH |  |
 | account 00000002003 unchanged ACCT-ACTIVE-STATUS | Y | Y | Y | MATCH |  |
 | account 00000002003 unchanged ACCT-CREDIT-LIMIT | 5000.00 | 5000.00 | 5000.00 | MATCH |  |
@@ -951,7 +951,7 @@ Artifacts: `work/lab/runs/acafa2cb6d7943efa34d31501bed4773/E11`
 | account 00000002004 ACCT-CURR-BAL | 1234.50 | 1234.50 | 1234.50 | UNRESOLVED | INT-Q02 |
 | account 00000002004 ACCT-CURR-CYC-CREDIT | 1234.50 | 1234.50 | 1234.50 | UNRESOLVED | INT-Q02 |
 | account 00000002004 ACCT-CURR-CYC-DEBIT | 0.00 | 0.00 | 0.00 | MATCH |  |
-| account 00000002004 updated | False | False | False | UNRESOLVED | INT-Q02 |
+| account 00000002004 updated (rewrite effects) | {'ACCT-CURR-CYC-CREDIT': Decimal('1234.50'), 'ACCT-CURR-CYC-DEBIT': Decimal('0.00')} | {'ACCT-CURR-CYC-CREDIT': Decimal('1234.50'), 'ACCT-CURR-CYC-DEBIT': Decimal('0.00')} | {'ACCT-CURR-CYC-CREDIT': Decimal('1234.50'), 'ACCT-CURR-CYC-DEBIT': Decimal('0.00')} | UNRESOLVED | INT-Q02 |
 | account 00000002004 unchanged ACCT-ID | 2004 | 2004 | 2004 | MATCH |  |
 | account 00000002004 unchanged ACCT-ACTIVE-STATUS | Y | Y | Y | MATCH |  |
 | account 00000002004 unchanged ACCT-CREDIT-LIMIT | 5000.00 | 5000.00 | 5000.00 | MATCH |  |

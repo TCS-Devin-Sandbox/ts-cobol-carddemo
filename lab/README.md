@@ -147,6 +147,9 @@ The negative-control command itself succeeds only when this exact check holds.
 
 ## What the lab does not prove
 
+- Account "updated (rewrite effects)" compares the observable cycle-field
+  reset, not a physical I/O trace. An unchanged zero-valued record cannot
+  prove whether a REWRITE occurred; balance arithmetic is judged separately.
 - Sequential batch replay only: no CICS execution and no concurrency proof.
 - GnuCOBOL rather than Enterprise COBOL arithmetic; no host overflow/TRUNC proof.
 - No real Db2: the off-host harness and Java shadow lane use PostgreSQL.

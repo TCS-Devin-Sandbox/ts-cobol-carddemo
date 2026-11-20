@@ -18,4 +18,4 @@ lab/e2e/test_ui_plan.py::test_row_10_evidence_popups[chromium] PASSED    [ 83%]
 lab/e2e/test_ui_plan.py::test_row_11_back_keeps_results[chromium] PASSED [ 91%]
 lab/e2e/test_ui_plan.py::test_row_12_reload_clears_results[chromium] PASSED [100%]
 
-======================== 12 passed in 194.33s (0:03:14) ========================
+======================== 12 passed in 207.40s (0:03:27) ========================

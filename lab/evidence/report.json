@@ -1,5 +1,5 @@
 {
-  "baseline_sha": "b2962225b345902e7b6b9f338d17b1e99f23afab",
+  "baseline_sha": "fb7d603daaa170230b85fb71bae86ad810773a5b",
   "clock": "2022-07-05 10:00:00.00",
   "parm": "2022071800",
   "cases": [
@@ -1064,10 +1064,10 @@
       },
       "golden_parity": true,
       "golden_differences": [],
-      "output_dir": "work/lab/runs/acafa2cb6d7943efa34d31501bed4773/i01-baseline",
+      "output_dir": "work/lab/runs/49162b5ef9d640d9b3453f3ebed48267/i01-baseline",
       "timings": {
-        "legacy": 0.1039245199999641,
-        "target": 1.999597057000301
+        "legacy": 0.0979865230001451,
+        "target": 1.8376067670005796
       },
       "values": [
         {
@@ -2067,10 +2067,19 @@
           }
         },
         {
-          "value": "account 00000002001 updated",
-          "required": true,
-          "observed": true,
-          "target": true,
+          "value": "account 00000002001 updated (rewrite effects)",
+          "required": {
+            "ACCT-CURR-CYC-CREDIT": "0.00",
+            "ACCT-CURR-CYC-DEBIT": "0.00"
+          },
+          "observed": {
+            "ACCT-CURR-CYC-CREDIT": "0.00",
+            "ACCT-CURR-CYC-DEBIT": "0.00"
+          },
+          "target": {
+            "ACCT-CURR-CYC-CREDIT": "0.00",
+            "ACCT-CURR-CYC-DEBIT": "0.00"
+          },
           "rules": [
             "INT-R06",
             "INT-Q02",
@@ -2381,10 +2390,19 @@
           }
         },
         {
-          "value": "account 00000002002 updated",
-          "required": false,
-          "observed": false,
-          "target": false,
+          "value": "account 00000002002 updated (rewrite effects)",
+          "required": {
+            "ACCT-CURR-CYC-CREDIT": "2400.00",
+            "ACCT-CURR-CYC-DEBIT": "0.00"
+          },
+          "observed": {
+            "ACCT-CURR-CYC-CREDIT": "2400.00",
+            "ACCT-CURR-CYC-DEBIT": "0.00"
+          },
+          "target": {
+            "ACCT-CURR-CYC-CREDIT": "2400.00",
+            "ACCT-CURR-CYC-DEBIT": "0.00"
+          },
           "rules": [
             "INT-R06",
             "INT-Q02",
@@ -3708,10 +3726,10 @@
       },
       "golden_parity": true,
       "golden_differences": [],
-      "output_dir": "work/lab/runs/acafa2cb6d7943efa34d31501bed4773/i02-tie-half-cent",
+      "output_dir": "work/lab/runs/49162b5ef9d640d9b3453f3ebed48267/i02-tie-half-cent",
       "timings": {
-        "legacy": 0.11228846899985001,
-        "target": 1.954826803999822
+        "legacy": 0.10318917199947464,
+        "target": 2.9974106040008337
       },
       "values": [
         {
@@ -4717,10 +4735,19 @@
           }
         },
         {
-          "value": "account 00000002003 updated",
-          "required": true,
-          "observed": true,
-          "target": true,
+          "value": "account 00000002003 updated (rewrite effects)",
+          "required": {
+            "ACCT-CURR-CYC-CREDIT": "0.00",
+            "ACCT-CURR-CYC-DEBIT": "0.00"
+          },
+          "observed": {
+            "ACCT-CURR-CYC-CREDIT": "0.00",
+            "ACCT-CURR-CYC-DEBIT": "0.00"
+          },
+          "target": {
+            "ACCT-CURR-CYC-CREDIT": "0.00",
+            "ACCT-CURR-CYC-DEBIT": "0.00"
+          },
           "rules": [
             "INT-R06",
             "INT-Q02",
@@ -5031,10 +5058,19 @@
           }
         },
         {
-          "value": "account 00000002004 updated",
-          "required": false,
-          "observed": false,
-          "target": false,
+          "value": "account 00000002004 updated (rewrite effects)",
+          "required": {
+            "ACCT-CURR-CYC-CREDIT": "1234.50",
+            "ACCT-CURR-CYC-DEBIT": "0.00"
+          },
+          "observed": {
+            "ACCT-CURR-CYC-CREDIT": "1234.50",
+            "ACCT-CURR-CYC-DEBIT": "0.00"
+          },
+          "target": {
+            "ACCT-CURR-CYC-CREDIT": "1234.50",
+            "ACCT-CURR-CYC-DEBIT": "0.00"
+          },
           "rules": [
             "INT-R06",
             "INT-Q02",
@@ -5963,10 +5999,10 @@
       },
       "golden_parity": true,
       "golden_differences": [],
-      "output_dir": "work/lab/runs/acafa2cb6d7943efa34d31501bed4773/i03-zero-rate-skipped",
+      "output_dir": "work/lab/runs/49162b5ef9d640d9b3453f3ebed48267/i03-zero-rate-skipped",
       "timings": {
-        "legacy": 0.10223503899987918,
-        "target": 2.025219422000191
+        "legacy": 0.13528487700023106,
+        "target": 3.075108404000275
       },
       "values": [
         {
@@ -6562,10 +6598,19 @@
           }
         },
         {
-          "value": "account 00000002005 updated",
-          "required": false,
-          "observed": false,
-          "target": false,
+          "value": "account 00000002005 updated (rewrite effects)",
+          "required": {
+            "ACCT-CURR-CYC-CREDIT": "1000.00",
+            "ACCT-CURR-CYC-DEBIT": "300.00"
+          },
+          "observed": {
+            "ACCT-CURR-CYC-CREDIT": "1000.00",
+            "ACCT-CURR-CYC-DEBIT": "300.00"
+          },
+          "target": {
+            "ACCT-CURR-CYC-CREDIT": "1000.00",
+            "ACCT-CURR-CYC-DEBIT": "300.00"
+          },
           "rules": [
             "INT-R06",
             "INT-Q02",
@@ -7499,10 +7544,10 @@
       },
       "golden_parity": true,
       "golden_differences": [],
-      "output_dir": "work/lab/runs/acafa2cb6d7943efa34d31501bed4773/i04-default-group-fallback",
+      "output_dir": "work/lab/runs/49162b5ef9d640d9b3453f3ebed48267/i04-default-group-fallback",
       "timings": {
-        "legacy": 0.1031047269998453,
-        "target": 1.9658683669999846
+        "legacy": 0.1348563550000108,
+        "target": 2.149161377999917
       },
       "values": [
         {
@@ -8103,10 +8148,19 @@
           }
         },
         {
-          "value": "account 00000002006 updated",
-          "required": false,
-          "observed": false,
-          "target": false,
+          "value": "account 00000002006 updated (rewrite effects)",
+          "required": {
+            "ACCT-CURR-CYC-CREDIT": "1000.00",
+            "ACCT-CURR-CYC-DEBIT": "0.00"
+          },
+          "observed": {
+            "ACCT-CURR-CYC-CREDIT": "1000.00",
+            "ACCT-CURR-CYC-DEBIT": "0.00"
+          },
+          "target": {
+            "ACCT-CURR-CYC-CREDIT": "1000.00",
+            "ACCT-CURR-CYC-DEBIT": "0.00"
+          },
           "rules": [
             "INT-R06",
             "INT-Q02",
@@ -9280,10 +9334,10 @@
       },
       "golden_parity": true,
       "golden_differences": [],
-      "output_dir": "work/lab/runs/acafa2cb6d7943efa34d31501bed4773/i05-multi-category",
+      "output_dir": "work/lab/runs/49162b5ef9d640d9b3453f3ebed48267/i05-multi-category",
       "timings": {
-        "legacy": 0.08984434399962993,
-        "target": 1.9023321620002207
+        "legacy": 0.10850971499985462,
+        "target": 1.9271383539999078
       },
       "values": [
         {
@@ -10287,10 +10341,19 @@
           }
         },
         {
-          "value": "account 00000002007 updated",
-          "required": false,
-          "observed": false,
-          "target": false,
+          "value": "account 00000002007 updated (rewrite effects)",
+          "required": {
+            "ACCT-CURR-CYC-CREDIT": "1500.00",
+            "ACCT-CURR-CYC-DEBIT": "0.00"
+          },
+          "observed": {
+            "ACCT-CURR-CYC-CREDIT": "1500.00",
+            "ACCT-CURR-CYC-DEBIT": "0.00"
+          },
+          "target": {
+            "ACCT-CURR-CYC-CREDIT": "1500.00",
+            "ACCT-CURR-CYC-DEBIT": "0.00"
+          },
           "rules": [
             "INT-R06",
             "INT-Q02",
@@ -11216,10 +11279,10 @@
       },
       "golden_parity": true,
       "golden_differences": [],
-      "output_dir": "work/lab/runs/acafa2cb6d7943efa34d31501bed4773/i06-negative-balance",
+      "output_dir": "work/lab/runs/49162b5ef9d640d9b3453f3ebed48267/i06-negative-balance",
       "timings": {
-        "legacy": 0.15694083300013517,
-        "target": 2.1001937589999216
+        "legacy": 0.099782328999936,
+        "target": 1.8985588969999299
       },
       "values": [
         {
@@ -11819,10 +11882,19 @@
           }
         },
         {
-          "value": "account 00000002008 updated",
-          "required": false,
-          "observed": false,
-          "target": false,
+          "value": "account 00000002008 updated (rewrite effects)",
+          "required": {
+            "ACCT-CURR-CYC-CREDIT": "0.00",
+            "ACCT-CURR-CYC-DEBIT": "300.00"
+          },
+          "observed": {
+            "ACCT-CURR-CYC-CREDIT": "0.00",
+            "ACCT-CURR-CYC-DEBIT": "300.00"
+          },
+          "target": {
+            "ACCT-CURR-CYC-CREDIT": "0.00",
+            "ACCT-CURR-CYC-DEBIT": "300.00"
+          },
           "rules": [
             "INT-R06",
             "INT-Q02",
@@ -13143,10 +13215,10 @@
       },
       "golden_parity": true,
       "golden_differences": [],
-      "output_dir": "work/lab/runs/acafa2cb6d7943efa34d31501bed4773/i07-nontie-rounding",
+      "output_dir": "work/lab/runs/49162b5ef9d640d9b3453f3ebed48267/i07-nontie-rounding",
       "timings": {
-        "legacy": 0.0950881170001594,
-        "target": 1.8948018999999476
+        "legacy": 0.09657863500069652,
+        "target": 1.9147961990001932
       },
       "values": [
         {
@@ -14146,10 +14218,19 @@
           }
         },
         {
-          "value": "account 00000002009 updated",
-          "required": true,
-          "observed": true,
-          "target": true,
+          "value": "account 00000002009 updated (rewrite effects)",
+          "required": {
+            "ACCT-CURR-CYC-CREDIT": "0.00",
+            "ACCT-CURR-CYC-DEBIT": "0.00"
+          },
+          "observed": {
+            "ACCT-CURR-CYC-CREDIT": "0.00",
+            "ACCT-CURR-CYC-DEBIT": "0.00"
+          },
+          "target": {
+            "ACCT-CURR-CYC-CREDIT": "0.00",
+            "ACCT-CURR-CYC-DEBIT": "0.00"
+          },
           "rules": [
             "INT-R06",
             "INT-Q02",
@@ -14460,10 +14541,19 @@
           }
         },
         {
-          "value": "account 00000002010 updated",
-          "required": false,
-          "observed": false,
-          "target": false,
+          "value": "account 00000002010 updated (rewrite effects)",
+          "required": {
+            "ACCT-CURR-CYC-CREDIT": "777.77",
+            "ACCT-CURR-CYC-DEBIT": "0.00"
+          },
+          "observed": {
+            "ACCT-CURR-CYC-CREDIT": "777.77",
+            "ACCT-CURR-CYC-DEBIT": "0.00"
+          },
+          "target": {
+            "ACCT-CURR-CYC-CREDIT": "777.77",
+            "ACCT-CURR-CYC-DEBIT": "0.00"
+          },
           "rules": [
             "INT-R06",
             "INT-Q02",
@@ -14747,10 +14837,10 @@
       "expectation": {
         "case": "E01",
         "derived_from": [
-          "work/lab/inputs/acafa2cb6d7943efa34d31501bed4773/E01/input/AWS.M2.CARDDEMO.ACCTDATA.PS.txt",
-          "work/lab/inputs/acafa2cb6d7943efa34d31501bed4773/E01/input/AWS.M2.CARDDEMO.CARDXREF.PS.txt",
-          "work/lab/inputs/acafa2cb6d7943efa34d31501bed4773/E01/input/AWS.M2.CARDDEMO.DISCGRP.PS.txt",
-          "work/lab/inputs/acafa2cb6d7943efa34d31501bed4773/E01/input/AWS.M2.CARDDEMO.TCATBALF.PS.txt"
+          "work/lab/inputs/49162b5ef9d640d9b3453f3ebed48267/E01/input/AWS.M2.CARDDEMO.ACCTDATA.PS.txt",
+          "work/lab/inputs/49162b5ef9d640d9b3453f3ebed48267/E01/input/AWS.M2.CARDDEMO.CARDXREF.PS.txt",
+          "work/lab/inputs/49162b5ef9d640d9b3453f3ebed48267/E01/input/AWS.M2.CARDDEMO.DISCGRP.PS.txt",
+          "work/lab/inputs/49162b5ef9d640d9b3453f3ebed48267/E01/input/AWS.M2.CARDDEMO.TCATBALF.PS.txt"
         ],
         "not_sme_signoff": true,
         "return_code": {
@@ -16594,10 +16684,10 @@
       },
       "golden_parity": null,
       "golden_differences": null,
-      "output_dir": "work/lab/runs/acafa2cb6d7943efa34d31501bed4773/E01",
+      "output_dir": "work/lab/runs/49162b5ef9d640d9b3453f3ebed48267/E01",
       "timings": {
-        "legacy": 0.08778829499988205,
-        "target": 1.758756197999901
+        "legacy": 0.09486272500089399,
+        "target": 1.8206055179998657
       },
       "values": [
         {
@@ -18434,10 +18524,19 @@
           }
         },
         {
-          "value": "account 00000002003 updated",
-          "required": true,
-          "observed": true,
-          "target": true,
+          "value": "account 00000002003 updated (rewrite effects)",
+          "required": {
+            "ACCT-CURR-CYC-CREDIT": "0.00",
+            "ACCT-CURR-CYC-DEBIT": "0.00"
+          },
+          "observed": {
+            "ACCT-CURR-CYC-CREDIT": "0.00",
+            "ACCT-CURR-CYC-DEBIT": "0.00"
+          },
+          "target": {
+            "ACCT-CURR-CYC-CREDIT": "0.00",
+            "ACCT-CURR-CYC-DEBIT": "0.00"
+          },
           "rules": [
             "INT-R06",
             "INT-Q02",
@@ -18747,10 +18846,19 @@
           }
         },
         {
-          "value": "account 00000002004 updated",
-          "required": true,
-          "observed": true,
-          "target": true,
+          "value": "account 00000002004 updated (rewrite effects)",
+          "required": {
+            "ACCT-CURR-CYC-CREDIT": "0.00",
+            "ACCT-CURR-CYC-DEBIT": "0.00"
+          },
+          "observed": {
+            "ACCT-CURR-CYC-CREDIT": "0.00",
+            "ACCT-CURR-CYC-DEBIT": "0.00"
+          },
+          "target": {
+            "ACCT-CURR-CYC-CREDIT": "0.00",
+            "ACCT-CURR-CYC-DEBIT": "0.00"
+          },
           "rules": [
             "INT-R06",
             "INT-Q02",
@@ -19059,10 +19167,19 @@
           }
         },
         {
-          "value": "account 00000002005 updated",
-          "required": true,
-          "observed": true,
-          "target": true,
+          "value": "account 00000002005 updated (rewrite effects)",
+          "required": {
+            "ACCT-CURR-CYC-CREDIT": "0.00",
+            "ACCT-CURR-CYC-DEBIT": "0.00"
+          },
+          "observed": {
+            "ACCT-CURR-CYC-CREDIT": "0.00",
+            "ACCT-CURR-CYC-DEBIT": "0.00"
+          },
+          "target": {
+            "ACCT-CURR-CYC-CREDIT": "0.00",
+            "ACCT-CURR-CYC-DEBIT": "0.00"
+          },
           "rules": [
             "INT-R06",
             "INT-Q02",
@@ -19373,10 +19490,19 @@
           }
         },
         {
-          "value": "account 00000002006 updated",
-          "required": false,
-          "observed": false,
-          "target": false,
+          "value": "account 00000002006 updated (rewrite effects)",
+          "required": {
+            "ACCT-CURR-CYC-CREDIT": "1235.50",
+            "ACCT-CURR-CYC-DEBIT": "0.00"
+          },
+          "observed": {
+            "ACCT-CURR-CYC-CREDIT": "1235.50",
+            "ACCT-CURR-CYC-DEBIT": "0.00"
+          },
+          "target": {
+            "ACCT-CURR-CYC-CREDIT": "1235.50",
+            "ACCT-CURR-CYC-DEBIT": "0.00"
+          },
           "rules": [
             "INT-R06",
             "INT-Q02",
@@ -19665,10 +19791,10 @@
       "expectation": {
         "case": "E02",
         "derived_from": [
-          "work/lab/inputs/acafa2cb6d7943efa34d31501bed4773/E02/input/AWS.M2.CARDDEMO.ACCTDATA.PS.txt",
-          "work/lab/inputs/acafa2cb6d7943efa34d31501bed4773/E02/input/AWS.M2.CARDDEMO.CARDXREF.PS.txt",
-          "work/lab/inputs/acafa2cb6d7943efa34d31501bed4773/E02/input/AWS.M2.CARDDEMO.DISCGRP.PS.txt",
-          "work/lab/inputs/acafa2cb6d7943efa34d31501bed4773/E02/input/AWS.M2.CARDDEMO.TCATBALF.PS.txt"
+          "work/lab/inputs/49162b5ef9d640d9b3453f3ebed48267/E02/input/AWS.M2.CARDDEMO.ACCTDATA.PS.txt",
+          "work/lab/inputs/49162b5ef9d640d9b3453f3ebed48267/E02/input/AWS.M2.CARDDEMO.CARDXREF.PS.txt",
+          "work/lab/inputs/49162b5ef9d640d9b3453f3ebed48267/E02/input/AWS.M2.CARDDEMO.DISCGRP.PS.txt",
+          "work/lab/inputs/49162b5ef9d640d9b3453f3ebed48267/E02/input/AWS.M2.CARDDEMO.TCATBALF.PS.txt"
         ],
         "not_sme_signoff": true,
         "return_code": {
@@ -21114,10 +21240,10 @@
       },
       "golden_parity": null,
       "golden_differences": null,
-      "output_dir": "work/lab/runs/acafa2cb6d7943efa34d31501bed4773/E02",
+      "output_dir": "work/lab/runs/49162b5ef9d640d9b3453f3ebed48267/E02",
       "timings": {
-        "legacy": 0.09908886700031871,
-        "target": 1.7220737479997297
+        "legacy": 0.09555507699951704,
+        "target": 1.8755679609994331
       },
       "values": [
         {
@@ -22527,10 +22653,19 @@
           }
         },
         {
-          "value": "account 00000002003 updated",
-          "required": true,
-          "observed": true,
-          "target": true,
+          "value": "account 00000002003 updated (rewrite effects)",
+          "required": {
+            "ACCT-CURR-CYC-CREDIT": "0.00",
+            "ACCT-CURR-CYC-DEBIT": "0.00"
+          },
+          "observed": {
+            "ACCT-CURR-CYC-CREDIT": "0.00",
+            "ACCT-CURR-CYC-DEBIT": "0.00"
+          },
+          "target": {
+            "ACCT-CURR-CYC-CREDIT": "0.00",
+            "ACCT-CURR-CYC-DEBIT": "0.00"
+          },
           "rules": [
             "INT-R06",
             "INT-Q02",
@@ -22841,10 +22976,19 @@
           }
         },
         {
-          "value": "account 00000002004 updated",
-          "required": false,
-          "observed": false,
-          "target": false,
+          "value": "account 00000002004 updated (rewrite effects)",
+          "required": {
+            "ACCT-CURR-CYC-CREDIT": "1234.50",
+            "ACCT-CURR-CYC-DEBIT": "0.00"
+          },
+          "observed": {
+            "ACCT-CURR-CYC-CREDIT": "1234.50",
+            "ACCT-CURR-CYC-DEBIT": "0.00"
+          },
+          "target": {
+            "ACCT-CURR-CYC-CREDIT": "1234.50",
+            "ACCT-CURR-CYC-DEBIT": "0.00"
+          },
           "rules": [
             "INT-R06",
             "INT-Q02",
@@ -23155,10 +23299,19 @@
           }
         },
         {
-          "value": "account 00000002005 updated",
-          "required": false,
-          "observed": false,
-          "target": false,
+          "value": "account 00000002005 updated (rewrite effects)",
+          "required": {
+            "ACCT-CURR-CYC-CREDIT": "1235.50",
+            "ACCT-CURR-CYC-DEBIT": "0.00"
+          },
+          "observed": {
+            "ACCT-CURR-CYC-CREDIT": "1235.50",
+            "ACCT-CURR-CYC-DEBIT": "0.00"
+          },
+          "target": {
+            "ACCT-CURR-CYC-CREDIT": "1235.50",
+            "ACCT-CURR-CYC-DEBIT": "0.00"
+          },
           "rules": [
             "INT-R06",
             "INT-Q02",
@@ -23466,10 +23619,10 @@
       "expectation": {
         "case": "E03",
         "derived_from": [
-          "work/lab/inputs/acafa2cb6d7943efa34d31501bed4773/E03/input/AWS.M2.CARDDEMO.ACCTDATA.PS.txt",
-          "work/lab/inputs/acafa2cb6d7943efa34d31501bed4773/E03/input/AWS.M2.CARDDEMO.CARDXREF.PS.txt",
-          "work/lab/inputs/acafa2cb6d7943efa34d31501bed4773/E03/input/AWS.M2.CARDDEMO.DISCGRP.PS.txt",
-          "work/lab/inputs/acafa2cb6d7943efa34d31501bed4773/E03/input/AWS.M2.CARDDEMO.TCATBALF.PS.txt"
+          "work/lab/inputs/49162b5ef9d640d9b3453f3ebed48267/E03/input/AWS.M2.CARDDEMO.ACCTDATA.PS.txt",
+          "work/lab/inputs/49162b5ef9d640d9b3453f3ebed48267/E03/input/AWS.M2.CARDDEMO.CARDXREF.PS.txt",
+          "work/lab/inputs/49162b5ef9d640d9b3453f3ebed48267/E03/input/AWS.M2.CARDDEMO.DISCGRP.PS.txt",
+          "work/lab/inputs/49162b5ef9d640d9b3453f3ebed48267/E03/input/AWS.M2.CARDDEMO.TCATBALF.PS.txt"
         ],
         "not_sme_signoff": true,
         "return_code": {
@@ -24532,10 +24685,10 @@
       },
       "golden_parity": null,
       "golden_differences": null,
-      "output_dir": "work/lab/runs/acafa2cb6d7943efa34d31501bed4773/E03",
+      "output_dir": "work/lab/runs/49162b5ef9d640d9b3453f3ebed48267/E03",
       "timings": {
-        "legacy": 0.09675513499996669,
-        "target": 1.8430413950000002
+        "legacy": 0.0949724279998918,
+        "target": 1.9747197249998862
       },
       "values": [
         {
@@ -25549,10 +25702,19 @@
           }
         },
         {
-          "value": "account 00000002003 updated",
-          "required": true,
-          "observed": true,
-          "target": true,
+          "value": "account 00000002003 updated (rewrite effects)",
+          "required": {
+            "ACCT-CURR-CYC-CREDIT": "0.00",
+            "ACCT-CURR-CYC-DEBIT": "0.00"
+          },
+          "observed": {
+            "ACCT-CURR-CYC-CREDIT": "0.00",
+            "ACCT-CURR-CYC-DEBIT": "0.00"
+          },
+          "target": {
+            "ACCT-CURR-CYC-CREDIT": "0.00",
+            "ACCT-CURR-CYC-DEBIT": "0.00"
+          },
           "rules": [
             "INT-R06",
             "INT-Q02",
@@ -25863,10 +26025,19 @@
           }
         },
         {
-          "value": "account 00000002004 updated",
-          "required": false,
-          "observed": false,
-          "target": false,
+          "value": "account 00000002004 updated (rewrite effects)",
+          "required": {
+            "ACCT-CURR-CYC-CREDIT": "1234.50",
+            "ACCT-CURR-CYC-DEBIT": "0.00"
+          },
+          "observed": {
+            "ACCT-CURR-CYC-CREDIT": "1234.50",
+            "ACCT-CURR-CYC-DEBIT": "0.00"
+          },
+          "target": {
+            "ACCT-CURR-CYC-CREDIT": "1234.50",
+            "ACCT-CURR-CYC-DEBIT": "0.00"
+          },
           "rules": [
             "INT-R06",
             "INT-Q02",
@@ -26168,10 +26339,10 @@
       "expectation": {
         "case": "E04",
         "derived_from": [
-          "work/lab/inputs/acafa2cb6d7943efa34d31501bed4773/E04/input/AWS.M2.CARDDEMO.ACCTDATA.PS.txt",
-          "work/lab/inputs/acafa2cb6d7943efa34d31501bed4773/E04/input/AWS.M2.CARDDEMO.CARDXREF.PS.txt",
-          "work/lab/inputs/acafa2cb6d7943efa34d31501bed4773/E04/input/AWS.M2.CARDDEMO.DISCGRP.PS.txt",
-          "work/lab/inputs/acafa2cb6d7943efa34d31501bed4773/E04/input/AWS.M2.CARDDEMO.TCATBALF.PS.txt"
+          "work/lab/inputs/49162b5ef9d640d9b3453f3ebed48267/E04/input/AWS.M2.CARDDEMO.ACCTDATA.PS.txt",
+          "work/lab/inputs/49162b5ef9d640d9b3453f3ebed48267/E04/input/AWS.M2.CARDDEMO.CARDXREF.PS.txt",
+          "work/lab/inputs/49162b5ef9d640d9b3453f3ebed48267/E04/input/AWS.M2.CARDDEMO.DISCGRP.PS.txt",
+          "work/lab/inputs/49162b5ef9d640d9b3453f3ebed48267/E04/input/AWS.M2.CARDDEMO.TCATBALF.PS.txt"
         ],
         "not_sme_signoff": true,
         "return_code": {
@@ -27219,10 +27390,10 @@
       },
       "golden_parity": null,
       "golden_differences": null,
-      "output_dir": "work/lab/runs/acafa2cb6d7943efa34d31501bed4773/E04",
+      "output_dir": "work/lab/runs/49162b5ef9d640d9b3453f3ebed48267/E04",
       "timings": {
-        "legacy": 0.09772404100021959,
-        "target": 1.7925997219999772
+        "legacy": 0.08948905800025386,
+        "target": 1.8572452440002962
       },
       "values": [
         {
@@ -28232,10 +28403,19 @@
           }
         },
         {
-          "value": "account 00000002003 updated",
-          "required": true,
-          "observed": true,
-          "target": true,
+          "value": "account 00000002003 updated (rewrite effects)",
+          "required": {
+            "ACCT-CURR-CYC-CREDIT": "0.00",
+            "ACCT-CURR-CYC-DEBIT": "0.00"
+          },
+          "observed": {
+            "ACCT-CURR-CYC-CREDIT": "0.00",
+            "ACCT-CURR-CYC-DEBIT": "0.00"
+          },
+          "target": {
+            "ACCT-CURR-CYC-CREDIT": "0.00",
+            "ACCT-CURR-CYC-DEBIT": "0.00"
+          },
           "rules": [
             "INT-R06",
             "INT-Q02",
@@ -28546,10 +28726,19 @@
           }
         },
         {
-          "value": "account 00000002004 updated",
-          "required": false,
-          "observed": false,
-          "target": false,
+          "value": "account 00000002004 updated (rewrite effects)",
+          "required": {
+            "ACCT-CURR-CYC-CREDIT": "1234.50",
+            "ACCT-CURR-CYC-DEBIT": "0.00"
+          },
+          "observed": {
+            "ACCT-CURR-CYC-CREDIT": "1234.50",
+            "ACCT-CURR-CYC-DEBIT": "0.00"
+          },
+          "target": {
+            "ACCT-CURR-CYC-CREDIT": "1234.50",
+            "ACCT-CURR-CYC-DEBIT": "0.00"
+          },
           "rules": [
             "INT-R06",
             "INT-Q02",
@@ -28832,10 +29021,10 @@
       "expectation": {
         "case": "E05",
         "derived_from": [
-          "work/lab/inputs/acafa2cb6d7943efa34d31501bed4773/E05/input/AWS.M2.CARDDEMO.ACCTDATA.PS.txt",
-          "work/lab/inputs/acafa2cb6d7943efa34d31501bed4773/E05/input/AWS.M2.CARDDEMO.CARDXREF.PS.txt",
-          "work/lab/inputs/acafa2cb6d7943efa34d31501bed4773/E05/input/AWS.M2.CARDDEMO.DISCGRP.PS.txt",
-          "work/lab/inputs/acafa2cb6d7943efa34d31501bed4773/E05/input/AWS.M2.CARDDEMO.TCATBALF.PS.txt"
+          "work/lab/inputs/49162b5ef9d640d9b3453f3ebed48267/E05/input/AWS.M2.CARDDEMO.ACCTDATA.PS.txt",
+          "work/lab/inputs/49162b5ef9d640d9b3453f3ebed48267/E05/input/AWS.M2.CARDDEMO.CARDXREF.PS.txt",
+          "work/lab/inputs/49162b5ef9d640d9b3453f3ebed48267/E05/input/AWS.M2.CARDDEMO.DISCGRP.PS.txt",
+          "work/lab/inputs/49162b5ef9d640d9b3453f3ebed48267/E05/input/AWS.M2.CARDDEMO.TCATBALF.PS.txt"
         ],
         "not_sme_signoff": true,
         "return_code": {
@@ -28995,7 +29184,7 @@
         "transactions": [],
         "accounts": {},
         "failure": {
-          "run": "df1b0ed5-a15c-472c-afe3-b077069071d1",
+          "run": "2e10de9c-f6a9-4d34-9c50-921187073f58",
           "category": "REQUIRED_LOOKUP_MISSING"
         },
         "files": [
@@ -29069,10 +29258,10 @@
       },
       "golden_parity": null,
       "golden_differences": null,
-      "output_dir": "work/lab/runs/acafa2cb6d7943efa34d31501bed4773/E05",
+      "output_dir": "work/lab/runs/49162b5ef9d640d9b3453f3ebed48267/E05",
       "timings": {
-        "legacy": 0.08600836000005074,
-        "target": 1.6030258109999522
+        "legacy": 0.09379821000038646,
+        "target": 1.626406002999829
       },
       "values": [
         {
@@ -29166,10 +29355,10 @@
       "expectation": {
         "case": "E06",
         "derived_from": [
-          "work/lab/inputs/acafa2cb6d7943efa34d31501bed4773/E06/input/AWS.M2.CARDDEMO.ACCTDATA.PS.txt",
-          "work/lab/inputs/acafa2cb6d7943efa34d31501bed4773/E06/input/AWS.M2.CARDDEMO.CARDXREF.PS.txt",
-          "work/lab/inputs/acafa2cb6d7943efa34d31501bed4773/E06/input/AWS.M2.CARDDEMO.DISCGRP.PS.txt",
-          "work/lab/inputs/acafa2cb6d7943efa34d31501bed4773/E06/input/AWS.M2.CARDDEMO.TCATBALF.PS.txt"
+          "work/lab/inputs/49162b5ef9d640d9b3453f3ebed48267/E06/input/AWS.M2.CARDDEMO.ACCTDATA.PS.txt",
+          "work/lab/inputs/49162b5ef9d640d9b3453f3ebed48267/E06/input/AWS.M2.CARDDEMO.CARDXREF.PS.txt",
+          "work/lab/inputs/49162b5ef9d640d9b3453f3ebed48267/E06/input/AWS.M2.CARDDEMO.DISCGRP.PS.txt",
+          "work/lab/inputs/49162b5ef9d640d9b3453f3ebed48267/E06/input/AWS.M2.CARDDEMO.TCATBALF.PS.txt"
         ],
         "not_sme_signoff": true,
         "return_code": {
@@ -29357,7 +29546,7 @@
         "transactions": [],
         "accounts": {},
         "failure": {
-          "run": "b172db0f-cfa7-4c6a-b741-329e3bc2db66",
+          "run": "2097e25f-f17c-41fb-9523-9288516fb80c",
           "category": "REQUIRED_LOOKUP_MISSING"
         },
         "files": [
@@ -29431,10 +29620,10 @@
       },
       "golden_parity": null,
       "golden_differences": null,
-      "output_dir": "work/lab/runs/acafa2cb6d7943efa34d31501bed4773/E06",
+      "output_dir": "work/lab/runs/49162b5ef9d640d9b3453f3ebed48267/E06",
       "timings": {
-        "legacy": 0.08979372199974023,
-        "target": 1.6019859020002514
+        "legacy": 0.08910904899948946,
+        "target": 1.668251106999378
       },
       "values": [
         {
@@ -29529,10 +29718,10 @@
       "expectation": {
         "case": "E07",
         "derived_from": [
-          "work/lab/inputs/acafa2cb6d7943efa34d31501bed4773/E07/input/AWS.M2.CARDDEMO.ACCTDATA.PS.txt",
-          "work/lab/inputs/acafa2cb6d7943efa34d31501bed4773/E07/input/AWS.M2.CARDDEMO.CARDXREF.PS.txt",
-          "work/lab/inputs/acafa2cb6d7943efa34d31501bed4773/E07/input/AWS.M2.CARDDEMO.DISCGRP.PS.txt",
-          "work/lab/inputs/acafa2cb6d7943efa34d31501bed4773/E07/input/AWS.M2.CARDDEMO.TCATBALF.PS.txt"
+          "work/lab/inputs/49162b5ef9d640d9b3453f3ebed48267/E07/input/AWS.M2.CARDDEMO.ACCTDATA.PS.txt",
+          "work/lab/inputs/49162b5ef9d640d9b3453f3ebed48267/E07/input/AWS.M2.CARDDEMO.CARDXREF.PS.txt",
+          "work/lab/inputs/49162b5ef9d640d9b3453f3ebed48267/E07/input/AWS.M2.CARDDEMO.DISCGRP.PS.txt",
+          "work/lab/inputs/49162b5ef9d640d9b3453f3ebed48267/E07/input/AWS.M2.CARDDEMO.TCATBALF.PS.txt"
         ],
         "not_sme_signoff": true,
         "return_code": {
@@ -29722,7 +29911,7 @@
         "transactions": [],
         "accounts": {},
         "failure": {
-          "run": "510cf1eb-bd01-439f-addd-1c62a844b7c6",
+          "run": "97d68bac-0002-4486-a9af-9bf16e08e8a7",
           "category": "REQUIRED_LOOKUP_MISSING"
         },
         "files": [
@@ -29796,10 +29985,10 @@
       },
       "golden_parity": null,
       "golden_differences": null,
-      "output_dir": "work/lab/runs/acafa2cb6d7943efa34d31501bed4773/E07",
+      "output_dir": "work/lab/runs/49162b5ef9d640d9b3453f3ebed48267/E07",
       "timings": {
-        "legacy": 0.09427278699968156,
-        "target": 1.6467647000004035
+        "legacy": 0.0912337950003348,
+        "target": 1.6649723159998757
       },
       "values": [
         {
@@ -29910,10 +30099,10 @@
       "expectation": {
         "case": "E08-second",
         "derived_from": [
-          "work/lab/runs/acafa2cb6d7943efa34d31501bed4773/E08/scratch/interest/E08-second/input/AWS.M2.CARDDEMO.ACCTDATA.PS.txt",
-          "work/lab/runs/acafa2cb6d7943efa34d31501bed4773/E08/scratch/interest/E08-second/input/AWS.M2.CARDDEMO.CARDXREF.PS.txt",
-          "work/lab/runs/acafa2cb6d7943efa34d31501bed4773/E08/scratch/interest/E08-second/input/AWS.M2.CARDDEMO.DISCGRP.PS.txt",
-          "work/lab/runs/acafa2cb6d7943efa34d31501bed4773/E08/scratch/interest/E08-second/input/AWS.M2.CARDDEMO.TCATBALF.PS.txt"
+          "work/lab/runs/49162b5ef9d640d9b3453f3ebed48267/E08/scratch/interest/E08-second/input/AWS.M2.CARDDEMO.ACCTDATA.PS.txt",
+          "work/lab/runs/49162b5ef9d640d9b3453f3ebed48267/E08/scratch/interest/E08-second/input/AWS.M2.CARDDEMO.CARDXREF.PS.txt",
+          "work/lab/runs/49162b5ef9d640d9b3453f3ebed48267/E08/scratch/interest/E08-second/input/AWS.M2.CARDDEMO.DISCGRP.PS.txt",
+          "work/lab/runs/49162b5ef9d640d9b3453f3ebed48267/E08/scratch/interest/E08-second/input/AWS.M2.CARDDEMO.TCATBALF.PS.txt"
         ],
         "not_sme_signoff": true,
         "return_code": {
@@ -30898,12 +31087,12 @@
       },
       "golden_parity": null,
       "golden_differences": null,
-      "output_dir": "work/lab/runs/acafa2cb6d7943efa34d31501bed4773/E08",
+      "output_dir": "work/lab/runs/49162b5ef9d640d9b3453f3ebed48267/E08",
       "timings": {
-        "legacy": 0.09125022599982913,
-        "legacy-second": 0.011345671000071889,
-        "target": 1.767762712000149,
-        "target-second": 1.7567010930001743
+        "legacy": 0.08961763299976155,
+        "legacy-second": 0.012083701999472396,
+        "target": 1.756733403999533,
+        "target-second": 1.906689360999735
       },
       "values": [
         {
@@ -31903,10 +32092,19 @@
           }
         },
         {
-          "value": "account 00000002003 updated",
-          "required": true,
-          "observed": true,
-          "target": true,
+          "value": "account 00000002003 updated (rewrite effects)",
+          "required": {
+            "ACCT-CURR-CYC-CREDIT": "0.00",
+            "ACCT-CURR-CYC-DEBIT": "0.00"
+          },
+          "observed": {
+            "ACCT-CURR-CYC-CREDIT": "0.00",
+            "ACCT-CURR-CYC-DEBIT": "0.00"
+          },
+          "target": {
+            "ACCT-CURR-CYC-CREDIT": "0.00",
+            "ACCT-CURR-CYC-DEBIT": "0.00"
+          },
           "rules": [
             "INT-R06",
             "INT-Q02",
@@ -32217,10 +32415,19 @@
           }
         },
         {
-          "value": "account 00000002004 updated",
-          "required": false,
-          "observed": false,
-          "target": false,
+          "value": "account 00000002004 updated (rewrite effects)",
+          "required": {
+            "ACCT-CURR-CYC-CREDIT": "1234.50",
+            "ACCT-CURR-CYC-DEBIT": "0.00"
+          },
+          "observed": {
+            "ACCT-CURR-CYC-CREDIT": "1234.50",
+            "ACCT-CURR-CYC-DEBIT": "0.00"
+          },
+          "target": {
+            "ACCT-CURR-CYC-CREDIT": "1234.50",
+            "ACCT-CURR-CYC-DEBIT": "0.00"
+          },
           "rules": [
             "INT-R06",
             "INT-Q02",
@@ -32510,10 +32717,10 @@
         "expectation": {
           "case": "E08",
           "derived_from": [
-            "work/lab/inputs/acafa2cb6d7943efa34d31501bed4773/E08/input/AWS.M2.CARDDEMO.ACCTDATA.PS.txt",
-            "work/lab/inputs/acafa2cb6d7943efa34d31501bed4773/E08/input/AWS.M2.CARDDEMO.CARDXREF.PS.txt",
-            "work/lab/inputs/acafa2cb6d7943efa34d31501bed4773/E08/input/AWS.M2.CARDDEMO.DISCGRP.PS.txt",
-            "work/lab/inputs/acafa2cb6d7943efa34d31501bed4773/E08/input/AWS.M2.CARDDEMO.TCATBALF.PS.txt"
+            "work/lab/inputs/49162b5ef9d640d9b3453f3ebed48267/E08/input/AWS.M2.CARDDEMO.ACCTDATA.PS.txt",
+            "work/lab/inputs/49162b5ef9d640d9b3453f3ebed48267/E08/input/AWS.M2.CARDDEMO.CARDXREF.PS.txt",
+            "work/lab/inputs/49162b5ef9d640d9b3453f3ebed48267/E08/input/AWS.M2.CARDDEMO.DISCGRP.PS.txt",
+            "work/lab/inputs/49162b5ef9d640d9b3453f3ebed48267/E08/input/AWS.M2.CARDDEMO.TCATBALF.PS.txt"
           ],
           "not_sme_signoff": true,
           "return_code": {
@@ -34557,10 +34764,19 @@
             }
           },
           {
-            "value": "account 00000002003 updated",
-            "required": true,
-            "observed": true,
-            "target": true,
+            "value": "account 00000002003 updated (rewrite effects)",
+            "required": {
+              "ACCT-CURR-CYC-CREDIT": "0.00",
+              "ACCT-CURR-CYC-DEBIT": "0.00"
+            },
+            "observed": {
+              "ACCT-CURR-CYC-CREDIT": "0.00",
+              "ACCT-CURR-CYC-DEBIT": "0.00"
+            },
+            "target": {
+              "ACCT-CURR-CYC-CREDIT": "0.00",
+              "ACCT-CURR-CYC-DEBIT": "0.00"
+            },
             "rules": [
               "INT-R06",
               "INT-Q02",
@@ -34871,10 +35087,19 @@
             }
           },
           {
-            "value": "account 00000002004 updated",
-            "required": false,
-            "observed": false,
-            "target": false,
+            "value": "account 00000002004 updated (rewrite effects)",
+            "required": {
+              "ACCT-CURR-CYC-CREDIT": "1234.50",
+              "ACCT-CURR-CYC-DEBIT": "0.00"
+            },
+            "observed": {
+              "ACCT-CURR-CYC-CREDIT": "1234.50",
+              "ACCT-CURR-CYC-DEBIT": "0.00"
+            },
+            "target": {
+              "ACCT-CURR-CYC-CREDIT": "1234.50",
+              "ACCT-CURR-CYC-DEBIT": "0.00"
+            },
             "rules": [
               "INT-R06",
               "INT-Q02",
@@ -35182,10 +35407,10 @@
       "expectation": {
         "case": "E09",
         "derived_from": [
-          "work/lab/inputs/acafa2cb6d7943efa34d31501bed4773/E09/input/AWS.M2.CARDDEMO.ACCTDATA.PS.txt",
-          "work/lab/inputs/acafa2cb6d7943efa34d31501bed4773/E09/input/AWS.M2.CARDDEMO.CARDXREF.PS.txt",
-          "work/lab/inputs/acafa2cb6d7943efa34d31501bed4773/E09/input/AWS.M2.CARDDEMO.DISCGRP.PS.txt",
-          "work/lab/inputs/acafa2cb6d7943efa34d31501bed4773/E09/input/AWS.M2.CARDDEMO.TCATBALF.PS.txt"
+          "work/lab/inputs/49162b5ef9d640d9b3453f3ebed48267/E09/input/AWS.M2.CARDDEMO.ACCTDATA.PS.txt",
+          "work/lab/inputs/49162b5ef9d640d9b3453f3ebed48267/E09/input/AWS.M2.CARDDEMO.CARDXREF.PS.txt",
+          "work/lab/inputs/49162b5ef9d640d9b3453f3ebed48267/E09/input/AWS.M2.CARDDEMO.DISCGRP.PS.txt",
+          "work/lab/inputs/49162b5ef9d640d9b3453f3ebed48267/E09/input/AWS.M2.CARDDEMO.TCATBALF.PS.txt"
         ],
         "not_sme_signoff": true,
         "return_code": {
@@ -36033,7 +36258,7 @@
         "transactions": [],
         "accounts": {},
         "failure": {
-          "run": "cfbb4d31-2900-4d0f-a43f-9d307f42340f",
+          "run": "84f7b0d5-f1ac-43c8-9083-5039cd76c835",
           "category": "TARGET_INTAKE_HELD"
         },
         "files": [
@@ -36112,10 +36337,10 @@
       },
       "golden_parity": null,
       "golden_differences": null,
-      "output_dir": "work/lab/runs/acafa2cb6d7943efa34d31501bed4773/E09",
+      "output_dir": "work/lab/runs/49162b5ef9d640d9b3453f3ebed48267/E09",
       "timings": {
-        "legacy": 0.0935069699999076,
-        "target": 1.5366172090002692
+        "legacy": 0.09794995799984463,
+        "target": 1.5308964449995983
       },
       "values": [
         {
@@ -36212,10 +36437,10 @@
       "expectation": {
         "case": "E10",
         "derived_from": [
-          "work/lab/inputs/acafa2cb6d7943efa34d31501bed4773/E10/input/AWS.M2.CARDDEMO.ACCTDATA.PS.txt",
-          "work/lab/inputs/acafa2cb6d7943efa34d31501bed4773/E10/input/AWS.M2.CARDDEMO.CARDXREF.PS.txt",
-          "work/lab/inputs/acafa2cb6d7943efa34d31501bed4773/E10/input/AWS.M2.CARDDEMO.DISCGRP.PS.txt",
-          "work/lab/inputs/acafa2cb6d7943efa34d31501bed4773/E10/input/AWS.M2.CARDDEMO.TCATBALF.PS.txt"
+          "work/lab/inputs/49162b5ef9d640d9b3453f3ebed48267/E10/input/AWS.M2.CARDDEMO.ACCTDATA.PS.txt",
+          "work/lab/inputs/49162b5ef9d640d9b3453f3ebed48267/E10/input/AWS.M2.CARDDEMO.CARDXREF.PS.txt",
+          "work/lab/inputs/49162b5ef9d640d9b3453f3ebed48267/E10/input/AWS.M2.CARDDEMO.DISCGRP.PS.txt",
+          "work/lab/inputs/49162b5ef9d640d9b3453f3ebed48267/E10/input/AWS.M2.CARDDEMO.TCATBALF.PS.txt"
         ],
         "not_sme_signoff": true,
         "return_code": {
@@ -37263,10 +37488,10 @@
       },
       "golden_parity": null,
       "golden_differences": null,
-      "output_dir": "work/lab/runs/acafa2cb6d7943efa34d31501bed4773/E10",
+      "output_dir": "work/lab/runs/49162b5ef9d640d9b3453f3ebed48267/E10",
       "timings": {
-        "legacy": 0.0940417259998867,
-        "target": 1.8256436550000217
+        "legacy": 0.10340645600081189,
+        "target": 1.906515663999926
       },
       "values": [
         {
@@ -38274,10 +38499,19 @@
           }
         },
         {
-          "value": "account 00000002003 updated",
-          "required": true,
-          "observed": true,
-          "target": true,
+          "value": "account 00000002003 updated (rewrite effects)",
+          "required": {
+            "ACCT-CURR-CYC-CREDIT": "0.00",
+            "ACCT-CURR-CYC-DEBIT": "0.00"
+          },
+          "observed": {
+            "ACCT-CURR-CYC-CREDIT": "0.00",
+            "ACCT-CURR-CYC-DEBIT": "0.00"
+          },
+          "target": {
+            "ACCT-CURR-CYC-CREDIT": "0.00",
+            "ACCT-CURR-CYC-DEBIT": "0.00"
+          },
           "rules": [
             "INT-R06",
             "INT-Q02",
@@ -38586,10 +38820,19 @@
           }
         },
         {
-          "value": "account 00000002004 updated",
-          "required": false,
-          "observed": false,
-          "target": false,
+          "value": "account 00000002004 updated (rewrite effects)",
+          "required": {
+            "ACCT-CURR-CYC-CREDIT": "1234.50",
+            "ACCT-CURR-CYC-DEBIT": "0.00"
+          },
+          "observed": {
+            "ACCT-CURR-CYC-CREDIT": "1234.50",
+            "ACCT-CURR-CYC-DEBIT": "0.00"
+          },
+          "target": {
+            "ACCT-CURR-CYC-CREDIT": "1234.50",
+            "ACCT-CURR-CYC-DEBIT": "0.00"
+          },
           "rules": [
             "INT-R06",
             "INT-Q02",
@@ -38870,10 +39113,10 @@
       "expectation": {
         "case": "E11",
         "derived_from": [
-          "work/lab/inputs/acafa2cb6d7943efa34d31501bed4773/E11/input/AWS.M2.CARDDEMO.ACCTDATA.PS.txt",
-          "work/lab/inputs/acafa2cb6d7943efa34d31501bed4773/E11/input/AWS.M2.CARDDEMO.CARDXREF.PS.txt",
-          "work/lab/inputs/acafa2cb6d7943efa34d31501bed4773/E11/input/AWS.M2.CARDDEMO.DISCGRP.PS.txt",
-          "work/lab/inputs/acafa2cb6d7943efa34d31501bed4773/E11/input/AWS.M2.CARDDEMO.TCATBALF.PS.txt"
+          "work/lab/inputs/49162b5ef9d640d9b3453f3ebed48267/E11/input/AWS.M2.CARDDEMO.ACCTDATA.PS.txt",
+          "work/lab/inputs/49162b5ef9d640d9b3453f3ebed48267/E11/input/AWS.M2.CARDDEMO.CARDXREF.PS.txt",
+          "work/lab/inputs/49162b5ef9d640d9b3453f3ebed48267/E11/input/AWS.M2.CARDDEMO.DISCGRP.PS.txt",
+          "work/lab/inputs/49162b5ef9d640d9b3453f3ebed48267/E11/input/AWS.M2.CARDDEMO.TCATBALF.PS.txt"
         ],
         "not_sme_signoff": true,
         "return_code": {
@@ -39921,10 +40164,10 @@
       },
       "golden_parity": null,
       "golden_differences": null,
-      "output_dir": "work/lab/runs/acafa2cb6d7943efa34d31501bed4773/E11",
+      "output_dir": "work/lab/runs/49162b5ef9d640d9b3453f3ebed48267/E11",
       "timings": {
-        "legacy": 0.09776642799988622,
-        "target": 1.8575526449999415
+        "legacy": 0.09518289799962076,
+        "target": 1.8051539959997172
       },
       "values": [
         {
@@ -40924,10 +41167,19 @@
           }
         },
         {
-          "value": "account 00000002003 updated",
-          "required": true,
-          "observed": true,
-          "target": true,
+          "value": "account 00000002003 updated (rewrite effects)",
+          "required": {
+            "ACCT-CURR-CYC-CREDIT": "0.00",
+            "ACCT-CURR-CYC-DEBIT": "0.00"
+          },
+          "observed": {
+            "ACCT-CURR-CYC-CREDIT": "0.00",
+            "ACCT-CURR-CYC-DEBIT": "0.00"
+          },
+          "target": {
+            "ACCT-CURR-CYC-CREDIT": "0.00",
+            "ACCT-CURR-CYC-DEBIT": "0.00"
+          },
           "rules": [
             "INT-R06",
             "INT-Q02",
@@ -41238,10 +41490,19 @@
           }
         },
         {
-          "value": "account 00000002004 updated",
-          "required": false,
-          "observed": false,
-          "target": false,
+          "value": "account 00000002004 updated (rewrite effects)",
+          "required": {
+            "ACCT-CURR-CYC-CREDIT": "1234.50",
+            "ACCT-CURR-CYC-DEBIT": "0.00"
+          },
+          "observed": {
+            "ACCT-CURR-CYC-CREDIT": "1234.50",
+            "ACCT-CURR-CYC-DEBIT": "0.00"
+          },
+          "target": {
+            "ACCT-CURR-CYC-CREDIT": "1234.50",
+            "ACCT-CURR-CYC-DEBIT": "0.00"
+          },
           "rules": [
             "INT-R06",
             "INT-Q02",
@@ -41532,7 +41793,7 @@
   "violations": [],
   "passed": true,
   "summary": [
-    "Interest replay | baseline b2962225b345902e7b6b9f338d17b1e99f23afab | clock 2022-07-05 10:00:00.00 | PARM 2022071800",
+    "Interest replay | baseline fb7d603daaa170230b85fb71bae86ad810773a5b | clock 2022-07-05 10:00:00.00 | PARM 2022071800",
     "i01-baseline: MATCH 53, INTENDED_CHANGE 0, UNRESOLVED 6 (engines agree 6, engines differ 0), UNCLASSIFIED 0; RC observed=0 target=0",
     "i02-tie-half-cent: MATCH 50, INTENDED_CHANGE 0, UNRESOLVED 9 (engines agree 9, engines differ 0), UNCLASSIFIED 0; RC observed=0 target=0",
     "i03-zero-rate-skipped: MATCH 26, INTENDED_CHANGE 0, UNRESOLVED 6 (engines agree 6, engines differ 0), UNCLASSIFIED 0; RC observed=0 target=0",
