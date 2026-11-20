@@ -77,6 +77,15 @@ public static class JobCatalog
             new("STEP10R", () => new Cbtrn03c(), Dd("TRANFILE", "TRANSACT.DALY(+1)", "CARDXREF", "CARDXREF.VSAM.KSDS", "TRANTYPE", "TRANTYPE.VSAM.KSDS",
                 "TRANCATG", "TRANCATG.VSAM.KSDS", "DATEPARM", "DATEPARM", "TRANREPT", "TRANREPT(+1)")) { ProgramName = Cbtrn03c.Name },
         ]),
+        ["READACCT"] = new("READACCT",
+        [
+            new("PREDEL", () => new IdcamsStep(IdcamsAction.Define), Dd()) { ProgramName = "IEFBR14" },
+            new("STEP05", () => new Cbact01c(), Dd("ACCTFILE", "ACCTDATA.VSAM.KSDS", "OUTFILE", "ACCTDATA.PSCOMP", "ARRYFILE", "ACCTDATA.ARRYPS", "VBRCFILE", "ACCTDATA.VBPS")) { ProgramName = Cbact01c.Name },
+        ]),
+        ["READCARD"] = new("READCARD",
+        [
+            new("STEP05", () => new Cbact02c(), Dd("CARDFILE", "CARDDATA.VSAM.KSDS")) { ProgramName = Cbact02c.Name },
+        ]),
         ["INTCALC"] = new("INTCALC",
         [
             new("STEP15", () => new Cbact04c(), Dd("TCATBALF", "TCATBALF.VSAM.KSDS", "XREFFILE", "CARDXREF.VSAM.KSDS", "XREFFIL1", "CARDXREF.VSAM.AIX.PATH",
@@ -89,5 +98,7 @@ public static class JobCatalog
     {
         ["posting"] = (["DEFGDGB", "DALYREJS", "ACCTFILE", "XREFFILE", "TCATBALF", "DISCGRP", "TRANTYPE", "TRANCATG", "TRANFILE"], ["POSTTRAN", "TRANREPT"]),
         ["interest"] = (["DEFGDGB", "ACCTFILE", "XREFFILE", "TCATBALF", "DISCGRP"], ["INTCALC"]),
+        ["readacct"] = (["ACCTFILE"], ["READACCT"]),
+        ["readcard"] = (["CARDFILE"], ["READCARD"]),
     };
 }
