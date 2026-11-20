@@ -123,6 +123,57 @@ class InterestCloseIT {
         }
     }
 
+    @Test void INT_H06_processHaltBeforeCommit() throws Exception { processCrash("before"); }
+    @Test void INT_H06_processHaltAfterCommit() throws Exception { processCrash("after"); }
+
+    void processCrash(String phase) throws Exception {
+        Path log = temp.resolve("child-" + phase + ".log");
+        Path output = out();
+        var command = new ArrayList<>(List.of(Path.of(System.getProperty("java.home"), "bin/java").toString(),
+                "-Dcrash.phase=" + phase, "-cp", System.getProperty("surefire.test.class.path", System.getProperty("java.class.path")),
+                CrashCloseProcess.class.getName(), "--interest.close.run-on-startup=true",
+                "--interest.close.jdbc-url=" + PG.getJdbcUrl(), "--interest.close.db-user=" + PG.getUsername(),
+                "--interest.close.db-password=" + PG.getPassword(), "--interest.close.database=interest_close_it",
+                "--interest.close.input-dir=" + input("i01-baseline"), "--interest.close.output-dir=" + output));
+        Process child = new ProcessBuilder(command).redirectErrorStream(true).redirectOutput(log.toFile()).start();
+        try {
+            assertTrue(child.waitFor(90, java.util.concurrent.TimeUnit.SECONDS), "child timed out");
+            assertEquals(77, child.exitValue(), Files.readString(log));
+        } finally { child.destroyForcibly(); }
+        String marker = Files.readAllLines(log).stream().filter(line -> line.startsWith("CRASH run=")).findFirst().orElseThrow();
+        UUID run = UUID.fromString(marker.split(" ")[1].substring(4));
+        UUID snapshot = store.jdbc().queryForObject("SELECT snapshot_id FROM interest.run WHERE run_id=?", UUID.class, run);
+        String inputs = fingerprint(snapshot);
+        var transactions = store.jdbc().queryForList("SELECT emit_ordinal, row_to_json(t)::text AS bytes FROM interest.interest_tx t WHERE run_id=? ORDER BY emit_ordinal", run);
+        var deltas = store.jdbc().queryForList("SELECT acct_id, row_to_json(t)::text AS bytes FROM interest.account_delta t WHERE run_id=?", run);
+        var checkpoint = store.jdbc().queryForList("SELECT row_to_json(t)::text FROM interest.run_checkpoint t WHERE run_id=?", run);
+        assertEquals("COMPUTING", state(run));
+        assertEquals(phase.equals("before") ? 0 : 1, transactions.size());
+        assertEquals(phase.equals("before") ? 0 : 1, checkpoint.size());
+        command.set(1, "-Dcrash.phase=none");
+        command.add("--interest.close.resume-run-id=" + run);
+        child = new ProcessBuilder(command).redirectErrorStream(true).redirectOutput(log.toFile()).start();
+        try {
+            assertTrue(child.waitFor(90, java.util.concurrent.TimeUnit.SECONDS));
+            assertEquals(12, child.exitValue(), Files.readString(log));
+        } finally { child.destroyForcibly(); }
+        assertEquals("COMPUTING", state(run));
+        assertEquals(checkpoint, store.jdbc().queryForList("SELECT row_to_json(t)::text FROM interest.run_checkpoint t WHERE run_id=?", run));
+        command.add("--interest.close.abandoned=true");
+        child = new ProcessBuilder(command).redirectErrorStream(true).redirectOutput(log.toFile()).start();
+        try {
+            assertTrue(child.waitFor(90, java.util.concurrent.TimeUnit.SECONDS));
+            assertEquals(0, child.exitValue(), Files.readString(log));
+        } finally { child.destroyForcibly(); }
+        assertEquals("COMPUTED", state(run));
+        assertEquals(snapshot, store.jdbc().queryForObject("SELECT snapshot_id FROM interest.run WHERE run_id=?", UUID.class, run));
+        assertEquals(inputs, fingerprint(snapshot));
+        for (var row : transactions) assertEquals(row.get("bytes"), store.jdbc().queryForObject("SELECT row_to_json(t)::text FROM interest.interest_tx t WHERE run_id=? AND emit_ordinal=?", String.class, run, row.get("emit_ordinal")));
+        for (var row : deltas) assertEquals(row.get("bytes"), store.jdbc().queryForObject("SELECT row_to_json(t)::text FROM interest.account_delta t WHERE run_id=? AND acct_id=?", String.class, run, row.get("acct_id")));
+        golden("i01-baseline", output);
+        System.out.println("INT-H06 process halt " + phase + ": exit=77 COMPUTING; unconfirmed refused; abandoned resume RC=0; snapshot and committed rows unchanged; golden identical");
+    }
+
     @Test void INT_R01_INT_R02_INT_R03_INT_R04_INT_R05_INT_R06_INT_R07_INT_R08_INT_R09_INT_R10_allSevenRecordedCases() throws Exception {
         for (String c : CASES) {
             Path output = out();

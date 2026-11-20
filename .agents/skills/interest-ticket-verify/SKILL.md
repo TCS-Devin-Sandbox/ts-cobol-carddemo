@@ -44,6 +44,11 @@ other. The pilot's own evidence stays under
    done 2>&1 | tee java/interest/evidence/$T/e2e-run.log
    ```
    Success, once per case: `interest/<case>: Java STEP15 RC=0, outputs in /estate/work/01-pilot/<case>`.
+   The driver runs the jar's Start-Class (the pilot). A ticket that adds a new entry point
+   under the frozen `pom.xml` passes `--java <wrapper>`: a script that runs the jar with
+   `-cp <jar> -Dloader.main=<main class> org.springframework.boot.loader.launch.PropertiesLauncher`
+   (INT-06's is `java/interest/interest-batch/scripts/parity/intcalc_java.py`, which runs the
+   joined job `com.carddemo.interest.batch.InterestBatchApplication`).
    The cases are the directories under `fixtures/interest/`; the ticket's **Verification**
    line names the ones that gate it.
 3. Compare each case field by field against the golden files (host Python, comparator
@@ -89,6 +94,9 @@ other. The pilot's own evidence stays under
    ```
    Success: exit 0 and ` t` under `transactions_pass`, `delta_pass` and
    `final_account_unchanged_pass`. The run id differs on every run.
+   A ticket whose SQL assertions target the `interest` / `interest_batch` schemas rather than
+   the pilot's (INT-02, INT-05) may assert them inside its own PostgreSQL 15 IT
+   (Testcontainers) and keep the printed assertion output as this step's evidence.
 6. Write `java/interest/evidence/<ticket>/parity-report.md` in the pilot's format (its example:
    `java/interest/interest-batch/src/test/resources/pilot/evidence/parity-report.md`):
    - title line `# <ticket id> – per-case parity report (open this first)`, then the code

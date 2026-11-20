@@ -1,4 +1,4 @@
-SQL case=i01-baseline run=f9f6d804-8521-41ed-8ac7-3b1d6439f29d
+SQL case=i01-baseline run=71b92126-9d30-4756-9ced-7e37220f8a31
 SELECT 1
  run_pass | tx_count_pass | delta_count_pass | tx_sum_pass | delta_sum_pass | last_account_pass | publication_pass | no_release_pass 
 ----------+---------------+------------------+-------------+----------------+-------------------+------------------+-----------------
@@ -6,7 +6,7 @@ SELECT 1
 (1 row)
 
 SQL PASS case=i01-baseline tx=2 deltas=1 tx_sum=47.00 delta_sum=10.00
-SQL case=i02-tie-half-cent run=d3d68f0f-37ab-4479-a854-2ca6069515a4
+SQL case=i02-tie-half-cent run=2d269475-8dce-449b-b193-e8d6209463c5
 SELECT 1
  run_pass | tx_count_pass | delta_count_pass | tx_sum_pass | delta_sum_pass | last_account_pass | publication_pass | no_release_pass 
 ----------+---------------+------------------+-------------+----------------+-------------------+------------------+-----------------
@@ -14,7 +14,7 @@ SELECT 1
 (1 row)
 
 SQL PASS case=i02-tie-half-cent tx=2 deltas=1 tx_sum=24.69 delta_sum=12.35
-SQL case=i03-zero-rate-skipped run=c26640b0-7f37-41dd-a076-9b0f9c467c92
+SQL case=i03-zero-rate-skipped run=09fcdbe9-1872-42de-acfe-c5c2d852b569
 SELECT 1
  run_pass | tx_count_pass | delta_count_pass | tx_sum_pass | delta_sum_pass | last_account_pass | publication_pass | no_release_pass 
 ----------+---------------+------------------+-------------+----------------+-------------------+------------------+-----------------
@@ -22,7 +22,7 @@ SELECT 1
 (1 row)
 
 SQL PASS case=i03-zero-rate-skipped tx=1 deltas=0 tx_sum=10.00 delta_sum=0.00
-SQL case=i04-default-group-fallback run=4fec44e8-45d5-4acc-8224-100d219ed432
+SQL case=i04-default-group-fallback run=a56f2150-755c-47c7-bf3c-945b1deb0ea6
 SELECT 1
  run_pass | tx_count_pass | delta_count_pass | tx_sum_pass | delta_sum_pass | last_account_pass | publication_pass | no_release_pass 
 ----------+---------------+------------------+-------------+----------------+-------------------+------------------+-----------------
@@ -30,7 +30,7 @@ SELECT 1
 (1 row)
 
 SQL PASS case=i04-default-group-fallback tx=1 deltas=0 tx_sum=17.50 delta_sum=0.00
-SQL case=i05-multi-category run=a002b13a-5369-4445-8707-d164b09ad23c
+SQL case=i05-multi-category run=c219ca67-1550-417a-87ca-85e6ace6a10d
 SELECT 1
  run_pass | tx_count_pass | delta_count_pass | tx_sum_pass | delta_sum_pass | last_account_pass | publication_pass | no_release_pass 
 ----------+---------------+------------------+-------------+----------------+-------------------+------------------+-----------------
@@ -38,7 +38,7 @@ SELECT 1
 (1 row)
 
 SQL PASS case=i05-multi-category tx=2 deltas=0 tx_sum=17.50 delta_sum=0.00
-SQL case=i06-negative-balance run=9aa88da1-ba57-4bdf-b2eb-13081491b2d4
+SQL case=i06-negative-balance run=a39521af-9abd-4fc9-ab8f-86feadd015a9
 SELECT 1
  run_pass | tx_count_pass | delta_count_pass | tx_sum_pass | delta_sum_pass | last_account_pass | publication_pass | no_release_pass 
 ----------+---------------+------------------+-------------+----------------+-------------------+------------------+-----------------
@@ -46,7 +46,7 @@ SELECT 1
 (1 row)
 
 SQL PASS case=i06-negative-balance tx=1 deltas=0 tx_sum=-3.00 delta_sum=0.00
-SQL case=i07-nontie-rounding run=0238c712-2c3a-48e5-99a1-62853aef7e04
+SQL case=i07-nontie-rounding run=9563eff8-f12e-4651-a9f6-a8419117484a
 SELECT 1
  run_pass | tx_count_pass | delta_count_pass | tx_sum_pass | delta_sum_pass | last_account_pass | publication_pass | no_release_pass 
 ----------+---------------+------------------+-------------+----------------+-------------------+------------------+-----------------

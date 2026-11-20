@@ -1,5 +1,22 @@
 # INT-04 – per-case parity report (open this first)
 
+## Integration review rerun (#4/#5)
+
+Candidate revision `731c55106b3cd1ffbac1aed4c9c52d1de9eb8a6d` incorporates exactly
+`c0447ed`, `320594a`, `c78c66c`, `8d700ce`, plus real child-JVM halt tests.
+Fresh combined output is `../combined-check-final.txt`: 70 unit + 88 integration tests,
+0 failures/errors/skips, BUILD SUCCESS; driver unittest 1/1 OK; all seven cases PASS
+through the joined candidate (`scripts/parity/intcalc_java.py`) and unchanged comparator;
+`make parity` 24/24 PASS. `test-output.txt` is its Maven segment;
+`restart-and-failure-cases.txt` is extracted from that run's reports.
+`crash-resume-cli.txt` independently records estate Runtime.halt before/after commit:
+halt RC77 / refused RC12 / explicitly abandoned resume RC0, same snapshot, committed
+rows byte-identical, final outputs golden-identical. Integration g4 files are unchanged.
+The historical captures below and the sibling seven-case `compare-*` / `e2e-run.log`
+remain the g2 branch's earlier evidence, not the latest integration rerun.
+
+## Historical g2 branch review capture
+
 Code revision: PR #21 review follow-up to `34da217c17f1ef9e5cf62067c000bbef084c1008`
 on `demo/05-g2-logic`. The recovery fix is `c0447ed`, the evidence-file fix is
 `320594a`, and the transcript-boundary fix and fresh verification are in this report's commit.

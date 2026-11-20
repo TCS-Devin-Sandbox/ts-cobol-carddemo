@@ -1,4 +1,6 @@
-Fresh Maven report extraction after PR #21 review fixes; no separate test run.
+Code revision: 731c55106b3cd1ffbac1aed4c9c52d1de9eb8a6d
+Extracted from final mvn clean verify reports, not a separate test run.
+Estate CLI commands, RCs, counts/totals and checkpoints: crash-resume-cli.txt
 
 SUITE name=com.carddemo.interest.calc.GroupCalculationTest tests=5 failures=0 errors=0 skipped=0
 PASS INT_H05_INT_R08_overflowKeepsEveryRowAndWrapsSuffixAndGroupTotal
@@ -25,7 +27,10 @@ PASS TN_04_INT_R10_extendedStatusReinterpretsSecondStorageByteNotItsDigitValue
 PASS TN_04_INT_R10_invalidGeometryRejectedAndFailureProtectsStatusAndRestrictedPrefix
 PASS TN_04_INT_R10_numericStatusUsesExactFourPositionMove
 
-SUITE name=com.carddemo.interest.job.InterestCloseIT tests=19 failures=0 errors=0 skipped=0
+SUITE name=com.carddemo.interest.job.ClosePackagingFailureIT tests=1 failures=0 errors=0 skipped=0
+PASS TN_01_INT_R03_INT_R10_packagingFailurePreservesCompletedSysoutForBaselineFallbackAndEmptyInput
+
+SUITE name=com.carddemo.interest.job.InterestCloseIT tests=21 failures=0 errors=0 skipped=0
 PASS INT_H02_invalidParmHeldNotReady
 PASS TN_06_INT_R06_INT_R07_exportPatchesOnlyThreeFieldsAndPreservesDistinctiveFiller
 PASS INT_H06_A3_crashAfterCommitDoesNotReplayCommittedOrdinalOrClock
@@ -34,7 +39,11 @@ PASS INT_R10_INT_H08_missingAccountXrefAndDefaultAreFailedNotComputedWithU999And
 PASS INT_H06_A3_changedSnapshotPayloadOrEncodedKeyRefusesResume
 PASS INT_H03_firstReturnEvidencePropertyReachesCoordinatorAndSelectedCardIsEmitted
 PASS INT_Q04_INT_H04_nonzeroRateZeroAmountStillEmitsForInactiveExpiredAccount
+PASS INT_H06_processHaltBeforeCommit
+INT-H06 process halt before: exit=77 COMPUTING; unconfirmed refused; abandoned resume RC=0; snapshot and committed rows unchanged; golden identical
 PASS A1_frozenMigrationsIdempotentWithExistingClusterRolesAndPilotSchemaUntouched
+PASS INT_H06_processHaltAfterCommit
+INT-H06 process halt after: exit=77 COMPUTING; unconfirmed refused; abandoned resume RC=0; snapshot and committed rows unchanged; golden identical
 PASS INT_H06_A3_resumeChangedIdentityRefusedAndNoAutomaticRestart
 PASS INT_H03_invalidOrUnreadableFirstReturnEvidenceHoldsIntakeWithoutReadyRun
 PASS TN_01_INT_R10_targetFailureTranscriptStopsAtReachedGroupNotLaterMissingAccount
@@ -45,36 +54,3 @@ PASS TN_01_INT_R10_targetFailureBeforeAnyGroupDoesNotReconstructUnreachedLookups
 PASS INT_H06_A3_crashBeforeGroupCommitRollsBackWholeGroupAndExplicitResumeSeeksCheckpoint
 PASS INT_R10_malformedDuplicateAndBadGeometryIntakeIsHeldWithoutReadyRun
 PASS INT_H03_multiCardWithoutEvidenceHeldAndSuppliedFirstReturnNotMinimumIsSealed
-
-Masked coordinator operation/target failure and abandonment events:
-2026-11-20T07:53:19.283Z  INFO 88521 --- [           main] c.carddemo.interest.job.CloseRunService  : event=run-finished run=32ecf685-7c4e-43e6-9f23-f120dc6e5fad phase=compute category=TARGET_COMPUTE_FAILED rc=12
-2026-11-20T07:53:23.298Z  WARN 88521 --- [           main] c.carddemo.interest.job.CloseRunService  : event=legacy-io-failed run=ce2bbe91-7d78-4ed2-be76-63be50dcc823 dd=ACCTFILE op=READ status-hex=3233
-2026-11-20T07:53:23.353Z  INFO 88521 --- [           main] c.carddemo.interest.job.CloseRunService  : event=run-finished run=ce2bbe91-7d78-4ed2-be76-63be50dcc823 phase=compute category=REQUIRED_LOOKUP_MISSING rc=12
-2026-11-20T07:53:23.710Z  WARN 88521 --- [           main] c.carddemo.interest.job.CloseRunService  : event=legacy-io-failed run=b775d58e-7dd0-4511-9984-1364c1bbb14f dd=XREFFILE op=READ status-hex=3233
-2026-11-20T07:53:23.770Z  INFO 88521 --- [           main] c.carddemo.interest.job.CloseRunService  : event=run-finished run=b775d58e-7dd0-4511-9984-1364c1bbb14f phase=compute category=REQUIRED_LOOKUP_MISSING rc=12
-2026-11-20T07:53:24.105Z  WARN 88521 --- [           main] c.carddemo.interest.job.CloseRunService  : event=legacy-io-failed run=84320d25-8cf4-4c34-9ca1-efeb52dddb41 dd=DISCGRP op=READ status-hex=3233
-2026-11-20T07:53:24.196Z  INFO 88521 --- [           main] c.carddemo.interest.job.CloseRunService  : event=run-finished run=84320d25-8cf4-4c34-9ca1-efeb52dddb41 phase=compute category=REQUIRED_LOOKUP_MISSING rc=12
-2026-11-20T07:53:24.587Z  INFO 88521 --- [           main] c.carddemo.interest.job.CloseRunService  : event=run-finished run=f764083c-d362-46df-b4db-84719370636a phase=compute category=TARGET_COMPUTE_FAILED rc=12
-2026-11-20T07:53:24.842Z  INFO 88521 --- [           main] c.carddemo.interest.job.CloseRunService  : event=run-finished run=cbfc19bf-afec-4c98-b6ae-df826036d2b2 phase=compute category=TARGET_COMPUTE_FAILED rc=12
-2026-11-20T07:53:26.257Z  INFO 88521 --- [           main] c.carddemo.interest.job.CloseRunService  : event=run-finished run=b4fb5859-b554-422a-9d16-5f49672feb44 phase=compute category=TARGET_COMPUTE_FAILED rc=12
-2026-11-20T07:53:27.357Z  INFO 88521 --- [           main] c.carddemo.interest.job.CloseRunService  : event=run-finished run=52422781-f07e-4dfc-ad52-daabfd07fd2b phase=compute category=TARGET_COMPUTE_FAILED rc=12
-2026-11-20T07:53:27.595Z  INFO 88521 --- [           main] c.carddemo.interest.job.CloseRunService  : event=run-finished run=5abe26e6-d74b-478d-8eb2-e47767939803 phase=compute category=TARGET_COMPUTE_FAILED rc=12
-2026-11-20T07:53:27.868Z  INFO 88521 --- [           main] c.carddemo.interest.job.CloseRunService  : event=run-finished run=b8229b7b-d8db-4c1e-a8ca-8dbd390911a3 phase=compute category=TARGET_COMPUTE_FAILED rc=12
-2026-11-20T07:53:28.165Z  INFO 88521 --- [           main] c.carddemo.interest.job.CloseRunService  : event=run-finished run=846fcf47-2294-4070-98b6-854244c548b9 phase=compute category=TARGET_COMPUTE_FAILED rc=12
-2026-11-20T07:53:28.411Z  WARN 88521 --- [           main] c.carddemo.interest.job.CloseRunService  : event=legacy-io-failed run=98c9af6e-5d44-4465-b25c-bb238b7ff169 dd=DISCGRP op=OPEN status-hex=3335
-2026-11-20T07:53:28.419Z  INFO 88521 --- [           main] c.carddemo.interest.job.CloseRunService  : event=run-finished run=98c9af6e-5d44-4465-b25c-bb238b7ff169 phase=compute category=LEGACY_IO_FAILURE rc=12
-2026-11-20T07:53:28.644Z  WARN 88521 --- [           main] c.carddemo.interest.job.CloseRunService  : event=legacy-io-failed run=9a43a54d-e6ca-4495-8f38-f0e93e508777 dd=XREFFILE op=READ status-hex=3130
-2026-11-20T07:53:28.652Z  INFO 88521 --- [           main] c.carddemo.interest.job.CloseRunService  : event=run-finished run=9a43a54d-e6ca-4495-8f38-f0e93e508777 phase=compute category=LEGACY_IO_FAILURE rc=12
-2026-11-20T07:53:28.859Z  WARN 88521 --- [           main] c.carddemo.interest.job.CloseRunService  : event=legacy-io-failed run=57e173ed-af37-457a-876d-11f2e1efa153 dd=TRANSACT op=WRITE status-hex=3935
-2026-11-20T07:53:28.869Z  INFO 88521 --- [           main] c.carddemo.interest.job.CloseRunService  : event=run-finished run=57e173ed-af37-457a-876d-11f2e1efa153 phase=compute category=LEGACY_IO_FAILURE rc=12
-2026-11-20T07:53:29.075Z  WARN 88521 --- [           main] c.carddemo.interest.job.CloseRunService  : event=legacy-io-failed run=d07ab870-cf21-4c10-88b9-5dd8a8acc1c8 dd=ACCTFILE op=REWRITE status-hex=3939
-2026-11-20T07:53:29.083Z  INFO 88521 --- [           main] c.carddemo.interest.job.CloseRunService  : event=run-finished run=d07ab870-cf21-4c10-88b9-5dd8a8acc1c8 phase=compute category=LEGACY_IO_FAILURE rc=12
-2026-11-20T07:53:29.288Z  WARN 88521 --- [           main] c.carddemo.interest.job.CloseRunService  : event=legacy-io-failed run=4bf01336-ee9b-499c-a970-1c120bc8bcf0 dd=TCATBALF op=CLOSE status-hex=3330
-2026-11-20T07:53:29.296Z  INFO 88521 --- [           main] c.carddemo.interest.job.CloseRunService  : event=run-finished run=4bf01336-ee9b-499c-a970-1c120bc8bcf0 phase=compute category=LEGACY_IO_FAILURE rc=12
-2026-11-20T07:53:29.534Z  WARN 88521 --- [           main] c.carddemo.interest.job.CloseRunService  : event=legacy-io-failed run=691828ce-73ce-44aa-a87a-54ccf0bf03d0 dd=DISCGRP op=READ status-hex=3431
-2026-11-20T07:53:29.543Z  INFO 88521 --- [           main] c.carddemo.interest.job.CloseRunService  : event=run-finished run=691828ce-73ce-44aa-a87a-54ccf0bf03d0 phase=compute category=LEGACY_IO_FAILURE rc=12
-2026-11-20T07:53:30.691Z  INFO 88521 --- [           main] c.carddemo.interest.job.CloseRunService  : event=run-finished run=e1d12430-2abf-4245-82df-f7e0227916e3 phase=compute category=TARGET_COMPUTE_FAILED rc=12
-2026-11-20T07:53:31.077Z  INFO 88521 --- [           main] c.carddemo.interest.job.CloseRunService  : event=run-abandoned run=e1d12430-2abf-4245-82df-f7e0227916e3 category=TARGET_RUN_ABANDONED
-2026-11-20T07:53:31.635Z  INFO 88521 --- [           main] c.carddemo.interest.job.CloseRunService  : event=run-finished run=22158dfc-82c1-4713-9444-f2641c38ebd8 phase=compute category=TARGET_COMPUTE_FAILED rc=12
-2026-11-20T07:53:32.071Z  INFO 88521 --- [           main] c.carddemo.interest.job.CloseRunService  : event=run-abandoned run=22158dfc-82c1-4713-9444-f2641c38ebd8 category=TARGET_RUN_ABANDONED
-2026-11-20T07:53:32.699Z  INFO 88521 --- [           main] c.carddemo.interest.job.CloseRunService  : event=run-finished run=613a71aa-01cb-4fa2-be3b-c04355cfbcba phase=compute category=TARGET_COMPUTE_FAILED rc=12

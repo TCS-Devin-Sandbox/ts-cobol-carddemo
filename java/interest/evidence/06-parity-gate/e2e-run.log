@@ -1,8 +1,8 @@
-2026-11-20T07:54:21.715Z  INFO 960 --- [interestClose] [           main] c.c.i.batch.InterestBatchApplication     : Starting InterestBatchApplication v0.1.0-PILOT using Java 21.0.13.1 with PID 960 (/estate/java/interest/interest-batch/target/interest-batch-0.1.0-PILOT.jar started by ? in /estate)
-2026-11-20T07:54:21.718Z  INFO 960 --- [interestClose] [           main] c.c.i.batch.InterestBatchApplication     : No active profile set, falling back to 1 default profile: "default"
-2026-11-20T07:54:22.417Z  INFO 960 --- [interestClose] [           main] c.c.i.batch.InterestBatchApplication     : Started InterestBatchApplication in 1.012 seconds (process running for 1.281)
-2026-11-20T07:54:22.725Z  INFO 960 --- [interestClose] [           main] c.carddemo.interest.job.CloseRunService  : event=run-finished run=f9f6d804-8521-41ed-8ac7-3b1d6439f29d phase=compute category=COMPUTED rc=0
-2026-11-20T07:54:22.847Z  INFO 960 --- [interestClose] [           main] c.c.interest.batch.InterestJobConfig     : event=package-shadow run=f9f6d804-8521-41ed-8ac7-3b1d6439f29d records=2 payload_sha256=4808df2ada1f74834f16ea24b136b50cf4e557118f24faad56d77cb3a856ea01
+2026-11-20T08:03:01.920Z  INFO 3028 --- [interestClose] [           main] c.c.i.batch.InterestBatchApplication     : Starting InterestBatchApplication v0.1.0-PILOT using Java 21.0.13.1 with PID 3028 (/estate/java/interest/interest-batch/target/interest-batch-0.1.0-PILOT.jar started by ? in /estate)
+2026-11-20T08:03:01.923Z  INFO 3028 --- [interestClose] [           main] c.c.i.batch.InterestBatchApplication     : No active profile set, falling back to 1 default profile: "default"
+2026-11-20T08:03:02.698Z  INFO 3028 --- [interestClose] [           main] c.c.i.batch.InterestBatchApplication     : Started InterestBatchApplication in 1.006 seconds (process running for 1.302)
+2026-11-20T08:03:03.026Z  INFO 3028 --- [interestClose] [           main] c.carddemo.interest.job.CloseRunService  : event=run-finished run=71b92126-9d30-4756-9ced-7e37220f8a31 phase=compute category=COMPUTED rc=0
+2026-11-20T08:03:03.146Z  INFO 3028 --- [interestClose] [           main] c.c.interest.batch.InterestJobConfig     : event=package-shadow run=71b92126-9d30-4756-9ced-7e37220f8a31 records=2 payload_sha256=4808df2ada1f74834f16ea24b136b50cf4e557118f24faad56d77cb3a856ea01
 JOB DEFGDGB (app/jcl/DEFGDGB.jcl)
   STEP05           IDCAMS   RC=0000
 JOB ACCTFILE (app/jcl/ACCTFILE.jcl)
@@ -25,11 +25,11 @@ JOB DISCGRP (app/jcl/DISCGRP.jcl)
   STEP10           IDCAMS   RC=0000
   STEP15           IDCAMS   RC=0000
 interest/i01-baseline: Java STEP15 RC=0, outputs in /estate/work/06-parity-gate/i01-baseline
-2026-11-20T07:54:23.623Z  INFO 1014 --- [interestClose] [           main] c.c.i.batch.InterestBatchApplication     : Starting InterestBatchApplication v0.1.0-PILOT using Java 21.0.13.1 with PID 1014 (/estate/java/interest/interest-batch/target/interest-batch-0.1.0-PILOT.jar started by ? in /estate)
-2026-11-20T07:54:23.626Z  INFO 1014 --- [interestClose] [           main] c.c.i.batch.InterestBatchApplication     : No active profile set, falling back to 1 default profile: "default"
-2026-11-20T07:54:24.389Z  INFO 1014 --- [interestClose] [           main] c.c.i.batch.InterestBatchApplication     : Started InterestBatchApplication in 0.978 seconds (process running for 1.247)
-2026-11-20T07:54:24.710Z  INFO 1014 --- [interestClose] [           main] c.carddemo.interest.job.CloseRunService  : event=run-finished run=d3d68f0f-37ab-4479-a854-2ca6069515a4 phase=compute category=COMPUTED rc=0
-2026-11-20T07:54:24.822Z  INFO 1014 --- [interestClose] [           main] c.c.interest.batch.InterestJobConfig     : event=package-shadow run=d3d68f0f-37ab-4479-a854-2ca6069515a4 records=2 payload_sha256=f8eed7e22d2f83b458a92c2241c023718a4746b933b00bfd30c5ee7ae89fd00d
+2026-11-20T08:03:04.033Z  INFO 3081 --- [interestClose] [           main] c.c.i.batch.InterestBatchApplication     : Starting InterestBatchApplication v0.1.0-PILOT using Java 21.0.13.1 with PID 3081 (/estate/java/interest/interest-batch/target/interest-batch-0.1.0-PILOT.jar started by ? in /estate)
+2026-11-20T08:03:04.036Z  INFO 3081 --- [interestClose] [           main] c.c.i.batch.InterestBatchApplication     : No active profile set, falling back to 1 default profile: "default"
+2026-11-20T08:03:04.753Z  INFO 3081 --- [interestClose] [           main] c.c.i.batch.InterestBatchApplication     : Started InterestBatchApplication in 0.935 seconds (process running for 1.293)
+2026-11-20T08:03:05.068Z  INFO 3081 --- [interestClose] [           main] c.carddemo.interest.job.CloseRunService  : event=run-finished run=2d269475-8dce-449b-b193-e8d6209463c5 phase=compute category=COMPUTED rc=0
+2026-11-20T08:03:05.189Z  INFO 3081 --- [interestClose] [           main] c.c.interest.batch.InterestJobConfig     : event=package-shadow run=2d269475-8dce-449b-b193-e8d6209463c5 records=2 payload_sha256=f8eed7e22d2f83b458a92c2241c023718a4746b933b00bfd30c5ee7ae89fd00d
 JOB DEFGDGB (app/jcl/DEFGDGB.jcl)
   STEP05           IDCAMS   RC=0000
 JOB ACCTFILE (app/jcl/ACCTFILE.jcl)
@@ -52,11 +52,11 @@ JOB DISCGRP (app/jcl/DISCGRP.jcl)
   STEP10           IDCAMS   RC=0000
   STEP15           IDCAMS   RC=0000
 interest/i02-tie-half-cent: Java STEP15 RC=0, outputs in /estate/work/06-parity-gate/i02-tie-half-cent
-2026-11-20T07:54:25.608Z  INFO 1068 --- [interestClose] [           main] c.c.i.batch.InterestBatchApplication     : Starting InterestBatchApplication v0.1.0-PILOT using Java 21.0.13.1 with PID 1068 (/estate/java/interest/interest-batch/target/interest-batch-0.1.0-PILOT.jar started by ? in /estate)
-2026-11-20T07:54:25.611Z  INFO 1068 --- [interestClose] [           main] c.c.i.batch.InterestBatchApplication     : No active profile set, falling back to 1 default profile: "default"
-2026-11-20T07:54:26.352Z  INFO 1068 --- [interestClose] [           main] c.c.i.batch.InterestBatchApplication     : Started InterestBatchApplication in 0.957 seconds (process running for 1.222)
-2026-11-20T07:54:26.642Z  INFO 1068 --- [interestClose] [           main] c.carddemo.interest.job.CloseRunService  : event=run-finished run=c26640b0-7f37-41dd-a076-9b0f9c467c92 phase=compute category=COMPUTED rc=0
-2026-11-20T07:54:26.765Z  INFO 1068 --- [interestClose] [           main] c.c.interest.batch.InterestJobConfig     : event=package-shadow run=c26640b0-7f37-41dd-a076-9b0f9c467c92 records=1 payload_sha256=eef528f8723d7e2db2b5fa88325c3edf7c93ec37129b917abdc5bbb298b267da
+2026-11-20T08:03:06.391Z  INFO 3135 --- [interestClose] [           main] c.c.i.batch.InterestBatchApplication     : Starting InterestBatchApplication v0.1.0-PILOT using Java 21.0.13.1 with PID 3135 (/estate/java/interest/interest-batch/target/interest-batch-0.1.0-PILOT.jar started by ? in /estate)
+2026-11-20T08:03:06.397Z  INFO 3135 --- [interestClose] [           main] c.c.i.batch.InterestBatchApplication     : No active profile set, falling back to 1 default profile: "default"
+2026-11-20T08:03:07.360Z  INFO 3135 --- [interestClose] [           main] c.c.i.batch.InterestBatchApplication     : Started InterestBatchApplication in 1.355 seconds (process running for 1.797)
+2026-11-20T08:03:07.685Z  INFO 3135 --- [interestClose] [           main] c.carddemo.interest.job.CloseRunService  : event=run-finished run=09fcdbe9-1872-42de-acfe-c5c2d852b569 phase=compute category=COMPUTED rc=0
+2026-11-20T08:03:07.804Z  INFO 3135 --- [interestClose] [           main] c.c.interest.batch.InterestJobConfig     : event=package-shadow run=09fcdbe9-1872-42de-acfe-c5c2d852b569 records=1 payload_sha256=eef528f8723d7e2db2b5fa88325c3edf7c93ec37129b917abdc5bbb298b267da
 JOB DEFGDGB (app/jcl/DEFGDGB.jcl)
   STEP05           IDCAMS   RC=0000
 JOB ACCTFILE (app/jcl/ACCTFILE.jcl)
@@ -79,12 +79,12 @@ JOB DISCGRP (app/jcl/DISCGRP.jcl)
   STEP10           IDCAMS   RC=0000
   STEP15           IDCAMS   RC=0000
 interest/i03-zero-rate-skipped: Java STEP15 RC=0, outputs in /estate/work/06-parity-gate/i03-zero-rate-skipped
-2026-11-20T07:54:27.671Z  INFO 1122 --- [interestClose] [           main] c.c.i.batch.InterestBatchApplication     : Starting InterestBatchApplication v0.1.0-PILOT using Java 21.0.13.1 with PID 1122 (/estate/java/interest/interest-batch/target/interest-batch-0.1.0-PILOT.jar started by ? in /estate)
-2026-11-20T07:54:27.675Z  INFO 1122 --- [interestClose] [           main] c.c.i.batch.InterestBatchApplication     : No active profile set, falling back to 1 default profile: "default"
-2026-11-20T07:54:28.423Z  INFO 1122 --- [interestClose] [           main] c.c.i.batch.InterestBatchApplication     : Started InterestBatchApplication in 0.983 seconds (process running for 1.308)
-2026-11-20T07:54:28.666Z  INFO 1122 --- [interestClose] [           main] c.c.interest.calc.GroupCalculation       : event=rate-fallback run=4fec44e8-45d5-4acc-8224-100d219ed432 dd=DISCGRP op=READ status=23
-2026-11-20T07:54:28.727Z  INFO 1122 --- [interestClose] [           main] c.carddemo.interest.job.CloseRunService  : event=run-finished run=4fec44e8-45d5-4acc-8224-100d219ed432 phase=compute category=COMPUTED rc=0
-2026-11-20T07:54:28.887Z  INFO 1122 --- [interestClose] [           main] c.c.interest.batch.InterestJobConfig     : event=package-shadow run=4fec44e8-45d5-4acc-8224-100d219ed432 records=1 payload_sha256=e2b322d1836f0482d32279739203e81932841fedf7fe513e9b4b96a15a75b67b
+2026-11-20T08:03:08.612Z  INFO 3189 --- [interestClose] [           main] c.c.i.batch.InterestBatchApplication     : Starting InterestBatchApplication v0.1.0-PILOT using Java 21.0.13.1 with PID 3189 (/estate/java/interest/interest-batch/target/interest-batch-0.1.0-PILOT.jar started by ? in /estate)
+2026-11-20T08:03:08.615Z  INFO 3189 --- [interestClose] [           main] c.c.i.batch.InterestBatchApplication     : No active profile set, falling back to 1 default profile: "default"
+2026-11-20T08:03:09.313Z  INFO 3189 --- [interestClose] [           main] c.c.i.batch.InterestBatchApplication     : Started InterestBatchApplication in 0.908 seconds (process running for 1.2)
+2026-11-20T08:03:09.568Z  INFO 3189 --- [interestClose] [           main] c.c.interest.calc.GroupCalculation       : event=rate-fallback run=a56f2150-755c-47c7-bf3c-945b1deb0ea6 dd=DISCGRP op=READ status=23
+2026-11-20T08:03:09.633Z  INFO 3189 --- [interestClose] [           main] c.carddemo.interest.job.CloseRunService  : event=run-finished run=a56f2150-755c-47c7-bf3c-945b1deb0ea6 phase=compute category=COMPUTED rc=0
+2026-11-20T08:03:09.760Z  INFO 3189 --- [interestClose] [           main] c.c.interest.batch.InterestJobConfig     : event=package-shadow run=a56f2150-755c-47c7-bf3c-945b1deb0ea6 records=1 payload_sha256=e2b322d1836f0482d32279739203e81932841fedf7fe513e9b4b96a15a75b67b
 JOB DEFGDGB (app/jcl/DEFGDGB.jcl)
   STEP05           IDCAMS   RC=0000
 JOB ACCTFILE (app/jcl/ACCTFILE.jcl)
@@ -107,11 +107,11 @@ JOB DISCGRP (app/jcl/DISCGRP.jcl)
   STEP10           IDCAMS   RC=0000
   STEP15           IDCAMS   RC=0000
 interest/i04-default-group-fallback: Java STEP15 RC=0, outputs in /estate/work/06-parity-gate/i04-default-group-fallback
-2026-11-20T07:54:29.676Z  INFO 1176 --- [interestClose] [           main] c.c.i.batch.InterestBatchApplication     : Starting InterestBatchApplication v0.1.0-PILOT using Java 21.0.13.1 with PID 1176 (/estate/java/interest/interest-batch/target/interest-batch-0.1.0-PILOT.jar started by ? in /estate)
-2026-11-20T07:54:29.679Z  INFO 1176 --- [interestClose] [           main] c.c.i.batch.InterestBatchApplication     : No active profile set, falling back to 1 default profile: "default"
-2026-11-20T07:54:30.399Z  INFO 1176 --- [interestClose] [           main] c.c.i.batch.InterestBatchApplication     : Started InterestBatchApplication in 0.933 seconds (process running for 1.198)
-2026-11-20T07:54:30.691Z  INFO 1176 --- [interestClose] [           main] c.carddemo.interest.job.CloseRunService  : event=run-finished run=a002b13a-5369-4445-8707-d164b09ad23c phase=compute category=COMPUTED rc=0
-2026-11-20T07:54:30.818Z  INFO 1176 --- [interestClose] [           main] c.c.interest.batch.InterestJobConfig     : event=package-shadow run=a002b13a-5369-4445-8707-d164b09ad23c records=2 payload_sha256=54527b2de7f37f9843750f4d215126964e9adcd23e0a792ca73beab3a32a127a
+2026-11-20T08:03:10.553Z  INFO 3243 --- [interestClose] [           main] c.c.i.batch.InterestBatchApplication     : Starting InterestBatchApplication v0.1.0-PILOT using Java 21.0.13.1 with PID 3243 (/estate/java/interest/interest-batch/target/interest-batch-0.1.0-PILOT.jar started by ? in /estate)
+2026-11-20T08:03:10.556Z  INFO 3243 --- [interestClose] [           main] c.c.i.batch.InterestBatchApplication     : No active profile set, falling back to 1 default profile: "default"
+2026-11-20T08:03:11.261Z  INFO 3243 --- [interestClose] [           main] c.c.i.batch.InterestBatchApplication     : Started InterestBatchApplication in 0.931 seconds (process running for 1.19)
+2026-11-20T08:03:11.565Z  INFO 3243 --- [interestClose] [           main] c.carddemo.interest.job.CloseRunService  : event=run-finished run=c219ca67-1550-417a-87ca-85e6ace6a10d phase=compute category=COMPUTED rc=0
+2026-11-20T08:03:11.677Z  INFO 3243 --- [interestClose] [           main] c.c.interest.batch.InterestJobConfig     : event=package-shadow run=c219ca67-1550-417a-87ca-85e6ace6a10d records=2 payload_sha256=54527b2de7f37f9843750f4d215126964e9adcd23e0a792ca73beab3a32a127a
 JOB DEFGDGB (app/jcl/DEFGDGB.jcl)
   STEP05           IDCAMS   RC=0000
 JOB ACCTFILE (app/jcl/ACCTFILE.jcl)
@@ -134,11 +134,11 @@ JOB DISCGRP (app/jcl/DISCGRP.jcl)
   STEP10           IDCAMS   RC=0000
   STEP15           IDCAMS   RC=0000
 interest/i05-multi-category: Java STEP15 RC=0, outputs in /estate/work/06-parity-gate/i05-multi-category
-2026-11-20T07:54:31.643Z  INFO 1230 --- [interestClose] [           main] c.c.i.batch.InterestBatchApplication     : Starting InterestBatchApplication v0.1.0-PILOT using Java 21.0.13.1 with PID 1230 (/estate/java/interest/interest-batch/target/interest-batch-0.1.0-PILOT.jar started by ? in /estate)
-2026-11-20T07:54:31.647Z  INFO 1230 --- [interestClose] [           main] c.c.i.batch.InterestBatchApplication     : No active profile set, falling back to 1 default profile: "default"
-2026-11-20T07:54:32.382Z  INFO 1230 --- [interestClose] [           main] c.c.i.batch.InterestBatchApplication     : Started InterestBatchApplication in 0.966 seconds (process running for 1.252)
-2026-11-20T07:54:32.698Z  INFO 1230 --- [interestClose] [           main] c.carddemo.interest.job.CloseRunService  : event=run-finished run=9aa88da1-ba57-4bdf-b2eb-13081491b2d4 phase=compute category=COMPUTED rc=0
-2026-11-20T07:54:32.814Z  INFO 1230 --- [interestClose] [           main] c.c.interest.batch.InterestJobConfig     : event=package-shadow run=9aa88da1-ba57-4bdf-b2eb-13081491b2d4 records=1 payload_sha256=c026ee4598ef2e52213f2fb007f025748ecf781277645414d7292e5609e81093
+2026-11-20T08:03:12.475Z  INFO 3297 --- [interestClose] [           main] c.c.i.batch.InterestBatchApplication     : Starting InterestBatchApplication v0.1.0-PILOT using Java 21.0.13.1 with PID 3297 (/estate/java/interest/interest-batch/target/interest-batch-0.1.0-PILOT.jar started by ? in /estate)
+2026-11-20T08:03:12.478Z  INFO 3297 --- [interestClose] [           main] c.c.i.batch.InterestBatchApplication     : No active profile set, falling back to 1 default profile: "default"
+2026-11-20T08:03:13.218Z  INFO 3297 --- [interestClose] [           main] c.c.i.batch.InterestBatchApplication     : Started InterestBatchApplication in 0.971 seconds (process running for 1.245)
+2026-11-20T08:03:13.504Z  INFO 3297 --- [interestClose] [           main] c.carddemo.interest.job.CloseRunService  : event=run-finished run=a39521af-9abd-4fc9-ab8f-86feadd015a9 phase=compute category=COMPUTED rc=0
+2026-11-20T08:03:13.617Z  INFO 3297 --- [interestClose] [           main] c.c.interest.batch.InterestJobConfig     : event=package-shadow run=a39521af-9abd-4fc9-ab8f-86feadd015a9 records=1 payload_sha256=c026ee4598ef2e52213f2fb007f025748ecf781277645414d7292e5609e81093
 JOB DEFGDGB (app/jcl/DEFGDGB.jcl)
   STEP05           IDCAMS   RC=0000
 JOB ACCTFILE (app/jcl/ACCTFILE.jcl)
@@ -161,11 +161,11 @@ JOB DISCGRP (app/jcl/DISCGRP.jcl)
   STEP10           IDCAMS   RC=0000
   STEP15           IDCAMS   RC=0000
 interest/i06-negative-balance: Java STEP15 RC=0, outputs in /estate/work/06-parity-gate/i06-negative-balance
-2026-11-20T07:54:33.603Z  INFO 1284 --- [interestClose] [           main] c.c.i.batch.InterestBatchApplication     : Starting InterestBatchApplication v0.1.0-PILOT using Java 21.0.13.1 with PID 1284 (/estate/java/interest/interest-batch/target/interest-batch-0.1.0-PILOT.jar started by ? in /estate)
-2026-11-20T07:54:33.606Z  INFO 1284 --- [interestClose] [           main] c.c.i.batch.InterestBatchApplication     : No active profile set, falling back to 1 default profile: "default"
-2026-11-20T07:54:34.519Z  INFO 1284 --- [interestClose] [           main] c.c.i.batch.InterestBatchApplication     : Started InterestBatchApplication in 1.133 seconds (process running for 1.399)
-2026-11-20T07:54:34.831Z  INFO 1284 --- [interestClose] [           main] c.carddemo.interest.job.CloseRunService  : event=run-finished run=0238c712-2c3a-48e5-99a1-62853aef7e04 phase=compute category=COMPUTED rc=0
-2026-11-20T07:54:34.952Z  INFO 1284 --- [interestClose] [           main] c.c.interest.batch.InterestJobConfig     : event=package-shadow run=0238c712-2c3a-48e5-99a1-62853aef7e04 records=2 payload_sha256=38699978b2c269ea72bb8b9fcd489f3ddaec3d230cd0058563fbe0bc4ec11620
+2026-11-20T08:03:14.420Z  INFO 3351 --- [interestClose] [           main] c.c.i.batch.InterestBatchApplication     : Starting InterestBatchApplication v0.1.0-PILOT using Java 21.0.13.1 with PID 3351 (/estate/java/interest/interest-batch/target/interest-batch-0.1.0-PILOT.jar started by ? in /estate)
+2026-11-20T08:03:14.423Z  INFO 3351 --- [interestClose] [           main] c.c.i.batch.InterestBatchApplication     : No active profile set, falling back to 1 default profile: "default"
+2026-11-20T08:03:15.151Z  INFO 3351 --- [interestClose] [           main] c.c.i.batch.InterestBatchApplication     : Started InterestBatchApplication in 0.936 seconds (process running for 1.204)
+2026-11-20T08:03:15.458Z  INFO 3351 --- [interestClose] [           main] c.carddemo.interest.job.CloseRunService  : event=run-finished run=9563eff8-f12e-4651-a9f6-a8419117484a phase=compute category=COMPUTED rc=0
+2026-11-20T08:03:15.574Z  INFO 3351 --- [interestClose] [           main] c.c.interest.batch.InterestJobConfig     : event=package-shadow run=9563eff8-f12e-4651-a9f6-a8419117484a records=2 payload_sha256=38699978b2c269ea72bb8b9fcd489f3ddaec3d230cd0058563fbe0bc4ec11620
 JOB DEFGDGB (app/jcl/DEFGDGB.jcl)
   STEP05           IDCAMS   RC=0000
 JOB ACCTFILE (app/jcl/ACCTFILE.jcl)

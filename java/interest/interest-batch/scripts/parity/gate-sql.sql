@@ -20,5 +20,5 @@ SELECT run_pass AND tx_count_pass AND delta_count_pass AND tx_sum_pass AND delta
 \echo SQL PASS case=:case tx=:tx_count deltas=:delta_count tx_sum=:tx_sum delta_sum=:delta_sum
 \else
 \echo SQL FAIL case=:case run=:run_id
-\quit 1
+DO $$ BEGIN RAISE EXCEPTION 'Gate SQL assertion failed'; END $$;
 \endif
