@@ -124,6 +124,10 @@ Ticket sessions copy each line into the review evidence and record **PASS** or *
 - **i** · Are both overlays accounted for by a timestamp formatter and a profile-aware status adapter?
 - **j** · Are all LRECLs and filler/untouched bytes preserved in byte tests?
 - **l** · Does state persist within its intended scope without reliance on unassigned bytes?
+  For newly emitted transactions in the lab fixture profile, explicitly fill TRAN-RECORD
+  FILLER and the unused TRAN-DESC tail with spaces, as `InterestTransaction` does in INT-01.
+  This documents the pilot's choice, not the legacy host bytes; host initialization remains
+  unconfirmed (§4 item l).
 - **m** · Are normal breaks, EOF and empty input covered, including the withheld final delta?
 - **o** · Are success and EOF typed outcomes with no APPL-RESULT leakage into RC?
 - **p** · Do keyed reads, nonunique AIX selection and guarded rewrite use the recorded key and preimage contracts?
