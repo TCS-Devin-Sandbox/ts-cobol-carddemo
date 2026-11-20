@@ -14,7 +14,7 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
-from lab.classify import INTAKE_REASON, classify, equal, intake_hold, required, register, termination_verdicts, verdicts
+from lab.classify import INTAKE_REASON, classify, equal, intake_hold, is_open, required, register, termination_verdicts, verdicts
 from tools.parity import compare
 from tools.parity.copybook import decode_record, parse_copybook, split_records
 
@@ -128,13 +128,14 @@ def compare_values(expectation, observed, target, data, directory, metadata, dec
     values = []
     card_accounts = [str(row['XREF-ACCT-ID']) for row in data['CARDXREF']]
     multi = len(card_accounts) != len(set(card_accounts))
-    held = intake_hold(target, data)
+    held = is_open(decisions, 'INT-H03') and intake_hold(target, data)
 
     def add(name, cell, o, t, host_unknown=False, hole=None):
         values.append({'value': name, 'required': required(cell), 'observed': o, 'target': t,
                        'rules': cell.get('rules', []), **classify(cell, o, t, decisions, hole),
                        'verdicts': {'observed': verdicts(cell, o, host_unknown),
-                                    'target': termination_verdicts(cell, t, held) if hole and held else verdicts(cell, t, host_unknown)}})
+                                    'target': termination_verdicts(cell, t, held) if hole and held else
+                                    verdicts(cell, t, host_unknown, decisions=decisions)}})
 
     stopped = observed['rc'] != 0 or target['rc'] != 0
     rc_cell = dict(expectation['return_code'])
@@ -226,7 +227,7 @@ def run_case(case, directory, metadata, jar, run_id, model, decisions, golden=Fa
     if not golden:
         expectation['derived_from'] = [str(p.relative_to(ROOT)) for p in sorted(staging.glob('*.txt'))]
     observed, target = lane_output(out / 'legacy'), lane_output(out / 'target')
-    if intake_hold(target, intake(staging)):
+    if is_open(decisions, 'INT-H03') and intake_hold(target, intake(staging)):
         target['outputs_judgment'] = {'verdict': 'NOT JUDGED', 'decision': 'INT-H03', 'reason': INTAKE_REASON}
     parity = compare.compare_case('interest', case, out / 'legacy')[0] if golden else None
     result = {'case': case, 'set': 'golden' if golden else 'edge', 'metadata': metadata, 'expectation': expectation,

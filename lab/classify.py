@@ -60,31 +60,47 @@ def register(text):
     return result
 
 
+def is_open(decisions, decision):
+    return decisions.get(decision, {}).get('status', 'OPEN') == 'OPEN'
+
+
+def approved_effects(cell, decisions):
+    effects = {}
+    for candidate in alternatives(cell):
+        decision, option = candidate['decision'].split('=')
+        entry = decisions.get(decision, {})
+        if (entry.get('status') in ('APPROVED', 'DECIDED') and entry.get('option') == option
+                and candidate['value'] is not None):
+            effects[decision] = candidate['value']
+    return effects
+
+
 def classify(cell, observed, target, decisions, host_hole=None):
-    alts = alternatives(cell)
+    alts = [c for c in alternatives(cell) if is_open(decisions, c['decision'].split('=')[0])]
     ids = sorted({c['decision'].split('=')[0] for c in alts})
     if equal(observed, target):
         return {'class': 'UNRESOLVED' if ids else 'MATCH', 'agreement': True, 'decisions': ids}
-    matched = [c for c in alts if c.get('value') is not None and equal(target, c['value'])]
-    approved, opened = [], []
-    for candidate in matched:
-        decision, option = candidate['decision'].split('=')
-        entry = decisions.get(decision, {'status': 'OPEN', 'option': None})
-        if entry['status'] in ('APPROVED', 'DECIDED') and entry['option'] == option:
-            approved.append(decision)
-        elif entry['status'] == 'OPEN':
-            opened.append(decision)
+    approved = sorted(decision for decision, value in approved_effects(cell, decisions).items()
+                      if equal(target, value))
     if approved:
-        return {'class': 'INTENDED_CHANGE', 'agreement': False, 'decisions': sorted(set(approved))}
-    if opened or host_hole:
-        return {'class': 'UNRESOLVED', 'agreement': False, 'decisions': sorted(set(opened + ([host_hole] if host_hole else [])))}
+        return {'class': 'INTENDED_CHANGE', 'agreement': False, 'decisions': approved}
+    opened = {c['decision'].split('=')[0] for c in alts
+              if c['value'] is not None and equal(target, c['value'])}
+    if host_hole and is_open(decisions, host_hole):
+        opened.add(host_hole)
+    if opened:
+        return {'class': 'UNRESOLVED', 'agreement': False, 'decisions': sorted(opened)}
     return {'class': 'UNCLASSIFIED', 'agreement': False, 'decisions': []}
 
 
-def verdicts(cell, value, host_unknown=False):
+def verdicts(cell, value, host_unknown=False, *, decisions=None):
     rules = [r for r in cell.get('rules', []) if re.fullmatch(r'INT-[RQH]\d+', r)]
     if host_unknown:
         return {r: {'verdict': 'NOT JUDGED', 'reason': HOST_REASON} for r in rules}
+    effects = approved_effects(cell, decisions) if decisions else {}
+    if effects:
+        violations = {r: {'verdict': 'VIOLATES'} for r, expected in effects.items() if not equal(value, expected)}
+        return violations or {r: {'verdict': 'CONFORMS'} for r in rules}
     if equal(value, required(cell)):
         return {r: {'verdict': 'CONFORMS'} for r in rules}
     matched = {c['decision'].split('=')[0] for c in alternatives(cell)

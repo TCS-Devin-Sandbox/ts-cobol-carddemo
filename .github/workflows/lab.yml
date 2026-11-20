@@ -46,7 +46,7 @@ jobs:
         run: make lab-jar JAVA21_HOME="$JAVA_HOME"
 
       - name: Lab unit tests
-        run: python3 -m unittest discover -s lab/tests -v
+        run: make lab-test
 
       - name: Replay gate
         run: make lab-gate

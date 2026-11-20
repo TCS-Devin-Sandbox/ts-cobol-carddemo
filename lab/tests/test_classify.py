@@ -23,6 +23,16 @@ class ClassificationTests(unittest.TestCase):
         decisions = register('| ID | Question | Status |\n|---|---|---|\n| INT-Q01 | OPEN prose | APPROVED option C |')
         self.assertEqual(classify(self.cell, '12.35', '12.36', decisions)['class'], 'INTENDED_CHANGE')
         self.assertEqual(verdicts(self.cell, '12.36'), {'INT-Q01': {'verdict': 'VIOLATES'}})
+        self.assertEqual(verdicts(self.cell, '12.36', decisions=decisions)['INT-Q01']['verdict'], 'CONFORMS')
+        self.assertEqual(verdicts(self.cell, '12.35', decisions=decisions), {'INT-Q01': {'verdict': 'VIOLATES'}})
+        result = classify(self.cell, '12.35', '12.35', decisions)
+        self.assertEqual((result['class'], result['agreement'], result['decisions']), ('MATCH', True, []))
+
+    def test_approval_of_legacy_option_closes_alternatives(self):
+        decisions = register('| ID | Status |\n| INT-Q01 | APPROVED option A |')
+        self.assertEqual(classify(self.cell, '12.35', '12.36', decisions)['class'], 'UNCLASSIFIED')
+        self.assertEqual(verdicts(self.cell, '12.35', decisions=decisions)['INT-Q01']['verdict'], 'CONFORMS')
+        self.assertEqual(verdicts(self.cell, '12.36', decisions=decisions), {'INT-Q01': {'verdict': 'VIOLATES'}})
 
     def test_register_uses_status_column(self):
         decisions = register('| ID | Options | Status |\n| INT-Q01 | APPROVED C | OPEN |')

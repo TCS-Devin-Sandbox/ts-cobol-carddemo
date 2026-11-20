@@ -9,6 +9,7 @@
 #   make parity [CHAIN=..] [CASE=..]   rerun chains and compare field by field -> work/parity/report.md
 #   make parity-naive CASE=i02-tie-half-cent   half-even Python reference vs golden (fails on the tie)
 #   make chain-graph / chain-graph-check       regenerate / verify docs/chain-graph.md
+#   make lab-test               run replay lab unit tests
 #   make reset                  drop datasets, loadlib, work/ and the database volume
 
 # run the estate container as the invoking user so bind-mounted loadlib/, work/,
@@ -109,13 +110,16 @@ JAVA21_HOME ?= /usr/lib/jvm/java-21-openjdk-amd64
 MVN ?= mvn
 LAB_PY ?= $(if $(wildcard $(HOME)/envs/lab/bin/python),$(HOME)/envs/lab/bin/python,python3)
 
-.PHONY: lab lab-jar lab-gate lab-gate-negative lab-e2e
+.PHONY: lab lab-jar lab-test lab-gate lab-gate-negative lab-e2e
 
 lab:
 	$(PY) lab/server.py
 
 lab-jar:
 	cd java/interest/interest-batch && env -u JDK_JAVA_OPTIONS JAVA_HOME=$(JAVA21_HOME) $(MVN) -q package -DskipTests
+
+lab-test:
+	$(PY) -m unittest discover -s lab/tests -v
 
 lab-gate:
 	$(PY) lab/replay.py gate --json work/lab/report.json --report work/lab/report.md

@@ -5,7 +5,7 @@ import unittest
 from decimal import Decimal
 from pathlib import Path
 
-from lab.classify import required
+from lab.classify import register, required
 from lab.replay import ROOT, SPECS, compare_values, evaluator, intake, validate
 from tools.parity.copybook import encode_record, parse_copybook
 
@@ -36,6 +36,24 @@ class ReplayTests(unittest.TestCase):
             for stem in SPECS:
                 (directory / f'AWS.M2.CARDDEMO.{stem}.PS.txt').touch()
             validate(directory)
+
+    def test_only_target_uses_approved_rounding(self):
+        directory = ROOT / 'fixtures/interest/i02-tie-half-cent/input'
+        data = intake(directory)
+        model = evaluator()
+        expectation = model.evaluate_case(model.load_rules(), directory.parent)
+        observed = {'rc': 0, 'failure': None, 'transactions': [
+            {field: required(cell) for field, cell in entry.items() if field.startswith('TRAN-')}
+            for entry in expectation['transactions'] if required(entry['exists'])],
+            'accounts': {}, 'sysout': expectation['sysout']['value']}
+        target = copy.deepcopy(observed)
+        target['transactions'][0]['TRAN-AMT'] = Decimal('12.36')
+        decisions = register('| ID | Status |\n| INT-Q01 | APPROVED option C |')
+        values = compare_values(expectation, observed, target, data, directory, {}, decisions)
+        amount = next(v for v in values if v['value'] == 'transaction 00000002003/01/0001 TRAN-AMT')
+        self.assertEqual(amount['class'], 'INTENDED_CHANGE')
+        self.assertEqual(amount['verdicts']['observed']['INT-Q01']['verdict'], 'CONFORMS')
+        self.assertEqual(amount['verdicts']['target']['INT-Q01']['verdict'], 'CONFORMS')
 
     def test_zero_interest_rewrite_with_no_value_change(self):
         data = intake(ROOT / 'fixtures/interest/i02-tie-half-cent/input')
