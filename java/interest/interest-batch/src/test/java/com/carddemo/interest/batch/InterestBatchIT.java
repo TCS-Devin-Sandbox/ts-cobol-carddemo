@@ -52,7 +52,7 @@ class InterestBatchIT {
     }
     void storedStatus(JobExecution execution, String status, String exitCode) {
         assertEquals(status, execution.getStatus().name());
-        var stored = jdbc.queryForMap("SELECT status, exit_code FROM BATCH_JOB_EXECUTION WHERE job_execution_id=?", execution.getId());
+        var stored = jdbc.queryForMap("SELECT status, exit_code FROM interest_batch.BATCH_JOB_EXECUTION WHERE job_execution_id=?", execution.getId());
         assertEquals(status, stored.get("status"));
         assertEquals(exitCode, stored.get("exit_code"));
     }
