@@ -57,7 +57,7 @@ All OPEN owner decisions and host evidence prerequisites remain OPEN.
 
 - **S12** · Does each touched status path produce the specified outcome, exit and diagnostic?
 
-  **PASS** — `gate/CandidateParityGateIT.java#INT_R10_failuresHaveNoPublishedEffects` covers five failure specimens; `batch/InterestBatchIT.java#INT_H06_packageRejectionRemovesSuccessArtifacts` covers packaging rejection. Existing typed status adapter tests in `calc/LegacyStatusTest.java` remain passing (`test-output.txt`).
+  **PASS** — `gate/CandidateParityGateIT.java#INT_R10_failuresHaveNoPublishedEffects` covers five failure specimens; `batch/InterestBatchIT.java#INT_H06_packageRejectionRemovesSuccessArtifacts` covers packaging rejection. `InterestBatchIT#storedStatus` checks persisted FAILED/12 for missing DEFAULT and packaging held, and COMPLETED/0 for i01. Existing typed status adapter tests in `calc/LegacyStatusTest.java` remain passing (`test-output.txt`). `scripts/parity/gate-sql.sql` raises on failed assertions; `negative-sql.txt` proves PostgreSQL 15 pipeline exit 3; existing run_gate.sh pipefail propagates failure before GATE PASS.
 
 - **S13** · Do private restart and host hold/reconciliation paths preserve committed state and prevent duplicate effects?
 

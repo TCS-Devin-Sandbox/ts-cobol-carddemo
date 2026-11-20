@@ -50,6 +50,12 @@ class InterestBatchIT {
     int publications(JobExecution execution) {
         return jdbc.queryForObject("SELECT count(*) FROM interest.publication WHERE run_id=?", Integer.class, runId(execution));
     }
+    void storedStatus(JobExecution execution, String status, String exitCode) {
+        assertEquals(status, execution.getStatus().name());
+        var stored = jdbc.queryForMap("SELECT status, exit_code FROM interest_batch.BATCH_JOB_EXECUTION WHERE job_execution_id=?", execution.getId());
+        assertEquals(status, stored.get("status"));
+        assertEquals(exitCode, stored.get("exit_code"));
+    }
     void failedArtifacts(Path output) throws Exception {
         assertTrue(Files.readString(output.resolve("rc.json")).contains("\"maxrc\":12"));
         assertFalse(Files.exists(output.resolve(CloseExporter.ACCOUNT)));
@@ -59,6 +65,7 @@ class InterestBatchIT {
     @Test void INT_H06_i01_computesThenPackagesPrivately() throws Exception {
         var execution = run(I01, temp);
         assertEquals("0", execution.getExitStatus().getExitCode());
+        storedStatus(execution, "COMPLETED", "0");
         assertEquals(List.of("candidate.load-calculate-private-export", "candidate.export-packaging"),
                 execution.getStepExecutions().stream().map(s -> s.getStepName()).toList());
         for (String artifact : List.of(CloseExporter.ACCOUNT, CloseExporter.SYSTRAN, CloseExporter.SYSOUT)) {
@@ -74,6 +81,7 @@ class InterestBatchIT {
     @Test void INT_R03_missingDefaultSkipsPackaging() throws Exception {
         var execution = run(Path.of("src/test/resources/pilot/specimens/missing-default-rate").toAbsolutePath(), temp);
         assertEquals("12", execution.getExitStatus().getExitCode());
+        storedStatus(execution, "FAILED", "12");
         assertEquals(1, execution.getStepExecutions().size());
         assertEquals(0, publications(execution));
         failedArtifacts(temp);
@@ -86,6 +94,7 @@ class InterestBatchIT {
         }).when(handoff).handoff(any());
         var execution = run(I01, temp);
         assertEquals("12", execution.getExitStatus().getExitCode());
+        storedStatus(execution, "FAILED", "12");
         assertEquals(0, publications(execution));
         failedArtifacts(temp);
         assertTrue(Files.readString(temp.resolve("pilot-failure.json")).contains("TARGET_PACKAGE_HELD"));
