@@ -40,9 +40,37 @@ public static class ChainRunner
                 }
             }
         }
-        var overall = 0;
+        var statePath = Path.Combine(outDir, "state", "chain.json");
+        var state = restart && File.Exists(statePath)
+            ? System.Text.Json.JsonSerializer.Deserialize<ChainState>(File.ReadAllText(statePath))!
+            : new ChainState([], [], []);
+        foreach (var (job, rc) in state.MaxRc)
+        {
+            rcs[job] = (rc, new SortedDictionary<string, int>(state.Steps[job], StringComparer.Ordinal));
+        }
+        var resumed = false;
+        var overall = rcs.Values.Select(v => v.MaxRc).DefaultIfEmpty(0).Max();
         foreach (var job in jobs)
         {
+            if (state.MaxRc.TryGetValue(job, out var done) && done <= 8)
+            {
+                log?.Invoke($"{job} completed in the failed run (RC {done}) - skipped on restart");
+                continue;
+            }
+            if (restart && !resumed)
+            {
+                resumed = true;
+                foreach (var (k, v) in state.CarriedCodes)
+                {
+                    runner.StepReturnCodes[k] = v;
+                }
+            }
+            state.CarriedCodes.Clear();
+            foreach (var (k, v) in runner.StepReturnCodes)
+            {
+                state.CarriedCodes[k] = v;
+            }
+            SaveChainState(statePath, state);
             var rc = runner.Run(JobCatalog.Jobs[job]);
             var steps = new SortedDictionary<string, int>(StringComparer.Ordinal);
             foreach (var (k, v) in runner.StepReturnCodes.Where(kv => !kv.Key.Contains('.', StringComparison.Ordinal) || kv.Key.StartsWith(job, StringComparison.Ordinal)))
@@ -50,6 +78,9 @@ public static class ChainRunner
                 steps[k] = v;
             }
             rcs[job] = (rc, steps);
+            state.MaxRc[job] = rc;
+            state.Steps[job] = new Dictionary<string, int>(steps);
+            SaveChainState(statePath, state);
             runner.StepReturnCodes.Clear();
             overall = Math.Max(overall, rc);
             if (rc > 8)
@@ -62,7 +93,21 @@ public static class ChainRunner
             catalog.UnloadClusters();
         }
         File.WriteAllText(Path.Combine(outDir, "rc.json"), RcJson(rcs));
+        if (overall <= 8 && File.Exists(statePath))
+        {
+            File.Delete(statePath);
+        }
         return overall;
+    }
+
+    /// <summary>Chain recovery metadata: finished jobs with their RCs and the step codes carried into the next job.</summary>
+    public sealed record ChainState(Dictionary<string, int> MaxRc, Dictionary<string, Dictionary<string, int>> Steps, Dictionary<string, int> CarriedCodes);
+
+    private static void SaveChainState(string path, ChainState state)
+    {
+        Directory.CreateDirectory(Path.GetDirectoryName(path)!);
+        File.WriteAllText(path + ".tmp", System.Text.Json.JsonSerializer.Serialize(state));
+        File.Move(path + ".tmp", path, overwrite: true);
     }
 
     /// <summary>Same text as Python json.dumps(rcs, indent=1, sort_keys=True).</summary>

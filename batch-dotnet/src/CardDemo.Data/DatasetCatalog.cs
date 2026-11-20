@@ -89,8 +89,16 @@ public sealed partial class DatasetCatalog(string workDir, IKsdsPersistence? ksd
         return store;
     }
 
-    public List<byte[]> ReadSequential(string dsn, int lrecl) =>
-        IsCluster(dsn) ? Cluster(dsn).Scan().Select(r => r.Bytes).ToList() : SequentialFile.Read(PathOf(dsn), lrecl);
+    /// <summary>Reads an input dataset; a dataset that is not catalogued fails the step (JCL error / OPEN failure), unlike an empty one.</summary>
+    public List<byte[]> ReadSequential(string dsn, int lrecl)
+    {
+        if (IsCluster(dsn))
+        {
+            return Cluster(dsn).Scan().Select(r => r.Bytes).ToList();
+        }
+        var path = PathOf(dsn);
+        return File.Exists(path) ? SequentialFile.Read(path, lrecl) : throw new FileNotFoundException($"dataset {Resolve(dsn)} not catalogued", path);
+    }
 
     public void WriteSequential(string dsn, IEnumerable<byte[]> records, bool append = false) =>
         SequentialFile.Write(PathOf(dsn), records, append);

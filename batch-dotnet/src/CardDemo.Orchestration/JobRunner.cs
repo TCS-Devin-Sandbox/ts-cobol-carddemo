@@ -52,6 +52,7 @@ public sealed class JobRunner(DatasetCatalog catalog, DateTime clock, string run
                 ChunkSize = ChunkSize,
                 Checkpoints = new FileCheckpointStore(Path.Combine(catalog.WorkDir, "checkpoints")),
             };
+            SaveState(job.Name, completed); // generations resolved so far stay pinned even if the process dies mid-step
             var program = ProgramOverride?.Invoke(job.Name, step.Name) ?? step.Program();
             var started = DateTime.UtcNow;
             int rc;
@@ -67,6 +68,13 @@ public sealed class JobRunner(DatasetCatalog catalog, DateTime clock, string run
                 rc = ex.Code;
                 status = "ABEND";
                 message = ex.Message;
+            }
+            catch (Exception ex) when (ex is IOException or FormatException or OverflowException or InvalidOperationException or KeyNotFoundException or ArgumentException)
+            {
+                rc = 999;
+                status = "ABEND";
+                message = ex.GetType().Name + ": " + ex.Message;
+                ctx.Display("ABENDING PROGRAM - " + message);
             }
             WriteSysout(job.Name, step.Name, ctx.Sysout);
             AppendLedger(new LedgerEntry(runId, job.Name, step.Name, step.ProgramName, started, DateTime.UtcNow, rc, status, ctx.RecordsRead, ctx.RecordsWritten, message));

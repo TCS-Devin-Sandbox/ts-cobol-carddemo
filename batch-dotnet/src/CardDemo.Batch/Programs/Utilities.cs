@@ -45,11 +45,23 @@ public sealed class IdcamsStep(IdcamsAction action, string? dataset = null, stri
                 if (cat.IsCluster(target))
                 {
                     var store = cat.Cluster(target);
+                    var skipped = 0;
                     foreach (var r in records)
                     {
-                        store.Write(new FixedRecord(store.Layout, r));
+                        if (!store.Write(new FixedRecord(store.Layout, r)))
+                        {
+                            skipped++; // duplicate key: first record kept, as the legacy loader does
+                        }
                     }
                     store.Commit();
+                    ctx.RecordsRead = records.Count;
+                    ctx.RecordsWritten = records.Count - skipped;
+                    if (skipped > 0)
+                    {
+                        ctx.Display($"IDC3314I {skipped} DUPLICATE KEY(S) SKIPPED");
+                        return 4;
+                    }
+                    break;
                 }
                 else
                 {

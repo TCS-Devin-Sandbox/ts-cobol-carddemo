@@ -68,6 +68,44 @@ public class WorkloadTests
         Assert.True(File.Exists(Path.Combine(restarted, "checkpoints", "POSTTRAN.STEP15.checkpoint.json")));
 
         ChainRunner.Run("posting", fixture, restarted, restart: true, chunkSize: 1);
+        AssertSameOutputs(clean, restarted);
+        var ledger = File.ReadAllLines(Path.Combine(restarted, "ledger", "batch_run_ledger.jsonl"));
+        Assert.Contains(ledger, l => l.Contains("\"Status\":\"ABEND\"", StringComparison.Ordinal));
+    }
+
+    private sealed class Failing : CardDemo.Batch.IBatchProgram
+    {
+        public int Execute(CardDemo.Batch.StepContext ctx) => throw new IOException("injected report failure");
+    }
+
+    /// <summary>TRANREPT fails after POSTTRAN succeeded: the restart must not post the day twice.</summary>
+    [Fact]
+    public void Tranrept_restart_does_not_repost()
+    {
+        var fixture = Path.Combine(Root, "fixtures", "posting", "p01-baseline-mixed");
+        var clean = Temp("clean");
+        var restarted = Temp("restart");
+        ChainRunner.Run("posting", fixture, clean);
+        Assert.Equal(999, ChainRunner.Run("posting", fixture, restarted, programOverride: (job, step) => step == "STEP10R" ? new Failing() : null));
+        ChainRunner.Run("posting", fixture, restarted, restart: true);
+        AssertSameOutputs(clean, restarted);
+    }
+
+    [Fact]
+    public void Missing_input_dataset_abends_instead_of_posting_an_empty_day()
+    {
+        var caseDir = Temp("nodaly");
+        Directory.CreateDirectory(Path.Combine(caseDir, "input"));
+        foreach (var f in Directory.EnumerateFiles(Path.Combine(Root, "fixtures", "posting", "p01-baseline-mixed", "input")).Where(f => !f.Contains("DALYTRAN.PS.txt", StringComparison.Ordinal)))
+        {
+            File.Copy(f, Path.Combine(caseDir, "input", Path.GetFileName(f)));
+        }
+        Assert.Equal(999, ChainRunner.Run("posting", caseDir, Temp("nodaly-out")));
+    }
+
+    private static void AssertSameOutputs(string clean, string restarted)
+    {
+        Assert.Equal(File.ReadAllText(Path.Combine(clean, "rc.json")), File.ReadAllText(Path.Combine(restarted, "rc.json")));
         foreach (var sub in new[] { "datasets", "sysout" })
         {
             foreach (var file in Directory.EnumerateFiles(Path.Combine(clean, sub)))
@@ -77,8 +115,6 @@ public class WorkloadTests
                 Assert.Equal(File.ReadAllBytes(file), File.ReadAllBytes(other));
             }
         }
-        var ledger = File.ReadAllLines(Path.Combine(restarted, "ledger", "batch_run_ledger.jsonl"));
-        Assert.Contains(ledger, l => l.Contains("\"Status\":\"ABEND\"", StringComparison.Ordinal));
     }
 
     [Fact]

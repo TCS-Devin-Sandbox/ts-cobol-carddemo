@@ -55,7 +55,7 @@ public sealed class Cbact04c : IBatchProgram
             {
                 var monthly = MonthlyInterest(bal.Number("TRAN-CAT-BAL"), rate);
                 totalInt += monthly;
-                suffix++;
+                suffix = (suffix + 1) % 1_000_000; // WS-TRANID-SUFFIX PIC 9(06): ADD 1 truncates high-order digit
                 systran.Add(InterestTransaction(ctx, parmDate, suffix, account, xrefRec, monthly).Bytes);
                 ctx.RecordsWritten++;
             }
