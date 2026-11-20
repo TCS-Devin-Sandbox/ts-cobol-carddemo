@@ -273,10 +273,10 @@ graph LR
 | PR | Batch | Title | Link | Status |
 |---|---|---|---|---|
 | A1 | A | Migration plan | this PR | in review |
-| A2 | A | `make parity-java` candidate seam + step-scoped compare | | not started |
-| A3 | A | Java CI job (trantype tests) | | not started |
-| A4 | A | Single transaction-type implementation | | not started |
-| A5 | A | BASELINE inventory corrections | | not started |
+| A2 | A | `make parity-java` candidate seam + step-scoped compare | [#34](https://github.com/TCS-Devin-Sandbox/ts-cobol-carddemo/pull/34) | in review |
+| A3 | A | Java CI job (trantype tests) | [#32](https://github.com/TCS-Devin-Sandbox/ts-cobol-carddemo/pull/32) | in review |
+| A4 | A | Single transaction-type implementation | [#33](https://github.com/TCS-Devin-Sandbox/ts-cobol-carddemo/pull/33) | in review |
+| A5 | A | BASELINE inventory corrections | [#31](https://github.com/TCS-Devin-Sandbox/ts-cobol-carddemo/pull/31) | in review |
 | B1 | B | `java/` skeleton | | not started |
 | B2 | B | Fixed-record codec | | not started |
 | B3 | B | VSAM master schema | | not started |
