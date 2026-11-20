@@ -37,7 +37,7 @@ export default function UserDeletePage() {
         <h1 className="m-0 text-xl text-primary-900">Delete User</h1>
       </div>
       <div className="card-body flex flex-col gap-sp-4">
-        <FetchBar initial={userId ?? ''} busy={busy} onFetch={(id) => { setSuccess(''); fetchUser(id); }} />
+        <FetchBar key={userId ?? ''} initial={userId ?? ''} busy={busy} onFetch={(id) => { setSuccess(''); fetchUser(id); }} />
         <Alert variant="success">{success}</Alert>
         <Alert variant="danger">{error}</Alert>
         {user && (

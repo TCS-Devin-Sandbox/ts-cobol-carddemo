@@ -1,6 +1,6 @@
 /** Tailwind theme mapped to the BFSI design tokens in src/styles/bfsi-theme.css (config/Style-Sheet.md). */
 export default {
-  content: ['./index.html', './src/**/*.{js,jsx}', '../../MG-01/Frontend/src/**/*.{js,jsx}'],
+  content: ['./index.html', './src/**/*.{js,jsx}', '../../MG-01/Frontend/src/**/*.{js,jsx}', '../../MG-03/Frontend/src/**/*.{js,jsx}'],
   corePlugins: { preflight: false },
   theme: {
     extend: {

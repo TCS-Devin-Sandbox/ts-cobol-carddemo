@@ -51,18 +51,20 @@ export default function UserListPage() {
         </div>
         <Link to="/admin/users/new" className="btn btn-primary">Add user</Link>
       </div>
-      <form className="flex gap-sp-3 items-end" onSubmit={onSearch} role="search">
-        <div className="form-group m-0">
+      <form className="grid grid-cols-1 gap-x-sp-4 md:grid-cols-12" onSubmit={onSearch} role="search">
+        <div className="form-group md:col-span-4">
           <label htmlFor="user-search">Search user ID</label>
-          <input id="user-search" value={search} maxLength={8} onChange={(e) => setSearch(e.target.value.toUpperCase())} />
+          <input id="user-search" type="text" value={search} maxLength={8} onChange={(e) => setSearch(e.target.value.toUpperCase())} />
         </div>
-        <button type="submit" className="btn btn-secondary" disabled={busy}>Search</button>
+        <div className="md:col-span-2 md:pt-[1.85rem]">
+          <button type="submit" className="btn btn-secondary" disabled={busy}>Search</button>
+        </div>
       </form>
       <Alert variant="danger">{error}</Alert>
       <Alert variant="info">{info}</Alert>
       <div className="card">
         <div className="table-wrap">
-          <table>
+          <table className="data-table">
             <caption className="visually-hidden">Users, page {pageNum}</caption>
             <thead>
               <tr>
@@ -82,7 +84,7 @@ export default function UserListPage() {
                   <td className="font-mono">{u.userId}</td>
                   <td>{u.firstName}</td>
                   <td>{u.lastName}</td>
-                  <td><span className={`badge ${u.userType === 'A' ? 'badge--info' : ''}`}>{typeLabel(u.userType)}</span></td>
+                  <td><span className={`badge ${u.userType === 'A' ? 'badge--info' : 'badge--neutral'}`}>{typeLabel(u.userType)}</span></td>
                   <td className="text-right">
                     <span className="inline-flex gap-sp-2">
                       <button type="button" className="btn btn-secondary btn-sm" aria-label={`Update ${u.userId}`}
