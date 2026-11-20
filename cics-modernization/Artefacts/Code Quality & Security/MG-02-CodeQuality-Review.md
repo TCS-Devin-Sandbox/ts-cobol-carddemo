@@ -118,3 +118,19 @@ Not applicable: no external guideline was supplied.
 - The duplication, maintainability, complexity and debt figures are estimates (`~`) from reading the code; no Sonar or jscpd run was available.
 - CQ-001 and CQ-002 need edits outside `Target/MG-02/`, which the fix agent may not make without approval.
 - Security observations are handed to the Security Review: rate-limit partitioning behind the proxy (SEC-002) and the audit-log user-ID masking (SEC-008).
+
+## Fixes Applied
+The user asked to fix the recommended set. Every change is under `Target/MG-02/`.
+
+| ID | Status | Change | Files |
+|---|---|---|---|
+| CQ-003 | Fixed | `Program.cs` now holds only composition (down from 156 to ~115 lines). Endpoints moved to `Endpoints/AuthEndpoints.cs`, `MenuEndpoints.cs` and `WellKnownEndpoints.cs` (route groups). The 401/403 handler moved to `Security/ProblemAuthorizationResultHandler.cs`. | `Program.cs`, `Endpoints/*.cs`, `Security/ProblemAuthorizationResultHandler.cs` |
+| CQ-005 | Fixed | Added `Target/MG-02/ci/quality-gate.sh`: build with warnings as errors, tests with an 80% backend coverage floor, NuGet vulnerability check, ESLint, vitest coverage thresholds, Vite build and `npm audit` (High). It passes. | `ci/quality-gate.sh` |
+| CQ-006 | Fixed | Added `MENU_STATUS` constants, used by `MenuPage` and `MenuTile`. | `Frontend/src/api/menuStatus.js`, `pages/MenuPage.jsx`, `components/MenuTile.jsx` |
+| CQ-007 | Fixed | The store-failure catch is narrowed to `DbException`, `TimeoutException` and `InvalidOperationException`. Other exceptions surface as 500 and are logged. New unit test. | `Auth/SignInService.cs`, `tests/SignInServiceTests.cs` |
+| CQ-008 | Fixed | Endpoints have names, summaries, tags, `Produces<T>` and `ProducesProblem` metadata, so the OpenAPI document lists the response types. | `Endpoints/*.cs` |
+| CQ-010 | Fixed | Added `demo/README.md` with run steps, credentials and a 5-minute demo script. | `demo/README.md` |
+| CQ-011 | Fixed | The header home link is now a router `<Link>`. | `Frontend/src/App.jsx` |
+| CQ-001, CQ-002 | Not applied | These need edits outside `Target/MG-02` (a shared library, an npm workspace) and an approval. | — |
+| CQ-004 | Not applied | Schema migrations belong to the Phase 5 owner. | — |
+| CQ-009 | Not applied | Optional; single locale. | — |

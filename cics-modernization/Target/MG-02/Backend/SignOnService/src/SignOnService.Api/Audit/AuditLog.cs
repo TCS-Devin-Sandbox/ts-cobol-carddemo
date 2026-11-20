@@ -1,6 +1,6 @@
 namespace SignOnService.Api.Audit;
 
-public sealed record AuditEvent(string Action, string User, string Outcome, string? Reason, string TraceId);
+public sealed record AuditEvent(string Action, string User, string Outcome, string? Reason, string? ClientIp, string TraceId);
 
 public interface IAuditLog
 {
@@ -12,7 +12,8 @@ public sealed class AuditLog(ILogger<AuditLog> logger, IHttpContextAccessor acce
 {
     public void Write(string action, string user, string outcome, string? reason = null)
     {
-        var evt = new AuditEvent(action, user, outcome, reason, accessor.HttpContext?.TraceIdentifier ?? "");
+        var context = accessor.HttpContext;
+        var evt = new AuditEvent(action, user, outcome, reason, context?.Connection.RemoteIpAddress?.ToString(), context?.TraceIdentifier ?? "");
         logger.LogInformation("AUDIT {@Audit}", evt);
     }
 }

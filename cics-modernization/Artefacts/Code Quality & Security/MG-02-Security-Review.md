@@ -112,3 +112,19 @@ None found.
 - RSA signing runs on a singleton `RSA` instance. This is believed thread-safe on .NET 9 / OpenSSL and the Phase 8 CON-001 test (10 parallel sign-ins) passed; a load test would confirm it.
 - CVE status comes from `npm audit` and NuGet advisory data on the review date. Re-run before release.
 - LOC counts only non-blank `.cs`, `.js` and `.jsx` under `src`, excluding tests.
+
+## Fixes Applied
+The user asked to fix the recommended set. Every change is under `Target/MG-02/`.
+
+| ID | Status | Change | Files |
+|---|---|---|---|
+| SEC-002 | Fixed | `UseForwardedHeaders` trusts only the configured proxies (`ForwardedHeaders:KnownProxies`). The sign-in limiter now partitions on the real client IP. The shell's Vite proxy sends `X-Forwarded-For` (`xfwd`). The demo pins the UI container to 172.28.0.10 and trusts only that address, so direct callers cannot spoof the header. New test `RateLimitTests`. | `Program.cs`, `appsettings.json`, `Frontend/vite.config.js`, `demo/docker-compose.yml`, `tests/RateLimitTests.cs` |
+| SEC-008 | Fixed | Audit events now carry `ClientIp`. For unknown users only a hash prefix is logged (`unknown#<sha256-12>`), never the typed text. | `Audit/AuditLog.cs`, `Auth/SignInService.cs`, `tests/SignInServiceTests.cs` |
+| SEC-009 | Fixed | The demo uses a persistent signing key: `start-demo.sh` generates `demo/keys/signon.pem` (git-ignored), mounted through `Auth__SigningKeyPath`. Restarting SignOnService no longer invalidates sessions or MG-01's cached JWKS. | `demo/start-demo.sh`, `demo/docker-compose.yml`, `demo/.gitignore` |
+| SEC-010 | Fixed | The `name` claim is removed from the access token. The UI still gets the display name from the sign-in response. | `Auth/TokenIssuer.cs`, `tests/SignInServiceTests.cs` |
+| SEC-001, SEC-003, SEC-004, SEC-005, SEC-007 | Not applied | These need a product decision (plain-text passwords, distinct messages, lockout, revocation) or a cross-group upgrade (React Router v7). | — |
+| SEC-006, SEC-011, SEC-012 | Not applied | Demo topology only; documented in `demo/README.md`. | — |
+
+Re-verification:
+- `ci/quality-gate.sh` passes: 38/38 backend tests, 94.7% line coverage, no vulnerable NuGet packages, ESLint clean, 19/19 frontend tests, build OK, `npm audit` shows no High or Critical.
+- The Phase 8 API and UI suites were re-run against the rebuilt stack.

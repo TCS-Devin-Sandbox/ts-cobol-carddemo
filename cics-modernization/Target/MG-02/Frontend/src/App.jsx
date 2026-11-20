@@ -1,5 +1,5 @@
 import { useCallback, useState } from 'react';
-import { Navigate, Route, Routes, useNavigate } from 'react-router-dom';
+import { Link, Navigate, Route, Routes, useNavigate } from 'react-router-dom';
 import TransactionTypeListPage from '@mg01/screens/TransactionTypeListPage.jsx';
 import TransactionTypeAddPage from '@mg01/screens/TransactionTypeAddPage.jsx';
 import TransactionTypeDetailPage from '@mg01/screens/TransactionTypeDetailPage.jsx';
@@ -61,9 +61,7 @@ export default function App() {
         </span>
         {user && (
           <nav aria-label="Account" className="flex items-center gap-sp-3">
-            <a href={homeFor(user)} onClick={(e) => { e.preventDefault(); navigate(homeFor(user)); }}>
-              {isAdmin(user) ? 'Administration' : 'Customer services'}
-            </a>
+            <Link to={homeFor(user)}>{isAdmin(user) ? 'Administration' : 'Customer services'}</Link>
             <span className="text-white/90" data-testid="signed-in-user">
               {user.firstName} {user.lastName}
             </span>

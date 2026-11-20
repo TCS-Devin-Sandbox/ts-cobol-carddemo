@@ -18,8 +18,8 @@ export default defineConfig({
     strictPort: true,
     fs: { allow: ['..', mg01] },
     proxy: {
-      '/api/v1/auth': { target: signOn, changeOrigin: true },
-      '/api/v1/menus': { target: signOn, changeOrigin: true },
+      '/api/v1/auth': { target: signOn, changeOrigin: true, xfwd: true },
+      '/api/v1/menus': { target: signOn, changeOrigin: true, xfwd: true },
       '/api': { target: mg01Api, changeOrigin: true },
     },
   },

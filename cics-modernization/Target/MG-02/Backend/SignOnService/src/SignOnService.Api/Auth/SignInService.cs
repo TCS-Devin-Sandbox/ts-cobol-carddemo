@@ -1,3 +1,4 @@
+using System.Data.Common;
 using System.Security.Cryptography;
 using System.Text;
 using SignOnService.Api.Audit;
@@ -35,7 +36,7 @@ public sealed class SignInService(ISecurityUserStore store, TokenIssuer issuer, 
         {
             user = await store.FindAsync(userId, ct);
         }
-        catch (Exception ex) when (ex is not OperationCanceledException)
+        catch (Exception ex) when (ex is DbException or TimeoutException or InvalidOperationException)
         {
             logger.LogError(ex, "USRSEC lookup failed");
             audit.Write(AuditAction, userId, "failure", ErrorCodes.UnableToVerify);
@@ -44,7 +45,7 @@ public sealed class SignInService(ISecurityUserStore store, TokenIssuer issuer, 
 
         if (user is null)
         {
-            audit.Write(AuditAction, userId, "failure", ErrorCodes.UserNotFound);
+            audit.Write(AuditAction, MaskUnknownUserId(userId), "failure", ErrorCodes.UserNotFound);
             throw new ApiException(401, ErrorCodes.UserNotFound, "User not found. Try again ...");
         }
         if (!PasswordMatches(password, user.Password))
@@ -58,6 +59,10 @@ public sealed class SignInService(ISecurityUserStore store, TokenIssuer issuer, 
         return new SignInResponse(token, "Bearer", expiresIn,
             new UserInfo(user.UserId, user.FirstName, user.LastName, user.UserType));
     }
+
+    /// <summary>An unknown user ID may be a mistyped password, so audit only a hash prefix of it.</summary>
+    public static string MaskUnknownUserId(string userId) =>
+        "unknown#" + Convert.ToHexString(SHA256.HashData(Encoding.UTF8.GetBytes(userId)))[..12].ToLowerInvariant();
 
     /// <summary>Legacy plain-text comparison (SEC-USR-PWD = WS-USER-PWD), in constant time. Demo only.</summary>
     public static bool PasswordMatches(string entered, string stored) =>

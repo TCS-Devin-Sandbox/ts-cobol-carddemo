@@ -75,7 +75,8 @@ public class SignInServiceTests
         var (service, _, audit) = Create(_ => null);
         var ex = await Fails(service, "nouser01", "x");
         Assert.Equal((401, ErrorCodes.UserNotFound, "User not found. Try again ..."), (ex.Status, ex.Code, ex.Message));
-        Assert.Equal(("auth.sign-in", "NOUSER01", "failure", ErrorCodes.UserNotFound), audit.Events.Single());
+        Assert.Equal(("auth.sign-in", SignInService.MaskUnknownUserId("NOUSER01"), "failure", ErrorCodes.UserNotFound), audit.Events.Single());
+        Assert.DoesNotContain("NOUSER01", audit.Events.Single().User);
     }
 
     [Fact]
@@ -124,6 +125,20 @@ public class SignInServiceTests
         var token = new JsonWebToken(result.AccessToken);
         Assert.Equal(Roles.User, token.GetClaim("role").Value);
         Assert.False(token.TryGetClaim("scope", out _));
+    }
+
+    [Fact]
+    public async Task Unexpected_errors_are_not_reported_as_unable_to_verify()
+    {
+        await Assert.ThrowsAsync<ArgumentException>(() =>
+            Create(_ => throw new ArgumentException("bug")).Service.SignInAsync(new SignInRequest("USER0001", "PASSWORD"), CancellationToken.None));
+    }
+
+    [Fact]
+    public async Task Token_does_not_carry_personal_names()
+    {
+        var result = await Create(_ => User("USER0001", "U")).Service.SignInAsync(new SignInRequest("USER0001", "PASSWORD"), CancellationToken.None);
+        Assert.False(new JsonWebToken(result.AccessToken).TryGetClaim("name", out _));
     }
 
     [Fact]

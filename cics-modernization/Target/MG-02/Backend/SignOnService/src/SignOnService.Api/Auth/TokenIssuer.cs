@@ -21,7 +21,6 @@ public sealed class TokenIssuer(SigningKeys keys, AuthOptions options, TimeProvi
         var claims = new Dictionary<string, object>
         {
             ["sub"] = user.UserId,
-            ["name"] = $"{user.FirstName} {user.LastName}".Trim(),
             ["role"] = isAdmin ? Roles.Admin : Roles.User,
             ["user_type"] = user.UserType
         };

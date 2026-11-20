@@ -9,6 +9,12 @@ if [ ! -f .env ]; then
   chmod 600 .env
   echo "Created demo/.env with random local passwords."
 fi
+if [ ! -f keys/signon.pem ]; then
+  mkdir -p keys
+  openssl genrsa -out keys/signon.pem 2048 2>/dev/null
+  chmod 644 keys/signon.pem   # demo only: readable by the non-root container user
+  echo "Created demo/keys/signon.pem (local demo signing key, git-ignored)."
+fi
 docker compose up -d --build
 echo "Waiting for the services..."
 for port in "${SIGNON_PORT:-5001}" "${API_PORT:-5000}"; do

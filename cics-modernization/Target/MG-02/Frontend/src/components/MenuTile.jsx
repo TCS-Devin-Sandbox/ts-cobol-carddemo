@@ -1,7 +1,9 @@
+import { MENU_STATUS } from '../api/menuStatus.js';
+
 const CHIPS = {
-  NOT_INSTALLED: { label: 'Not available yet', className: 'badge badge--neutral' },
-  COMING_SOON: { label: 'Coming soon', className: 'badge badge--info' },
-  ADMIN_ONLY: { label: 'Admin only', className: 'badge badge--warning' },
+  [MENU_STATUS.NOT_INSTALLED]: { label: 'Not available yet', className: 'badge badge--neutral' },
+  [MENU_STATUS.COMING_SOON]: { label: 'Coming soon', className: 'badge badge--info' },
+  [MENU_STATUS.ADMIN_ONLY]: { label: 'Admin only', className: 'badge badge--warning' },
 };
 
 /** One menu option as a clickable tile. */

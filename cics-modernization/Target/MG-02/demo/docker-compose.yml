@@ -30,12 +30,16 @@ services:
       ASPNETCORE_ENVIRONMENT: Development
       ASPNETCORE_URLS: http://+:5001
       Auth__Issuer: http://signon:5001
+      Auth__SigningKeyPath: /keys/signon.pem
+      ForwardedHeaders__KnownProxies__0: 172.28.0.10
       RateLimit__SignInPerMinute: ${SIGNON_RATE_LIMIT:-5}
       AllowedHosts: "localhost;signon"
       ConnectionStrings__SignOn: Host=db;Port=5432;Database=carddemo;Username=carddemo_signon;Password=${CARDDEMO_SIGNON_PASSWORD}
     depends_on:
       db:
         condition: service_healthy
+    volumes:
+      - ./keys:/keys:ro
     ports:
       - "${SIGNON_PORT:-5001}:5001"
 
@@ -69,5 +73,14 @@ services:
     depends_on:
       - signon
       - api
+    networks:
+      default:
+        ipv4_address: 172.28.0.10
     ports:
       - "${UI_PORT:-5173}:5173"
+
+networks:
+  default:
+    ipam:
+      config:
+        - subnet: 172.28.0.0/16
