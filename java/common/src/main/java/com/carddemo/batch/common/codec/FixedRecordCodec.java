@@ -1,0 +1,130 @@
+package com.carddemo.batch.common.codec;
+
+import java.math.BigDecimal;
+import java.math.BigInteger;
+import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
+import java.util.Arrays;
+import java.util.LinkedHashMap;
+import java.util.Map;
+
+import com.carddemo.batch.common.codec.RecordLayout.Field;
+
+/** Binary fields are raw bytes, not hexadecimal text, even in fixture .txt files. */
+public final class FixedRecordCodec {
+    private static final String POSITIVE = "{ABCDEFGHI";
+    private static final String NEGATIVE = "}JKLMNOPQR";
+    private final RecordLayout layout;
+    private final Charset charset;
+
+    public FixedRecordCodec(RecordLayout layout) {
+        this(layout, StandardCharsets.ISO_8859_1);
+    }
+
+    public FixedRecordCodec(RecordLayout layout, Charset charset) {
+        if (!charset.equals(StandardCharsets.ISO_8859_1) && !charset.equals(Charset.forName("IBM037"))) {
+            throw new IllegalArgumentException("Use Latin-1 (off-host) or IBM037 (EBCDIC)");
+        }
+        this.layout = layout;
+        this.charset = charset;
+    }
+
+    /** Strings retain trailing spaces and filler; every numeric has its declared scale. */
+    public Map<String, Object> decode(byte[] record) {
+        if (record.length != layout.length()) throw new IllegalArgumentException("Wrong record length");
+        var values = new LinkedHashMap<String, Object>();
+        int offset = 0;
+        for (Field field : layout.fields()) {
+            byte[] raw = Arrays.copyOfRange(record, offset, offset + field.length());
+            Object value = switch (field.kind()) {
+                case TEXT -> new String(raw, charset);
+                case DISPLAY -> decodeDisplay(raw, field);
+                case COMP3 -> decodePacked(raw, field);
+                case COMP -> new BigDecimal(field.signed() ? new BigInteger(raw) : new BigInteger(1, raw), field.scale());
+            };
+            values.put(field.name(), value);
+            offset += field.length();
+        }
+        return values;
+    }
+
+    /** No rounding, overflow truncation, implicit defaults, or text truncation. */
+    public byte[] encode(Map<String, ?> values) {
+        byte[] record = new byte[layout.length()];
+        int offset = 0;
+        for (Field field : layout.fields()) {
+            Object value = values.get(field.name());
+            byte[] raw;
+            if (field.kind() == RecordLayout.Kind.TEXT) {
+                if (!(value instanceof String text) || text.length() > field.length() || !charset.newEncoder().canEncode(text)) {
+                    throw new IllegalArgumentException("Invalid text: " + field.name());
+                }
+                raw = (text + " ".repeat(field.length() - text.length())).getBytes(charset);
+            } else {
+                if (!(value instanceof BigDecimal decimal)) throw new IllegalArgumentException("Expected BigDecimal: " + field.name());
+                BigInteger units = decimal.setScale(field.scale()).unscaledValue();
+                if ((!field.signed() && units.signum() < 0) || units.abs().toString().length() > field.digits()) {
+                    throw new IllegalArgumentException("Numeric overflow: " + field.name());
+                }
+                raw = encodeNumber(units, field);
+            }
+            System.arraycopy(raw, 0, record, offset, raw.length);
+            offset += field.length();
+        }
+        return record;
+    }
+
+    private BigDecimal decodeDisplay(byte[] raw, Field field) {
+        String text = new String(raw, charset);
+        if (text.isBlank()) return BigDecimal.ZERO.setScale(field.scale());
+        int sign = 1;
+        char last = text.charAt(text.length() - 1);
+        int digit = POSITIVE.indexOf(last);
+        if (digit < 0) {
+            digit = NEGATIVE.indexOf(last);
+            if (digit >= 0) sign = -1;
+        }
+        if (digit >= 0) text = text.substring(0, text.length() - 1) + digit;
+        text = text.replace(' ', '0');
+        if (!text.matches("[0-9]+")) throw new IllegalArgumentException("Invalid zoned decimal: " + field.name());
+        return new BigDecimal(new BigInteger(text).multiply(BigInteger.valueOf(sign)), field.scale());
+    }
+
+    private BigDecimal decodePacked(byte[] raw, Field field) {
+        var digits = new StringBuilder();
+        for (int i = 0; i < raw.length * 2 - 1; i++) {
+            int digit = (raw[i / 2] >> (i % 2 == 0 ? 4 : 0)) & 15;
+            if (digit > 9) throw new IllegalArgumentException("Invalid packed digit: " + field.name());
+            digits.append(digit);
+        }
+        int sign = raw[raw.length - 1] & 15;
+        if (sign < 10) throw new IllegalArgumentException("Invalid packed sign: " + field.name());
+        BigInteger units = new BigInteger(digits.toString());
+        if (sign == 11 || sign == 13) units = units.negate();
+        if (units.abs().toString().length() > field.digits()) throw new IllegalArgumentException("Invalid packed padding");
+        return new BigDecimal(units, field.scale());
+    }
+
+    private byte[] encodeNumber(BigInteger units, Field field) {
+        if (field.kind() == RecordLayout.Kind.COMP) {
+            int bits = field.length() * 8;
+            if (units.bitLength() > bits - (field.signed() ? 1 : 0)) throw new IllegalArgumentException("Binary overflow");
+            byte[] raw = new byte[field.length()];
+            Arrays.fill(raw, units.signum() < 0 ? (byte) 0xff : 0);
+            byte[] bytes = units.toByteArray();
+            int count = Math.min(bytes.length, raw.length);
+            System.arraycopy(bytes, bytes.length - count, raw, raw.length - count, count);
+            return raw;
+        }
+        int width = field.kind() == RecordLayout.Kind.COMP3 ? field.length() * 2 - 1 : field.length();
+        String digits = units.abs().toString();
+        digits = "0".repeat(width - digits.length()) + digits;
+        if (field.kind() == RecordLayout.Kind.DISPLAY) {
+            if (field.signed()) digits = digits.substring(0, width - 1)
+                    + (units.signum() < 0 ? NEGATIVE : POSITIVE).charAt(digits.charAt(width - 1) - '0');
+            return digits.getBytes(charset);
+        }
+        String nibbles = digits + (field.signed() ? units.signum() < 0 ? "D" : "C" : "F");
+        return java.util.HexFormat.of().parseHex(nibbles);
+    }
+}
