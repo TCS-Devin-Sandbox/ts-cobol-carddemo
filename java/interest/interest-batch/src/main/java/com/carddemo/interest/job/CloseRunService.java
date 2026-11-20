@@ -9,6 +9,7 @@ import com.carddemo.interest.intake.SnapshotIntake;
 import java.nio.file.Path;
 import java.util.List;
 import java.util.UUID;
+import java.util.concurrent.atomic.AtomicReference;
 import org.slf4j.LoggerFactory;
 import org.springframework.batch.core.BatchStatus;
 import org.springframework.batch.core.JobParametersBuilder;
@@ -16,6 +17,7 @@ import org.springframework.batch.core.job.builder.JobBuilder;
 import org.springframework.batch.core.launch.JobLauncher;
 import org.springframework.batch.core.repository.JobRepository;
 import org.springframework.batch.core.step.builder.StepBuilder;
+import org.springframework.batch.item.ItemProcessor;
 import org.springframework.stereotype.Service;
 import org.springframework.core.env.Environment;
 import org.springframework.transaction.PlatformTransactionManager;
@@ -99,12 +101,20 @@ public final class CloseRunService {
         int rc = 12;
         String category = "TARGET_COMPUTE_FAILED";
         LegacyStatus.Failure legacyFailure = null;
+        AtomicReference<String> lastReachedAccount = new AtomicReference<>();
         try {
             var checkpoint = store.checkpoint(run);
+            if (checkpoint.present()) lastReachedAccount.set(store.jdbc().queryForObject(
+                    "SELECT last_acct_id FROM interest.run_checkpoint WHERE run_id=?", String.class, run));
+            var calculation = new GroupCalculation(store, snapshot, run, rules, identity.parm(), checkpoint.ordinal());
+            ItemProcessor<AccountGroups.Group, GroupCalculation.Outcome> processor = group -> {
+                lastReachedAccount.set(group.account());
+                return calculation.process(group);
+            };
             var step = new StepBuilder("interestClose.compute", repository)
                     .<AccountGroups.Group, GroupCalculation.Outcome>chunk(1, manager)
                     .reader(new AccountGroups(store, snapshot, checkpoint))
-                    .processor(new GroupCalculation(store, snapshot, run, rules, identity.parm(), checkpoint.ordinal()))
+                    .processor(processor)
                     .writer(new GroupWriter(store, run, hook)).build();
             var job = new JobBuilder("interestClose", repository).start(step).build();
             var execution = launcher.run(job, new JobParametersBuilder().addString("runId", run.toString())
@@ -122,10 +132,10 @@ public final class CloseRunService {
         }
         store.jdbc().update("UPDATE interest.run SET state=? WHERE run_id=?", rc == 0 ? "COMPUTED" : "FAILED", run);
         try {
-            exporter.export(run, snapshot, output, rc, category, legacyFailure);
+            exporter.export(run, snapshot, output, rc, category, legacyFailure, lastReachedAccount.get());
         } catch (Exception e) {
             store.jdbc().update("UPDATE interest.run SET state='FAILED' WHERE run_id=?", run);
-            exporter.export(run, snapshot, output, 12, "TARGET_EXPORT_FAILED");
+            exporter.export(run, snapshot, output, 12, "TARGET_EXPORT_FAILED", null, lastReachedAccount.get());
             rc = 12; category = "TARGET_EXPORT_FAILED";
         }
         LoggerFactory.getLogger(CloseRunService.class).info("event=run-finished run={} phase=compute category={} rc={}", run, category, rc);

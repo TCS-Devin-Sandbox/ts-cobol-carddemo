@@ -48,6 +48,7 @@ class InterestCloseIT {
     }
     @Autowired CloseRunService service;
     @Autowired CloseStore store;
+    @Autowired CloseExporter exporter;
     @Autowired SnapshotIntake intake;
     @Autowired TestHook hook;
     @Autowired ConfigurableEnvironment environment;
@@ -223,6 +224,43 @@ class InterestCloseIT {
         assertEquals("FAILED", state(failed.runId()));
         assertEquals(0, service.run(null, out(), ID, failed.runId()).rc());
         assertThrows(IllegalArgumentException.class, () -> service.run(null, out(), ID, failed.runId()));
+    }
+
+    @Test void TN_01_INT_R10_targetFailureTranscriptStopsAtReachedGroupNotLaterMissingAccount() throws Exception {
+        for (int failing : List.of(1, 2)) {
+            for (boolean afterCommit : List.of(false, true)) {
+                Path input = copy(CASES.getFirst());
+                var balances = SnapshotIntake.decodeLines(Layout.TCATBAL, Files.readAllBytes(ps(input, "TCATBALF")));
+                var raw = new ArrayList<>(balances.stream().map(Decoded::original).toList());
+                raw.add(FixedRecordCodec.encode(balances.getFirst(), Map.of("acctId", "99999999999")));
+                CloseExporter.writeFixed(ps(input, "TCATBALF"), raw);
+                if (afterCommit) hook.after = failing; else hook.before = failing;
+                Path output = out();
+                var failed = service.run(input, output, ID, null);
+                assertEquals(12, failed.rc()); assertEquals("TARGET_COMPUTE_FAILED", failed.category());
+                assertEquals("FAILED", state(failed.runId()));
+                assertEquals(afterCommit ? failing : failing - 1, count("interest_tx", failed.runId()));
+                String sysout = Files.readString(output.resolve(CloseExporter.SYSOUT));
+                assertFalse(sysout.contains("ABENDING PROGRAM"), "Unreached third group must not invent a legacy abend");
+                var expected = new ArrayList<>(List.of("START OF EXECUTION OF PROGRAM CBACT04C"));
+                for (var row : store.rows(failed.snapshotId(), Layout.TCATBAL).subList(0, failing))
+                    expected.add(new String(row.original(), StandardCharsets.US_ASCII));
+                assertEquals(String.join("\n", expected) + "\n", sysout);
+                assertFalse(Files.exists(output.resolve(CloseExporter.SYSTRAN)));
+                assertFalse(Files.exists(output.resolve(CloseExporter.ACCOUNT)));
+            }
+        }
+    }
+
+    @Test void TN_01_INT_R10_targetFailureBeforeAnyGroupDoesNotReconstructUnreachedLookups() throws Exception {
+        Path input = copy(CASES.getFirst());
+        Files.write(ps(input, "ACCTDATA"), new byte[0]);
+        var snapshot = intake.load(input);
+        assertTrue(snapshot.sealed());
+        Path output = out();
+        exporter.export(UUID.randomUUID(), snapshot.snapshotId(), output, 12, "TARGET_COMPUTE_FAILED");
+        assertEquals("START OF EXECUTION OF PROGRAM CBACT04C\n", Files.readString(output.resolve(CloseExporter.SYSOUT)));
+        assertFalse(Files.exists(output.resolve(CloseExporter.SYSTRAN)));
     }
 
     @Test void INT_R10_INT_H08_missingAccountXrefAndDefaultAreFailedNotComputedWithU999AndNoDatasets() throws Exception {
