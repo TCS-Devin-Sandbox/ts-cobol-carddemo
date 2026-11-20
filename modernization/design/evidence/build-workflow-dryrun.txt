@@ -1,0 +1,53 @@
+=== all-pass
+[dry-run] register interest-build-5b phases=['g1-groundwork', 'g2-logic', 'g3-data-flow', 'g4-gate']
+[workflow t= 0.0s] states: {"g1-groundwork": "pending", "g2-logic": "pending", "g3-data-flow": "pending", "g4-gate": "pending"}
+[workflow t= 0.0s] g1-groundwork: running (attempt 1, tickets 02-schema, 03-record-codecs)
+[workflow t= 0.0s]   stand-in g1-groundwork-attempt1 start
+[workflow t= 1.0s]   stand-in g1-groundwork-attempt1 end
+[workflow t= 1.0s] g1-groundwork: passed - combined into demo/05b-integration at sha-g1-groundwork (PR https://github.com/TCS-Devin-Sandbox/ts-cobol-carddemo/pull/X-g1-groundwork)
+[workflow t= 1.0s] g2-logic: running (attempt 1, tickets 04-calculation-restart)
+[workflow t= 1.0s]   stand-in g2-logic-attempt1 start
+[workflow t= 1.0s] g3-data-flow: running (attempt 1, tickets 05-shadow-handoff)
+[workflow t= 1.0s]   stand-in g3-data-flow-attempt1 start
+[workflow t= 2.0s]   stand-in g2-logic-attempt1 end
+[workflow t= 2.0s] g2-logic: passed - combined into demo/05b-integration at sha-g2-logic (PR https://github.com/TCS-Devin-Sandbox/ts-cobol-carddemo/pull/X-g2-logic)
+[workflow t= 2.5s]   stand-in g3-data-flow-attempt1 end
+[workflow t= 2.5s] g3-data-flow: passed - combined into demo/05b-integration at sha-g3-data-flow (PR https://github.com/TCS-Devin-Sandbox/ts-cobol-carddemo/pull/X-g3-data-flow)
+[workflow t= 2.5s] g4-gate: running (attempt 1, tickets 06-parity-gate)
+[workflow t= 2.5s]   stand-in g4-gate-attempt1 start
+[workflow t= 3.0s]   stand-in g4-gate-attempt1 end
+[workflow t= 3.0s] g4-gate: passed - combined into demo/05b-integration at sha-g4-gate (PR https://github.com/TCS-Devin-Sandbox/ts-cobol-carddemo/pull/X-g4-gate)
+[workflow t= 3.0s] final states: {"g1-groundwork": "passed", "g2-logic": "passed", "g3-data-flow": "passed", "g4-gate": "passed"}
+=== g2-needs-decision
+[dry-run] register interest-build-5b phases=['g1-groundwork', 'g2-logic', 'g3-data-flow', 'g4-gate']
+[workflow t= 0.0s] states: {"g1-groundwork": "pending", "g2-logic": "pending", "g3-data-flow": "pending", "g4-gate": "pending"}
+[workflow t= 0.0s] g1-groundwork: running (attempt 1, tickets 02-schema, 03-record-codecs)
+[workflow t= 0.0s]   stand-in g1-groundwork-attempt1 start
+[workflow t= 1.0s]   stand-in g1-groundwork-attempt1 end
+[workflow t= 1.0s] g1-groundwork: passed - combined into demo/05b-integration at sha-g1-groundwork (PR https://github.com/TCS-Devin-Sandbox/ts-cobol-carddemo/pull/X-g1-groundwork)
+[workflow t= 1.0s] g2-logic: running (attempt 1, tickets 04-calculation-restart)
+[workflow t= 1.0s]   stand-in g2-logic-attempt1 start
+[workflow t= 1.0s] g3-data-flow: running (attempt 1, tickets 05-shadow-handoff)
+[workflow t= 1.0s]   stand-in g3-data-flow-attempt1 start
+[workflow t= 2.0s]   stand-in g2-logic-attempt1 end
+[workflow t= 2.0s] g2-logic: needs-decision - some/File.java: stub
+[workflow t= 2.5s]   stand-in g3-data-flow-attempt1 end
+[workflow t= 2.5s] g3-data-flow: passed - combined into demo/05b-integration at sha-g3-data-flow (PR https://github.com/TCS-Devin-Sandbox/ts-cobol-carddemo/pull/X-g3-data-flow)
+[workflow t= 2.5s] g4-gate: skipped (depends on g2-logic=needs-decision)
+[workflow t= 2.5s] final states: {"g1-groundwork": "passed", "g2-logic": "needs-decision", "g3-data-flow": "passed", "g4-gate": "skipped"}
+=== g1-fails-twice
+[dry-run] register interest-build-5b phases=['g1-groundwork', 'g2-logic', 'g3-data-flow', 'g4-gate']
+[workflow t= 0.0s] states: {"g1-groundwork": "pending", "g2-logic": "pending", "g3-data-flow": "pending", "g4-gate": "pending"}
+[workflow t= 0.0s] g1-groundwork: running (attempt 1, tickets 02-schema, 03-record-codecs)
+[workflow t= 0.0s]   stand-in g1-groundwork-attempt1 start
+[workflow t= 1.0s]   stand-in g1-groundwork-attempt1 end
+[workflow t= 1.0s] g1-groundwork: failed on attempt 1 - stub failure 1
+[workflow t= 1.0s] g1-groundwork: running (attempt 2, tickets 02-schema, 03-record-codecs)
+[workflow t= 1.0s]   stand-in g1-groundwork-attempt2 start
+[workflow t= 2.0s]   stand-in g1-groundwork-attempt2 end
+[workflow t= 2.0s] g1-groundwork: failed on attempt 2 - stub failure 2
+[workflow t= 2.0s] g1-groundwork: failed (after retry)
+[workflow t= 2.0s] g2-logic: skipped (depends on g1-groundwork=failed)
+[workflow t= 2.0s] g3-data-flow: skipped (depends on g1-groundwork=failed)
+[workflow t= 2.0s] g4-gate: skipped (depends on g2-logic=skipped, g3-data-flow=skipped)
+[workflow t= 2.0s] final states: {"g1-groundwork": "failed", "g2-logic": "skipped", "g3-data-flow": "skipped", "g4-gate": "skipped"}

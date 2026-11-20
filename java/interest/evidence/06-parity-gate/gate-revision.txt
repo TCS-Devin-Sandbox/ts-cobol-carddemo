@@ -1,0 +1,6 @@
+revision=62384290f674f1f6f1ef2c237eb35550feb12514
+ M java/interest/evidence/06-parity-gate/gate-output.txt
+ M java/interest/evidence/06-parity-gate/gate-revision.txt
+ M java/interest/evidence/06-parity-gate/test-output.txt
+?? java/interest/interest-batch/target/
+command=java/interest/interest-batch/scripts/parity/run_gate.sh java/interest/evidence/06-parity-gate

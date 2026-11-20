@@ -1,0 +1,11 @@
+SQL case=i01-forced-false run=71b92126-9d30-4756-9ced-7e37220f8a31
+SELECT 1
+ run_pass | tx_count_pass | delta_count_pass | tx_sum_pass | delta_sum_pass | last_account_pass | publication_pass | no_release_pass 
+----------+---------------+------------------+-------------+----------------+-------------------+------------------+-----------------
+ f        | t             | t                | t           | t              | t                 | t                | t
+(1 row)
+
+SQL FAIL case=i01-forced-false run=71b92126-9d30-4756-9ced-7e37220f8a31
+psql:<stdin>:23: ERROR:  Gate SQL assertion failed
+CONTEXT:  PL/pgSQL function inline_code_block line 1 at RAISE
+PSQL_PIPELINE_EXIT=3
