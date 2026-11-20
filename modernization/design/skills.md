@@ -12,25 +12,35 @@ fixture, golden, `tools/parity` or `carddemo-parity` file was changed.
 |---|---|
 | [interest-ticket-build](../../.agents/skills/interest-ticket-build/SKILL.md) | Module layout, Java 21 / Maven 3.9.9 / Spring Boot 3.3.5 / Testcontainers 1.21.4 / PostgreSQL 15, and the commands to start the estate and PostgreSQL, build and run the tests. |
 | [interest-ticket-verify](../../.agents/skills/interest-ticket-verify/SKILL.md) | Driver command per case into `work/<ticket>/<case>`, `compare.py` per case, reading a difference, SQL check, and the pilot's report format; evidence under `java/interest/evidence/<ticket>/`. |
-| [interest-pitfalls](../../.agents/skills/interest-pitfalls/SKILL.md) | The ten failures the pilot hit, as symptom, cause, fix; six reproduced in Step 5a, four marked "reported by the pilot, not reproduced". |
+| [interest-pitfalls](../../.agents/skills/interest-pitfalls/SKILL.md) | Eight entries about failures the pilot hit, as symptom, cause, fix; four reproduced in the original Step 5a run and four marked "reported by the pilot, not reproduced". |
 
 ## 2. Replay result
 
-Clean clone of `demo/05a-skills` at `197f178`, no `target/`, `work/`, `datasets/` or `loadlib/`; only the
-build and verify skills followed, ticket `01-pilot`. Raw output:
-`java/interest/evidence/01-pilot/` (`test-output.txt`, `e2e-run.log`, `compare-stdout.txt`,
-`compare-report.md`, `i01-sql.sql`, `i01-sql-output.txt`, `replay-transcript.txt`).
+Review replay: fresh clone of `demo/05a-skills` at `9590642`, with no `target/`, `work/`,
+`datasets/` or `loadlib/`. The clone fetched the standards branch solely for the scope
+diff. Host setup installed Java 21, pulled and tagged the PostgreSQL images from the mirror,
+and cached Testcontainers' `testcontainers/ryuk:0.12.0` image before running Maven. The
+replay stayed on `demo/05a-skills`. [The new per-ticket parity report](../../java/interest/evidence/01-pilot/parity-report.md)
+records this run; the raw files and transcript beside it are from the earlier replay and
+remain unchanged in the branch.
 
 | Step | Command | Result |
 |---|---|---|
-| build 2 | `sudo apt-get install -y -q openjdk-21-jdk-headless`; `export JAVA_HOME=/usr/lib/jvm/java-21-openjdk-amd64`; `mvn -v` | exit 0; `Apache Maven 3.9.9`, `Java version: 21.0.13.1` (Java 21 already present, install skipped as the step allows) |
-| build 3 | `make up && make build && make parity CHAIN=interest` | exit 0; `db-1 Healthy`, `estate-1 Healthy`, `CBACT04C: compiled`, 7/7 `[legacy rerun]: PASS` |
-| build 4 | `mvn -B -f java/interest/interest-batch/pom.xml clean verify` | exit 0; 36 unit + 10 integration, 0 failures/errors/skips, `BUILD SUCCESS` |
+| build 1 | `git branch --show-current && ls java/interest/interest-batch/pom.xml` | exit 0; `demo/05a-skills`, `java/interest/interest-batch/pom.xml` |
+| build 2 | `sudo apt-get install -y -q openjdk-21-jdk-headless`; `export JAVA_HOME=/usr/lib/jvm/java-21-openjdk-amd64`; `mvn -v` | exit 0; `Setting up openjdk-21-jdk-headless:amd64 (21.0.13.1+2-1~22.04.1) ...`, `Apache Maven 3.9.9`, `Java version: 21.0.13.1` |
+| build 3 | `export ESTATE_BASE_IMAGE=mirror.gcr.io/library/ubuntu:22.04`; `make up && make build && make parity CHAIN=interest` | exit 0; `db-1 Healthy`, `estate-1 Healthy`, `CBACT04C: compiled`, 7/7 `[legacy rerun]: PASS` |
+| build 4 | `mvn -B -f java/interest/interest-batch/pom.xml clean verify` with `pipefail` and `tee` to `test-output.txt` | exit 0; 36 unit + 10 integration, 0 failures/errors/skips, `BUILD SUCCESS` |
 | build 5 | `python3 -m unittest discover -s java/interest/interest-batch/src/test/resources/pilot/parity -v` | exit 0; `Ran 1 test`, `OK` |
-| build 6 | `git diff --stat origin/demo/04a-standards -- java/interest` | exit 0; 79 files, all in INT-01 Scope or `java/interest/evidence/01-pilot/` |
+| build 6 | `git diff --stat origin/demo/04a-standards -- java/interest` | exit 0; 85 paths in the replay checkout, zero outside INT-01 Scope and its evidence directory |
+| verify 1 | `set -o pipefail`; initialize `T=01-pilot`, create the evidence directory, and remove the old `compare-report.md` in the replay checkout | exit 0; fresh comparator report |
 | verify 2 | `docker compose exec -T ... estate python3 .../run_case.py <case> --out work/01-pilot/<case>` | 7/7 exit 0; `Java STEP15 RC=0` |
-| verify 3 | `python3 tools/parity/compare.py interest <case> --actual work/01-pilot/<case> --label java --report java/interest/evidence/01-pilot/compare-report.md` | see table |
-| verify 5 | `docker compose exec -T db psql ... -v run_id=<id> -f - < java/interest/evidence/01-pilot/i01-sql.sql` | exit 0; run `d30078c7-4c70-4cbf-94fb-ff5d54735b98`; 2 transactions = 47.00, delta 1000.00 → 1010.00, final account no delta; `transactions_pass`, `delta_pass`, `final_account_unchanged_pass` all `t` |
+| verify 3 | `python3 tools/parity/compare.py interest <case> --actual work/01-pilot/<case> --label java --report java/interest/evidence/01-pilot/compare-report.md` | 7/7 exit 0; heading count `7`; see table |
+| verify 4 | Compare a scratch copy of the i01 output with only its `rc.json` replaced | `interest/i01-baseline [java]: FAIL (4 records, 50 fields, 1 differences)`; one `rc.json` / `(text)` difference; `pipeline exit=1` and no second case ran |
+| verify 5 | `docker compose exec -T db psql ... -v run_id=<id> -f - < java/interest/evidence/01-pilot/i01-sql.sql` | exit 0; run `7e2e8206-52f2-4725-b1e5-581d45f9dc8f`; 2 transactions = 47.00, delta 1000.00 → 1010.00, final account no delta; `transactions_pass`, `delta_pass`, `final_account_unchanged_pass` all `t` |
+| verify 6–7 | Write the pilot-format `java/interest/evidence/01-pilot/parity-report.md` from the replay and commit it | dated by the tested revision and SQL run ID; earlier raw evidence left unchanged |
+
+The loop was also checked in Bash with a forced nonzero driver stand-in. It printed
+`forced-failure` and `pipeline exit=23`, without reaching the second iteration.
 
 Parity per case (pilot result in `parity-report.md` → replay):
 
@@ -44,15 +54,21 @@ Parity per case (pilot result in `parity-report.md` → replay):
 | i06-negative-balance | no | PASS 2 / 25, 0 differences | PASS 2 / 25, 0 differences (match) |
 | i07-nontie-rounding | no | PASS 4 / 50, 0 differences | PASS 4 / 50, 0 differences (match) |
 
-Tests: pilot 36 unit + 10 integration, 0 failures/errors/skips → replay 36 unit + 10 integration, 0 failures/errors/skips (match).
+Tests: pilot 36 unit + 10 integration, 0 failures/errors/skips → replay 36 unit + 10
+integration, 0 failures/errors/skips (match). The Python driver unit test also matched (1/1).
 
-First replay (at `cf0a66c`) stopped at build step 6: `<base>` was not named for INT-01. Fixed in `197f178` (pilot base `demo/04a-standards`, `mkdir -p` before `tee`, `[legacy rerun]` label); the full replay above was then rerun from a fresh clone.
+Earlier replay exceptions: the first attempt at `cf0a66c` stopped because build step 6 did not
+name INT-01's diff base. The retry at `197f178` skipped build step 1 and generated
+`compare-report.md` but not the human-readable report in verify step 6. The earlier
+`replay-transcript.txt` is retained unchanged and does not show those steps.
 
 ## 3. Pitfall reproduction
 
-Reproduced in Step 5a (commands and output in the pitfalls skill): Java 17 enforcer, Testcontainers
-1.20.3 vs Docker API, zoned overpunch decode, `rc.json`-only difference, driver `--out`/missing-jar
-refusals, appended report. Reported by the pilot, not reproduced: abstract-base `@Container`
+Reproduced in the original Step 5a run (commands and output in the pitfalls skill): Java 17
+enforcer, Testcontainers 1.20.3 vs Docker API, zoned overpunch decode, `rc.json`-only difference.
+The missing-jar/output-path refusals and duplicate report were removed from the skill because
+the pilot's report and PR do not record that the pilot hit them.
+Reported by the pilot, not reproduced: abstract-base `@Container`
 lifecycle, Docker Hub HTTP 429 (pulls succeeded), `mvn -o` without a cached enforcer (the
 build ran online), and the PR #15 review findings (already fixed in the pilot code).
 
@@ -69,7 +85,7 @@ now says the pilot applied the standards once (commit `734ab68`).
 | 4 | §3 S09 PARM check | `TransactionIdSource` holds a PARM that is not 10 printable lab-profile bytes (`INT_H02_parmThatIsNotTenLabProfileBytesIsHeld`) | Say such a PARM is held, not re-encoded or substituted | pilot (review fix) | (applied) `fcb1959` | INT-04 (`intake`/`job` must carry the same check out of `pilot`) |
 | 5 | §7 S16 RC evidence | `run_case.py` executes the real setup jobs and uses their observed RCs plus the Java exit code; nothing hardcoded | RC evidence comes from executed setup steps plus the converted step's exit code | pilot (finding 6) | (applied) `a196b48` | INT-06 (its `scripts/parity` gate must take RCs the same way) |
 | 6 | §9 checklist | No checklist line separates converted-step RCs from setup-job RC provenance (pilot finding 6) | Add a checklist line for RC provenance | pilot (finding 6) | (open) – new review content, not wording; architect decides | – |
-| 7 | §9 checklist l (filler/unassigned bytes) | TRAN filler and DESC tail written as spaces; legacy bytes are unassigned (pilot finding 4) | Decide spaces vs. proven host bytes | pilot (finding 4) | (open) – a choice the code makes by assumption; legacy evidence missing | – |
+| 7 | §9 checklist l (filler/unassigned bytes) | `InterestTransaction.interestCharge` supplies space filler and `toRecord` pads the description with spaces via `PilotFieldCodec.fixedText` | Use spaces for the newly emitted TRAN filler and DESC tail in the lab fixture profile, not as a claim about host bytes | pilot (finding 4) | (applied) `9590642`; host initial bytes remain open | INT-04 (carry this choice into its generated transaction output); INT-06 verifies the fixture bytes |
 | 8 | §6 S12 abend RC/SYSOUT | Pilot produces FAILED + RC 12 + `pilot-failure.json` but not the legacy abend SYSOUT lines (ticket excluded them) | None to the wording; S12 stays as written and must be met by INT-04 | pilot (S12 FAIL partial) | (open) – scope, not a correction | – |
 
 Also open, outside the standard (pilot finding 1, owner comparator/fixtures): golden `rc.json`
