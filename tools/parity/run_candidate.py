@@ -56,7 +56,10 @@ def main() -> int:
             subprocess.run([*command, "--chain", chain, "--case", case, "--input", str(inputs),
                             "--out", str(actual), "--clock", CHAINS[chain]["clock"]], cwd=ROOT, check=True)
         except (OSError, subprocess.CalledProcessError) as exc:
-            detail = f"exit {exc.returncode}" if isinstance(exc, subprocess.CalledProcessError) else exc
+            detail = f"exit {exc.returncode}" if isinstance(exc, subprocess.CalledProcessError) else str(exc)
+            compare.write_report(report, chain, case, "java", [
+                {"where": "candidate command", "field": "(execution)", "expected": "exit 0", "actual": detail},
+            ], checked=None)
             print(f"{chain}/{case} [java]: candidate command failed: {detail}", file=sys.stderr)
             failed = True
             continue
@@ -64,8 +67,7 @@ def main() -> int:
             failed |= bool(compare.run_comparison(chain, case, actual, report, "java", steps=args.steps))
         except ValueError as exc:
             parser.error(str(exc))
-    if report.is_file():
-        print(f"report: {report.relative_to(ROOT)}")
+    print(f"report: {report.relative_to(ROOT)}")
     return int(failed)
 
 

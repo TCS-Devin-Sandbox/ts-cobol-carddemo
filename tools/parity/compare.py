@@ -184,12 +184,16 @@ def compare_case(chain: str, case: str, actual: Path, encoding: str = "ascii",
     return diffs, checked
 
 
-def write_report(report: Path, chain: str, case: str, label: str, diffs: list[dict], checked: dict) -> None:
+def write_report(report: Path, chain: str, case: str, label: str, diffs: list[dict], checked: dict | None) -> None:
     report.parent.mkdir(parents=True, exist_ok=True)
     verdict = "PASS" if not diffs else f"FAIL ({len(diffs)} difference{'s' if len(diffs) != 1 else ''})"
-    lines = [f"## {chain} / {case} — {label}: **{verdict}**", "",
-             f"Checked {checked['datasets']} datasets, {checked['records']} records, {checked['fields']} decoded fields, "
-             f"{checked['sysout']} SYSOUT files, {checked['db']} table snapshots, return codes.", ""]
+    lines = [f"## {chain} / {case} — {label}: **{verdict}**", ""]
+    if checked is None:
+        lines += ["Candidate command failed before comparison.", ""]
+    else:
+        lines += [f"Checked {checked['datasets']} datasets, {checked['records']} records, "
+                  f"{checked['fields']} decoded fields, {checked['sysout']} SYSOUT files, "
+                  f"{checked['db']} table snapshots, return codes.", ""]
     if diffs:
         lines += ["| Where | Field | Expected (legacy) | Actual (candidate) |", "|---|---|---|---|"]
         for d in diffs[:MAX_ROWS]:

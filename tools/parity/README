@@ -77,3 +77,8 @@ fails full comparison but passes when comparing only POSTTRAN. Run from root:
     fi
     grep -F 'SYSOUT TRANREPT.STEP10R | `(file)` | present | missing' work/parity-java/report.md
     make parity-java CHAIN=posting CASE=p01-baseline-mixed STEPS=POSTTRAN CANDIDATE="python3 $stub --drop"
+    if make parity-java CHAIN=posting CASE=p01-baseline-mixed CANDIDATE=false; then
+        echo "failed candidate command unexpectedly passed" >&2
+        exit 1
+    fi
+    grep -F 'candidate command | `(execution)` | exit 0 | exit 1' work/parity-java/report.md
