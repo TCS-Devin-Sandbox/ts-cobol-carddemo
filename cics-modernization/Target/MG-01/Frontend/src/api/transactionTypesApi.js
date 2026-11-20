@@ -13,6 +13,11 @@ export function clearSession() {
   accessToken = null;
 }
 
+/** True when requests will carry a bearer token (signed in, or local dev bypass). */
+export function hasSession() {
+  return accessToken !== null || DEV_BYPASS;
+}
+
 export class ApiError extends Error {
   constructor({ status, code, message, errors, traceId }) {
     super(message);

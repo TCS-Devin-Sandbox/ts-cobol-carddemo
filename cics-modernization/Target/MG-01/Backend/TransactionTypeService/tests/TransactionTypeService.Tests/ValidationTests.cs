@@ -47,7 +47,7 @@ public class ValidationTests
     [Fact]
     public void Non_numeric_filter_is_rejected()
     {
-        var ex = Assert.Throws<ApiException>(() => TransactionTypeValidators.ValidateList(new ListQuery { TypeCode = "A1" }));
+        var ex = Assert.Throws<ServiceException>(() => TransactionTypeValidators.ValidateList(new ListQuery { TypeCode = "A1" }));
         Assert.Equal(ErrorCodes.TypeFilterInvalid, ex.Code);
         Assert.Equal("Type code must be a 2-digit number.", ex.Message);
     }
@@ -67,7 +67,7 @@ public class ValidationTests
     [Fact]
     public void Create_reports_both_fields()
     {
-        var ex = Assert.Throws<ApiException>(() => TransactionTypeValidators.ValidateCreate(new CreateTransactionTypeRequest("", "")));
+        var ex = Assert.Throws<ServiceException>(() => TransactionTypeValidators.ValidateCreate(new CreateTransactionTypeRequest("", "")));
         Assert.Equal(ErrorCodes.ValidationFailed, ex.Code);
         Assert.Contains("typeCode", ex.Errors!.Keys);
         Assert.Contains("description", ex.Errors!.Keys);
@@ -76,7 +76,7 @@ public class ValidationTests
     [Fact]
     public void Paging_keys_cannot_both_be_set()
     {
-        var ex = Assert.Throws<ApiException>(() => TransactionTypeValidators.ValidateList(new ListQuery { After = "03", Before = "05" }));
+        var ex = Assert.Throws<ServiceException>(() => TransactionTypeValidators.ValidateList(new ListQuery { After = "03", Before = "05" }));
         Assert.Equal("Use either after or before, not both.", ex.Errors!["after"][0]);
     }
 

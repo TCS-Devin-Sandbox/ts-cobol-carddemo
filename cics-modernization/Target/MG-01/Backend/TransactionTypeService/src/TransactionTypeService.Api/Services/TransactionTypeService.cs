@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using Npgsql;
+using TransactionTypeService.Api.Audit;
 using TransactionTypeService.Api.Domain;
 using TransactionTypeService.Api.Dtos;
 using TransactionTypeService.Api.Errors;
@@ -9,9 +10,9 @@ using TransactionTypeService.Api.Validation;
 namespace TransactionTypeService.Api.Services;
 
 /// <summary>Business rules of legacy COTRTLIC (list/filter/inline update/delete) and COTRTUPC (lookup/add/update/delete).</summary>
-public class TransactionTypeService(ITransactionTypeRepository repository, ILogger<TransactionTypeService> logger)
-    : ITransactionTypeService
+public class TransactionTypeService(ITransactionTypeRepository repository, IAuditLog audit) : ITransactionTypeService
 {
+    /// <inheritdoc />
     public async Task<TransactionTypePageDto> ListAsync(ListQuery query, CancellationToken ct)
     {
         var criteria = TransactionTypeValidators.ValidateList(query);
@@ -44,64 +45,94 @@ public class TransactionTypeService(ITransactionTypeRepository repository, ILogg
             criteria.Filtered);
     }
 
+    /// <inheritdoc />
     public async Task<TransactionTypeDto> GetAsync(string typeCode, CancellationToken ct)
     {
         var code = TransactionTypeValidators.NormalizeCodeOrThrow(typeCode);
         var entity = await repository.FindAsync(code, ct)
-                     ?? throw new ApiException(StatusCodes.Status404NotFound, ErrorCodes.TypeNotFound,
-                         $"No transaction type with code {code}.");
+                     ?? throw new ServiceException(ErrorKind.NotFound, ErrorCodes.TypeNotFound, $"No transaction type with code {code}.");
         return ToDto(entity);
     }
 
+    /// <inheritdoc />
     public async Task<TransactionTypeDto> CreateAsync(CreateTransactionTypeRequest request, string user, CancellationToken ct)
     {
         var (code, description) = TransactionTypeValidators.ValidateCreate(request);
-        repository.Add(new TransactionType { TypeCode = code, Description = description });
         try
         {
-            await repository.SaveChangesAsync(ct);
+            repository.Add(new TransactionType { TypeCode = code, Description = description });
+            try
+            {
+                await repository.SaveChangesAsync(ct);
+            }
+            catch (DbUpdateException ex) when (ex.InnerException is PostgresException { SqlState: PostgresErrorCodes.UniqueViolation })
+            {
+                throw new ServiceException(ErrorKind.Conflict, ErrorCodes.TypeAlreadyExists,
+                    $"Transaction type {code} already exists.",
+                    new Dictionary<string, string[]> { ["typeCode"] = [$"Transaction type {code} already exists."] });
+            }
+            audit.Record(new AuditEvent(user, AuditActions.Create, code, null, description, AuditEvent.Success));
+            return new TransactionTypeDto(code, description);
         }
-        catch (DbUpdateException ex) when (ex.InnerException is PostgresException { SqlState: PostgresErrorCodes.UniqueViolation })
+        catch (Exception ex)
         {
-            throw new ApiException(StatusCodes.Status409Conflict, ErrorCodes.TypeAlreadyExists,
-                $"Transaction type {code} already exists.",
-                new Dictionary<string, string[]> { ["typeCode"] = [$"Transaction type {code} already exists."] });
+            audit.Record(new AuditEvent(user, AuditActions.Create, code, null, description, AuditEvent.Failed(ex)));
+            throw;
         }
-        logger.LogInformation("Audit: user {User} created transaction type {Code}", user, code);
-        return new TransactionTypeDto(code, description);
     }
 
+    /// <inheritdoc />
     public async Task<TransactionTypeDto> UpdateAsync(string typeCode, UpdateTransactionTypeRequest request, string user, CancellationToken ct)
     {
         var code = TransactionTypeValidators.NormalizeCodeOrThrow(typeCode);
         var description = TransactionTypeValidators.ValidateUpdate(request);
-
-        await using var transaction = await repository.BeginTransactionAsync(ct);
-        var entity = await repository.FindForUpdateAsync(code, ct)
-                     ?? throw NotFoundForChange(code);
-
-        if (string.Equals(entity.Description.Trim(), description, StringComparison.OrdinalIgnoreCase))
+        string? before = null;
+        try
         {
-            throw new ApiException(StatusCodes.Status422UnprocessableEntity, ErrorCodes.NoChanges,
-                "No change detected with respect to database values.");
-        }
+            await using var transaction = await repository.BeginTransactionAsync(ct);
+            var entity = await repository.FindForUpdateAsync(code, ct)
+                         ?? throw NotFoundForChange(code);
+            before = entity.Description;
 
-        entity.Description = description;
-        await repository.SaveChangesAsync(ct);
-        await transaction.CommitAsync(ct);
-        logger.LogInformation("Audit: user {User} updated transaction type {Code}", user, code);
-        return ToDto(entity);
+            if (string.Equals(entity.Description.Trim(), description, StringComparison.OrdinalIgnoreCase))
+            {
+                throw new ServiceException(ErrorKind.NoChanges, ErrorCodes.NoChanges,
+                    "No change detected with respect to database values.");
+            }
+
+            entity.Description = description;
+            await repository.SaveChangesAsync(ct);
+            await transaction.CommitAsync(ct);
+            audit.Record(new AuditEvent(user, AuditActions.Update, code, before, description, AuditEvent.Success));
+            return ToDto(entity);
+        }
+        catch (Exception ex)
+        {
+            audit.Record(new AuditEvent(user, AuditActions.Update, code, before, description, AuditEvent.Failed(ex)));
+            throw;
+        }
     }
 
+    /// <inheritdoc />
     public async Task DeleteAsync(string typeCode, string user, CancellationToken ct)
     {
         var code = TransactionTypeValidators.NormalizeCodeOrThrow(typeCode);
-        var deleted = await repository.DeleteAsync(code, ct);
-        if (deleted == 0)
+        string? before = null;
+        try
         {
-            throw NotFoundForChange(code);
+            before = (await repository.FindAsync(code, ct))?.Description;
+            var deleted = await repository.DeleteAsync(code, ct);
+            if (deleted == 0)
+            {
+                throw NotFoundForChange(code);
+            }
+            audit.Record(new AuditEvent(user, AuditActions.Delete, code, before, null, AuditEvent.Success));
         }
-        logger.LogInformation("Audit: user {User} deleted transaction type {Code}", user, code);
+        catch (Exception ex)
+        {
+            audit.Record(new AuditEvent(user, AuditActions.Delete, code, before, null, AuditEvent.Failed(ex)));
+            throw;
+        }
     }
 
     private async Task<(List<TransactionType> Rows, bool HasNext)> ForwardPageAsync(
@@ -116,8 +147,8 @@ public class TransactionTypeService(ITransactionTypeRepository repository, ILogg
         return (rows, hasNext);
     }
 
-    private static ApiException NotFoundForChange(string code) =>
-        new(StatusCodes.Status404NotFound, ErrorCodes.TypeNotFound,
+    private static ServiceException NotFoundForChange(string code) =>
+        new(ErrorKind.NotFound, ErrorCodes.TypeNotFound,
             $"Transaction type {code} was not found. It may have been deleted by someone else.");
 
     private static TransactionTypeDto ToDto(TransactionType t) => new(t.TypeCode, t.Description);

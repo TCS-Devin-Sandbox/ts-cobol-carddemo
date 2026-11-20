@@ -19,7 +19,7 @@ public class ProblemDetailsMiddleware(RequestDelegate next, ILogger<ProblemDetai
             {
                 logger.LogError(ex, "Request failed with {Code} (trace {TraceId})", code, context.TraceIdentifier);
             }
-            else if (ex is not ApiException)
+            else if (ex is not ServiceException)
             {
                 logger.LogWarning(ex, "Request rejected with {Code} (trace {TraceId})", code, context.TraceIdentifier);
             }
@@ -46,9 +46,16 @@ public class ProblemDetailsMiddleware(RequestDelegate next, ILogger<ProblemDetai
 
     private static (int, string, string, IDictionary<string, string[]>?) Map(Exception ex, string traceId)
     {
-        if (ex is ApiException api)
+        if (ex is ServiceException service)
         {
-            return (api.Status, api.Code, api.Message, api.Errors);
+            var status = service.Kind switch
+            {
+                ErrorKind.NotFound => StatusCodes.Status404NotFound,
+                ErrorKind.Conflict => StatusCodes.Status409Conflict,
+                ErrorKind.NoChanges => StatusCodes.Status422UnprocessableEntity,
+                _ => StatusCodes.Status400BadRequest
+            };
+            return (status, service.Code, service.Message, service.Errors);
         }
 
         var postgres = Find<PostgresException>(ex);

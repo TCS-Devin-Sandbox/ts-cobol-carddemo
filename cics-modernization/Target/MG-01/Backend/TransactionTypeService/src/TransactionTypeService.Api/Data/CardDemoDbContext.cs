@@ -3,6 +3,7 @@ using TransactionTypeService.Api.Domain;
 
 namespace TransactionTypeService.Api.Data;
 
+/// <summary>EF Core context for the MG-01 PostgreSQL schema.</summary>
 public class CardDemoDbContext(DbContextOptions<CardDemoDbContext> options) : DbContext(options)
 {
     public DbSet<TransactionType> TransactionTypes => Set<TransactionType>();

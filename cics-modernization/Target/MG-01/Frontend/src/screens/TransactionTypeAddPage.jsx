@@ -1,4 +1,5 @@
 import { useRef, useState } from 'react';
+import { useFormField } from '../hooks/useFormField.js';
 import { Link, useNavigate, useSearchParams } from 'react-router-dom';
 import Alert from '../components/Alert.jsx';
 import ConfirmDialog from '../components/ConfirmDialog.jsx';
@@ -6,12 +7,14 @@ import TextField from '../components/TextField.jsx';
 import { transactionTypesApi } from '../api/transactionTypesApi.js';
 import { MAX_DESCRIPTION, normalizeCode, validateDescription, validateTypeCode } from '../validation/transactionType.js';
 
+/** S2 – create a new transaction type (legacy COTRTUPC add path). */
 export default function TransactionTypeAddPage() {
   const navigate = useNavigate();
   const [params] = useSearchParams();
-  const [typeCode, setTypeCode] = useState(params.get('typeCode') ?? '');
-  const [description, setDescription] = useState('');
-  const [errors, setErrors] = useState({});
+  const codeField = useFormField(params.get('typeCode') ?? '', validateTypeCode);
+  const descriptionField = useFormField('', validateDescription);
+  const typeCode = codeField.value;
+  const description = descriptionField.value;
   const [existingCode, setExistingCode] = useState(null);
   const [confirming, setConfirming] = useState(false);
   const [busy, setBusy] = useState(false);
@@ -20,11 +23,11 @@ export default function TransactionTypeAddPage() {
   const descriptionRef = useRef(null);
 
   const validate = () => {
-    const next = { typeCode: validateTypeCode(typeCode), description: validateDescription(description) };
-    setErrors(next);
-    if (next.typeCode) codeRef.current?.focus();
-    else if (next.description) descriptionRef.current?.focus();
-    return !next.typeCode && !next.description;
+    const codeError = codeField.validate();
+    const descriptionError = descriptionField.validate();
+    if (codeError) codeRef.current?.focus();
+    else if (descriptionError) descriptionRef.current?.focus();
+    return !codeError && !descriptionError;
   };
 
   const onSubmit = (e) => {
@@ -43,10 +46,11 @@ export default function TransactionTypeAddPage() {
       setConfirming(false);
       if (err.code === 'TYPE_ALREADY_EXISTS') {
         setExistingCode(normalizeCode(typeCode));
-        setErrors({ typeCode: err.message });
+        codeField.setError(err.message);
         codeRef.current?.focus();
       } else if (err.errors && Object.keys(err.errors).length) {
-        setErrors({ typeCode: err.errors.typeCode?.[0], description: err.errors.description?.[0] });
+        codeField.setError(err.errors.typeCode?.[0] ?? null);
+        descriptionField.setError(err.errors.description?.[0] ?? null);
       } else {
         setAlert(err.message);
       }
@@ -73,13 +77,13 @@ export default function TransactionTypeAddPage() {
             label="Type code"
             required
             value={typeCode}
-            onChange={(v) => setTypeCode(v)}
-            onBlur={(e) => e.relatedTarget?.type !== 'submit' && setErrors((x) => ({ ...x, typeCode: validateTypeCode(typeCode) }))}
+            onChange={codeField.onChange}
+            onBlur={codeField.onBlur}
             maxLength={2}
             inputMode="numeric"
             mono
             autoFocus
-            error={errors.typeCode}
+            error={codeField.error}
             hint="Two digits from 01 to 99."
           />
           {existingCode && (
@@ -93,10 +97,10 @@ export default function TransactionTypeAddPage() {
             label="Description"
             required
             value={description}
-            onChange={(v) => setDescription(v)}
-            onBlur={(e) => e.relatedTarget?.type !== 'submit' && setErrors((x) => ({ ...x, description: validateDescription(description) }))}
+            onChange={descriptionField.onChange}
+            onBlur={descriptionField.onBlur}
             maxLength={MAX_DESCRIPTION}
-            error={errors.description}
+            error={descriptionField.error}
             hint={`Letters, numbers and spaces. ${description.length}/${MAX_DESCRIPTION}`}
           />
         </div>

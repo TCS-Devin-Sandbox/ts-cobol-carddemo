@@ -32,7 +32,7 @@ public static partial class TransactionTypeValidators
     {
         if (!TransactionTypeCode.TryNormalize(raw, out var code, out var error))
         {
-            throw ApiException.Validation(new Dictionary<string, string[]> { ["typeCode"] = [error!] });
+            throw ServiceException.Validation(new Dictionary<string, string[]> { ["typeCode"] = [error!] });
         }
         return code;
     }
@@ -50,7 +50,7 @@ public static partial class TransactionTypeValidators
         }
         if (errors.Count > 0)
         {
-            throw ApiException.Validation(errors);
+            throw ServiceException.Validation(errors);
         }
         return (code, request!.Description!.Trim());
     }
@@ -59,7 +59,7 @@ public static partial class TransactionTypeValidators
     {
         if (DescriptionError(request?.Description) is { } error)
         {
-            throw ApiException.Validation(new Dictionary<string, string[]> { ["description"] = [error] });
+            throw ServiceException.Validation(new Dictionary<string, string[]> { ["description"] = [error] });
         }
         return request!.Description!.Trim();
     }
@@ -73,7 +73,7 @@ public static partial class TransactionTypeValidators
     {
         if (!TransactionTypeCode.TryNormalizeFilter(query.TypeCode, out var typeCode))
         {
-            throw new ApiException(StatusCodes.Status400BadRequest, ErrorCodes.TypeFilterInvalid,
+            throw new ServiceException(ErrorKind.Validation, ErrorCodes.TypeFilterInvalid,
                 TransactionTypeCode.FilterInvalid,
                 new Dictionary<string, string[]> { ["typeCode"] = [TransactionTypeCode.FilterInvalid] });
         }
@@ -106,7 +106,7 @@ public static partial class TransactionTypeValidators
         }
         if (errors.Count > 0)
         {
-            throw ApiException.Validation(errors);
+            throw ServiceException.Validation(errors);
         }
 
         return new ListCriteria(typeCode, string.IsNullOrEmpty(description) ? null : description,

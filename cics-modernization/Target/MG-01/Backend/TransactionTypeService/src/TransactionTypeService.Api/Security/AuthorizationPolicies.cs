@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Authorization;
 
 namespace TransactionTypeService.Api.Security;
 
+/// <summary>Read/write policies: role <c>carddemo.admin</c> plus the matching OAuth scope.</summary>
 public static class AuthorizationPolicies
 {
     public const string Read = "TransactionTypesRead";

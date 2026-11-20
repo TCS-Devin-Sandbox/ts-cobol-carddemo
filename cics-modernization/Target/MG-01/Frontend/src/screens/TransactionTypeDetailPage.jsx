@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { Link, useNavigate, useParams } from 'react-router-dom';
+import { useFormField } from '../hooks/useFormField.js';
 import Alert from '../components/Alert.jsx';
 import ConfirmDialog from '../components/ConfirmDialog.jsx';
 import TextField from '../components/TextField.jsx';
@@ -8,6 +9,7 @@ import {
   isUnchanged, MAX_DESCRIPTION, normalizeCode, validateDescription, validateTypeCode,
 } from '../validation/transactionType.js';
 
+/** S3 – look up, view, update and delete one transaction type (legacy COTRTUPC). */
 export default function TransactionTypeDetailPage() {
   const { typeCode: rawCode } = useParams();
   const navigate = useNavigate();
@@ -15,8 +17,8 @@ export default function TransactionTypeDetailPage() {
 
   const [state, setState] = useState('loading'); // loading | viewing | notFound | error
   const [record, setRecord] = useState(null);
-  const [description, setDescription] = useState('');
-  const [fieldError, setFieldError] = useState(null);
+  const descriptionField = useFormField('', validateDescription, { clearOnChange: true });
+  const { value: description, setValue: setDescription } = descriptionField;
   const [alert, setAlert] = useState(null);
   const [status, setStatus] = useState(null);
   const [confirm, setConfirm] = useState(null); // 'save' | 'delete'
@@ -47,7 +49,7 @@ export default function TransactionTypeDetailPage() {
         setState('error');
       }
     }
-  }, [code, rawCode]);
+  }, [code, rawCode, setDescription]);
 
   useEffect(() => {
     load();
@@ -58,9 +60,7 @@ export default function TransactionTypeDetailPage() {
   const onSave = (e) => {
     e.preventDefault();
     setStatus(null);
-    const err = validateDescription(description);
-    setFieldError(err);
-    if (err) {
+    if (descriptionField.validate()) {
       descriptionRef.current?.focus();
       return;
     }
@@ -76,7 +76,7 @@ export default function TransactionTypeDetailPage() {
       setStatus('Changes saved.');
       setAlert(null);
     } catch (err) {
-      if (err.errors?.description) setFieldError(err.errors.description[0]);
+      if (err.errors?.description) descriptionField.setError(err.errors.description[0]);
       else setAlert(err.message);
     } finally {
       setBusy(false);
@@ -163,13 +163,10 @@ export default function TransactionTypeDetailPage() {
               label="Description"
               required
               value={description}
-              onChange={(v) => {
-                setDescription(v);
-                setFieldError(null);
-              }}
-              onBlur={(e) => e.relatedTarget?.type !== 'submit' && setFieldError(validateDescription(description))}
+              onChange={descriptionField.onChange}
+              onBlur={descriptionField.onBlur}
               maxLength={MAX_DESCRIPTION}
-              error={fieldError}
+              error={descriptionField.error}
               hint={unchanged ? 'No changes to save.' : `Letters, numbers and spaces. ${description.length}/${MAX_DESCRIPTION}`}
             />
           </div>

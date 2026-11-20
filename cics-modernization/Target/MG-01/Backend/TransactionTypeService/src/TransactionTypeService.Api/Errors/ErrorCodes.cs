@@ -1,5 +1,6 @@
 namespace TransactionTypeService.Api.Errors;
 
+/// <summary>Stable machine-readable error codes returned in the ProblemDetails <c>code</c> member.</summary>
 public static class ErrorCodes
 {
     public const string ValidationFailed = "VALIDATION_FAILED";

@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Authorization.Policy;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using TransactionTypeService.Api.Audit;
 using TransactionTypeService.Api.Data;
 using TransactionTypeService.Api.Errors;
 using TransactionTypeService.Api.Repositories;
@@ -16,10 +17,7 @@ using TransactionTypeService.Api.Services;
 var builder = WebApplication.CreateBuilder(args);
 var isDevelopment = builder.Environment.IsDevelopment();
 var devBypass = builder.Configuration.GetValue<bool>("Auth:DevBypass");
-if (devBypass && !isDevelopment)
-{
-    throw new InvalidOperationException("Auth:DevBypass is only allowed in the Development environment.");
-}
+StartupGuards.Validate(builder.Configuration, builder.Environment);
 
 var connectionString = builder.Configuration.GetConnectionString("CardDemo")
                        ?? throw new InvalidOperationException("Connection string 'CardDemo' is not configured (set ConnectionStrings__CardDemo).");
@@ -36,6 +34,9 @@ builder.WebHost.ConfigureKestrel(options =>
 
 builder.Services.AddDbContext<CardDemoDbContext>(o => o.UseNpgsql(connectionString));
 builder.Services.AddScoped<ITransactionTypeRepository, TransactionTypeRepository>();
+builder.Services.AddHttpContextAccessor();
+builder.Services.AddSingleton<IAuditLog, AuditLog>();
+builder.Services.AddOpenApi();
 builder.Services.AddScoped<ITransactionTypeService, TransactionTypeService.Api.Services.TransactionTypeService>();
 
 builder.Services.AddControllers()
@@ -112,6 +113,10 @@ app.UseRateLimiter();
 app.UseAuthorization();
 
 app.MapControllers();
+if (isDevelopment)
+{
+    app.MapOpenApi().AllowAnonymous();
+}
 app.MapGet("/health", async (CardDemoDbContext db, CancellationToken ct) =>
 {
     var healthy = await db.Database.CanConnectAsync(ct);

@@ -15,6 +15,10 @@ public class ApiIntegrationTests : IClassFixture<ApiIntegrationTests.Factory>, I
         Environment.GetEnvironmentVariable("ConnectionStrings__CardDemo")
         ?? throw new InvalidOperationException("Set ConnectionStrings__CardDemo to run integration tests.");
 
+    // Fixture setup needs DDL (dependent-table test); the API itself runs as the least-privilege login.
+    private static readonly string AdminConnectionString =
+        Environment.GetEnvironmentVariable("ConnectionStrings__CardDemoAdmin") ?? ConnectionString;
+
     private readonly HttpClient _client;
     private readonly HttpClient _anonymous;
 
@@ -227,7 +231,7 @@ public class ApiIntegrationTests : IClassFixture<ApiIntegrationTests.Factory>, I
 
     private static async Task ExecAsync(string sql)
     {
-        await using var conn = new NpgsqlConnection(ConnectionString);
+        await using var conn = new NpgsqlConnection(AdminConnectionString);
         await conn.OpenAsync();
         await using var cmd = new NpgsqlCommand(sql, conn);
         await cmd.ExecuteNonQueryAsync();
