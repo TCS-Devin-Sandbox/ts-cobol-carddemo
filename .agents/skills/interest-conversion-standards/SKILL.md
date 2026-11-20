@@ -5,7 +5,7 @@ description: Apply the proposed INTCALC interest-stream conversion standards in 
 
 # Interest conversion standards
 
-**PROPOSED · Owner: Target architect. Conversion and runtime parity have not been run under these standards. [INT-01, the pilot](../../../modernization/design/tickets/01-pilot.md), is their first test.**
+**PROPOSED · Owner: Target architect. The pilot, [INT-01](../../../modernization/design/tickets/01-pilot.md), applied these standards once; corrections that only match its code are applied, the rest are open in [skills.md](../../../modernization/design/skills.md) section 4.**
 
 Every interest ticket session reads this skill before changing anything and fills in section 9 in its PR evidence. This skill governs the stream. The [reader summary](../../../modernization/design/standards.md) is explanatory. Later tickets cite this skill and submit proposed changes for target architect review. Edits to the skill sit outside ticket scope.
 
