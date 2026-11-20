@@ -56,7 +56,15 @@ whole fix.
      the jar alone yields only STEP15.
    - Fix: run each case through the driver (interest-ticket-verify step 2), which executes the
      real setup jobs and uses their observed codes; standards §7 (S16). Never edit the golden.
-8. **Review findings on the pilot** (PILOT-REPORT, "Review fixes" and "Review round 2"):
+8. **A Spring Batch flow with custom exit statuses ends FAILED although every step succeeded**
+   - reported by INT-06 (step 5b, g4-gate).
+   - Symptom: the job's last step returns exit status `0` and the job ends with an
+     unmatched-transition failure.
+   - Cause: a flow whose steps set custom numeric exit statuses (`0`, `12`) has no transition
+     for those statuses unless every step declares them.
+   - Fix: give every step explicit transitions, ending with `on("*")`, as
+     `batch/InterestJobConfig.java` does.
+9. **Review findings on the pilot** (PILOT-REPORT, "Review fixes" and "Review round 2"):
     chunked commits that could leave a partial run (fix: standards §2, S05), PARM not checked as
     ten bytes (§3, S09), no log event for the DISCGRP fallback (§6, S14), locale-dependent digits
     and lost filler bytes (§3), stale artifacts after a failed rerun into a reused directory
