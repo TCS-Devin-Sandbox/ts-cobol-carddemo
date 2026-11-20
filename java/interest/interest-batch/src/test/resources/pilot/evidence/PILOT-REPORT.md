@@ -1,7 +1,7 @@
 # INT-01 pilot report
 
 Ticket: `modernization/design/tickets/01-pilot.md`. `modernization/design/tickets/README.md` names it as the Wave 1 pilot.
-Start: `origin/demo/04a-standards` @ `84ffae7`. Branch: `demo/05-pilot`. Final code revision: `2109615405fe658bd4d9b2b55af43c48e0a704f1` (scoped parity driver; Java unchanged from `d99d984`).
+Start: `origin/demo/04a-standards` @ `84ffae7`. Branch: `demo/05-pilot`. Final code revision: `9128857aff0ed3c700d89eb20a8d0aaee0ec9c1a` (catalog-derived manifest lengths; Java unchanged from `d99d984`).
 Module: `java/interest/interest-batch` (the ticket's `interest-batch/` scope placed under `java/interest` as the prompt asks).
 Skills used: `interest-conversion-standards` (read before coding) and `carddemo-parity`. `interest-ticket-build`,
 `interest-ticket-verify` and `interest-pitfalls` are not on the starting branch, so this run is the pilot for the method below.
@@ -20,7 +20,7 @@ Skills used: `interest-conversion-standards` (read before coding) and `carddemo-
 | Check | Result |
 |---|---|
 | `mvn -B clean verify` (Java 21, Testcontainers `postgres:15-alpine`) | BUILD SUCCESS: unit 36/36, integration 10/10 (`test-output.txt`) |
-| Historical direct-jar PostgreSQL 15 SQL assertions, i01 | exit 0; SQL assertions pass (`i01-sql-assertions.txt`); not re-queried in this driver revision |
+| PostgreSQL 15 SQL assertions, final i01 driver run | PASS: run `7a1e3931-8f54-479f-aa96-babc7303311b`; transactions_pass, delta_pass, final_account_unchanged_pass all t (`i01-sql-assertions.txt`) |
 | compare.py i01-baseline + six informational cases | PASS: 7/7 including datasets, SYSOUT and setup/Java RCs (`compare-report.md`, `compare-stdout.txt`, `e2e-run.log`) |
 | Legacy baseline `make parity CHAIN=interest` | 7/7 PASS |
 | Driver framing unit check | PASS: 1 test OK (normal, empty, overlength records), `python3 -m unittest discover -s src/test/resources/pilot/parity -v` |
@@ -100,7 +100,7 @@ the GDG/DISP bridge, non-unique AIX ordering, PARM shorter than 10 bytes, and th
 
 ## Final scoped-driver verification
 
-Final code SHA: `2109615405fe658bd4d9b2b55af43c48e0a704f1`. Exact complete commands: `../parity/README.md`.
+Final code SHA: `9128857aff0ed3c700d89eb20a8d0aaee0ec9c1a`. Exact complete commands: `../parity/README.md`.
 Docker Hub returned HTTP 429 resolving ubuntu:22.04; the successful baseline used the existing
 `ESTATE_BASE_IMAGE=mirror.gcr.io/library/ubuntu:22.04` argument with `make up && make build && make parity CHAIN=interest`.
 No tracked infrastructure changed. The existing estate Dockerfile installs Java 21, so Java and Runner run together in estate
@@ -108,7 +108,11 @@ against compose db (PostgreSQL 15). Host Java 21 was installed for Maven.
 `test-output.txt` is full Maven stdout/stderr: 36 unit + 10 integration tests, zero failures/errors/skips, BUILD SUCCESS.
 `e2e-run.log` records all seven real setup/Java executions. `compare-stdout.txt` and `compare-report.md` show 7/7 PASS.
 Setup logs and post-setup unloads remain under `work/java-pilot/<case>/setup-joblog` and `intake/` (runtime artifacts).
-The driver unit check proves normal/empty/overlength framing. No UI changed; visual verification is not applicable.
+The driver unit check proves normal/empty/overlength framing, catalog KSDS recsize, flat lrecl and default 80.
+Manifest names now use Runner resolution, with TRANSACT allocated from the real STEP15 DD's DCB before Java.
+SQL was freshly queried on compose db PostgreSQL 15.20 for the first completed run in the final e2e log:
+`7a1e3931-8f54-479f-aa96-babc7303311b`. Two expected transactions, sum 47.00, the single expected account delta
+and unchanged final account all pass (`i01-sql-assertions.txt`). No UI changed; visual verification is not applicable.
 
 ## Historical direct-jar method and failures (superseded by driver above)
 ```sh

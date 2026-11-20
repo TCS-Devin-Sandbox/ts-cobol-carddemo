@@ -1,6 +1,6 @@
 # INT-01 pilot – per-case parity report (open this first)
 
-Final code revision: `2109615405fe658bd4d9b2b55af43c48e0a704f1` (branch `demo/05-pilot`).
+Final code revision: `9128857aff0ed3c700d89eb20a8d0aaee0ec9c1a` (branch `demo/05-pilot`).
 Java 21, Spring Boot 3.3.5 / Spring Batch 5.1.2, PostgreSQL 15 (compose db).
 Legacy baseline rerun in this session: `make up && make build && make parity CHAIN=interest` -> 7/7 PASS.
 
@@ -35,7 +35,9 @@ XREFFILE, TCATBALF and DISCGRP on one Runner, then unloads their actual KSDS dat
 Only STEP15 is replaced by Java. Every RC comes from an executed setup step or the Java process exit code;
 no code is hardcoded. The previous direct-jar RC-only failure is superseded. Exact commands and faithful
 input/framing explanation: `../parity/README.md`. Raw outputs: `compare-report.md`, `compare-stdout.txt`,
-`e2e-run.log`. Manifest includes layout/lrecl/records; SYSOUT comes from Java's committed SYSOUT rows.
+`e2e-run.log`. Manifest includes layout/lrecl/records; resolved names and lrecl come from Runner's catalog
+using the recorder's KSDS recsize / flat lrecl / 80 fallback rules. TRANSACT is allocated from the actual
+STEP15 DD's DCB. SYSOUT comes from Java's committed SYSOUT rows.
 
 Recorder bug remains OPEN for a person: scope/reset Runner.rcs in record.py and explicitly re-record goldens.
 INTCALC has only STEP15, but the current recorder attributes accumulated setup keys to it. No forbidden files
@@ -46,16 +48,17 @@ Driver unit check: 1 test OK, including normal/empty/overlength records. Docker 
 ESTATE_BASE_IMAGE=mirror.gcr.io/library/ubuntu:22.04 build argument. Java 21 is already in estate;
 Maven runs on host Java 21. Runtime setup logs/unloads remain under work/java-pilot/<case>.
 
-## Additional i01 field slice (historical SQL evidence, final Maven ITs rerun)
+## Additional i01 field slice and fresh final-driver SQL assertions
 
 From `PilotI01IT` (Testcontainers PostgreSQL 15) and `i01-field-slice.md`:
 - SYSTRAN T01–T13: 2 of 2 rows match the decoded golden. ACCTDATA A03/A09/A10 and whole records: 2 of 2 match,
   including the untouched account `00000002002`.
 - Interest cents matched: 4700 (10.00 + 37.00 = 47.00).
-- SQL on the Docker PostgreSQL 15 run `ec2f6b8c-…` (`i01-sql-assertions.txt`): 2 transaction rows
+- Fresh SQL on compose db PostgreSQL 15.20 run `7a1e3931-8f54-479f-aa96-babc7303311b` (first completed run in final `e2e-run.log`, `i01-sql-assertions.txt`): 2 transaction rows
   `2022071800000001` / `…02`, amounts 10.00 / 37.00, sum 47.00, cards `4000000000002001` / `…2002`, both timestamps
   `2022-07-05-10.00.00.000000`. 1 delta: `00000002001` 1000.00 -> 1010.00 with cycle credit/debit 0.00.
   `00000002002` stays 2400.00 with 0 deltas (INT-Q02).
+  SQL checks `transactions_pass`, `delta_pass`, `final_account_unchanged_pass` are all t.
 - Rollback (`PilotRollbackIT`): unreadable TCATBALF sign byte, missing DISCGRP dataset, missing account,
   missing XREF and missing DEFAULT rate each give a FAILED job, exit 12, 0 committed `interest_tx` /
   `account_delta` / `sysout_line` / `run_checkpoint` rows for the run and no `datasets/` export. For the

@@ -1,3 +1,10 @@
+Final code: 9128857aff0ed3c700d89eb20a8d0aaee0ec9c1a
+Case: i01-baseline; run_id from first event=run-completed in final e2e-run.log
+ database |        postgres_version         |                run_id                
+----------+---------------------------------+--------------------------------------
+ carddemo | 15.20 (Debian 15.20-1.pgdg13+1) | 7a1e3931-8f54-479f-aa96-babc7303311b
+(1 row)
+
  emit_ordinal |      txn_id      | amount |   card_number    |          orig_ts           |          proc_ts           
 --------------+------------------+--------+------------------+----------------------------+----------------------------
             1 | 2022071800000001 |  10.00 | 4000000000002001 | 2022-07-05-10.00.00.000000 | 2022-07-05-10.00.00.000000
@@ -19,4 +26,19 @@
  00000002001 |         1000.00 |      1
  00000002002 |         2400.00 |      0
 (2 rows)
+
+ transactions_pass 
+-------------------
+ t
+(1 row)
+
+ delta_pass 
+------------
+ t
+(1 row)
+
+ final_account_unchanged_pass 
+------------------------------
+ t
+(1 row)
 
