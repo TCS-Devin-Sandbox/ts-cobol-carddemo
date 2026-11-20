@@ -1,9 +1,6 @@
-revision=4f687969ff2b05d5a13b7ac7c9df0a637dffafef
-?? java/interest/evidence/06-parity-gate/
-?? java/interest/interest-batch/docs/
-?? java/interest/interest-batch/scripts/
-?? java/interest/interest-batch/src/main/java/com/carddemo/interest/batch/
-?? java/interest/interest-batch/src/test/java/com/carddemo/interest/batch/
-?? java/interest/interest-batch/src/test/java/com/carddemo/interest/gate/
+revision=62384290f674f1f6f1ef2c237eb35550feb12514
+ M java/interest/evidence/06-parity-gate/gate-output.txt
+ M java/interest/evidence/06-parity-gate/gate-revision.txt
+ M java/interest/evidence/06-parity-gate/test-output.txt
 ?? java/interest/interest-batch/target/
 command=java/interest/interest-batch/scripts/parity/run_gate.sh java/interest/evidence/06-parity-gate
