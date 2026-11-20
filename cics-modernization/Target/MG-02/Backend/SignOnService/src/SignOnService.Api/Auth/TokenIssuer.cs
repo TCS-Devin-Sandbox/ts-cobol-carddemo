@@ -8,7 +8,7 @@ public static class Roles
 {
     public const string Admin = "carddemo.admin";
     public const string User = "carddemo.user";
-    public const string AdminScopes = "transaction-types.read transaction-types.write";
+    public const string AdminScopes = "transaction-types.read transaction-types.write users.read users.write";
 }
 
 /// <summary>Issues the bearer token that replaces the COMMAREA user fields (CDEMO-USER-ID/-TYPE).</summary>
