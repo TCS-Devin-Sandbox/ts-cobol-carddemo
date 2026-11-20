@@ -1,0 +1,67 @@
+name: interest-replay-lab
+
+on:
+  push:
+    branches: [main, demo/06-lab]
+  pull_request:
+
+jobs:
+  lab:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    env:
+      ESTATE_BASE_IMAGE: mirror.gcr.io/library/ubuntu:22.04
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '21'
+          cache: maven
+
+      - name: Install Python dependency and verify Maven
+        run: |
+          python3 -m pip install PyYAML
+          mvn --version
+
+      - name: Mirror PostgreSQL images
+        run: |
+          docker pull mirror.gcr.io/library/postgres:15
+          docker tag mirror.gcr.io/library/postgres:15 postgres:15
+          docker pull mirror.gcr.io/library/postgres:15-alpine
+          docker tag mirror.gcr.io/library/postgres:15-alpine postgres:15-alpine
+
+      - name: Build estate image and start services
+        run: make up
+
+      - name: Compile the estate
+        run: make build
+
+      - name: Build Java lane
+        run: make lab-jar JAVA21_HOME="$JAVA_HOME"
+
+      - name: Lab unit tests
+        run: python3 -m unittest discover -s lab/tests -v
+
+      - name: Replay gate
+        run: make lab-gate
+
+      - name: Half-even negative control
+        run: make lab-gate-negative JAVA21_HOME="$JAVA_HOME"
+
+      # TODO: make lab-e2e (browser suite, next handoff).
+
+      - name: Upload replay reports
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: lab-reports
+          path: |
+            work/lab/*.md
+            work/lab/*.json
+          if-no-files-found: ignore
