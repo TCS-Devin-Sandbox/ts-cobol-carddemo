@@ -50,13 +50,9 @@ public sealed class JobRunner(DatasetCatalog catalog, DateTime clock, string run
             {
                 Parm = step.Parm,
                 ChunkSize = ChunkSize,
-                Checkpoints = new CatalogCheckpointStore(catalog),
+                Checkpoints = new FileCheckpointStore(Path.Combine(catalog.WorkDir, "checkpoints")),
             };
-            foreach (var dsn in step.Dd.Values)
-            {
-                catalog.Resolve(dsn); // allocate this step's (+n) generations now ...
-            }
-            SaveState(job.Name, completed); // ... so they stay pinned even if the process dies mid-step
+            SaveState(job.Name, completed); // generations resolved so far stay pinned even if the process dies mid-step
             var program = ProgramOverride?.Invoke(job.Name, step.Name) ?? step.Program();
             var started = DateTime.UtcNow;
             int rc;

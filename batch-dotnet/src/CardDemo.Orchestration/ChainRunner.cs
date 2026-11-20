@@ -11,7 +11,7 @@ public static class ChainRunner
     public static readonly DateTime FrozenClock = new(2022, 7, 5, 10, 0, 0, DateTimeKind.Unspecified);
 
     public static int Run(string chain, string caseDir, string outDir, IKsdsPersistence? persistence = null, Action<string>? log = null,
-        bool restart = false, Func<string, string, Batch.IBatchProgram?>? programOverride = null, int chunkSize = 1000, Action<string>? commitHook = null)
+        bool restart = false, Func<string, string, Batch.IBatchProgram?>? programOverride = null, int chunkSize = 1000)
     {
         var (setup, jobs) = JobCatalog.Chains[chain];
         if (!restart)
@@ -26,15 +26,7 @@ public static class ChainRunner
                 File.Copy(input, Path.Combine(outDir, "datasets", Path.GetFileName(input)));
             }
         }
-        var catalog = new DatasetCatalog(outDir, persistence) { CommitHook = commitHook };
-        if (restart)
-        {
-            catalog.RecoverPendingCommit();
-        }
-        else
-        {
-            catalog.ResetCheckpoints(jobs);
-        }
+        var catalog = new DatasetCatalog(outDir, persistence);
         var runner = new JobRunner(catalog, FrozenClock, Guid.NewGuid().ToString("N")) { Log = log, Restart = restart, ProgramOverride = programOverride, ChunkSize = chunkSize };
         var rcs = new SortedDictionary<string, (int MaxRc, SortedDictionary<string, int> Steps)>(StringComparer.Ordinal);
         if (!restart)

@@ -85,11 +85,6 @@ public sealed partial class DatasetCatalog(string workDir, IKsdsPersistence? ksd
             var persistence = Persistence is PostgresPersistence ? Persistence : new FilePersistence(DatasetDir);
             store = new KeyedStore(name, c.Layout, c.KeyOffset, c.KeyLength, persistence, c.Alt);
             _open[name] = store;
-            if (Persistence is PostgresPersistence)
-            {
-                Directory.CreateDirectory(Path.GetDirectoryName(UsedClustersPath)!);
-                File.AppendAllLines(UsedClustersPath, [name]); // a restarted run unloads the same clusters as a clean one
-            }
         }
         return store;
     }
@@ -111,13 +106,6 @@ public sealed partial class DatasetCatalog(string workDir, IKsdsPersistence? ksd
     /// <summary>Unload every cluster touched by the run to datasets/ (IDCAMS REPRO to a flat file) for comparison.</summary>
     public void UnloadClusters()
     {
-        if (File.Exists(UsedClustersPath))
-        {
-            foreach (var name in File.ReadAllLines(UsedClustersPath).Distinct(StringComparer.Ordinal).ToList())
-            {
-                Cluster(name);
-            }
-        }
         var files = new FilePersistence(DatasetDir);
         foreach (var s in _open.Values)
         {
@@ -125,114 +113,12 @@ public sealed partial class DatasetCatalog(string workDir, IKsdsPersistence? ksd
         }
     }
 
-    public void CommitAll() => CommitUnit(null, null);
-
-    /// <summary>Fault-injection point for tests: called with the name of each durability boundary.</summary>
-    public Action<string>? CommitHook { get; set; }
-
-    private string UsedClustersPath => Path.Combine(WorkDir, "state", "clusters.txt");
-
-    private string JournalPath => Path.Combine(WorkDir, "state", "commit.journal");
-
-    private string CheckpointPath(string key) => Path.Combine(WorkDir, "checkpoints", key + ".checkpoint.json");
-
-    public string? LoadCheckpoint(string key) =>
-        Persistence is PostgresPersistence pg ? pg.LoadCheckpoint(key)
-        : File.Exists(CheckpointPath(key)) ? File.ReadAllText(CheckpointPath(key)) : null;
-
-    /// <summary>Appends to a sequential dataset and returns its new length (recorded in the checkpoint so a restart can cut off an uncommitted tail).</summary>
-    public long AppendSequential(string dsn, IEnumerable<byte[]> records)
+    public void CommitAll()
     {
-        SequentialFile.Write(PathOf(dsn), records, append: true);
-        CommitHook?.Invoke("appended");
-        return new FileInfo(PathOf(dsn)).Length;
-    }
-
-    /// <summary>Restores a sequential dataset to the length recorded at the last committed checkpoint.</summary>
-    public void TruncateSequential(string dsn, long length)
-    {
-        Directory.CreateDirectory(DatasetDir);
-        using var fs = new FileStream(PathOf(dsn), FileMode.OpenOrCreate);
-        fs.SetLength(length);
-    }
-
-    /// <summary>
-    /// Commits every open store together with a restart checkpoint as one unit (checkpointKey null: no checkpoint change;
-    /// checkpointJson null: delete it). PostgreSQL uses one transaction. Files use a redo journal: the journal rename is the
-    /// commit point, and <see cref="RecoverPendingCommit"/> replays a journal left by a crash.
-    /// </summary>
-    public void CommitUnit(string? checkpointKey, string? checkpointJson)
-    {
-        var stores = _open.Values.Select(s => (s.Dsn, s.Layout, Records: (IEnumerable<byte[]>)s.Scan().Select(r => r.Bytes).ToList())).ToList();
-        if (Persistence is PostgresPersistence pg)
+        foreach (var s in _open.Values)
         {
-            pg.SaveAll(stores, checkpointKey, checkpointJson, CommitHook);
-            CommitHook?.Invoke("committed");
-            return;
+            s.Commit();
         }
-        var files = new FilePersistence(DatasetDir);
-        var entries = stores.Select(s => new JournalEntry(Path.GetRelativePath(WorkDir, files.PathOf(s.Dsn)), Convert.ToBase64String(SequentialFile.Encode(s.Records)))).ToList();
-        if (checkpointKey is not null)
-        {
-            entries.Add(new JournalEntry(Path.GetRelativePath(WorkDir, CheckpointPath(checkpointKey)),
-                checkpointJson is null ? null : Convert.ToBase64String(System.Text.Encoding.UTF8.GetBytes(checkpointJson))));
-        }
-        Directory.CreateDirectory(Path.GetDirectoryName(JournalPath)!);
-        DurableWrite(JournalPath, System.Text.Json.JsonSerializer.SerializeToUtf8Bytes(entries));
-        CommitHook?.Invoke("journal");
-        Apply(entries);
-        File.Delete(JournalPath);
-        CommitHook?.Invoke("done");
-    }
-
-    /// <summary>Completes a file-mode commit that was interrupted after its journal became durable.</summary>
-    public void RecoverPendingCommit()
-    {
-        if (File.Exists(JournalPath))
-        {
-            Apply(System.Text.Json.JsonSerializer.Deserialize<List<JournalEntry>>(File.ReadAllBytes(JournalPath))!);
-            File.Delete(JournalPath);
-        }
-        if (File.Exists(JournalPath + ".tmp"))
-        {
-            File.Delete(JournalPath + ".tmp");
-        }
-    }
-
-    /// <summary>A fresh run of these jobs must not resume a checkpoint an earlier run of them left in the database.</summary>
-    public void ResetCheckpoints(IEnumerable<string> jobs) => (Persistence as PostgresPersistence)?.ClearCheckpoints(jobs);
-
-    private sealed record JournalEntry(string Path, string? Content);
-
-    private void Apply(List<JournalEntry> entries)
-    {
-        for (var i = 0; i < entries.Count; i++)
-        {
-            var path = Path.Combine(WorkDir, entries[i].Path);
-            if (entries[i].Content is { } content)
-            {
-                Directory.CreateDirectory(Path.GetDirectoryName(path)!);
-                DurableWrite(path, Convert.FromBase64String(content));
-            }
-            else if (File.Exists(path))
-            {
-                File.Delete(path);
-            }
-            if (i == 0)
-            {
-                CommitHook?.Invoke("applied");
-            }
-        }
-    }
-
-    private static void DurableWrite(string path, byte[] bytes)
-    {
-        using (var fs = new FileStream(path + ".tmp", FileMode.Create))
-        {
-            fs.Write(bytes);
-            fs.Flush(flushToDisk: true);
-        }
-        File.Move(path + ".tmp", path, overwrite: true);
     }
 
     private IEnumerable<int> Generations(string baseName)

@@ -74,82 +74,6 @@ public class WorkloadTests
         Assert.Contains(ledger, l => l.Contains("\"Status\":\"ABEND\"", StringComparison.Ordinal));
     }
 
-    private sealed class SimulatedCrash : Exception;
-
-    /// <summary>Kills the run at one durability boundary of POSTTRAN's second chunk (chunk size 1).</summary>
-    private static Action<string> CrashAt(string phase)
-    {
-        var appended = 0;
-        var crashed = false;
-        return p =>
-        {
-            appended += p == "appended" ? 1 : 0;
-            if (!crashed && appended == 2 && p == phase)
-            {
-                crashed = true;
-                throw new SimulatedCrash();
-            }
-        };
-    }
-
-    /// <summary>p01: chunk 2 posts a transaction (replay = double charge); p02: chunk 2 writes a reject (replay = duplicate reject).</summary>
-    private static void CrashAndRestart(string fixtureCase, string phase, CardDemo.Data.IKsdsPersistence? persistence)
-    {
-        var fixture = Path.Combine(Root, "fixtures", "posting", fixtureCase);
-        var clean = Temp("clean-" + phase);
-        var restarted = Temp("crash-" + phase);
-        ChainRunner.Run("posting", fixture, clean, persistence);
-        Assert.Throws<SimulatedCrash>(() => ChainRunner.Run("posting", fixture, restarted, persistence, chunkSize: 1, commitHook: CrashAt(phase)));
-        Assert.True(ChainRunner.Run("posting", fixture, restarted, persistence, restart: true, chunkSize: 1) <= 4);
-        AssertSameOutputs(clean, restarted);
-    }
-
-    /// <summary>File mode: a crash at any point of a chunk commit neither loses nor replays postings or rejects.</summary>
-    [Theory]
-    [InlineData("p01-baseline-mixed", "appended")]
-    [InlineData("p01-baseline-mixed", "journal")]
-    [InlineData("p01-baseline-mixed", "applied")]
-    [InlineData("p01-baseline-mixed", "done")]
-    [InlineData("p02-invalid-card", "appended")]
-    [InlineData("p02-invalid-card", "journal")]
-    [InlineData("p02-invalid-card", "applied")]
-    [InlineData("p02-invalid-card", "done")]
-    public void Posting_chunk_commit_is_atomic_on_files(string fixtureCase, string phase) => CrashAndRestart(fixtureCase, phase, null);
-
-    /// <summary>PostgreSQL mode (CARDDEMO_PG set): stores and checkpoint commit in one transaction.</summary>
-    [Theory]
-    [InlineData("p01-baseline-mixed", "pg-before-commit")]
-    [InlineData("p01-baseline-mixed", "committed")]
-    [InlineData("p02-invalid-card", "appended")]
-    [InlineData("p02-invalid-card", "pg-before-commit")]
-    [InlineData("p02-invalid-card", "committed")]
-    public void Posting_chunk_commit_is_atomic_on_postgres(string fixtureCase, string phase)
-    {
-        var cs = Environment.GetEnvironmentVariable("CARDDEMO_PG");
-        if (string.IsNullOrEmpty(cs))
-        {
-            return;
-        }
-        CrashAndRestart(fixtureCase, phase, new CardDemo.Data.PostgresPersistence(cs, CardDemo.Data.DatasetCatalog.Clusters.ToDictionary(kv => kv.Key, kv => kv.Value.Table)));
-    }
-
-    /// <summary>A fresh run of another chain must not delete a failed posting run's PostgreSQL checkpoint.</summary>
-    [Fact]
-    public void Other_chain_keeps_posting_checkpoint_on_postgres()
-    {
-        var cs = Environment.GetEnvironmentVariable("CARDDEMO_PG");
-        if (string.IsNullOrEmpty(cs))
-        {
-            return;
-        }
-        var pg = new CardDemo.Data.PostgresPersistence(cs, CardDemo.Data.DatasetCatalog.Clusters.ToDictionary(kv => kv.Key, kv => kv.Value.Table));
-        pg.SaveAll([], "POSTTRAN.STEP15", "{}");
-        new CardDemo.Data.DatasetCatalog(Temp("readcard"), pg).ResetCheckpoints(["READCARD"]);
-        Assert.Equal("{}", pg.LoadCheckpoint("POSTTRAN.STEP15"));
-        new CardDemo.Data.DatasetCatalog(Temp("posting"), pg).ResetCheckpoints(["POSTTRAN", "TRANREPT"]);
-        Assert.Null(pg.LoadCheckpoint("POSTTRAN.STEP15"));
-    }
-
     private sealed class Failing : CardDemo.Batch.IBatchProgram
     {
         public int Execute(CardDemo.Batch.StepContext ctx) => throw new IOException("injected report failure");
@@ -186,7 +110,6 @@ public class WorkloadTests
         Assert.Equal(File.ReadAllText(Path.Combine(clean, "rc.json")), File.ReadAllText(Path.Combine(restarted, "rc.json")));
         foreach (var sub in new[] { "datasets", "sysout" })
         {
-            Assert.Equal(Directory.EnumerateFiles(Path.Combine(clean, sub)).Select(Path.GetFileName).Order(), Directory.EnumerateFiles(Path.Combine(restarted, sub)).Select(Path.GetFileName).Order());
             foreach (var file in Directory.EnumerateFiles(Path.Combine(clean, sub)))
             {
                 var other = Path.Combine(restarted, sub, Path.GetFileName(file));

@@ -27,7 +27,7 @@ PostgreSQL tables come from `db/migrations/001_create_vsam_tables.sql`, which is
 
 - `src/CardDemo.Domain`: generated copybook layouts, the COBOL numeric codec and `[Trace]`.
 - `src/CardDemo.Data`: the VSAM keyed store (with AIX), the PostgreSQL and file persistence, QSAM files, and the GDG catalog.
-- `src/CardDemo.Batch`: one class per COBOL program, plus the SORT and IDCAMS utilities and the chunk checkpoints. A POSTTRAN chunk and its checkpoint commit atomically (see ADR-005).
+- `src/CardDemo.Batch`: one class per COBOL program, plus the SORT and IDCAMS utilities and the chunk checkpoints.
 - `src/CardDemo.Orchestration`: the JCL job catalog, the job runner (return codes, abends, the run ledger, restart) and the chain runner.
 - `src/CardDemo.Host`: the `carddemo-batch` command-line tool.
 - `tests/CardDemo.Tests`: codec unit tests, golden-fixture contract tests and the restart test.
