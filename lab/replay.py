@@ -59,6 +59,9 @@ def validate(directory):
                 row = decode_record(layout, line.ljust(length, b' '))
             except (ValueError, ArithmeticError, IndexError) as e:
                 raise ValueError(f'{path.name} line {number}: cannot decode {layout}: {e}') from e
+            for field in parse_copybook(layout):
+                if not field.is_filler and field.kind != 'text' and not isinstance(row[field.name], Decimal):
+                    raise ValueError(f'{path.name} line {number}: {field.name} must be numeric')
             if stem == 'TCATBALF':
                 key = (row['TRANCAT-ACCT-ID'], row['TRANCAT-TYPE-CD'], row['TRANCAT-CD'])
                 if previous is not None and key < previous:

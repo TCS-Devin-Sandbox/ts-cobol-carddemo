@@ -1,4 +1,5 @@
 import copy
+import shutil
 import tempfile
 import unittest
 from decimal import Decimal
@@ -6,10 +7,36 @@ from pathlib import Path
 
 from lab.classify import required
 from lab.replay import ROOT, SPECS, compare_values, evaluator, intake, validate
-from tools.parity.copybook import encode_record
+from tools.parity.copybook import encode_record, parse_copybook
 
 
 class ReplayTests(unittest.TestCase):
+    def test_malformed_numeric_fields_are_rejected(self):
+        with tempfile.TemporaryDirectory() as temporary:
+            directory = Path(temporary) / 'input'
+            shutil.copytree(ROOT / 'lab/probes/E10/input', directory)
+            for stem, layout in SPECS.items():
+                path = directory / f'AWS.M2.CARDDEMO.{stem}.PS.txt'
+                original = path.read_bytes()
+                for field in parse_copybook(layout):
+                    if field.is_filler or field.kind == 'text':
+                        continue
+                    with self.subTest(field=field.name):
+                        malformed = bytearray(original)
+                        malformed[field.offset] = ord('x')
+                        path.write_bytes(malformed)
+                        with self.assertRaisesRegex(ValueError, f'line 1:.*{field.name}.*numeric'):
+                            validate(directory)
+                    path.write_bytes(original)
+
+    def test_valid_and_empty_inputs(self):
+        validate(ROOT / 'lab/probes/E10/input')
+        with tempfile.TemporaryDirectory() as temporary:
+            directory = Path(temporary)
+            for stem in SPECS:
+                (directory / f'AWS.M2.CARDDEMO.{stem}.PS.txt').touch()
+            validate(directory)
+
     def test_zero_interest_rewrite_with_no_value_change(self):
         data = intake(ROOT / 'fixtures/interest/i02-tie-half-cent/input')
         first = data['ACCTDATA'][0]
