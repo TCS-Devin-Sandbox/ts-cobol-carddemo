@@ -39,7 +39,7 @@ Ticket sessions copy each line into the review evidence and record **PASS** or *
 - **S12** · Does each touched status path produce the specified outcome, exit and diagnostic?
   **PASS** — `LegacyStatus.check` distinguishes success, TCATBALF-only EOF, exact-rate fallback and typed terminal failure; `LegacyStatusTest` verifies all 17 source operation/text combinations. `INT_R10_TN_03_TN_04_TN_07_TN_09_typedOperationFailuresRollbackAndPreserveRestrictedSourceOrder` proves FAILED/U999/RC12, restricted diagnostics, rollback and no dataset export for injected typed failures.
 - **S13** · Do private restart and host hold/reconciliation paths preserve committed state and prevent duplicate effects?
-  **PASS** — `INT_H06_A3_crashBeforeGroupCommitRollsBackWholeGroupAndExplicitResumeSeeksCheckpoint`, `INT_H06_A3_crashAfterCommitDoesNotReplayCommittedOrdinalOrClock`, changed identity/snapshot ITs; no host reconciliation/release added.
+  **PASS** — `INT_H06_A3_crashBeforeGroupCommitRollsBackWholeGroupAndExplicitResumeSeeksCheckpoint`, `INT_H06_A3_crashAfterCommitDoesNotReplayCommittedOrdinalOrClock`, `INT_H06_A3_operatorAbandonedComputingRequiresExplicitResumeAndPreservesCheckpoint`, changed identity/snapshot ITs; explicit operator abandonment only, no automatic restart or host reconciliation/release added.
 - **S14** · Are ordinary logs masked and parity SYSOUT restricted?
   **PASS** — `GroupCalculation.rate`/`MissingLookup`, `CloseRunService` category/run logging, `CloseExporter.transcript`; `close.properties` suppresses framework logging in candidate launch. Raw synthetic records only in restricted parity artifacts.
 - **S15** · Do applicable rule-named tests cover their listed fixtures and targeted gaps with independent expectations?
