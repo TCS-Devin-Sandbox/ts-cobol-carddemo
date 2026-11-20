@@ -74,4 +74,4 @@
 2. Confirm that MG-03 (user security administration, CU00–CU03) is next. It writes the same `usrsec` table, so it is the natural place to introduce hashed passwords.
 
 ## 7. Sign-off
-- [ ] **Gate 3: awaiting the user's approval.**
+- [x] **Gate 3: APPROVED** by the user ("ok proceed", 2026-11-20 16:15 IST). MG-03 is next.
