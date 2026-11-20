@@ -73,7 +73,9 @@ compose `db` service `postgres:15` (server 15.20), host Python 3.12 for the comp
    `CBACT04C: compiled`, and seven lines `interest/<case> [legacy rerun]: PASS (...)`. The
    CBEXPORT/CBIMPORT skips printed by `make build` are expected.
 4. Build and run all tests (unit tests, then PostgreSQL 15 integration tests in Testcontainers;
-   Docker must be running). In Bash, keep the full output for the evidence (use your ticket
+   Docker must be running, and the mirrored `postgres:15-alpine` tag of step 3 must exist:
+   Testcontainers pulls it too and hits the same Docker Hub 429; and `JAVA_HOME` must be the
+   Java 21 of step 2 in this shell). In Bash, keep the full output for the evidence (use your ticket
    file name without `.md` in place of `01-pilot` for a new ticket):
    ```sh
    set -o pipefail
