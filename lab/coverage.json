@@ -1,0 +1,102 @@
+{
+  "INT-R01": {
+    "exercisable": true,
+    "waits_for": null
+  },
+  "INT-R02": {
+    "exercisable": true,
+    "waits_for": null
+  },
+  "INT-R03": {
+    "exercisable": true,
+    "waits_for": null
+  },
+  "INT-R04": {
+    "exercisable": true,
+    "waits_for": null
+  },
+  "INT-R05": {
+    "exercisable": true,
+    "waits_for": null
+  },
+  "INT-R06": {
+    "exercisable": true,
+    "waits_for": null
+  },
+  "INT-R07": {
+    "exercisable": true,
+    "waits_for": null
+  },
+  "INT-R08": {
+    "exercisable": true,
+    "waits_for": null
+  },
+  "INT-R09": {
+    "exercisable": true,
+    "waits_for": null
+  },
+  "INT-R10": {
+    "exercisable": true,
+    "waits_for": null
+  },
+  "INT-Q01": {
+    "exercisable": true,
+    "waits_for": null
+  },
+  "INT-Q02": {
+    "exercisable": true,
+    "waits_for": null
+  },
+  "INT-Q03": {
+    "exercisable": true,
+    "waits_for": null
+  },
+  "INT-Q04": {
+    "exercisable": true,
+    "waits_for": null
+  },
+  "INT-Q05": {
+    "exercisable": true,
+    "waits_for": null
+  },
+  "INT-Q06": {
+    "exercisable": true,
+    "waits_for": null
+  },
+  "INT-H01": {
+    "exercisable": true,
+    "waits_for": null
+  },
+  "INT-H02": {
+    "exercisable": false,
+    "waits_for": "scheduler/application answer on the cycle date source"
+  },
+  "INT-H03": {
+    "exercisable": false,
+    "waits_for": "host evidence: AIX first-return card; E09 shows each engine today"
+  },
+  "INT-H04": {
+    "exercisable": true,
+    "waits_for": null
+  },
+  "INT-H05": {
+    "exercisable": false,
+    "waits_for": "host Enterprise COBOL arithmetic/TRUNC evidence on overflow"
+  },
+  "INT-H06": {
+    "exercisable": true,
+    "waits_for": null
+  },
+  "INT-H07": {
+    "exercisable": true,
+    "waits_for": null
+  },
+  "INT-H08": {
+    "exercisable": true,
+    "waits_for": null
+  },
+  "INT-H09": {
+    "exercisable": false,
+    "waits_for": "operations answer: which job clears TCATBALF"
+  }
+}

@@ -103,3 +103,21 @@ rules-check:               ## fail when expectations, board or register are stal
 
 board-e2e: rules-check     ## Playwright suite for rules-INTCALC.html (ui-test-plan.md rows 1-9)
 	$(RULES_PY) -m pytest e2e -v
+
+# ---- replay lab (host coordinator; container-side serialized lanes) -------
+JAVA21_HOME ?= /usr/lib/jvm/java-21-openjdk-amd64
+MVN ?= mvn
+
+.PHONY: lab lab-jar lab-gate lab-gate-negative
+
+lab:
+	$(PY) lab/server.py
+
+lab-jar:
+	cd java/interest/interest-batch && env -u JDK_JAVA_OPTIONS JAVA_HOME=$(JAVA21_HOME) $(MVN) -q package -DskipTests
+
+lab-gate:
+	$(PY) lab/replay.py gate --json work/lab/report.json --report work/lab/report.md
+
+lab-gate-negative:
+	JAVA21_HOME=$(JAVA21_HOME) MVN=$(MVN) $(PY) lab/negative.py

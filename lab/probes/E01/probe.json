@@ -1,0 +1,15 @@
+{
+  "id": "E01",
+  "title": "Positive and negative cent ties",
+  "stresses": "Positive and negative cent ties",
+  "rules": [
+    "INT-Q01",
+    "INT-Q03"
+  ],
+  "flags": {
+    "tie": true
+  },
+  "gnucobol_vs_host": "GnuCOBOL lab observation only; not Enterprise COBOL arithmetic, LE abend, or VSAM AIX first-return proof.",
+  "open_question": null,
+  "derived_from": "fixtures/interest/i02-tie-half-cent/input"
+}
