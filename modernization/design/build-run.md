@@ -120,3 +120,6 @@ None. No group failed, was retried, skipped or returned needs-decision.
 - g4's second squash `40f6cc2`, pushed after the workflow had ended (not in the child's structured result; final check covers it).
 - The four group PRs #18, #20, #21, #22 (open, base `demo/05b-integration`) and this PR (base `demo/05a-skills`).
 - The nine standards proposals.
+- Devin Review on PR #24, left unfixed (child code; for a person to decide):
+  - 05 `handoff/PacketBuilder.java`: `txn_ids` in the manifest are not JSON-escaped; a PARM holding `"` or `\` gives invalid JSON. Fix on `demo/05-g3-data-flow`.
+  - 04 `job/CloseRunService.java`: resume accepts only a `FAILED` run, so a run left `COMPUTING` by a JVM crash cannot be resumed. Needs a design decision on abandoned-run recovery; fix on `demo/05-g2-logic`.
