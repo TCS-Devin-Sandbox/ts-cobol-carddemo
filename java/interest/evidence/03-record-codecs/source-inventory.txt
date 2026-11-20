@@ -1,0 +1,2 @@
+b1cfff2ce86ab648d13bf97fe31c5127b1972d3679c8bee976a091a21a14743b  java/interest/interest-batch/src/main/java/com/carddemo/interest/codec/FixedRecordCodec.java
+f1fe3c50275f148c30dce7c0524d2ac976efa840f2d21fdd22a873f428d87aef  java/interest/interest-batch/src/test/java/com/carddemo/interest/codec/FixedRecordCodecTest.java

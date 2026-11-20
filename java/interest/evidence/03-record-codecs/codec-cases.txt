@@ -1,0 +1,10 @@
+INT-03 codec byte/key cases (Surefire XML)
+INT_R09_INT_H03_encodedKeysAndUnsignedLocaleOrder: PASS
+TN_01_TN_06_exactFramingEmptyAndWrongPaddingRejections: PASS
+INT_R06_TN_06_accountPatchOnlyChangesThreeReceivers: PASS
+INT_Q03_T06_negativeAmountAndLeadingZeroFieldsIndependent: PASS
+TN_06_INT_Q03_i01_i06_allFiveLayoutsRoundTripBothProfiles: PASS
+TN_06_signedZeroAndImmutableOriginalFiller: PASS
+INT_R10_badDigitsOverpunchCodePageAndUnmappableStructured: PASS
+INT_R08_INT_Q05_TN_02_opaqueDatesIdsAndTimestamps: PASS
+Tests: 8 Failures: 0 Errors: 0 Skipped: 0
