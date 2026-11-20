@@ -84,6 +84,7 @@ public class InterestJobConfig {
             @Override public void afterJob(JobExecution execution) {
                 int rc = execution.getStatus() == org.springframework.batch.core.BatchStatus.COMPLETED
                         ? execution.getExecutionContext().getInt("rc", 12) : 12;
+                if (rc != 0) execution.setStatus(org.springframework.batch.core.BatchStatus.FAILED);
                 execution.setExitStatus(new ExitStatus(Integer.toString(rc)));
             }
         }).start(compute).on("0").to(packaging).on("*").end()
