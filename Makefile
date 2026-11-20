@@ -107,8 +107,9 @@ board-e2e: rules-check     ## Playwright suite for rules-INTCALC.html (ui-test-p
 # ---- replay lab (host coordinator; container-side serialized lanes) -------
 JAVA21_HOME ?= /usr/lib/jvm/java-21-openjdk-amd64
 MVN ?= mvn
+LAB_PY ?= $(if $(wildcard $(HOME)/envs/lab/bin/python),$(HOME)/envs/lab/bin/python,python3)
 
-.PHONY: lab lab-jar lab-gate lab-gate-negative
+.PHONY: lab lab-jar lab-gate lab-gate-negative lab-e2e
 
 lab:
 	$(PY) lab/server.py
@@ -121,3 +122,8 @@ lab-gate:
 
 lab-gate-negative:
 	JAVA21_HOME=$(JAVA21_HOME) MVN=$(MVN) $(PY) lab/negative.py
+
+lab-e2e:
+	@mkdir -p lab/evidence
+	@$(LAB_PY) -m pytest lab/e2e -v --color=no > lab/evidence/e2e-output.txt 2>&1; \
+	status=$$?; cat lab/evidence/e2e-output.txt; exit $$status

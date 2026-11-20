@@ -15,10 +15,18 @@ host build dependencies; Java 21 also ships in the estate image.
 make lab                       # browser workbench, foreground
 make lab-gate                  # complete golden + edge replay
 make lab-gate-negative         # succeeds only when the mutation is detected
-# make lab-e2e                 # placeholder: browser suite, next handoff
+make lab-e2e                   # twelve UI plan rows, saves lab/evidence/e2e-output.txt
 ```
 
-`make lab-e2e` is not implemented yet; use [ui-test-plan.md](ui-test-plan.md).
+Install browser dependencies with
+`~/envs/lab/bin/python -m pip install -r lab/e2e/requirements.txt` and
+`~/envs/lab/bin/python -m playwright install --with-deps chromium`.
+`make lab-e2e` uses `~/envs/lab/bin/python` when available, otherwise `python3`;
+override `LAB_PY` if needed. It runs one pytest test per [UI plan](ui-test-plan.md)
+row, starts an isolated server on a free `LAB_PORT`, and stops that server
+afterward. Set `LAB_URL` to test an already running lab instead. Do not run
+the suite in parallel: replays share estate files. The suite first runs the
+full CLI gate for comparisons and refreshes the committed gate/report evidence.
 `JAVA21_HOME` and `MVN` override the Java build tool locations. If Docker Hub
 is rate-limited, set `ESTATE_BASE_IMAGE=mirror.gcr.io/library/ubuntu:22.04`
 and pull/retag `postgres:15` and `postgres:15-alpine` from `mirror.gcr.io/library/`.
@@ -146,3 +154,29 @@ The negative-control command itself succeeds only when this exact check holds.
 - The lab ASCII codec profile is not the EBCDIC host environment.
 - Local AIX card ordering is not host first-return-card evidence. Passing
   comparisons do not close the register or establish production readiness.
+
+## Evidence
+
+The manual Chrome run passed all twelve rows in [ui-test-plan.md](ui-test-plan.md).
+Rows 4, 8 and 10 are qualified: the desktop harness folds new tabs into the
+current tab. Fresh headless Chromium verified real popups and that original
+results remain. This is supplementary browser evidence, not a claim that the
+desktop harness displayed separate tabs. The automated suite also checks these
+popups through clicks, without using API calls or injected application state.
+
+Committed files under `lab/evidence/`:
+
+Latest automated Chromium result: **12 passed** (one test per UI plan row).
+
+- `e2e-output.txt`: latest full `make lab-e2e` pytest result, one test per plan row.
+- `gate-output.txt`: full `make lab-gate` output, including its exit code.
+- `gate-negative-output.txt`: full half-even negative-control output and exit code.
+- `classified-report.md` and `report.json`: the normal gate's classified report.
+- `ui/row-01.png` through `ui/row-12.png`: manual desktop check screenshots.
+- `golden-run.html`: saved script-free all-golden snapshot from the manual check.
+
+Captured reports name the tested baseline SHA; the evidence commit itself will
+have a newer SHA. Snapshot evidence links point at the original run's local
+`work/lab/` artifacts, which are intentionally not committed. The normal gate
+and browser suite pass only for the required behavior; the negative command
+passes when it detects the deliberately failing copied Java lane.

@@ -54,7 +54,13 @@ jobs:
       - name: Half-even negative control
         run: make lab-gate-negative JAVA21_HOME="$JAVA_HOME"
 
-      # TODO: make lab-e2e (browser suite, next handoff).
+      - name: Install browser test dependencies
+        run: |
+          python3 -m pip install -r lab/e2e/requirements.txt
+          python3 -m playwright install --with-deps chromium
+
+      - name: Lab browser test plan
+        run: make lab-e2e
 
       - name: Upload replay reports
         if: always()
@@ -64,4 +70,5 @@ jobs:
           path: |
             work/lab/*.md
             work/lab/*.json
+            lab/evidence/e2e-output.txt
           if-no-files-found: ignore
