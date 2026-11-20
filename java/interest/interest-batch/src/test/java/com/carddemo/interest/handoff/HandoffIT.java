@@ -53,6 +53,7 @@ class HandoffIT {
     String cycle;
     SimulatedHost host;
     final List<String> signals = new ArrayList<>();
+    int failingSignals;
     HandoffCoordinator coordinator;
 
     @BeforeAll
@@ -372,6 +373,63 @@ class HandoffIT {
         assertEquals(0, host.hostCalls);
     }
 
+    @Test
+    void INT_H06_receiptForGenerationNoLongerCurrentStaysHeld() throws Exception {
+        host.catalogReply = CatalogStatus.UNKNOWN;
+        host.catalogWritesAnyway = true;
+        coordinator.handoff(run);
+        host.generations.add(DESTINATION + ".G0002V00");
+        HandoffOutcome outcome = coordinator.resolve(run);
+        assertEquals(new Held(run, HoldReason.GENERATION_MOVED), outcome);
+        assertHeld(HoldReason.GENERATION_MOVED);
+        report("receipt-generation-not-current", run, outcome);
+    }
+
+    @Test
+    void INT_H06_undeliveredSuccessConditionIsEmittedAgainWithoutRepublishing() throws Exception {
+        failingSignals = 1;
+        assertThrows(IllegalStateException.class, () -> coordinator.handoff(run));
+        assertEquals("RECEIVED", publicationState(run));
+        assertEquals("false", owner.queryForObject(
+                "SELECT receipt->>'signal_acknowledged' FROM interest.publication WHERE run_id = ?", String.class, run));
+        int mutations = host.mutations;
+        HandoffOutcome outcome = coordinator.handoff(run);
+        assertEquals(new Released(run, DESTINATION + ".G0001V00", true), outcome);
+        assertEquals(1, signals.size());
+        assertEquals(mutations, host.mutations);
+        assertEquals("true", owner.queryForObject(
+                "SELECT receipt->>'signal_acknowledged' FROM interest.publication WHERE run_id = ?", String.class, run));
+        coordinator.handoff(run);
+        assertEquals(1, signals.size());
+        report("signal-redelivered", run, outcome);
+    }
+
+    @Test
+    void INT_H06_hostErrorAfterMutationHolds() throws Exception {
+        host.generationFailsAfterMutation = true;
+        HandoffOutcome outcome = coordinator.handoff(run);
+        assertEquals(new Held(run, HoldReason.HOST_ERROR), outcome);
+        assertEquals(1, host.mutations);
+        assertEquals(0, host.catalogCalls);
+        assertHeld(HoldReason.HOST_ERROR);
+        report("host-error-after-apply", run, outcome);
+    }
+
+    @Test
+    void stagedColumnDisagreeingWithRawRecordRejectsPacket() throws Exception {
+        owner.update("UPDATE interest.interest_tx SET card_number = '4000000000009999' WHERE run_id = ? AND emit_ordinal = 1", run);
+        assertEquals("RECORD_COLUMN_MISMATCH", assertThrows(PacketBuilder.PacketRejected.class,
+                () -> new PacketBuilder(publisher).build(run)).reason());
+    }
+
+    @Test
+    void INT_R08_opaqueParmWithJsonSpecialCharactersIsEscapedInManifest() throws Exception {
+        owner.update("UPDATE interest.run SET parm = ? WHERE run_id = ?", "2022\"71\\80", run);
+        ExportPacket packet = new PacketBuilder(publisher).build(run);
+        assertTrue(packet.manifest().contains("\"parm\":\"2022\\\"71\\\\80\""), packet.manifest());
+        assertEquals(packet.manifest(), new PacketBuilder(publisher).build(run).manifest());
+    }
+
     private void assertHeldWithoutMutation(HoldReason reason, String label) throws Exception {
         HandoffOutcome outcome = coordinator.handoff(run);
         assertEquals(new Held(run, reason), outcome);
@@ -406,7 +464,13 @@ class HandoffIT {
 
     private HandoffCoordinator coordinator(SimulatedHost h) {
         return new HandoffCoordinator(new PacketBuilder(publisher), new PublicationLedger(publisher, publishTx), h,
-                (id, generation) -> signals.add(id + "|" + generation));
+                (id, generation) -> {
+                    if (failingSignals > 0) {
+                        failingSignals--;
+                        throw new IllegalStateException("simulated scheduler outage");
+                    }
+                    signals.add(id + "|" + generation);
+                });
     }
 
     private SimulatedHost hostFor(String destination, String forCycle) throws Exception {

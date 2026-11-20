@@ -21,6 +21,8 @@ public enum HoldReason {
     APPLY_UNCERTAIN,
     /** Write/catalog of SYSTRAN(+1) failed or its outcome is unknown. */
     CATALOG_AMBIGUOUS,
+    /** A host call failed with no typed answer; earlier mutations may have taken effect. */
+    HOST_ERROR,
     /** No durable host receipt exists after apply/catalog. */
     RECEIPT_MISSING,
     /** The receipt does not match the packet (operation, generation, digest, count or account post-images). */

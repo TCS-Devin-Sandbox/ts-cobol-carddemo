@@ -64,7 +64,11 @@ public final class HandoffCoordinator {
         if (claim instanceof PublicationLedger.Claim.Existing e) {
             return revisit(e.publication());
         }
-        return publish(packet, prior, next, operationId);
+        try {
+            return publish(packet, prior, next, operationId);
+        } catch (RuntimeException e) {
+            return holdAfterError(runId, e);
+        }
     }
 
     /** A held run is released only by a verified matching receipt; nothing is reapplied. */
@@ -72,18 +76,35 @@ public final class HandoffCoordinator {
         PublicationLedger.Publication publication = ledger.find(runId)
                 .orElseThrow(() -> new IllegalStateException("no publication for run"));
         if (publication.state() == PublicationLedger.State.RECEIVED) {
-            return new HandoffOutcome.Released(runId, publication.currentGeneration(), true);
+            return released(publication);
         }
         if (publication.state() == PublicationLedger.State.PRIVATE) {
             return new HandoffOutcome.ShadowRehearsed(runId, packets.build(runId).payloadDigestHex());
         }
         ExportPacket packet = packets.build(runId);
-        return verifyAndRelease(packet, publication.currentGeneration(), publication.operationId());
+        try {
+            return verifyAndRelease(packet, publication.currentGeneration(), publication.operationId());
+        } catch (RuntimeException e) {
+            return holdAfterError(runId, e);
+        }
+    }
+
+    /** RECEIVED is final; a success condition not yet acknowledged is emitted again (at least once). */
+    private HandoffOutcome released(PublicationLedger.Publication publication) {
+        if (!publication.signalAcknowledged()) {
+            signal(publication.runId(), publication.currentGeneration());
+        }
+        return new HandoffOutcome.Released(publication.runId(), publication.currentGeneration(), true);
+    }
+
+    private void signal(UUID runId, String generation) {
+        signal.intcalcCompleted(runId, generation);
+        ledger.acknowledgeSignal(runId);
     }
 
     private HandoffOutcome revisit(PublicationLedger.Publication publication) {
         return switch (publication.state()) {
-            case RECEIVED -> new HandoffOutcome.Released(publication.runId(), publication.currentGeneration(), true);
+            case RECEIVED -> released(publication);
             case PRIVATE -> new HandoffOutcome.ShadowRehearsed(publication.runId(),
                     packets.build(publication.runId()).payloadDigestHex());
             case PREPARED, HELD -> resolve(publication.runId());
@@ -163,13 +184,16 @@ public final class HandoffCoordinator {
         if (!matches(receipt.get(), packet, next, operationId)) {
             return hold(runId, HoldReason.RECEIPT_MISMATCH);
         }
+        if (!host.currentGeneration(packet.destination()).equals(next)) {
+            return hold(runId, HoldReason.GENERATION_MOVED);
+        }
         if (ledger.release(runId, receiptJson(receipt.get()))) {
-            signal.intcalcCompleted(runId, next);
+            signal(runId, next);
             log.info("event=handoff-released run={} records={} deltas={}", runId, packet.recordCount(),
                     packet.deltas().size());
             return new HandoffOutcome.Released(runId, next, false);
         }
-        return new HandoffOutcome.Released(runId, next, true);
+        return released(ledger.find(runId).orElseThrow());
     }
 
     static boolean matches(Receipt r, ExportPacket packet, String next, String operationId) {
@@ -186,6 +210,14 @@ public final class HandoffCoordinator {
 
     private boolean stillFenced(Fence fence, ExportPacket packet) {
         return host.observeFence(packet.destination()).filter(f -> f.equals(fence) && current(f, packet)).isPresent();
+    }
+
+    /** A failure after RECEIVED (success-condition delivery) is not a host error: it propagates and is redelivered. */
+    private HandoffOutcome holdAfterError(UUID runId, RuntimeException e) {
+        if (ledger.find(runId).filter(p -> p.state() == PublicationLedger.State.RECEIVED).isPresent()) {
+            throw e;
+        }
+        return hold(runId, HoldReason.HOST_ERROR);
     }
 
     private HandoffOutcome hold(UUID runId, HoldReason reason) {
@@ -223,7 +255,7 @@ public final class HandoffCoordinator {
     private static String receiptJson(Receipt r) {
         String accounts = r.accountPostImageSha256().entrySet().stream().sorted(Map.Entry.comparingByKey())
                 .map(e -> "\"" + e.getKey() + "\":\"" + e.getValue() + "\"").collect(Collectors.joining(",", "{", "}"));
-        return "{\"verified\":true,\"operation_id\":\"" + r.operationId() + "\",\"generation\":\"" + r.generation()
+        return "{\"verified\":true,\"signal_acknowledged\":false,\"operation_id\":\"" + r.operationId() + "\",\"generation\":\"" + r.generation()
                 + "\",\"payload_sha256\":\"" + r.payloadSha256() + "\",\"record_count\":" + r.recordCount()
                 + ",\"accounts\":" + accounts + "}";
     }

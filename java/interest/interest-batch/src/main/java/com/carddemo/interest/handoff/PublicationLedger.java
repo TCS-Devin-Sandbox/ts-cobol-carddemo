@@ -15,7 +15,7 @@ public final class PublicationLedger {
     public enum State { PRIVATE, PREPARED, HELD, RECEIVED }
 
     public record Publication(UUID runId, State state, String destination, String priorGeneration,
-            String currentGeneration, String operationId, Optional<HoldReason> holdReason) {}
+            String currentGeneration, String operationId, Optional<HoldReason> holdReason, boolean signalAcknowledged) {}
 
     public sealed interface Claim {
         record Claimed(Publication publication) implements Claim {}
@@ -33,11 +33,12 @@ public final class PublicationLedger {
 
     public Optional<Publication> find(UUID runId) {
         return jdbc.query("""
-                SELECT state, destination, prior_generation, current_generation, operation_id, receipt->>'reason'
+                SELECT state, destination, prior_generation, current_generation, operation_id, receipt->>'reason',
+                  coalesce((receipt->>'signal_acknowledged')::boolean, false)
                 FROM interest.publication WHERE run_id = ?""",
                 (rs, n) -> new Publication(runId, State.valueOf(rs.getString(1)), rs.getString(2), rs.getString(3),
                         rs.getString(4), rs.getString(5),
-                        Optional.ofNullable(rs.getString(6)).map(HoldReason::valueOf)), runId).stream().findFirst();
+                        Optional.ofNullable(rs.getString(6)).map(HoldReason::valueOf), rs.getBoolean(7)), runId).stream().findFirst();
     }
 
     public Claim claim(ExportPacket packet, String priorGeneration, String nextGeneration, String operationId,
@@ -78,6 +79,13 @@ public final class PublicationLedger {
                     WHERE run_id = ? AND state IN ('PREPARED','HELD')""", reason.name(), runId);
             jdbc.update("UPDATE interest.run SET state = 'HELD' WHERE run_id = ? AND state IN ('COMPUTED','HELD')", runId);
         });
+    }
+
+    /** Records that the INTCALC success condition for a RECEIVED publication was delivered. */
+    public void acknowledgeSignal(UUID runId) {
+        jdbc.update("""
+                UPDATE interest.publication SET receipt = receipt || '{"signal_acknowledged":true}'::jsonb
+                WHERE run_id = ? AND state = 'RECEIVED'""", runId);
     }
 
     /**

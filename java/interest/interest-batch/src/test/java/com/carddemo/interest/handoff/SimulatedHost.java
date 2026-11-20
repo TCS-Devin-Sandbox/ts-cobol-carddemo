@@ -27,6 +27,7 @@ final class SimulatedHost implements HostBridge {
     boolean catalogWritesAnyway;
     ReceiptMode receiptMode = ReceiptMode.RECORD;
     Runnable afterPreflight = () -> {};
+    boolean generationFailsAfterMutation;
     int hostCalls;
     int mutations;
     int catalogCalls;
@@ -46,6 +47,9 @@ final class SimulatedHost implements HostBridge {
     @Override
     public String currentGeneration(String destination) {
         hostCalls++;
+        if (generationFailsAfterMutation && mutations > 0) {
+            throw new IllegalStateException("simulated host error");
+        }
         return generations.isEmpty() ? NO_GENERATION : generations.get(generations.size() - 1);
     }
 
