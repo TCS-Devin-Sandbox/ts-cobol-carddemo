@@ -40,3 +40,34 @@ jobs:
           name: parity-report
           path: work/parity/*.md
           if-no-files-found: ignore
+
+  trantype-tests:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up JDK 21 with Maven cache
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '21'
+          cache: maven
+          cache-dependency-path: carddemo-trantype-api/pom.xml
+
+      - name: Transaction-type API tests (Testcontainers PostgreSQL)
+        working-directory: carddemo-trantype-api
+        run: mvn -B verify
+
+      - name: Set up Node.js with npm cache
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+          cache-dependency-path: carddemo-trantype-ui/package-lock.json
+
+      - name: Transaction-type UI tests
+        working-directory: carddemo-trantype-ui
+        run: |
+          npm ci
+          npm test
