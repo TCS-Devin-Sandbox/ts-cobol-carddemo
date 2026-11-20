@@ -1,5 +1,7 @@
 # Phase 1 — Discovery: CTLI (COTRTLIC) and CTTU (COTRTUPC)
 
+This is a **legacy-source discovery record**, not the current API/UI contract. Source state names, PF-key dispatch, SQLCODE text and Q1–Q14 below describe COBOL/CICS. The retained implementation is `carddemo-trantype-api/` and `carddemo-trantype-ui/`; see `target-spec.md` and numbered `deviations.md` for current behavior. In particular, modern paging uses FORWARD/BACKWARD plus a client page label; CTTU saves with PUT (CTLI updates with PATCH), and F3 returns to the list when launched there. Keyboard repeat suppression, configurable Hikari lock_timeout and public Actuator health are implemented and tested as described in `test-plan.md`.
+
 Source module: `app/app-transaction-type-db2/`. Authoritative artifacts read for this document:
 
 | Artifact | Path | Lines |
