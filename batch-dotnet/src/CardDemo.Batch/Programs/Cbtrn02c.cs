@@ -34,6 +34,7 @@ public sealed class Cbtrn02c : IBatchProgram
         }
         else
         {
+            cat.TruncateSequential(rejectsDsn, long.Parse(checkpoint.State["rejectBytes"], CultureInfo.InvariantCulture));
             processed = decimal.Parse(checkpoint.State["processed"], CultureInfo.InvariantCulture);
             rejected = decimal.Parse(checkpoint.State["rejected"], CultureInfo.InvariantCulture);
             ctx.Sysout.AddRange(checkpoint.State["sysout"].Split('\n', StringSplitOptions.RemoveEmptyEntries));
@@ -66,20 +67,26 @@ public sealed class Cbtrn02c : IBatchProgram
         }
         ctx.Display("TRANSACTIONS PROCESSED :" + CobolCodec.DisplayUnsigned(processed, 9));
         ctx.Display("TRANSACTIONS REJECTED  :" + CobolCodec.DisplayUnsigned(rejected, 9));
-        cat.WriteSequential(rejectsDsn, pendingRejects, append: true);
-        cat.CommitAll();
-        ctx.Checkpoints?.Clear(ctx.Job, ctx.Step);
+        cat.AppendSequential(rejectsDsn, pendingRejects);
+        if (ctx.Checkpoints is null)
+        {
+            cat.CommitAll();
+        }
+        else
+        {
+            ctx.Checkpoints.Complete(ctx.Job, ctx.Step);
+        }
         ctx.Display("END OF EXECUTION OF PROGRAM CBTRN02C");
         return rejected > 0 ? 4 : 0; // [Trace("CBTRN02C", "BR-PST-011")]
     }
 
     private static void Commit(StepContext ctx, string rejectsDsn, List<byte[]> rejects, int position, decimal processed, decimal rejected)
     {
-        ctx.Catalog.WriteSequential(rejectsDsn, rejects, append: true);
+        var rejectBytes = ctx.Catalog.AppendSequential(rejectsDsn, rejects);
         rejects.Clear();
-        ctx.Catalog.CommitAll();
-        ctx.Checkpoints!.Save(new Checkpoint(ctx.Job, ctx.Step, position, new Dictionary<string, string>
+        ctx.Checkpoints!.Commit(new Checkpoint(ctx.Job, ctx.Step, position, new Dictionary<string, string>
         {
+            ["rejectBytes"] = rejectBytes.ToString(CultureInfo.InvariantCulture),
             ["processed"] = processed.ToString(CultureInfo.InvariantCulture),
             ["rejected"] = rejected.ToString(CultureInfo.InvariantCulture),
             ["sysout"] = string.Join('\n', ctx.Sysout),
