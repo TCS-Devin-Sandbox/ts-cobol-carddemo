@@ -68,3 +68,55 @@ After the fix, all three INT-H03 integration tests passed:
 The coordinator IT proves COMPUTED, the persisted evidence/first-card selection,
 the selected card in the emitted transaction, unchanged input bytes/manifests,
 empty evidence behavior, malformed/duplicate proof refusal and unreadable-file hold.
+
+## 3. Target-error reconstruction reaches future missing lookups — real
+
+`TN_01_INT_R10_targetFailureTranscriptStopsAtReachedGroupNotLaterMissingAccount`
+adds a third TCATBALF account with no account/XREF row and injects a target error
+before or after the first or second group commits. The third group is never processed.
+Before the fix, the first injected target error nevertheless generated a legacy U999:
+
+```text
+Unreached third group must not invent a legacy abend ==> expected: <false> but was: <true>
+[ERROR] Tests run: 1, Failures: 1, Errors: 0, Skipped: 0
+[INFO] BUILD FAILURE
+```
+
+The coordinator tracks the last group actually entered by the processor, seeded by
+the last committed checkpoint on resume. Target-failure reconstruction stops after
+that account, before displaying or looking up any later group. Tracking actual
+processing rather than blindly including the checkpoint's next key also handles
+an after-commit exception, where the next group has not been reached. No reached
+group means no input reconstruction. Explicit typed legacy failures retain their
+existing operation diagnostics; missing-lookup reconstruction stays bounded too.
+
+The two new transcript tests plus the existing missing-lookup and typed-operation
+failure tests passed:
+
+```text
+[INFO] Tests run: 4, Failures: 0, Errors: 0, Skipped: 0
+[INFO] BUILD SUCCESS
+```
+
+The four target-error scenarios assert exact restricted SYSOUT (only the reached
+prefix), TARGET_COMPUTE_FAILED/FAILED/RC12, retained committed row counts and no
+dataset export. The empty-progress export test proves that even a sealed snapshot
+with missing account rows cannot invent a legacy failure before any group is reached.
+
+## Final combined verification after all three fixes
+
+`mvn -B -f java/interest/interest-batch/pom.xml clean verify`, Java 21:
+
+```text
+[INFO] Tests run: 63, Failures: 0, Errors: 0, Skipped: 0
+[INFO] Tests run: 35, Failures: 0, Errors: 0, Skipped: 0
+[INFO] BUILD SUCCESS
+```
+
+All seven real-driver runs used `close_java.py` and returned STEP15 RC=0;
+the unchanged comparator returned seven PASS lines and seven report sections.
+`test-output.txt`, `e2e-run.log`, `compare-stdout.txt`, `compare-report.md`,
+`restart-and-failure-cases.txt` and this report reflect this verification.
+`compare-stdout.txt` and `compare-report.md` are byte-identical to their prior passing
+captures. Historical combined-check-branch, SQL, Python and full legacy-parity evidence
+was retained, not rerun in this review. All 42 checklist annotations remain PASS.

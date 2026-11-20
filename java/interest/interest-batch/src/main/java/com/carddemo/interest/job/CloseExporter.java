@@ -31,6 +31,10 @@ public final class CloseExporter {
     }
 
     public void export(UUID run, UUID snapshot, Path output, int rc, String category, LegacyStatus.Failure failure) throws IOException {
+        export(run, snapshot, output, rc, category, failure, null);
+    }
+
+    public void export(UUID run, UUID snapshot, Path output, int rc, String category, LegacyStatus.Failure failure, String lastReachedAccount) throws IOException {
         if (output == null) return;
         Path staging = output.resolve(".close-" + UUID.randomUUID());
         Files.createDirectories(staging);
@@ -53,7 +57,7 @@ public final class CloseExporter {
             }
             Path sysout = staging.resolve(SYSOUT);
             Files.createDirectories(sysout.getParent());
-            Files.writeString(sysout, String.join("\n", transcript(snapshot, rc == 0, failure)) + "\n", StandardCharsets.ISO_8859_1);
+            Files.writeString(sysout, String.join("\n", transcript(snapshot, rc == 0, failure, lastReachedAccount)) + "\n", StandardCharsets.ISO_8859_1);
             Files.deleteIfExists(output.resolve("rc.json"));
             for (String artifact : ARTIFACTS) {
                 Files.deleteIfExists(output.resolve(artifact));
@@ -77,6 +81,11 @@ public final class CloseExporter {
     }
 
     public List<String> transcript(UUID snapshot, boolean success, LegacyStatus.Failure failure) {
+        return transcript(snapshot, success, failure, null);
+    }
+
+    /** TN-01 / INT-R10: target failures cannot manufacture legacy diagnostics from unreached groups. */
+    private List<String> transcript(UUID snapshot, boolean success, LegacyStatus.Failure failure, String lastReachedAccount) {
         List<String> lines = new ArrayList<>();
         lines.add("START OF EXECUTION OF PROGRAM CBACT04C");
         if (failure != null && !(failure instanceof GroupCalculation.MissingLookup)) {
@@ -84,11 +93,15 @@ public final class CloseExporter {
             lines.addAll(failure.diagnostics());
             return lines;
         }
-        if (snapshot == null) return lines;
+        if (snapshot == null || !success && lastReachedAccount == null) {
+            if (failure != null) lines.addAll(failure.diagnostics());
+            return lines;
+        }
         String previous = "";
         Account account = null;
         for (Decoded row : store.rows(snapshot, Layout.TCATBAL)) {
             CategoryBalance balance = (CategoryBalance) row.fields();
+            if (!success && previous.equals(lastReachedAccount) && !previous.equals(balance.acctId())) break;
             lines.add(new String(row.original(), StandardCharsets.US_ASCII));
             if (!previous.equals(balance.acctId())) {
                 var found = store.account(snapshot, balance.acctId());

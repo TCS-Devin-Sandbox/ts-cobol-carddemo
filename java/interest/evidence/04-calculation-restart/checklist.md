@@ -91,7 +91,7 @@ Ticket sessions copy each line into the review evidence and record **PASS** or *
 - **r** · Do PARM, fixed GDG output, DISP intent and step RC drive the correct handoff and hold paths?
   **PASS** — invalid-PARM IT, `CloseExporter` private fixed-generation artifacts and no failed-run datasets, seven real-driver RC comparisons; live DISP/catalog/release explicitly outside INT-04 and not approved.
 - **s** · Does restricted SYSOUT match ordered DISPLAY including skipped inputs and fallback lines?
-  **PASS** — `CloseExporter.transcript`, all-seven golden SYSOUT bytes and comparator evidence including i03 skip and i04 fallback.
+  **PASS** — `CloseExporter.transcript`, all-seven golden SYSOUT bytes and comparator evidence including i03 skip and i04 fallback; `TN_01_INT_R10_targetFailureTranscriptStopsAtReachedGroupNotLaterMissingAccount` and `TN_01_INT_R10_targetFailureBeforeAnyGroupDoesNotReconstructUnreachedLookups` prohibit future-group diagnostics on target failures.
 - **t** · Do IDs and timestamps use their distinct verified inputs?
   **PASS** — independently injected PARM and Clock in `InterestRules`; i01 prefix 2022071800 differs from timestamp date 2022-07-05; constants/suffix tests.
 - **u** · Do both timestamp fields share one sample, truncate to hundredths and append four zeros?

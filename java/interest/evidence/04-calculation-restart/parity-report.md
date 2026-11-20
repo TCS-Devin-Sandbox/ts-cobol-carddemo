@@ -1,16 +1,20 @@
 # INT-04 – per-case parity report (open this first)
 
-Code revision: `aee3e1e9d6b7a0091b4daa0d3fb6728d53c1345e` on `demo/05-g2-logic`.
-Base: `origin/demo/05b-integration` = `c43bcf11a11a4814cfa9a5d07b53b093be79e30d`.
-Fresh Maven, seven-case Java comparison, SQL and diagnostics evidence was captured after the
-status-adapter fix, from the identical code before its commit. No production/test code changed afterward.
+Code revision: PR #21 review follow-up to `34da217c17f1ef9e5cf62067c000bbef084c1008`
+on `demo/05-g2-logic`. The recovery fix is `c0447ed`, the evidence-file fix is
+`320594a`, and the transcript-boundary fix and fresh verification are in this report's commit.
+Original implementation diff base: `c43bcf11a11a4814cfa9a5d07b53b093be79e30d`.
+Fresh Maven, seven-case Java comparison and diagnostics evidence was captured after all
+three review fixes. SQL and legacy/Python evidence below is retained from prior checks,
+not represented as freshly rerun. `demo/05b-integration` was not modified by this review.
 Java 21.0.13.1, Maven 3.9.9, Spring Boot 3.3.5 / Spring Batch 5.1.2;
 PostgreSQL 15 (`postgres:15` compose, `postgres:15-alpine` Testcontainers).
 Retained legacy baseline: `ESTATE_BASE_IMAGE=mirror.gcr.io/library/ubuntu:22.04 make parity`:
 24/24 PASS, zero FAIL (posting 7, interest 7, trantype-update 7, trantype-dynamic 3).
-The legacy and wrapper/driver inputs did not change in the status fix, so their passing
+The legacy and wrapper/driver inputs did not change in the review fixes, so their passing
 `make-parity.txt`, `parity-driver-unittest.txt` and `job-wrapper-unittest.txt` evidence is
-retained from the preceding evidence commit, not represented as freshly rerun tests.
+retained, not represented as freshly rerun tests. `review-findings.md` records each
+concrete pre-fix failing test, the chosen contracts and the targeted post-fix results.
 
 **Candidate:** `com.carddemo.interest.job.InterestCloseApplication`, launched through
 `src/test/resources/job/parity/close_java.py`. The jar Start-Class remains
@@ -22,8 +26,8 @@ See `launcher-manifest.txt` and `job-wrapper-unittest.txt`.
 ## Exact evidence commands
 
 From the repository root, Bash, with pipeline failure propagation. Maven and the two loops
-were rerun after the status fix; unchanged Python and legacy checks retain the preceding
-capture as noted above. The output-only
+were rerun after the review fixes; the Python, SQL and legacy commands shown here document
+retained captures and were not rerun in this review. The output-only
 redirection after tee avoids flooding the terminal; the complete streams are retained.
 
 ```sh
@@ -68,7 +72,8 @@ make parity 2>&1 | tee java/interest/evidence/$T/make-parity.txt > /dev/null
 The new job emits `event=run-finished` rather than the pilot's `event=run-completed`.
 The first run in the sequential log is i01; no extra rerun or inferred MAX(run_id) was used.
 The skill's SQL database is deliberately changed to the candidate's private `interest_close`.
-All commands completed with exit 0. Report heading count: **7**.
+The fresh Maven command and both loops completed with exit 0. Retained commands passed
+in their earlier captures. Report heading count: **7**.
 The real setup jobs populate/unload the KSDS inputs; only INTCALC STEP15 is replaced.
 Setup RCs are observed by the frozen driver, and STEP15 RC is the wrapper's actual process exit.
 
@@ -88,7 +93,9 @@ All seven cases gate INT-04, not merely informational replays.
 
 ## SQL and automated assertions
 
-i01 run: `f034f47c-81ab-432e-bfd2-3459ad3a4f02`, database `interest_close`.
+Retained SQL capture (not rerun for this review): i01 run
+`f034f47c-81ab-432e-bfd2-3459ad3a4f02`, database `interest_close`.
+This is not the fresh i01 run ID in `e2e-run.log`.
 All ten SQL assertions in `i01-sql-output.txt` are **t**:
 private database, COMPUTED run/SEALED snapshot, 2 transactions totaling 47.00 with exact
 ordinals/IDs/cards/timestamps, one delta for `00000002001` (1000.00 -> 1010.00, cycle
@@ -100,14 +107,18 @@ Fresh Maven totals (`test-output.txt`):
 
 ```text
 [INFO] Tests run: 63, Failures: 0, Errors: 0, Skipped: 0
-[INFO] Tests run: 30, Failures: 0, Errors: 0, Skipped: 0
+[INFO] Tests run: 35, Failures: 0, Errors: 0, Skipped: 0
 [INFO] BUILD SUCCESS
 ```
 
-This retains the existing 44 unit / 16 integration tests and adds 19 unit / 14 integration
-tests. Pilot parity driver: 1 test OK. New wrapper: 2 tests OK.
+This retains the existing 44 unit / 16 integration tests and adds 19 unit / 19 integration
+tests. Retained Python results: pilot parity driver 1 test OK; wrapper 2 tests OK.
 Expected injected crashes and required-lookup exceptions appear in the successful Maven
 log; these are negative-path assertions, not test failures.
+The five review ITs cover operator-confirmed abandoned COMPUTING recovery, evidence-file
+selection reaching COMPUTED, invalid/unreadable evidence holds, bounded failure transcripts
+before/after group commits, and empty-progress target failures. `review-findings.md` gives
+their pre-fix red results and the explicit operator/evidence-file contracts.
 `restart-and-failure-cases.txt` extracts fresh Surefire/Failsafe testcase/suite lines and
 the corresponding diagnostic lines from `test-output.txt`; it is not a separate test run.
 It covers rollback before commit, no replay after commit, explicit resume, changed identity
@@ -169,7 +180,7 @@ operation/formatting/job-failure tests described above, not by merely relabellin
   CP037 and little-endian profiles are explicitly synthetic probes. The caller supplies
   the observed restricted DISPLAY prefix for a generic typed failure. The job does not
   invent legacy statuses from target I/O exceptions. Physical host fault injection and
-  actual production binary/CCSID behavior are not verified by these synthetic tests.
+actual production binary/CCSID behavior are not verified by these synthetic tests.
 - All standards §4 **“Confirm on the mainframe”** items remain unverified: production
   compiler/ARITH/NUMPROC/TRUNC and arithmetic/overflow evidence, sign/transfer/CCSID and
   key ordering specimens, numeric/extended binary status overlays and operation statuses,
@@ -177,13 +188,17 @@ operation/formatting/job-failure tests described above, not by merely relabellin
   catalog/DISP/absolute generation and downstream conditions. Relevant owners remain
   COBOL/LE, VSAM/card operations, application, Finance/interest policy and Operations.
   LAB_ASCII fixture and synthetic probes do not settle host behavior.
-- **INT-H06 stays OPEN.** Explicit technical recovery is for FAILED private target work;
+- **INT-H06 stays OPEN.** Explicit technical recovery is for FAILED private target work
+  or a named COMPUTING run with `--interest.close.abandoned=true`. The operator must
+  first stop/fence the abandoned process; this flag is a declaration, not a liveness check.
   no automatic retry/live relaunch, host reconciliation, fence/receipt, live GDG advance
   or COMBTRAN release is implemented/approved by this ticket. Package/release guarantees
   outside INT-04 must not be inferred from private rc.json staging.
 - Multi-card first-return evidence has an **external source**. Intake records the supplied
   reference and rejects missing evidence; the source/provenance cannot be validated against
-  a host in this environment. Single-card fixtures use `single-card` evidence.
+  a host in this environment. `--interest.close.first-return-evidence=<path>` supplies
+  a UTF-8, headerless TSV of account ID, observed first card and evidence reference;
+  invalid/unreadable files hold intake. Single-card fixtures use `single-card` evidence.
 - Policy switches and **AccountRecord grants are not used**; shared policy/reference/schema
   contracts and grants were not changed. The lab superuser is used; least-privilege deployment
   is not proved. Snapshot immutability is enforced by application flow and resume checks,
@@ -209,3 +224,4 @@ operation/formatting/job-failure tests described above, not by merely relabellin
 - `launcher-manifest.txt`
 - `scope.txt`
 - `checklist.md`
+- `review-findings.md`
