@@ -170,7 +170,7 @@ def compare_values(expectation, observed, target, data, directory, metadata, dec
     original = {f"{int(a['ACCT-ID']):011d}": a for a in data['ACCTDATA']}
     changed = ['ACCT-CURR-BAL', 'ACCT-CURR-CYC-CREDIT', 'ACCT-CURR-CYC-DEBIT']
     def amounts(row):
-        return {f: Decimal(str(row[f])) if row.get(f) is not None else None for f in changed}
+        return {f: Decimal(str(row[f])) if row.get(f) is not None else None for f in changed[1:]}
 
     for account, fields in expectation['accounts'].items():
         o = observed['accounts'].get(account, {})
