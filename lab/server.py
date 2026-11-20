@@ -87,7 +87,7 @@ def register_page():
             '<link rel="icon" href="data:,">'
             '<style>body{font:15px system-ui;margin:32px;color:#183036;background:#f5f6f2}table{border-collapse:collapse;background:white}th,td{border:1px solid #ccd6d0;padding:14px;text-align:left;vertical-align:top}th{background:#193f39;color:white}tr:target{background:#fff1b5;outline:3px solid #a76c00}a{color:#006d5d}</style>'
             '<h1>Interest decision register</h1><p>Not SME sign-off. Status is authoritative; replay is evidence, not policy.</p>'
-            '<a href="/">Replay lab</a><table>' + ''.join(rows) + '</table></html>')
+            '<a href="/" target="_blank" rel="noopener">Replay lab</a><table>' + ''.join(rows) + '</table></html>')
 
 
 def worker():

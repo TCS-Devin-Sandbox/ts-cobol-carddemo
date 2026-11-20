@@ -26,12 +26,14 @@ let meta=null,state={id:null,report:null,selected:0},pollEpoch=0,filter='ALL';
 const esc=v=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const fmt=v=>typeof v==='object'?JSON.stringify(v,null,2):String(v??'—');
 const link=(url,label)=>`<a href="${esc(url)}" target="_blank" rel="noopener">${esc(label)}</a>`;
+function newTabLinks(root=document){root.querySelectorAll('a[href]').forEach(a=>{a.setAttribute('target','_blank');a.setAttribute('rel','noopener');});}
 function persist(){try{sessionStorage.setItem(key,JSON.stringify(state));}catch(e){/* Large custom reports remain available through the run endpoint. */}}
 async function api(url,body){const r=await fetch(url,body===undefined?{}:{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)});const data=await r.json();if(!r.ok||data.ok===false)throw Error(data.error||`HTTP ${r.status}`);return data;}
 function error(message){$('error').textContent=message;$('error').hidden=!message;}
 function progress(message){$('progress').hidden=!message;$('progress').innerHTML=message?`<span class="spinner"></span>${esc(message)}`:'';}
 function options(items){return items.map(i=>`<option value="${esc(i.id)}">${esc(i.id+(i.title!==i.id?' · '+i.title:''))}</option>`).join('');}
 async function initialize(){
+ newTabLinks();
  meta=await api('/api/meta');
  $('provenance').innerHTML=`<span>Baseline <b><code>${esc(meta.sha.slice(0,12))}</code></b> <span class="dirty">${meta.dirty?'dirty working tree':'clean working tree'}</span></span><span>Frozen clock <b>${esc(meta.clock)}</b></span><span>PARM <b><code>${esc(meta.parm)}</code></b></span>`;
  $('toolchain').innerHTML=Object.entries(meta.toolchain).map(([name,version])=>`<span><strong>${esc(name)}</strong> ${esc(version)}</span>`).join('');
@@ -82,7 +84,8 @@ function render(){
  report={...report,summary:report.summary.map(line=>/^(Rules exercised:|Open questions)/.test(line)?`${line} (for this run: ${scope})`:line)};
  $('results').innerHTML=`<section class="card summary"><div class="summary-top"><div><p class="section-label">Replay result / ${esc(state.id.slice(0,8))}</p><h3>${cases.length===7&&cases.every(c=>c.set==='golden')?'All golden fixtures':cases.length===11?'All edge probes':cases.length+' case'+(cases.length===1?'':'s')} <span class="subtle">· ${cases.length} completed</span></h3></div>${badge(report.passed?'PASS':'FAIL')}</div><div class="stats">${Object.entries(totals).map(([name,n])=>`<div class="stat"><span>${esc(name.replace('_',' '))}</span><b>${n}</b>${name==='UNRESOLVED'?`<small>engines agree ${agree} / differ ${differ}</small>`:'<small>compared values</small>'}</div>`).join('')}</div><details open><summary>Gate counts &amp; coverage</summary><pre class="gate-lines">${esc(report.summary.filter(line=>/^(golden:|edge:|total:|golden parity|Rules exercised:|Open questions|GATE:)/.test(line)).join('\n'))}</pre></details></section><div class="case-nav" aria-label="Completed cases">${cases.map((item,i)=>`<button class="case-tab ${i===state.selected?'active':''}" data-case-index="${i}">${esc(item.case)}</button>`).join('')}</div><div id="case-result">${caseView(c)}</div>`;
  document.querySelectorAll('[data-case-index]').forEach(b=>b.onclick=()=>{state.selected=Number(b.dataset.caseIndex);filter='ALL';persist();render();});
- const select=$('class-filter');if(select)select.onchange=()=>{filter=select.value;$('value-table').innerHTML=valuesTable(c,filter);};
+ newTabLinks($('results'));
+ const select=$('class-filter');if(select)select.onchange=()=>{filter=select.value;$('value-table').innerHTML=valuesTable(c,filter);newTabLinks($('value-table'));};
 }
 async function prefill(){try{error('');const inputs=await api('/api/inputs?case='+encodeURIComponent($('custom-source').value));$('editors').innerHTML=Object.entries(inputs).map(([name,text])=>`<label for="input-${esc(name)}">${esc(name)} <span class="subtle">/ LRECL ${meta.datasets[name]}</span></label><textarea id="input-${esc(name)}" data-dataset="${esc(name)}" spellcheck="false">${esc(text)}</textarea>`).join('');}catch(e){error(e.message);}}
 $('run-golden').onclick=()=>start({case:$('golden').value});$('all-golden').onclick=()=>start({set:'golden'});$('run-probe').onclick=()=>start({case:$('probe').value});$('all-edge').onclick=()=>start({set:'edge'});
@@ -93,6 +96,7 @@ $('save').onclick=()=>{
  // Include every completed case, not just the active tab, in the offline snapshot.
  clone.querySelector('#case-result').innerHTML=state.report.cases.map(c=>`<section style="margin-top:32px">${caseView(c)}</section>`).join('');
  clone.querySelectorAll('button,select').forEach(el=>el.disabled=true);clone.querySelectorAll('a[href]').forEach(a=>a.href=new URL(a.getAttribute('href'),location.origin).href);
+ newTabLinks(clone);
  const blob=new Blob(['<!doctype html>\n'+clone.outerHTML],{type:'text/html'}),url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download=`interest-replay-${state.id.slice(0,8)}.html`;a.click();setTimeout(()=>URL.revokeObjectURL(url),1000);
 };
 addEventListener('pageshow',event=>{if(event.persisted){if(state.report)render();else if(state.id)poll(state.id,++pollEpoch);}});
