@@ -56,17 +56,7 @@ whole fix.
      the jar alone yields only STEP15.
    - Fix: run each case through the driver (interest-ticket-verify step 2), which executes the
      real setup jobs and uses their observed codes; standards §7 (S16). Never edit the golden.
-8. **The driver refuses to run.**
-   - Symptom: `ValueError: --out must be a case directory below work/` (for `--out /tmp/x` or
-     `--out work`), or
-     `ValueError: no pilot jar /estate/java/interest/interest-batch/target/interest-batch-0.1.0-PILOT.jar`.
-   - Cause: the output path is not `work/<ticket>/<case>`, or the jar was not built yet.
-   - Fix: interest-ticket-build step 4 first, then `--out work/<ticket>/<case>`.
-9. **`compare-report.md` lists a case twice.**
-   - Symptom: `grep -c '^## '` gives 8 after one extra run (14 after a second seven-case loop).
-   - Cause: `--report` appends.
-   - Fix: interest-ticket-verify step 1 (`rm -f` the report before the loop).
-10. **Review findings on the pilot** (PILOT-REPORT, "Review fixes" and "Review round 2"):
+8. **Review findings on the pilot** (PILOT-REPORT, "Review fixes" and "Review round 2"):
     chunked commits that could leave a partial run (fix: standards §2, S05), PARM not checked as
     ten bytes (§3, S09), no log event for the DISCGRP fallback (§6, S14), locale-dependent digits
     and lost filler bytes (§3), stale artifacts after a failed rerun into a reused directory
