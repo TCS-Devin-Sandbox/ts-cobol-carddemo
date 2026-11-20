@@ -169,6 +169,9 @@ def compare_values(expectation, observed, target, data, directory, metadata, dec
         len(observed['transactions']), len(target['transactions']))
     original = {f"{int(a['ACCT-ID']):011d}": a for a in data['ACCTDATA']}
     changed = ['ACCT-CURR-BAL', 'ACCT-CURR-CYC-CREDIT', 'ACCT-CURR-CYC-DEBIT']
+    def amounts(row):
+        return {f: Decimal(str(row[f])) if row.get(f) is not None else None for f in changed}
+
     for account, fields in expectation['accounts'].items():
         o = observed['accounts'].get(account, {})
         t = target['accounts'].get(account, {})
@@ -176,9 +179,9 @@ def compare_values(expectation, observed, target, data, directory, metadata, dec
             add(f'account {account} {field}', fields[field], o.get(field), t.get(field))
         def rewrite_effect(updated, decision=None):
             if not updated:
-                return {f: original[account][f] for f in changed}
-            return {f: next((c['value'] for c in fields[f].get('candidates', [])
-                             if c['decision'] == decision), required(fields[f])) for f in changed}
+                return amounts(original[account])
+            return amounts({f: next((c['value'] for c in fields[f].get('candidates', [])
+                                     if c['decision'] == decision), required(fields[f])) for f in changed})
 
         update_cell = dict(fields['updated'])
         if 'candidates' in update_cell:
@@ -187,7 +190,7 @@ def compare_values(expectation, observed, target, data, directory, metadata, dec
         else:
             update_cell['value'] = rewrite_effect(update_cell['value'])
         add(f'account {account} updated (rewrite effects)', update_cell,
-            {f: o.get(f) for f in changed}, {f: t.get(f) for f in changed})
+            amounts(o), amounts(t))
         for field, value in original[account].items():
             if field not in changed:
                 add(f'account {account} unchanged {field}', {'value': value, 'rules': ['TN-06']}, o.get(field), t.get(field))
