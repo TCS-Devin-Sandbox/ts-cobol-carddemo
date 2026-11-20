@@ -1,0 +1,205 @@
+MIGRATION V001__interest.sql applied
+MIGRATION V002__batch_repository.sql applied
+TN-08 carddemo tables, contents and ACL unchanged: transaction_type:NULL,transaction_type_categor:NULL,transaction_type_categor_pkey:NULL,transaction_type_pkey:NULL010005
+DB PostgreSQL 15.20 on x86_64-pc-linux-musl, compiled by gcc (Alpine 15.2.0) 15.2.0, 64-bit
+REJECT 23505 ERROR: duplicate key value violates unique constraint "account_input_pkey"
+REJECT 23502 ERROR: null value in column "snapshot_id" of relation "account_input" violates not-null constraint
+REJECT 23502 ERROR: null value in column "acct_id" of relation "account_input" violates not-null constraint
+REJECT 23502 ERROR: null value in column "active_status" of relation "account_input" violates not-null constraint
+REJECT 23502 ERROR: null value in column "current_balance" of relation "account_input" violates not-null constraint
+REJECT 23502 ERROR: null value in column "credit_limit" of relation "account_input" violates not-null constraint
+REJECT 23502 ERROR: null value in column "cash_credit_limit" of relation "account_input" violates not-null constraint
+REJECT 23502 ERROR: null value in column "open_date" of relation "account_input" violates not-null constraint
+REJECT 23502 ERROR: null value in column "expiration_date" of relation "account_input" violates not-null constraint
+REJECT 23502 ERROR: null value in column "reissue_date" of relation "account_input" violates not-null constraint
+REJECT 23502 ERROR: null value in column "cycle_credit" of relation "account_input" violates not-null constraint
+REJECT 23502 ERROR: null value in column "cycle_debit" of relation "account_input" violates not-null constraint
+REJECT 23502 ERROR: null value in column "addr_zip" of relation "account_input" violates not-null constraint
+REJECT 23502 ERROR: null value in column "group_id" of relation "account_input" violates not-null constraint
+REJECT 23502 ERROR: null value in column "filler_raw" of relation "account_input" violates not-null constraint
+REJECT 23502 ERROR: null value in column "raw_record" of relation "account_input" violates not-null constraint
+METADATA account_input.snapshot_id uuid(null,null,null)
+REJECT 23514 ERROR: new row for relation "account_input" violates check constraint "account_input_acct_id_check"
+METADATA account_input.acct_id character varying(11,null,null)
+REJECT 23514 ERROR: new row for relation "account_input" violates check constraint "account_input_active_status_check"
+METADATA account_input.active_status character varying(1,null,null)
+METADATA account_input.current_balance numeric(null,12,2)
+METADATA account_input.credit_limit numeric(null,12,2)
+METADATA account_input.cash_credit_limit numeric(null,12,2)
+REJECT 23514 ERROR: new row for relation "account_input" violates check constraint "account_input_open_date_check"
+METADATA account_input.open_date character varying(10,null,null)
+REJECT 23514 ERROR: new row for relation "account_input" violates check constraint "account_input_expiration_date_check"
+METADATA account_input.expiration_date character varying(10,null,null)
+REJECT 23514 ERROR: new row for relation "account_input" violates check constraint "account_input_reissue_date_check"
+METADATA account_input.reissue_date character varying(10,null,null)
+METADATA account_input.cycle_credit numeric(null,12,2)
+METADATA account_input.cycle_debit numeric(null,12,2)
+REJECT 23514 ERROR: new row for relation "account_input" violates check constraint "account_input_addr_zip_check"
+METADATA account_input.addr_zip character varying(10,null,null)
+REJECT 23514 ERROR: new row for relation "account_input" violates check constraint "account_input_group_id_check"
+METADATA account_input.group_id character varying(10,null,null)
+REJECT 23514 ERROR: new row for relation "account_input" violates check constraint "account_input_filler_raw_check"
+METADATA account_input.filler_raw bytea(null,null,null)
+REJECT 23514 ERROR: new row for relation "account_input" violates check constraint "account_input_raw_record_check"
+METADATA account_input.raw_record bytea(null,null,null)
+PASS INT-MAP account_input valid i01-shaped row / nulls / widths / duplicate PK
+REJECT 23505 ERROR: duplicate key value violates unique constraint "card_xref_input_pkey"
+REJECT 23502 ERROR: null value in column "snapshot_id" of relation "card_xref_input" violates not-null constraint
+REJECT 23502 ERROR: null value in column "card_number" of relation "card_xref_input" violates not-null constraint
+REJECT 23502 ERROR: null value in column "customer_id" of relation "card_xref_input" violates not-null constraint
+REJECT 23502 ERROR: null value in column "acct_id" of relation "card_xref_input" violates not-null constraint
+REJECT 23502 ERROR: null value in column "filler_raw" of relation "card_xref_input" violates not-null constraint
+REJECT 23502 ERROR: null value in column "raw_record" of relation "card_xref_input" violates not-null constraint
+REJECT 23502 ERROR: null value in column "aix_first" of relation "card_xref_input" violates not-null constraint
+REJECT 23502 ERROR: null value in column "aix_evidence" of relation "card_xref_input" violates not-null constraint
+METADATA card_xref_input.snapshot_id uuid(null,null,null)
+REJECT 23514 ERROR: new row for relation "card_xref_input" violates check constraint "card_xref_input_card_number_check"
+METADATA card_xref_input.card_number character varying(16,null,null)
+REJECT 23514 ERROR: new row for relation "card_xref_input" violates check constraint "card_xref_input_customer_id_check"
+METADATA card_xref_input.customer_id character varying(9,null,null)
+REJECT 23514 ERROR: new row for relation "card_xref_input" violates check constraint "card_xref_input_acct_id_check"
+METADATA card_xref_input.acct_id character varying(11,null,null)
+REJECT 23514 ERROR: new row for relation "card_xref_input" violates check constraint "card_xref_input_filler_raw_check"
+METADATA card_xref_input.filler_raw bytea(null,null,null)
+REJECT 23514 ERROR: new row for relation "card_xref_input" violates check constraint "card_xref_input_raw_record_check"
+METADATA card_xref_input.raw_record bytea(null,null,null)
+METADATA card_xref_input.aix_first boolean(null,null,null)
+METADATA card_xref_input.aix_evidence text(null,null,null)
+PASS INT-MAP card_xref_input valid i01-shaped row / nulls / widths / duplicate PK
+REJECT 23505 ERROR: duplicate key value violates unique constraint "category_balance_input_pkey"
+REJECT 23502 ERROR: null value in column "snapshot_id" of relation "category_balance_input" violates not-null constraint
+REJECT 23502 ERROR: null value in column "legacy_key" of relation "category_balance_input" violates not-null constraint
+REJECT 23502 ERROR: null value in column "acct_id" of relation "category_balance_input" violates not-null constraint
+REJECT 23502 ERROR: null value in column "txn_type" of relation "category_balance_input" violates not-null constraint
+REJECT 23502 ERROR: null value in column "category_code" of relation "category_balance_input" violates not-null constraint
+REJECT 23502 ERROR: null value in column "balance" of relation "category_balance_input" violates not-null constraint
+REJECT 23502 ERROR: null value in column "filler_raw" of relation "category_balance_input" violates not-null constraint
+REJECT 23502 ERROR: null value in column "raw_record" of relation "category_balance_input" violates not-null constraint
+METADATA category_balance_input.snapshot_id uuid(null,null,null)
+REJECT 23514 ERROR: new row for relation "category_balance_input" violates check constraint "category_balance_input_legacy_key_check"
+METADATA category_balance_input.legacy_key bytea(null,null,null)
+REJECT 23514 ERROR: new row for relation "category_balance_input" violates check constraint "category_balance_input_acct_id_check"
+METADATA category_balance_input.acct_id character varying(11,null,null)
+REJECT 23514 ERROR: new row for relation "category_balance_input" violates check constraint "category_balance_input_txn_type_check"
+METADATA category_balance_input.txn_type character varying(2,null,null)
+REJECT 23514 ERROR: new row for relation "category_balance_input" violates check constraint "category_balance_input_category_code_check"
+METADATA category_balance_input.category_code character varying(4,null,null)
+METADATA category_balance_input.balance numeric(null,11,2)
+REJECT 23514 ERROR: new row for relation "category_balance_input" violates check constraint "category_balance_input_filler_raw_check"
+METADATA category_balance_input.filler_raw bytea(null,null,null)
+REJECT 23514 ERROR: new row for relation "category_balance_input" violates check constraint "category_balance_input_raw_record_check"
+METADATA category_balance_input.raw_record bytea(null,null,null)
+PASS INT-MAP category_balance_input valid i01-shaped row / nulls / widths / duplicate PK
+REJECT 23505 ERROR: duplicate key value violates unique constraint "disclosure_rate_input_pkey"
+REJECT 23502 ERROR: null value in column "snapshot_id" of relation "disclosure_rate_input" violates not-null constraint
+REJECT 23502 ERROR: null value in column "legacy_key" of relation "disclosure_rate_input" violates not-null constraint
+REJECT 23502 ERROR: null value in column "group_id" of relation "disclosure_rate_input" violates not-null constraint
+REJECT 23502 ERROR: null value in column "txn_type" of relation "disclosure_rate_input" violates not-null constraint
+REJECT 23502 ERROR: null value in column "category_code" of relation "disclosure_rate_input" violates not-null constraint
+REJECT 23502 ERROR: null value in column "annual_percent_rate" of relation "disclosure_rate_input" violates not-null constraint
+REJECT 23502 ERROR: null value in column "filler_raw" of relation "disclosure_rate_input" violates not-null constraint
+REJECT 23502 ERROR: null value in column "raw_record" of relation "disclosure_rate_input" violates not-null constraint
+METADATA disclosure_rate_input.snapshot_id uuid(null,null,null)
+REJECT 23514 ERROR: new row for relation "disclosure_rate_input" violates check constraint "disclosure_rate_input_legacy_key_check"
+METADATA disclosure_rate_input.legacy_key bytea(null,null,null)
+REJECT 23514 ERROR: new row for relation "disclosure_rate_input" violates check constraint "disclosure_rate_input_group_id_check"
+METADATA disclosure_rate_input.group_id character varying(10,null,null)
+REJECT 23514 ERROR: new row for relation "disclosure_rate_input" violates check constraint "disclosure_rate_input_txn_type_check"
+METADATA disclosure_rate_input.txn_type character varying(2,null,null)
+REJECT 23514 ERROR: new row for relation "disclosure_rate_input" violates check constraint "disclosure_rate_input_category_code_check"
+METADATA disclosure_rate_input.category_code character varying(4,null,null)
+METADATA disclosure_rate_input.annual_percent_rate numeric(null,6,2)
+REJECT 23514 ERROR: new row for relation "disclosure_rate_input" violates check constraint "disclosure_rate_input_filler_raw_check"
+METADATA disclosure_rate_input.filler_raw bytea(null,null,null)
+REJECT 23514 ERROR: new row for relation "disclosure_rate_input" violates check constraint "disclosure_rate_input_raw_record_check"
+METADATA disclosure_rate_input.raw_record bytea(null,null,null)
+PASS INT-MAP disclosure_rate_input valid i01-shaped row / nulls / widths / duplicate PK
+REJECT 23505 ERROR: duplicate key value violates unique constraint "interest_tx_pkey"
+REJECT 23502 ERROR: null value in column "run_id" of relation "interest_tx" violates not-null constraint
+REJECT 23502 ERROR: null value in column "emit_ordinal" of relation "interest_tx" violates not-null constraint
+REJECT 23502 ERROR: null value in column "txn_id" of relation "interest_tx" violates not-null constraint
+REJECT 23502 ERROR: null value in column "txn_type" of relation "interest_tx" violates not-null constraint
+REJECT 23502 ERROR: null value in column "category_code" of relation "interest_tx" violates not-null constraint
+REJECT 23502 ERROR: null value in column "source" of relation "interest_tx" violates not-null constraint
+REJECT 23502 ERROR: null value in column "description" of relation "interest_tx" violates not-null constraint
+REJECT 23502 ERROR: null value in column "amount" of relation "interest_tx" violates not-null constraint
+REJECT 23502 ERROR: null value in column "merchant_id" of relation "interest_tx" violates not-null constraint
+REJECT 23502 ERROR: null value in column "merchant_name" of relation "interest_tx" violates not-null constraint
+REJECT 23502 ERROR: null value in column "merchant_city" of relation "interest_tx" violates not-null constraint
+REJECT 23502 ERROR: null value in column "merchant_zip" of relation "interest_tx" violates not-null constraint
+REJECT 23502 ERROR: null value in column "card_number" of relation "interest_tx" violates not-null constraint
+REJECT 23502 ERROR: null value in column "orig_ts" of relation "interest_tx" violates not-null constraint
+REJECT 23502 ERROR: null value in column "proc_ts" of relation "interest_tx" violates not-null constraint
+REJECT 23502 ERROR: null value in column "filler_raw" of relation "interest_tx" violates not-null constraint
+REJECT 23502 ERROR: null value in column "raw_record" of relation "interest_tx" violates not-null constraint
+METADATA interest_tx.run_id uuid(null,null,null)
+METADATA interest_tx.emit_ordinal bigint(null,64,0)
+REJECT 23514 ERROR: new row for relation "interest_tx" violates check constraint "interest_tx_txn_id_check"
+METADATA interest_tx.txn_id character varying(16,null,null)
+REJECT 23514 ERROR: new row for relation "interest_tx" violates check constraint "interest_tx_txn_type_check"
+METADATA interest_tx.txn_type character varying(2,null,null)
+REJECT 23514 ERROR: new row for relation "interest_tx" violates check constraint "interest_tx_category_code_check"
+METADATA interest_tx.category_code character varying(4,null,null)
+REJECT 23514 ERROR: new row for relation "interest_tx" violates check constraint "interest_tx_source_check"
+METADATA interest_tx.source character varying(10,null,null)
+REJECT 23514 ERROR: new row for relation "interest_tx" violates check constraint "interest_tx_description_check"
+METADATA interest_tx.description character varying(100,null,null)
+METADATA interest_tx.amount numeric(null,11,2)
+REJECT 23514 ERROR: new row for relation "interest_tx" violates check constraint "interest_tx_merchant_id_check"
+METADATA interest_tx.merchant_id character varying(9,null,null)
+REJECT 23514 ERROR: new row for relation "interest_tx" violates check constraint "interest_tx_merchant_name_check"
+METADATA interest_tx.merchant_name character varying(50,null,null)
+REJECT 23514 ERROR: new row for relation "interest_tx" violates check constraint "interest_tx_merchant_city_check"
+METADATA interest_tx.merchant_city character varying(50,null,null)
+REJECT 23514 ERROR: new row for relation "interest_tx" violates check constraint "interest_tx_merchant_zip_check"
+METADATA interest_tx.merchant_zip character varying(10,null,null)
+REJECT 23514 ERROR: new row for relation "interest_tx" violates check constraint "interest_tx_card_number_check"
+METADATA interest_tx.card_number character varying(16,null,null)
+REJECT 23514 ERROR: new row for relation "interest_tx" violates check constraint "interest_tx_orig_ts_check"
+METADATA interest_tx.orig_ts character varying(26,null,null)
+REJECT 23514 ERROR: new row for relation "interest_tx" violates check constraint "interest_tx_proc_ts_check"
+METADATA interest_tx.proc_ts character varying(26,null,null)
+REJECT 23514 ERROR: new row for relation "interest_tx" violates check constraint "interest_tx_filler_raw_check"
+METADATA interest_tx.filler_raw bytea(null,null,null)
+REJECT 23514 ERROR: new row for relation "interest_tx" violates check constraint "interest_tx_raw_record_check"
+METADATA interest_tx.raw_record bytea(null,null,null)
+PASS INT-MAP interest_tx valid i01-shaped row / nulls / widths / duplicate PK
+REJECT 23505 ERROR: duplicate key value violates unique constraint "account_delta_pkey"
+REJECT 23502 ERROR: null value in column "run_id" of relation "account_delta" violates not-null constraint
+REJECT 23502 ERROR: null value in column "acct_id" of relation "account_delta" violates not-null constraint
+REJECT 23502 ERROR: null value in column "old_current_balance" of relation "account_delta" violates not-null constraint
+REJECT 23502 ERROR: null value in column "new_current_balance" of relation "account_delta" violates not-null constraint
+REJECT 23502 ERROR: null value in column "old_cycle_credit" of relation "account_delta" violates not-null constraint
+REJECT 23502 ERROR: null value in column "new_cycle_credit" of relation "account_delta" violates not-null constraint
+REJECT 23502 ERROR: null value in column "old_cycle_debit" of relation "account_delta" violates not-null constraint
+REJECT 23502 ERROR: null value in column "new_cycle_debit" of relation "account_delta" violates not-null constraint
+REJECT 23502 ERROR: null value in column "source_fingerprint" of relation "account_delta" violates not-null constraint
+METADATA account_delta.run_id uuid(null,null,null)
+REJECT 23514 ERROR: new row for relation "account_delta" violates check constraint "account_delta_acct_id_check"
+METADATA account_delta.acct_id character varying(11,null,null)
+METADATA account_delta.old_current_balance numeric(null,12,2)
+METADATA account_delta.new_current_balance numeric(null,12,2)
+METADATA account_delta.old_cycle_credit numeric(null,12,2)
+METADATA account_delta.new_cycle_credit numeric(null,12,2)
+METADATA account_delta.old_cycle_debit numeric(null,12,2)
+METADATA account_delta.new_cycle_debit numeric(null,12,2)
+REJECT 23514 ERROR: new row for relation "account_delta" violates check constraint "account_delta_source_fingerprint_check"
+METADATA account_delta.source_fingerprint bytea(null,null,null)
+PASS INT-MAP account_delta valid i01-shaped row / nulls / widths / duplicate PK
+PASS A1 ten business/six repository tables; distinct grants; no defaults/cascades
+REJECT 23505 ERROR: duplicate key value violates unique constraint "interest_tx_pkey"
+REJECT 23514 ERROR: new row for relation "interest_tx" violates check constraint "interest_tx_emit_ordinal_check"
+PASS INT-H05 duplicate TRAN-ID retained within/across runs; positive per-run ordinal PK
+REJECT 23514 ERROR: new row for relation "run_checkpoint" violates check constraint "run_checkpoint_next_legacy_key_check"
+REJECT 23514 ERROR: new row for relation "run_checkpoint" violates check constraint "run_checkpoint_last_ordinal_check"
+REJECT 23503 ERROR: update or delete on table "run" violates foreign key constraint "run_checkpoint_run_id_fkey" on table "run_checkpoint"
+REJECT 23514 ERROR: new row for relation "publication" violates check constraint "publication_payload_checksum_check"
+REJECT 23514 ERROR: new row for relation "publication" violates check constraint "publication_record_count_check"
+REJECT 23502 ERROR: null value in column "acct_id" of relation "account_input" violates not-null constraint
+PASS A3 empty snapshot and zero-output private publication; checkpoint widths; restrictive metadata FK
+REJECT 23505 ERROR: duplicate key value violates unique constraint "card_xref_aix_first"
+PASS INT-H03 same-account xrefs; sole flagged first; INT-R10 absent account/rate permitted
+PASS INT-R09 unique snapshot/BYTEA btree; unsigned order 00,7f,80,ff
+REJECT 23505 ERROR: duplicate key value violates unique constraint "category_balance_input_snapshot_id_legacy_key_key"
+REJECT 23505 ERROR: duplicate key value violates unique constraint "disclosure_rate_input_snapshot_id_legacy_key_key"
+PASS INT-MAP duplicate encoded keys rejected independently of decoded PK
