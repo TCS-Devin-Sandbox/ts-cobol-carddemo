@@ -5,6 +5,10 @@ import TransactionTypeAddPage from '@mg01/screens/TransactionTypeAddPage.jsx';
 import TransactionTypeDetailPage from '@mg01/screens/TransactionTypeDetailPage.jsx';
 import ConfirmDialog from '@mg01/components/ConfirmDialog.jsx';
 import { useIdleTimeout } from '@mg01/hooks/useIdleTimeout.js';
+import UserListPage from '@mg03/screens/UserListPage.jsx';
+import UserAddPage from '@mg03/screens/UserAddPage.jsx';
+import UserUpdatePage from '@mg03/screens/UserUpdatePage.jsx';
+import UserDeletePage from '@mg03/screens/UserDeletePage.jsx';
 import { endSession, getSession, homeFor, isAdmin, startSession } from './auth/session.js';
 import SignInPage from './pages/SignInPage.jsx';
 import MenuPage from './pages/MenuPage.jsx';
@@ -81,6 +85,12 @@ export default function App() {
             <Route path="/signed-out" element={<SignedOutPage />} />
             <Route path="/menu" element={guard(false, <MenuPage kind="main" onUnauthorized={signOut} />)} />
             <Route path="/admin" element={guard(true, <MenuPage kind="admin" onUnauthorized={signOut} />)} />
+            <Route path="/admin/users" element={guard(true, <UserListPage />)} />
+            <Route path="/admin/users/new" element={guard(true, <UserAddPage />)} />
+            <Route path="/admin/users/update" element={guard(true, <UserUpdatePage />)} />
+            <Route path="/admin/users/update/:userId" element={guard(true, <UserUpdatePage key="update" />)} />
+            <Route path="/admin/users/delete" element={guard(true, <UserDeletePage />)} />
+            <Route path="/admin/users/delete/:userId" element={guard(true, <UserDeletePage key="delete" />)} />
             <Route path="/transaction-types" element={guard(true, <TransactionTypeListPage />)} />
             <Route path="/transaction-types/new" element={guard(true, <TransactionTypeAddPage />)} />
             <Route path="/transaction-types/:typeCode" element={guard(true, <TransactionTypeDetailPage />)} />
