@@ -199,8 +199,8 @@ public sealed partial class DatasetCatalog(string workDir, IKsdsPersistence? ksd
         }
     }
 
-    /// <summary>A fresh run must not resume a checkpoint left in the database by an earlier run.</summary>
-    public void ResetCheckpoints() => (Persistence as PostgresPersistence)?.ClearCheckpoints();
+    /// <summary>A fresh run of these jobs must not resume a checkpoint an earlier run of them left in the database.</summary>
+    public void ResetCheckpoints(IEnumerable<string> jobs) => (Persistence as PostgresPersistence)?.ClearCheckpoints(jobs);
 
     private sealed record JournalEntry(string Path, string? Content);
 

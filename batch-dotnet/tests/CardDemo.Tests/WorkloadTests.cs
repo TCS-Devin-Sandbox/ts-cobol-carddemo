@@ -133,6 +133,23 @@ public class WorkloadTests
         CrashAndRestart(fixtureCase, phase, new CardDemo.Data.PostgresPersistence(cs, CardDemo.Data.DatasetCatalog.Clusters.ToDictionary(kv => kv.Key, kv => kv.Value.Table)));
     }
 
+    /// <summary>A fresh run of another chain must not delete a failed posting run's PostgreSQL checkpoint.</summary>
+    [Fact]
+    public void Other_chain_keeps_posting_checkpoint_on_postgres()
+    {
+        var cs = Environment.GetEnvironmentVariable("CARDDEMO_PG");
+        if (string.IsNullOrEmpty(cs))
+        {
+            return;
+        }
+        var pg = new CardDemo.Data.PostgresPersistence(cs, CardDemo.Data.DatasetCatalog.Clusters.ToDictionary(kv => kv.Key, kv => kv.Value.Table));
+        pg.SaveAll([], "POSTTRAN.STEP15", "{}");
+        new CardDemo.Data.DatasetCatalog(Temp("readcard"), pg).ResetCheckpoints(["READCARD"]);
+        Assert.Equal("{}", pg.LoadCheckpoint("POSTTRAN.STEP15"));
+        new CardDemo.Data.DatasetCatalog(Temp("posting"), pg).ResetCheckpoints(["POSTTRAN", "TRANREPT"]);
+        Assert.Null(pg.LoadCheckpoint("POSTTRAN.STEP15"));
+    }
+
     private sealed class Failing : CardDemo.Batch.IBatchProgram
     {
         public int Execute(CardDemo.Batch.StepContext ctx) => throw new IOException("injected report failure");

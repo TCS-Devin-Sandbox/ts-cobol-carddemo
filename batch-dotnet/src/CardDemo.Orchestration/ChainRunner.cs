@@ -33,7 +33,7 @@ public static class ChainRunner
         }
         else
         {
-            catalog.ResetCheckpoints();
+            catalog.ResetCheckpoints(jobs);
         }
         var runner = new JobRunner(catalog, FrozenClock, Guid.NewGuid().ToString("N")) { Log = log, Restart = restart, ProgramOverride = programOverride, ChunkSize = chunkSize };
         var rcs = new SortedDictionary<string, (int MaxRc, SortedDictionary<string, int> Steps)>(StringComparer.Ordinal);

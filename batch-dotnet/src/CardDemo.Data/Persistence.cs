@@ -90,12 +90,16 @@ public sealed class PostgresPersistence(string connectionString, IReadOnlyDictio
         return cmd.ExecuteScalar() as string;
     }
 
-    public void ClearCheckpoints()
+    /// <summary>Deletes the checkpoints of the given jobs only; other chains' restart points survive.</summary>
+    public void ClearCheckpoints(IEnumerable<string> jobs)
     {
         using var conn = new NpgsqlConnection(connectionString);
         conn.Open();
         Exec(conn, null, CheckpointDdl);
-        Exec(conn, null, "DELETE FROM batch_checkpoint");
+        foreach (var job in jobs)
+        {
+            Exec(conn, null, "DELETE FROM batch_checkpoint WHERE split_part(checkpoint_key, '.', 1) = $1", job);
+        }
     }
 
     private static void Exec(NpgsqlConnection conn, NpgsqlTransaction? tx, string sql, params object[] args)
