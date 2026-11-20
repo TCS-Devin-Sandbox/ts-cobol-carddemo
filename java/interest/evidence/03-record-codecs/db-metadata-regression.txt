@@ -1,0 +1,81 @@
+MIGRATION V001__interest.sql applied
+MIGRATION V002__batch_repository.sql applied
+TN-08 carddemo tables, contents and ACL unchanged: transaction_type:NULL,transaction_type_categor:NULL,transaction_type_categor_pkey:NULL,transaction_type_pkey:NULL010005
+DB PostgreSQL 15.20 on x86_64-pc-linux-musl, compiled by gcc (Alpine 15.2.0) 15.2.0, 64-bit
+METADATA account_input.snapshot_id uuid(null,null,null)
+METADATA account_input.acct_id character varying(11,null,null)
+METADATA account_input.active_status character varying(1,null,null)
+METADATA account_input.current_balance numeric(null,12,2)
+METADATA account_input.credit_limit numeric(null,12,2)
+METADATA account_input.cash_credit_limit numeric(null,12,2)
+METADATA account_input.open_date character varying(10,null,null)
+METADATA account_input.expiration_date character varying(10,null,null)
+METADATA account_input.reissue_date character varying(10,null,null)
+METADATA account_input.cycle_credit numeric(null,12,2)
+METADATA account_input.cycle_debit numeric(null,12,2)
+METADATA account_input.addr_zip character varying(10,null,null)
+METADATA account_input.group_id character varying(10,null,null)
+METADATA account_input.filler_raw bytea(null,null,null)
+METADATA account_input.raw_record bytea(null,null,null)
+PASS INT-MAP account_input valid i01-shaped row / nulls / widths / duplicate PK
+METADATA card_xref_input.snapshot_id uuid(null,null,null)
+METADATA card_xref_input.card_number character varying(16,null,null)
+METADATA card_xref_input.customer_id character varying(9,null,null)
+METADATA card_xref_input.acct_id character varying(11,null,null)
+METADATA card_xref_input.filler_raw bytea(null,null,null)
+METADATA card_xref_input.raw_record bytea(null,null,null)
+METADATA card_xref_input.aix_first boolean(null,null,null)
+METADATA card_xref_input.aix_evidence text(null,null,null)
+PASS INT-MAP card_xref_input valid i01-shaped row / nulls / widths / duplicate PK
+METADATA category_balance_input.snapshot_id uuid(null,null,null)
+METADATA category_balance_input.legacy_key bytea(null,null,null)
+METADATA category_balance_input.acct_id character varying(11,null,null)
+METADATA category_balance_input.txn_type character varying(2,null,null)
+METADATA category_balance_input.category_code character varying(4,null,null)
+METADATA category_balance_input.balance numeric(null,11,2)
+METADATA category_balance_input.filler_raw bytea(null,null,null)
+METADATA category_balance_input.raw_record bytea(null,null,null)
+PASS INT-MAP category_balance_input valid i01-shaped row / nulls / widths / duplicate PK
+METADATA disclosure_rate_input.snapshot_id uuid(null,null,null)
+METADATA disclosure_rate_input.legacy_key bytea(null,null,null)
+METADATA disclosure_rate_input.group_id character varying(10,null,null)
+METADATA disclosure_rate_input.txn_type character varying(2,null,null)
+METADATA disclosure_rate_input.category_code character varying(4,null,null)
+METADATA disclosure_rate_input.annual_percent_rate numeric(null,6,2)
+METADATA disclosure_rate_input.filler_raw bytea(null,null,null)
+METADATA disclosure_rate_input.raw_record bytea(null,null,null)
+PASS INT-MAP disclosure_rate_input valid i01-shaped row / nulls / widths / duplicate PK
+METADATA interest_tx.run_id uuid(null,null,null)
+METADATA interest_tx.emit_ordinal bigint(null,64,0)
+METADATA interest_tx.txn_id character varying(16,null,null)
+METADATA interest_tx.txn_type character varying(2,null,null)
+METADATA interest_tx.category_code character varying(4,null,null)
+METADATA interest_tx.source character varying(10,null,null)
+METADATA interest_tx.description character varying(100,null,null)
+METADATA interest_tx.amount numeric(null,11,2)
+METADATA interest_tx.merchant_id character varying(9,null,null)
+METADATA interest_tx.merchant_name character varying(50,null,null)
+METADATA interest_tx.merchant_city character varying(50,null,null)
+METADATA interest_tx.merchant_zip character varying(10,null,null)
+METADATA interest_tx.card_number character varying(16,null,null)
+METADATA interest_tx.orig_ts character varying(26,null,null)
+METADATA interest_tx.proc_ts character varying(26,null,null)
+METADATA interest_tx.filler_raw bytea(null,null,null)
+METADATA interest_tx.raw_record bytea(null,null,null)
+PASS INT-MAP interest_tx valid i01-shaped row / nulls / widths / duplicate PK
+METADATA account_delta.run_id uuid(null,null,null)
+METADATA account_delta.acct_id character varying(11,null,null)
+METADATA account_delta.old_current_balance numeric(null,12,2)
+METADATA account_delta.new_current_balance numeric(null,12,2)
+METADATA account_delta.old_cycle_credit numeric(null,12,2)
+METADATA account_delta.new_cycle_credit numeric(null,12,2)
+METADATA account_delta.old_cycle_debit numeric(null,12,2)
+METADATA account_delta.new_cycle_debit numeric(null,12,2)
+METADATA account_delta.source_fingerprint bytea(null,null,null)
+PASS INT-MAP account_delta valid i01-shaped row / nulls / widths / duplicate PK
+PASS A1 ten business/six repository tables; distinct grants; no defaults/cascades
+PASS INT-H05 duplicate TRAN-ID retained within/across runs; positive per-run ordinal PK
+PASS A3 empty snapshot and zero-output private publication; checkpoint widths; restrictive metadata FK
+PASS INT-H03 same-account xrefs; sole flagged first; INT-R10 absent account/rate permitted
+PASS INT-R09 unique snapshot/BYTEA btree; unsigned order 00,7f,80,ff
+PASS INT-MAP duplicate encoded keys rejected independently of decoded PK

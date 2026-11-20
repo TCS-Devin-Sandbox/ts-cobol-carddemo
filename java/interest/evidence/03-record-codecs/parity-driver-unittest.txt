@@ -1,0 +1,6 @@
+test_normal_empty_and_overlength (test_run_case.ManifestTest.test_normal_empty_and_overlength) ... ok
+
+----------------------------------------------------------------------
+Ran 1 test in 0.002s
+
+OK
