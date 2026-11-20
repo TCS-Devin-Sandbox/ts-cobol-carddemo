@@ -30,11 +30,14 @@ the mainframe `{ A-I } J-R` convention).
 
 ## CICS programs (`app/cbl/CO*`)
 
-All 19 online programs fail with `DFHBMSCA: No such file or directory` or
+`app/cbl` holds 17 online (`EXEC CICS`) programs; `COBSWAIT` also matches
+`CO*` but is batch (table above).  `tools/build.sh` skips the 17; compiled
+with the batch flags they fail with `DFHBMSCA: No such file or directory` or
 `<mapname>: No such file or directory`: they `COPY` the CICS-supplied `DFHAID`
-/ `DFHBMSCA` members and the symbolic maps that the BMS assembler generates
-from `app/bms/*.bms`.  Neither a CICS region nor the BMS macro assembler is
-available off-host, so these are **analysis-only** in this estate.  They are
+/ `DFHBMSCA` members (not shipped) and the BMS symbolic maps (shipped in
+`app/cpy-bms`, generated from `app/bms/*.bms`, but not on the `-I work/cpy`
+path).  No CICS region or CICS translator is available off-host, so these
+are **analysis-only** in this estate.  They are
 still fully readable input for discovery (`make chain-graph` lists their
 copybooks and files).
 
@@ -47,6 +50,11 @@ copybooks and files).
 | COSGN00C | `COSGN00` map missing |
 | COTRN00C, COTRN01C, COTRN02C | `COTRN00/01/02` maps missing |
 | COUSR00C, COUSR01C, COUSR02C, COUSR03C | `COUSR00/01/02/03` maps missing |
+
+`app/csd/CARDDEMO.CSD` defines 18 programs: the 17 above plus `COCRDSEC`
+(`CREDIT CARD SEARCH`, started by transaction `CDV1`, `DEVELOPER TRANSACTION
+- 1`), which has no source anywhere in the repository.  `CDV1` cannot be
+analysed or built from this estate.
 
 ## Db2 sub-application (`app/app-transaction-type-db2`)
 

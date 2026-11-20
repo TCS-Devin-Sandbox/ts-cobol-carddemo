@@ -7,6 +7,7 @@
 #   make run CHAIN=posting      run one chain on its first fixture case (or CASE=...)
 #   make record [CHAIN=..] [CASE=..]   (re)write golden outputs under fixtures/*/*/expected
 #   make parity [CHAIN=..] [CASE=..]   rerun chains and compare field by field -> work/parity/report.md
+#   make parity-java CANDIDATE=... [CHAIN=..] [CASE=..] [STEPS="JOB[.STEP] ..."]
 #   make parity-naive CASE=i02-tie-half-cent   half-even Python reference vs golden (fails on the tie)
 #   make chain-graph / chain-graph-check       regenerate / verify docs/chain-graph.md
 #   make reset                  drop datasets, loadlib, work/ and the database volume
@@ -22,8 +23,9 @@ CHAINS  ?= posting interest trantype-update trantype-dynamic
 CHAIN   ?=
 CASE    ?=
 PY       = python3
+export CANDIDATE
 
-.PHONY: up down build run record parity parity-naive chain-graph chain-graph-check reset baseline shell
+.PHONY: up down build run record parity parity-java parity-naive chain-graph chain-graph-check reset baseline shell
 
 up:
 	$(COMPOSE) up -d --build --wait
@@ -66,6 +68,9 @@ parity:
 	  done; \
 	done; \
 	echo "report: work/parity/report.md"; exit $$fail
+
+parity-java:
+	$(PY) tools/parity/run_candidate.py $(if $(CHAIN),--chain "$(CHAIN)") $(if $(CASE),--case "$(CASE)") $(if $(STEPS),--steps $(STEPS))
 
 parity-naive:
 	@test -n "$(CASE)" || { echo "usage: make parity-naive CASE=<interest case>"; exit 2; }
