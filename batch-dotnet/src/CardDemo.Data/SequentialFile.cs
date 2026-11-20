@@ -35,6 +35,13 @@ public static class SequentialFile
     {
         Directory.CreateDirectory(Path.GetDirectoryName(path)!);
         using var fs = new FileStream(path, append ? FileMode.Append : FileMode.Create);
+        fs.Write(Encode(records));
+        fs.Flush(flushToDisk: true);
+    }
+
+    public static byte[] Encode(IEnumerable<byte[]> records)
+    {
+        using var ms = new MemoryStream();
         foreach (var rec in records)
         {
             var len = rec.Length;
@@ -42,9 +49,10 @@ public static class SequentialFile
             {
                 len--;
             }
-            fs.Write(rec, 0, len);
-            fs.WriteByte((byte)'\n');
+            ms.Write(rec, 0, len);
+            ms.WriteByte((byte)'\n');
         }
+        return ms.ToArray();
     }
 
     public static void WriteBinary(string path, IEnumerable<byte[]> records)

@@ -50,12 +50,71 @@ public sealed class PostgresPersistence(string connectionString, IReadOnlyDictio
         return rows;
     }
 
-    public void Save(string dsn, RecordLayout layout, IEnumerable<byte[]> records)
+    public void Save(string dsn, RecordLayout layout, IEnumerable<byte[]> records) => SaveAll([(dsn, layout, records)], null, null);
+
+    private const string CheckpointDdl = "CREATE TABLE IF NOT EXISTS batch_checkpoint (checkpoint_key VARCHAR(64) PRIMARY KEY, payload TEXT NOT NULL)";
+
+    /// <summary>
+    /// One unit of work: every store and the restart checkpoint commit in a single transaction, so a
+    /// crash leaves either the previous chunk or this one. A null checkpointJson deletes the checkpoint.
+    /// </summary>
+    public void SaveAll(IReadOnlyList<(string Dsn, RecordLayout Layout, IEnumerable<byte[]> Records)> stores, string? checkpointKey, string? checkpointJson, Action<string>? hook = null)
     {
-        var fields = layout.Fields.Where(f => !f.IsFiller).ToList();
         using var conn = new NpgsqlConnection(connectionString);
         conn.Open();
         using var tx = conn.BeginTransaction();
+        foreach (var (dsn, layout, records) in stores)
+        {
+            Write(conn, tx, dsn, layout, records);
+        }
+        if (checkpointKey is not null)
+        {
+            Exec(conn, tx, CheckpointDdl);
+            Exec(conn, tx, "DELETE FROM batch_checkpoint WHERE checkpoint_key = $1", checkpointKey);
+            if (checkpointJson is not null)
+            {
+                Exec(conn, tx, "INSERT INTO batch_checkpoint (checkpoint_key, payload) VALUES ($1, $2)", checkpointKey, checkpointJson);
+            }
+        }
+        hook?.Invoke("pg-before-commit");
+        tx.Commit();
+    }
+
+    public string? LoadCheckpoint(string checkpointKey)
+    {
+        using var conn = new NpgsqlConnection(connectionString);
+        conn.Open();
+        Exec(conn, null, CheckpointDdl);
+        using var cmd = new NpgsqlCommand("SELECT payload FROM batch_checkpoint WHERE checkpoint_key = $1", conn);
+        cmd.Parameters.Add(new NpgsqlParameter { Value = checkpointKey });
+        return cmd.ExecuteScalar() as string;
+    }
+
+    /// <summary>Deletes the checkpoints of the given jobs only; other chains' restart points survive.</summary>
+    public void ClearCheckpoints(IEnumerable<string> jobs)
+    {
+        using var conn = new NpgsqlConnection(connectionString);
+        conn.Open();
+        Exec(conn, null, CheckpointDdl);
+        foreach (var job in jobs)
+        {
+            Exec(conn, null, "DELETE FROM batch_checkpoint WHERE split_part(checkpoint_key, '.', 1) = $1", job);
+        }
+    }
+
+    private static void Exec(NpgsqlConnection conn, NpgsqlTransaction? tx, string sql, params object[] args)
+    {
+        using var cmd = new NpgsqlCommand(sql, conn, tx);
+        foreach (var a in args)
+        {
+            cmd.Parameters.Add(new NpgsqlParameter { Value = a });
+        }
+        cmd.ExecuteNonQuery();
+    }
+
+    private void Write(NpgsqlConnection conn, NpgsqlTransaction tx, string dsn, RecordLayout layout, IEnumerable<byte[]> records)
+    {
+        var fields = layout.Fields.Where(f => !f.IsFiller).ToList();
         using (var del = new NpgsqlCommand($"DELETE FROM {tables[dsn]}", conn, tx))
         {
             del.ExecuteNonQuery();
@@ -71,7 +130,6 @@ public sealed class PostgresPersistence(string connectionString, IReadOnlyDictio
             }
             ins.ExecuteNonQuery();
         }
-        tx.Commit();
     }
 
     private static string Column(FieldSpec f) => f.Name.ToLowerInvariant().Replace('-', '_');
