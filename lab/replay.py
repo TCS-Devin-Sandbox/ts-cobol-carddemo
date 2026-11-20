@@ -171,9 +171,20 @@ def compare_values(expectation, observed, target, data, directory, metadata, dec
         t = target['accounts'].get(account, {})
         for field in changed:
             add(f'account {account} {field}', fields[field], o.get(field), t.get(field))
-        add(f'account {account} updated', fields['updated'],
-            any(not equal(o.get(f), original[account][f]) for f in changed),
-            any(not equal(t.get(f), original[account][f]) for f in changed))
+        def rewrite_effect(updated, decision=None):
+            if not updated:
+                return {f: original[account][f] for f in changed}
+            return {f: next((c['value'] for c in fields[f].get('candidates', [])
+                             if c['decision'] == decision), required(fields[f])) for f in changed}
+
+        update_cell = dict(fields['updated'])
+        if 'candidates' in update_cell:
+            update_cell['candidates'] = [dict(c, value=rewrite_effect(c['value'], c['decision']))
+                                         for c in update_cell['candidates']]
+        else:
+            update_cell['value'] = rewrite_effect(update_cell['value'])
+        add(f'account {account} updated (rewrite effects)', update_cell,
+            {f: o.get(f) for f in changed}, {f: t.get(f) for f in changed})
         for field, value in original[account].items():
             if field not in changed:
                 add(f'account {account} unchanged {field}', {'value': value, 'rules': ['TN-06']}, o.get(field), t.get(field))
