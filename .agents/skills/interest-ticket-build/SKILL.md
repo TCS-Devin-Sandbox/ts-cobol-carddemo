@@ -32,8 +32,19 @@ compose `db` service `postgres:15` (server 15.20), host Python 3.12 for the comp
 
 ## Steps
 
-1. Branch from the ticket's base branch (for INT-02 and INT-03, the branch that holds INT-01):
-   `git checkout -b <branch> origin/<base>`.
+1. Start on the revision for your task:
+   - **New ticket:** branch from the ticket's dependency base, which must already contain the
+     INT-01 Maven module. For INT-02 and INT-03, use `demo/05-pilot` (or its successor
+     containing INT-01 and these skills); for INT-04 through INT-06, use the revision with
+     the prerequisites listed under **Dependencies** in the ticket. Do not start from
+     `demo/04a-standards`: it predates the pilot module.
+   - **Pilot replay:** start from a clean checkout of `demo/05a-skills` and stay on that
+     revision for the entire replay. `demo/04a-standards` is only the diff base in step 6.
+   From the repository root, confirm the checked-out branch and module:
+   ```sh
+   git branch --show-current && ls java/interest/interest-batch/pom.xml
+   ```
+   Pilot replay output: `demo/05a-skills`, then `java/interest/interest-batch/pom.xml`.
 2. Install Java 21 if `java -version` is not 21 (the image ships 17):
    ```sh
    sudo apt-get install -y -q openjdk-21-jdk-headless
@@ -44,24 +55,37 @@ compose `db` service `postgres:15` (server 15.20), host Python 3.12 for the comp
    `Apache Maven 3.9.9` and `Java version: 21.0.13.1`. `JAVA_HOME` is per shell: export it in
    every new shell before `mvn`.
 3. Start the estate and its PostgreSQL 15 (`db`), compile the legacy programs and confirm the
-   legacy interest chain is green before changing anything:
+   legacy interest chain is green before changing anything. On a host without the PostgreSQL
+   images, use the mirror to avoid Docker Hub rate limits:
    ```sh
+   docker pull mirror.gcr.io/library/postgres:15-alpine &&
+     docker tag mirror.gcr.io/library/postgres:15-alpine postgres:15-alpine &&
+     docker pull mirror.gcr.io/library/postgres:15 &&
+     docker tag mirror.gcr.io/library/postgres:15 postgres:15
+   ```
+   Success: `Status: Downloaded newer image for mirror.gcr.io/library/postgres:15-alpine`
+   and `Status: Downloaded newer image for mirror.gcr.io/library/postgres:15`; both tags exit 0.
+   ```sh
+   export ESTATE_BASE_IMAGE=mirror.gcr.io/library/ubuntu:22.04
    make up && make build && make parity CHAIN=interest
    ```
    Success: `Container ...-db-1 Healthy`, `Container ...-estate-1 Healthy`,
    `CBACT04C: compiled`, and seven lines `interest/<case> [legacy rerun]: PASS (...)`. The
    CBEXPORT/CBIMPORT skips printed by `make build` are expected.
 4. Build and run all tests (unit tests, then PostgreSQL 15 integration tests in Testcontainers;
-   Docker must be running, images are pulled automatically):
+   Docker must be running). In Bash, keep the full output for the evidence (use your ticket
+   file name without `.md` in place of `01-pilot` for a new ticket):
    ```sh
-   mvn -B -f java/interest/interest-batch/pom.xml clean verify
+   set -o pipefail
+   T=01-pilot
+   mkdir -p "java/interest/evidence/$T" &&
+     mvn -B -f java/interest/interest-batch/pom.xml clean verify 2>&1 |
+     tee "java/interest/evidence/$T/test-output.txt"
    ```
    Success at the pilot: `Tests run: 36, Failures: 0, Errors: 0, Skipped: 0` (Surefire),
    `Tests run: 10, Failures: 0, Errors: 0, Skipped: 0` (Failsafe), `BUILD SUCCESS`. A later
    ticket's counts are higher by its own tests; zero failures, errors and skips is the pass.
    This also builds `target/interest-batch-0.1.0-PILOT.jar`, which the parity driver runs.
-   Keep the full output for the evidence (`<ticket>` is the ticket file name without `.md`):
-   `mkdir -p java/interest/evidence/<ticket> && mvn -B -f java/interest/interest-batch/pom.xml clean verify 2>&1 | tee java/interest/evidence/<ticket>/test-output.txt`.
    FAILED jobs and stack traces logged by negative-path ITs are expected; read the totals.
 5. Run the parity driver's own unit test:
    ```sh
