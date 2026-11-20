@@ -49,7 +49,7 @@ compose `db` service `postgres:15` (server 15.20), host Python 3.12 for the comp
    make up && make build && make parity CHAIN=interest
    ```
    Success: `Container ...-db-1 Healthy`, `Container ...-estate-1 Healthy`,
-   `CBACT04C: compiled`, and seven lines `interest/<case> [cobol]: PASS`. The
+   `CBACT04C: compiled`, and seven lines `interest/<case> [legacy rerun]: PASS (...)`. The
    CBEXPORT/CBIMPORT skips printed by `make build` are expected.
 4. Build and run all tests (unit tests, then PostgreSQL 15 integration tests in Testcontainers;
    Docker must be running, images are pulled automatically):
@@ -60,14 +60,17 @@ compose `db` service `postgres:15` (server 15.20), host Python 3.12 for the comp
    `Tests run: 10, Failures: 0, Errors: 0, Skipped: 0` (Failsafe), `BUILD SUCCESS`. A later
    ticket's counts are higher by its own tests; zero failures, errors and skips is the pass.
    This also builds `target/interest-batch-0.1.0-PILOT.jar`, which the parity driver runs.
-   Keep the full output for the evidence:
-   `mvn -B -f java/interest/interest-batch/pom.xml clean verify 2>&1 | tee java/interest/evidence/<ticket>/test-output.txt`.
+   Keep the full output for the evidence (`<ticket>` is the ticket file name without `.md`):
+   `mkdir -p java/interest/evidence/<ticket> && mvn -B -f java/interest/interest-batch/pom.xml clean verify 2>&1 | tee java/interest/evidence/<ticket>/test-output.txt`.
    FAILED jobs and stack traces logged by negative-path ITs are expected; read the totals.
 5. Run the parity driver's own unit test:
    ```sh
    python3 -m unittest discover -s java/interest/interest-batch/src/test/resources/pilot/parity -v
    ```
    Success: `Ran 1 test` and `OK`.
-6. Check that the diff stays inside the ticket's Scope and touches nothing frozen
-   (standards S17/S18): `git diff --stat origin/<base>`.
+6. Check that the code diff stays inside the ticket's Scope and touches nothing frozen
+   (standards §8, S17/S18). `<base>` is the base branch of step 1; the pilot's was
+   `demo/04a-standards`: `git diff --stat origin/<base> -- java/interest`. Every listed path must
+   match the ticket's Scope or be under `java/interest/evidence/<ticket>/`. `target/` is build
+   output and is not committed.
 7. Prove the ticket with [interest-ticket-verify](../interest-ticket-verify/SKILL.md).
