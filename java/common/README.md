@@ -40,9 +40,14 @@ URL is `jdbc:postgresql://localhost:5432/carddemo`), including on Docker Desktop
 `VsamDataset` is the single copybook-field-order to business-column mapping.
 `VsamTransfer.load` replaces one master in an explicit caller-owned transaction
 and rolls back that load on failure; `export` orders by its primary key (C
-collation for text). Keep the same transfer instance for a case: it retains raw
-source-field provenance in memory to preserve filler, noncanonical numeric
-representations and short lines for unchanged fields. Without that provenance,
-exports use the codec's canonical representation. This is fixture transport,
-not yet a durable production-unload provenance store. Writers use the golden
+collation for text). PostgreSQL is the only source of export values: loading and
+exporting may use separate connections, instances or processes. Fixture lines use
+canonical codec numeric representations, omit trailing ASCII spaces, and end in
+LF; empty tables produce empty files. All 98 interest/posting master input files
+follow this convention. Filler is stored in PostgreSQL, not regenerated; only
+trailing spaces are omitted from the serialized line and restored by fixed-width
+readers. Arbitrary source formatting (noncanonical signs, negative zero, padded
+lines or missing final LF) is normalized, not retained. Lossless reproduction of
+such non-fixture representations would require persisted provenance, outside
+this fixture transport contract. Writers use the golden
 one-space JSON indentation, no final JSON newline, and Latin-1 SYSOUT text.

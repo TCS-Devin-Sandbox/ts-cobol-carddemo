@@ -44,22 +44,23 @@ class VsamTransferTest {
                         && relative.getName(2).toString().equals("input")
                         && VsamDataset.forInput(path.getFileName().toString()) != null;
             }).sorted().toList().stream().map(path -> DynamicTest.dynamicTest(ROOT.relativize(path).toString(), () -> {
+                var dataset = VsamDataset.forInput(path.getFileName().toString());
                 try (var connection = DriverManager.getConnection(POSTGRES.getJdbcUrl(), POSTGRES.getUsername(), POSTGRES.getPassword())) {
                     connection.setAutoCommit(false);
-                    var transfer = new VsamTransfer(connection);
-                    var dataset = VsamDataset.forInput(path.getFileName().toString());
-                    transfer.load(dataset, path);
+                    new VsamTransfer(connection).load(dataset, path);
+                    connection.commit();
+                }
+                try (var connection = DriverManager.getConnection(POSTGRES.getJdbcUrl(), POSTGRES.getUsername(), POSTGRES.getPassword())) {
                     Path output = temporary.resolve("export.txt");
-                    transfer.export(dataset, output);
+                    new VsamTransfer(connection).export(dataset, output);
                     assertArrayEquals(Files.readAllBytes(path), Files.readAllBytes(output));
-                    connection.rollback();
                 }
             }));
         }
     }
 
     @Test
-    void retainsRawFieldsWhileExportingSqlChangesInKeyOrderAndRollsBackInvalidLoads() throws Exception {
+    void exportsCanonicalSqlValuesInKeyOrderAndRollsBackInvalidLoads() throws Exception {
         var dataset = VsamDataset.ACCOUNT;
         Path fixture = ROOT.resolve("fixtures/interest/i01-baseline/input/AWS.M2.CARDDEMO.ACCTDATA.PS.txt");
         byte[] first = new byte[300];
@@ -93,7 +94,6 @@ class VsamTransferTest {
                 var values = codec.decode(source);
                 values.put("ACCT-CURR-CYC-CREDIT", new java.math.BigDecimal("1.23"));
                 byte[] expected = codec.encode(values);
-                expected[35] = source[35];
                 assertArrayEquals(expected, Arrays.copyOfRange(actual, row * 301, row * 301 + 300));
             }
             Files.write(input, new byte[301]);

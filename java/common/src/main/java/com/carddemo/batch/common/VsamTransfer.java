@@ -5,19 +5,14 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.sql.Connection;
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
 
 import com.carddemo.batch.common.codec.FixedRecordCodec;
 import com.carddemo.batch.common.codec.RecordLayout;
 
-/** One case/session: retain source representation for unchanged fields, including negative zero. */
+/** PostgreSQL-only transport using canonical codec values and LF-terminated, space-trimmed fixture lines. */
 public final class VsamTransfer {
-    private record Source(byte[] padded, int width, boolean newline) { }
     private final Connection connection;
-    private final Map<VsamDataset, Map<List<Object>, Source>> sources = new HashMap<>();
 
     public VsamTransfer(Connection connection) {
         this.connection = connection;
@@ -27,7 +22,6 @@ public final class VsamTransfer {
         if (connection.getAutoCommit()) throw new IllegalStateException("Loading requires an explicit transaction");
         var layout = dataset.layout.load();
         var codec = new FixedRecordCodec(layout);
-        var provenance = new HashMap<List<Object>, Source>();
         byte[] file = Files.readAllBytes(input);
         var savepoint = connection.setSavepoint();
         try (var delete = connection.createStatement();
@@ -48,10 +42,8 @@ public final class VsamTransfer {
                 int i = 1;
                 for (var value : values.values()) insert.setObject(i++, value);
                 insert.executeUpdate();
-                provenance.put(key(values, dataset.keyFields), new Source(padded, width, end < file.length));
                 start = end + 1;
             }
-            sources.put(dataset, provenance);
             connection.releaseSavepoint(savepoint);
         } catch (Exception failure) {
             connection.rollback(savepoint);
@@ -69,12 +61,10 @@ public final class VsamTransfer {
                     ? " COLLATE \"C\"" : ""));
         }
         String order = String.join(",", keys);
-        boolean needsSeparator = false;
         try (var query = connection.createStatement();
                 var rows = query.executeQuery("SELECT " + String.join(",", dataset.columns)
                         + " FROM \"" + dataset.table + "\" ORDER BY " + order)) {
             while (rows.next()) {
-                if (needsSeparator) file.write('\n');
                 var values = new LinkedHashMap<String, Object>();
                 for (int i = 0; i < layout.fields().size(); i++) {
                     var field = layout.fields().get(i);
@@ -82,32 +72,13 @@ public final class VsamTransfer {
                             ? rows.getString(i + 1) : rows.getBigDecimal(i + 1));
                 }
                 byte[] encoded = codec.encode(values);
-                var source = sources.getOrDefault(dataset, Map.of()).get(key(values, dataset.keyFields));
                 int width = encoded.length;
-                boolean newline = true;
-                if (source != null) {
-                    var original = codec.decode(source.padded());
-                    int offset = 0;
-                    for (var field : layout.fields()) {
-                        if (original.get(field.name()).equals(values.get(field.name()))) {
-                            System.arraycopy(source.padded(), offset, encoded, offset, field.length());
-                        }
-                        offset += field.length();
-                    }
-                    if (Arrays.equals(Arrays.copyOfRange(encoded, source.width(), encoded.length),
-                            Arrays.copyOfRange(source.padded(), source.width(), encoded.length))) width = source.width();
-                    newline = source.newline();
-                }
+                while (width > 0 && encoded[width - 1] == ' ') width--;
                 file.write(encoded, 0, width);
-                if (newline) file.write('\n');
-                needsSeparator = !newline;
+                file.write('\n');
             }
         }
         Files.createDirectories(output.toAbsolutePath().getParent());
         Files.write(output, file.toByteArray());
-    }
-
-    private static List<Object> key(Map<String, Object> values, int count) {
-        return values.values().stream().limit(count).toList();
     }
 }
