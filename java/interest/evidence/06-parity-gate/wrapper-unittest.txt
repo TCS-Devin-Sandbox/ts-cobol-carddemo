@@ -1,0 +1,8 @@
+test_empty_properties (test_intcalc_java.CandidateCommandTest.test_empty_properties) ... ok
+test_rejects_invalid_invocation (test_intcalc_java.CandidateCommandTest.test_rejects_invalid_invocation) ... ok
+test_translates_only_pilot_property_prefix (test_intcalc_java.CandidateCommandTest.test_translates_only_pilot_property_prefix) ... ok
+
+----------------------------------------------------------------------
+Ran 3 tests in 0.000s
+
+OK
