@@ -57,6 +57,10 @@ public static class ChainRunner
                 break;
             }
         }
+        if (persistence is PostgresPersistence)
+        {
+            catalog.UnloadClusters();
+        }
         File.WriteAllText(Path.Combine(outDir, "rc.json"), RcJson(rcs));
         return overall;
     }

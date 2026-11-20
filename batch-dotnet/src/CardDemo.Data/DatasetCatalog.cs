@@ -95,6 +95,16 @@ public sealed partial class DatasetCatalog(string workDir, IKsdsPersistence? ksd
     public void WriteSequential(string dsn, IEnumerable<byte[]> records, bool append = false) =>
         SequentialFile.Write(PathOf(dsn), records, append);
 
+    /// <summary>Unload every cluster touched by the run to datasets/ (IDCAMS REPRO to a flat file) for comparison.</summary>
+    public void UnloadClusters()
+    {
+        var files = new FilePersistence(DatasetDir);
+        foreach (var s in _open.Values)
+        {
+            files.Save(s.Dsn, s.Layout, s.Scan().Select(r => r.Bytes));
+        }
+    }
+
     public void CommitAll()
     {
         foreach (var s in _open.Values)

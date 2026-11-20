@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 # Prove the .NET target against the legacy golden files with the repository's comparator.
 # usage: batch-dotnet/tools/parity_dotnet.sh [chain] [case]
+# CARDDEMO_PG="Host=...;Username=...;Password=...;Database=..." runs the KSDS stores on PostgreSQL instead of files.
 set -uo pipefail
 ROOT="$(cd "$(dirname "$0")/../.." && pwd)"
 DOTNET="${DOTNET:-$(command -v dotnet || echo "$HOME/.dotnet/dotnet")}"
@@ -13,8 +14,8 @@ for chain in ${1:-posting interest}; do
   for dir in "$ROOT"/fixtures/$chain/${2:-*}/; do
     case=$(basename "$dir"); n=$((n+1))
     out="$ROOT/work/parity-dotnet/$chain/$case"
-    "$DOTNET" "$HOST_DLL" run-chain "$chain" "$dir" "$out" --quiet || { echo "$chain/$case: run failed"; fail=1; continue; }
-    python3 "$ROOT/tools/parity/compare.py" "$chain" "$case" --actual "$out" --report "$REPORT" --label ".NET 8 target" || fail=1
+    "$DOTNET" "$HOST_DLL" run-chain "$chain" "$dir" "$out" --quiet ${CARDDEMO_PG:+--postgres "$CARDDEMO_PG"} || { echo "$chain/$case: run failed"; fail=1; continue; }
+    python3 "$ROOT/tools/parity/compare.py" "$chain" "$case" --actual "$out" --report "$REPORT" --label "${LABEL:-.NET 8 target}" || fail=1
   done
 done
 echo "cases: $n  report: $REPORT"; exit $fail
