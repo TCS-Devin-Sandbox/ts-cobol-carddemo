@@ -53,10 +53,16 @@ jobs:
           distribution: temurin
           java-version: '21'
           cache: maven
-          cache-dependency-path: carddemo-trantype-api/pom.xml
+          cache-dependency-path: |
+            carddemo-trantype-api/pom.xml
+            java/**/pom.xml
 
       - name: Transaction-type API tests (Testcontainers PostgreSQL)
         working-directory: carddemo-trantype-api
+        run: mvn -B verify
+
+      - name: Spring Batch skeleton verification
+        working-directory: java
         run: mvn -B verify
 
       - name: Set up Node.js with npm cache
