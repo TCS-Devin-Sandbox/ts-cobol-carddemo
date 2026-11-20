@@ -65,7 +65,9 @@ public final class PacketBuilder {
     private List<ExportPacket.PayloadRecord> records(UUID runId, Profile profile) {
         List<ExportPacket.PayloadRecord> out = new ArrayList<>();
         jdbc.query("""
-                SELECT emit_ordinal, txn_id, amount, filler_raw, raw_record FROM interest.interest_tx
+                SELECT emit_ordinal, txn_id, amount, filler_raw, raw_record, txn_type, category_code, source, description,
+                  merchant_id, merchant_name, merchant_city, merchant_zip, card_number, orig_ts, proc_ts
+                FROM interest.interest_tx
                 WHERE run_id = ? ORDER BY emit_ordinal""", rs -> {
             long ordinal = rs.getLong(1);
             byte[] raw = rs.getBytes(5);
@@ -81,7 +83,13 @@ public final class PacketBuilder {
             } catch (FixedRecordCodec.Rejection e) {
                 throw new PacketRejected("RECORD_CODEC_" + e.row() + "_" + e.reason());
             }
-            if (!t.txnId().equals(rs.getString(2)) || t.amount().compareTo(rs.getBigDecimal(3)) != 0
+            List<String> columns = List.of(rs.getString(2), rs.getString(6), rs.getString(7), rs.getString(8),
+                    rs.getString(9), rs.getString(10), rs.getString(11), rs.getString(12), rs.getString(13),
+                    rs.getString(14), rs.getString(15), rs.getString(16));
+            List<String> decoded = List.of(t.txnId(), t.txnType(), t.categoryCode(), t.source(), t.description(),
+                    t.merchantId(), t.merchantName(), t.merchantCity(), t.merchantZip(), t.cardNumber(), t.origTs(),
+                    t.procTs());
+            if (!decoded.equals(columns) || t.amount().compareTo(rs.getBigDecimal(3)) != 0
                     || !Arrays.equals(t.filler().array(), rs.getBytes(4))) {
                 throw new PacketRejected("RECORD_COLUMN_MISMATCH");
             }
@@ -169,10 +177,17 @@ public final class PacketBuilder {
     }
 
     private static void field(StringBuilder m, String key, String value) {
-        if (value.chars().anyMatch(c -> c == '"' || c == '\\' || c < 0x20 || c > 0x7e)) {
-            throw new PacketRejected("MANIFEST_TEXT");
+        m.append(",\"").append(key).append("\":\"");
+        for (char c : value.toCharArray()) {
+            if (c == '"' || c == '\\') {
+                m.append('\\').append(c);
+            } else if (c < 0x20 || c > 0x7e) {
+                m.append("\\u%04x".formatted((int) c));
+            } else {
+                m.append(c);
+            }
         }
-        m.append(",\"").append(key).append("\":\"").append(value).append('"');
+        m.append('"');
     }
 
     private record RunRow(UUID snapshotId, String parm, String cycle, String feed, String mode, String buildRevision,
