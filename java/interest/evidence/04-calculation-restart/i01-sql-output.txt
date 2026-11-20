@@ -1,0 +1,52 @@
+INT-04 i01-baseline run_id=9f021563-af41-4037-99ce-b234f4d6fc84 database=interest_close
+SET
+ private_database_pass 
+-----------------------
+ t
+(1 row)
+
+ run_snapshot_pass 
+-------------------
+ t
+(1 row)
+
+ transactions_pass 
+-------------------
+ t
+(1 row)
+
+ delta_pass 
+------------
+ t
+(1 row)
+
+ final_account_unchanged_pass 
+------------------------------
+ t
+(1 row)
+
+ checkpoint_pass 
+-----------------
+ t
+(1 row)
+
+ account_input_manifest_count_pass 
+-----------------------------------
+ t
+(1 row)
+
+ xref_input_manifest_count_pass 
+--------------------------------
+ t
+(1 row)
+
+ category_input_manifest_count_pass 
+------------------------------------
+ t
+(1 row)
+
+ disclosure_input_manifest_count_pass 
+--------------------------------------
+ t
+(1 row)
+

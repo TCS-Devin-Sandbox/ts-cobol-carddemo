@@ -1,0 +1,45 @@
+Extracted from fresh Maven Surefire/Failsafe reports (not a separate test run).
+Integration: crash/resume, changed identity/snapshot, required lookups and intake holds:
+<testsuite xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://maven.apache.org/surefire/maven-failsafe-plugin/xsd/failsafe-test-report-3.0.xsd" version="3.0" name="com.carddemo.interest.job.InterestCloseIT" time="10.926" tests="13" errors="0" skipped="0" failures="0">
+  <testcase name="INT_H02_invalidParmHeldNotReady" classname="com.carddemo.interest.job.InterestCloseIT" time="0.028">
+  <testcase name="INT_H06_A3_crashAfterCommitDoesNotReplayCommittedOrdinalOrClock" classname="com.carddemo.interest.job.InterestCloseIT" time="0.683">
+  <testcase name="INT_R10_INT_H08_missingAccountXrefAndDefaultAreFailedNotComputedWithU999AndNoDatasets" classname="com.carddemo.interest.job.InterestCloseIT" time="0.7">
+  <testcase name="INT_H06_A3_changedSnapshotPayloadOrEncodedKeyRefusesResume" classname="com.carddemo.interest.job.InterestCloseIT" time="0.607">
+  <testcase name="INT_H06_A3_resumeChangedIdentityRefusedAndNoAutomaticRestart" classname="com.carddemo.interest.job.InterestCloseIT" time="1.098">
+  <testcase name="INT_H06_A3_crashBeforeGroupCommitRollsBackWholeGroupAndExplicitResumeSeeksCheckpoint" classname="com.carddemo.interest.job.InterestCloseIT" time="0.737">
+  <testcase name="INT_R10_malformedDuplicateAndBadGeometryIntakeIsHeldWithoutReadyRun" classname="com.carddemo.interest.job.InterestCloseIT" time="0.24"/>
+  <testcase name="INT_H03_multiCardWithoutEvidenceHeldAndSuppliedFirstReturnNotMinimumIsSealed" classname="com.carddemo.interest.job.InterestCloseIT" time="0.044"/>
+Unit: overflow/suffix, EOF and advancing-clock probes:
+<testsuite xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://maven.apache.org/surefire/maven-surefire-plugin/xsd/surefire-test-report-3.0.xsd" version="3.0" name="com.carddemo.interest.calc.GroupCalculationTest" time="0.669" tests="5" errors="0" skipped="0" failures="0">
+  <testcase name="INT_H05_INT_R08_overflowKeepsEveryRowAndWrapsSuffixAndGroupTotal" classname="com.carddemo.interest.calc.GroupCalculationTest" time="0.07">
+  <testcase name="INT_R09_INT_Q02_lookaheadNextKeyAndResumeKeepFinalGroupWithoutFinalDelta" classname="com.carddemo.interest.calc.GroupCalculationTest" time="0.004"/>
+  <testcase name="INT_Q06_INT_R10_emptyTcatbalfIsNormalEofWithoutLookups" classname="com.carddemo.interest.calc.GroupCalculationTest" time="0.004"/>
+  <testcase name="INT_R04_INT_R10_zeroRateDoesNotBypassRequiredAccountOrCardReads" classname="com.carddemo.interest.calc.GroupCalculationTest" time="0.005"/>
+  <testcase name="INT_Q05_TN_02_advancingClockSamplesOncePerEmittedRow" classname="com.carddemo.interest.calc.GroupCalculationTest" time="0.004"/>
+Unit: receiver widths and truncation:
+<testsuite xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://maven.apache.org/surefire/maven-surefire-plugin/xsd/surefire-test-report-3.0.xsd" version="3.0" name="com.carddemo.interest.calc.InterestRulesTest" time="0.014" tests="8" errors="0" skipped="0" failures="0">
+  <testcase name="INT_H05_receiverWidthsKeepSignedLowDigitsAtEveryAssignmentAndAddition" classname="com.carddemo.interest.calc.InterestRulesTest" time="0.001"/>
+  <testcase name="INT_R04_INT_Q04_nonzeroRateEmitsZeroCentsAndExactZeroRateSkips" classname="com.carddemo.interest.calc.InterestRulesTest" time="0.001"/>
+  <testcase name="INT_Q02_INT_Q06_lookaheadNotEofControlsDeltaEligibility" classname="com.carddemo.interest.calc.InterestRulesTest" time="0.001"/>
+  <testcase name="INT_Q03_INT_H07_negativeSubCentUsesDownNotFloorAndNegativeRateIsNotFiltered" classname="com.carddemo.interest.calc.InterestRulesTest" time="0.001"/>
+  <testcase name="INT_R05_INT_H01_INT_Q05_TN_06_constantsNoFeesAndOneTimestampSample" classname="com.carddemo.interest.calc.InterestRulesTest" time="0.002"/>
+  <testcase name="INT_R01_INT_Q01_tiesAndI07NonTiesTruncateBeforeSumming" classname="com.carddemo.interest.calc.InterestRulesTest" time="0.002"/>
+  <testcase name="INT_R08_INT_H05_suffixWrapDoesNotLimitOrdinal" classname="com.carddemo.interest.calc.InterestRulesTest" time="0.001"/>
+  <testcase name="INT_H02_opaqueTenPrintableBytesOnly" classname="com.carddemo.interest.calc.InterestRulesTest" time="0.001"/>
+Expected negative-path diagnostics from integration execution:
+java.lang.IllegalStateException: injected-after-commit
+2026-11-20T07:32:37.954Z  INFO 44288 --- [           main] c.carddemo.interest.job.CloseRunService  : event=run-finished run=a06696d4-8392-4e52-8f29-533de78dcb93 phase=compute category=TARGET_COMPUTE_FAILED rc=12
+com.carddemo.interest.calc.GroupCalculation$MissingLookup: dd=ACCTFILE op=READ status=23
+2026-11-20T07:32:42.113Z  INFO 44288 --- [           main] c.carddemo.interest.job.CloseRunService  : event=run-finished run=361bf44e-0f9e-4c31-9a19-e2b9bbb6cfd3 phase=compute category=REQUIRED_LOOKUP_MISSING rc=12
+com.carddemo.interest.calc.GroupCalculation$MissingLookup: dd=XREFFILE op=READ status=23
+2026-11-20T07:32:42.360Z  INFO 44288 --- [           main] c.carddemo.interest.job.CloseRunService  : event=run-finished run=72eb578d-d6e3-4e39-8133-41326e278687 phase=compute category=REQUIRED_LOOKUP_MISSING rc=12
+com.carddemo.interest.calc.GroupCalculation$MissingLookup: dd=DISCGRP op=READ status=23
+2026-11-20T07:32:42.594Z  INFO 44288 --- [           main] c.carddemo.interest.job.CloseRunService  : event=run-finished run=923187c4-7a6d-40b3-8cfe-640bd106c29f phase=compute category=REQUIRED_LOOKUP_MISSING rc=12
+java.lang.IllegalStateException: injected-before-commit
+2026-11-20T07:32:42.853Z  INFO 44288 --- [           main] c.carddemo.interest.job.CloseRunService  : event=run-finished run=c30e554a-100d-431f-bd3f-bc1eb7b6acba phase=compute category=TARGET_COMPUTE_FAILED rc=12
+java.lang.IllegalStateException: injected-before-commit
+2026-11-20T07:32:43.164Z  INFO 44288 --- [           main] c.carddemo.interest.job.CloseRunService  : event=run-finished run=ac4520d9-29aa-44b8-ba03-254e6b4dd386 phase=compute category=TARGET_COMPUTE_FAILED rc=12
+java.lang.IllegalStateException: injected-before-commit
+2026-11-20T07:32:43.942Z  INFO 44288 --- [           main] c.carddemo.interest.job.CloseRunService  : event=run-finished run=4e3d6d79-b25e-4167-946b-264106d0b6db phase=compute category=TARGET_COMPUTE_FAILED rc=12
+java.lang.IllegalStateException: injected-before-commit
+2026-11-20T07:32:45.954Z  INFO 44288 --- [           main] c.carddemo.interest.job.CloseRunService  : event=run-finished run=1909e98b-5e9e-4cb5-afbc-3846c7c7494c phase=compute category=TARGET_COMPUTE_FAILED rc=12
