@@ -272,14 +272,14 @@ graph LR
 
 | PR | Batch | Title | Link | Status |
 |---|---|---|---|---|
-| A1 | A | Migration plan | this PR | in review |
-| A2 | A | `make parity-java` candidate seam + step-scoped compare | [#34](https://github.com/TCS-Devin-Sandbox/ts-cobol-carddemo/pull/34) | in review |
-| A3 | A | Java CI job (trantype tests) | [#32](https://github.com/TCS-Devin-Sandbox/ts-cobol-carddemo/pull/32) | in review |
-| A4 | A | Single transaction-type implementation | [#33](https://github.com/TCS-Devin-Sandbox/ts-cobol-carddemo/pull/33) | in review |
-| A5 | A | BASELINE inventory corrections | [#31](https://github.com/TCS-Devin-Sandbox/ts-cobol-carddemo/pull/31) | in review |
-| B1 | B | `java/` skeleton | | not started |
-| B2 | B | Fixed-record codec | | not started |
-| B3 | B | VSAM master schema | | not started |
+| A1 | A | Migration plan | [#30](https://github.com/TCS-Devin-Sandbox/ts-cobol-carddemo/pull/30) | merged |
+| A2 | A | `make parity-java` candidate seam + step-scoped compare | [#34](https://github.com/TCS-Devin-Sandbox/ts-cobol-carddemo/pull/34) | merged |
+| A3 | A | Java CI job (trantype tests) | [#32](https://github.com/TCS-Devin-Sandbox/ts-cobol-carddemo/pull/32) | merged |
+| A4 | A | Single transaction-type implementation | [#33](https://github.com/TCS-Devin-Sandbox/ts-cobol-carddemo/pull/33), [#36](https://github.com/TCS-Devin-Sandbox/ts-cobol-carddemo/pull/36) | merged |
+| A5 | A | BASELINE inventory corrections | [#31](https://github.com/TCS-Devin-Sandbox/ts-cobol-carddemo/pull/31) | merged |
+| B1 | B | `java/` skeleton | [#35](https://github.com/TCS-Devin-Sandbox/ts-cobol-carddemo/pull/35) | merged |
+| B2 | B | Fixed-record codec | [#38](https://github.com/TCS-Devin-Sandbox/ts-cobol-carddemo/pull/38) | in review |
+| B3 | B | VSAM master schema | [#37](https://github.com/TCS-Devin-Sandbox/ts-cobol-carddemo/pull/37) (follow-up [#40](https://github.com/TCS-Devin-Sandbox/ts-cobol-carddemo/pull/40) in review) | merged |
 | B4 | B | Loader/exporter | | not started |
 | C1 | C | INTCALC | | not started |
 | C2 | C | POSTTRAN | | not started |
