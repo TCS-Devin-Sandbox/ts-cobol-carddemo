@@ -18,6 +18,14 @@ import static com.carddemo.batch.common.codec.RecordLayout.Kind.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 class FixedRecordCodecTest {
+    @Test
+    void ebcdicTextRoundTripsEveryByte() {
+        var codec = new FixedRecordCodec(layout(TEXT, 256, 256, 0, false), Charset.forName("IBM037"));
+        byte[] bytes = new byte[256];
+        for (int i = 0; i < bytes.length; i++) bytes[i] = (byte) i;
+        assertArrayEquals(bytes, codec.encode(codec.decode(bytes)));
+    }
+
     static Stream<Arguments> signs() {
         return Stream.of(StandardCharsets.ISO_8859_1, Charset.forName("IBM037")).flatMap(charset ->
                 IntStream.range(0, 20).mapToObj(i -> Arguments.of(charset, i % 10, i >= 10)));

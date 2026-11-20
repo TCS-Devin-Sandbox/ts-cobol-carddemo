@@ -15,7 +15,7 @@ public final class FixedRecordCodec {
     private static final String POSITIVE = "{ABCDEFGHI";
     private static final String NEGATIVE = "}JKLMNOPQR";
     private final RecordLayout layout;
-    private final Charset charset;
+    private final String characters;
 
     public FixedRecordCodec(RecordLayout layout) {
         this(layout, StandardCharsets.ISO_8859_1);
@@ -26,7 +26,12 @@ public final class FixedRecordCodec {
             throw new IllegalArgumentException("Use Latin-1 (off-host) or IBM037 (EBCDIC)");
         }
         this.layout = layout;
-        this.charset = charset;
+        byte[] bytes = new byte[256];
+        for (int i = 0; i < bytes.length; i++) bytes[i] = (byte) i;
+        var table = new StringBuilder(new String(bytes, charset));
+        // IBM037 aliases NEL to LF; keep EBCDIC 0x15 distinct from 0x25.
+        if (charset.equals(Charset.forName("IBM037"))) table.setCharAt(0x15, '\u0085');
+        this.characters = table.toString();
     }
 
     /** Strings retain trailing spaces and filler; every numeric has its declared scale. */
@@ -37,7 +42,7 @@ public final class FixedRecordCodec {
         for (Field field : layout.fields()) {
             byte[] raw = Arrays.copyOfRange(record, offset, offset + field.length());
             Object value = switch (field.kind()) {
-                case TEXT -> new String(raw, charset);
+                case TEXT -> decodeText(raw);
                 case DISPLAY -> decodeDisplay(raw, field);
                 case COMP3 -> decodePacked(raw, field);
                 case COMP -> new BigDecimal(field.signed() ? new BigInteger(raw) : new BigInteger(1, raw), field.scale());
@@ -56,10 +61,10 @@ public final class FixedRecordCodec {
             Object value = values.get(field.name());
             byte[] raw;
             if (field.kind() == RecordLayout.Kind.TEXT) {
-                if (!(value instanceof String text) || text.length() > field.length() || !charset.newEncoder().canEncode(text)) {
+                if (!(value instanceof String text) || text.length() > field.length()) {
                     throw new IllegalArgumentException("Invalid text: " + field.name());
                 }
-                raw = (text + " ".repeat(field.length() - text.length())).getBytes(charset);
+                raw = encodeText(text + " ".repeat(field.length() - text.length()));
             } else {
                 if (!(value instanceof BigDecimal decimal)) throw new IllegalArgumentException("Expected BigDecimal: " + field.name());
                 BigInteger units = decimal.setScale(field.scale()).unscaledValue();
@@ -75,7 +80,7 @@ public final class FixedRecordCodec {
     }
 
     private BigDecimal decodeDisplay(byte[] raw, Field field) {
-        String text = new String(raw, charset);
+        String text = decodeText(raw);
         if (text.isBlank()) return BigDecimal.ZERO.setScale(field.scale());
         int sign = 1;
         char last = text.charAt(text.length() - 1);
@@ -122,9 +127,25 @@ public final class FixedRecordCodec {
         if (field.kind() == RecordLayout.Kind.DISPLAY) {
             if (field.signed()) digits = digits.substring(0, width - 1)
                     + (units.signum() < 0 ? NEGATIVE : POSITIVE).charAt(digits.charAt(width - 1) - '0');
-            return digits.getBytes(charset);
+            return encodeText(digits);
         }
         String nibbles = digits + (field.signed() ? units.signum() < 0 ? "D" : "C" : "F");
         return java.util.HexFormat.of().parseHex(nibbles);
+    }
+
+    private String decodeText(byte[] raw) {
+        char[] text = new char[raw.length];
+        for (int i = 0; i < raw.length; i++) text[i] = characters.charAt(Byte.toUnsignedInt(raw[i]));
+        return new String(text);
+    }
+
+    private byte[] encodeText(String text) {
+        byte[] raw = new byte[text.length()];
+        for (int i = 0; i < raw.length; i++) {
+            int value = characters.indexOf(text.charAt(i));
+            if (value < 0) throw new IllegalArgumentException("Unmappable text character");
+            raw[i] = (byte) value;
+        }
+        return raw;
     }
 }
