@@ -1,16 +1,18 @@
 # INT-06 – per-case parity report (open this first)
 
-Code revision: `77e37b12c3c032d929ab6452f67ae040832e935f`,
+Code revision: `62384290f674f1f6f1ef2c237eb35550feb12514`,
 branch `demo/05-g4-gate`; base `origin/demo/05b-integration`.
 The evidence-only commit follows this code commit.
 
-Verification chronology: commands executed against uncommitted code subsequently
-recorded by the code revision above, not after its commit. `gate-revision.txt`
-honestly records the then-HEAD `4f687969ff2b05d5a13b7ac7c9df0a637dffafef`
-and untracked paths. The final Maven log includes the additional partial-apply
-restoration test; the gate script ran before that test-only addition. Candidate
-production code, parity scripts and golden inputs did not change between these
-checks and the code commit. No checks are represented as post-commit reruns.
+Verification chronology: the full combined Maven, frozen-driver, candidate gate
+and legacy parity checks ran fresh after this code commit. `gate-revision.txt`
+records that revision and evidence files being refreshed. Review fixes make SQL
+assertion failures raise a PostgreSQL error and persist nonzero candidate results
+as BatchStatus FAILED while retaining exit code 12. Stored metadata assertions
+cover i01 COMPLETED, missing DEFAULT FAILED and packaging rejection FAILED.
+The schema-qualified stored-status test correction is a separate follow-up code
+commit; prior commits were not amended. Historical wrapper/script unit-test logs
+are retained unchanged; those scripts did not change in this review.
 
 Versions: Java 21.0.13.1, Spring Boot 3.3.5 / Spring Batch 5.1.2;
 PostgreSQL 15.20 (compose `postgres:15`), PG15 Testcontainers
@@ -44,7 +46,8 @@ PYTHONDONTWRITEBYTECODE=1 python3 -m unittest discover \
   tee "$E/parity-driver-unittest.txt"
 ```
 
-Long command logs were redirected to `/dev/null` after tee during execution.
+During this refresh the four combined-check commands redirected directly to
+their evidence logs rather than tee; command inputs are otherwise as above.
 The gate expands the unchanged driver/comparator steps as follows, for all seven
 case names listed below:
 
@@ -112,13 +115,13 @@ input/golden account differences, never candidate output.
 
 | Case | Run ID | Transactions | Deltas | Signed tx sum | Signed delta sum |
 | --- | --- | ---: | ---: | ---: | ---: |
-| i01-baseline | f9f6d804-8521-41ed-8ac7-3b1d6439f29d | 2 | 1 | 47.00 | 10.00 |
-| i02-tie-half-cent | d3d68f0f-37ab-4479-a854-2ca6069515a4 | 2 | 1 | 24.69 | 12.35 |
-| i03-zero-rate-skipped | c26640b0-7f37-41dd-a076-9b0f9c467c92 | 1 | 0 | 10.00 | 0.00 |
-| i04-default-group-fallback | 4fec44e8-45d5-4acc-8224-100d219ed432 | 1 | 0 | 17.50 | 0.00 |
-| i05-multi-category | a002b13a-5369-4445-8707-d164b09ad23c | 2 | 0 | 17.50 | 0.00 |
-| i06-negative-balance | 9aa88da1-ba57-4bdf-b2eb-13081491b2d4 | 1 | 0 | -3.00 | 0.00 |
-| i07-nontie-rounding | 0238c712-2c3a-48e5-99a1-62853aef7e04 | 2 | 1 | 29.03 | 15.42 |
+| i01-baseline | 71b92126-9d30-4756-9ced-7e37220f8a31 | 2 | 1 | 47.00 | 10.00 |
+| i02-tie-half-cent | 2d269475-8dce-449b-b193-e8d6209463c5 | 2 | 1 | 24.69 | 12.35 |
+| i03-zero-rate-skipped | 09fcdbe9-1872-42de-acfe-c5c2d852b569 | 1 | 0 | 10.00 | 0.00 |
+| i04-default-group-fallback | a56f2150-755c-47c7-bf3c-945b1deb0ea6 | 1 | 0 | 17.50 | 0.00 |
+| i05-multi-category | c219ca67-1550-417a-87ca-85e6ace6a10d | 2 | 0 | 17.50 | 0.00 |
+| i06-negative-balance | a39521af-9abd-4fc9-ab8f-86feadd015a9 | 1 | 0 | -3.00 | 0.00 |
+| i07-nontie-rounding | 9563eff8-f12e-4651-a9f6-a8419117484a | 2 | 1 | 29.03 | 15.42 |
 
 All have one PRIVATE shadow publication and no received/released effects.
 The final TCATBALF account has no delta and its golden account bytes equal input
@@ -175,7 +178,8 @@ binder provenance, compiler options or approval. No live cutover or deployment.
 - `compare-stdout.txt`, `compare-report.md`: unchanged field/RC/SYSOUT comparison.
 - `byte-check.txt`: 14 ordered, padded dataset comparisons.
 - `sql-output.txt`: eight SQL booleans per run plus expected totals.
-- `gate-revision.txt`: original then-HEAD, dirty paths and gate command.
+- `gate-revision.txt`: verified code HEAD, evidence refresh paths and gate command.
+- `negative-sql.txt`: PostgreSQL 15 forced-false assertion, error and nonzero pipeline exit.
 - `parity-unittest.txt`: final seven wrapper/byte tests.
 - `wrapper-unittest.txt`: earlier three adapter tests, retained as historical.
 - `parity-driver-unittest.txt`: frozen driver's one test.
