@@ -1,0 +1,79 @@
+Java candidate parity
+=====================
+
+Run from the repository root with GNU Make and Python 3.10+:
+
+    make parity-java CANDIDATE=./run-interest CHAIN=interest CASE=i02-tie-half-cent
+    make parity-java CANDIDATE='java -jar path/to/runner.jar' CHAIN=posting STEPS=POSTTRAN
+
+Omit CASE to run every case in CHAIN; omit both to run all chains. CANDIDATE is
+split into arguments (with shell-style quoting, but no shell evaluation).
+The runner invokes it once per case, from the repository root, appending:
+
+    --chain <name> --case <name> --input <absolute fixture input directory>
+    --out <absolute output directory> --clock <frozen chain clock as one argument>
+
+The candidate manages its own runtime and database setup. It must exit zero
+when it successfully writes its outputs, even if a JCL return code is nonzero.
+The runner clears work/parity-java/<chain>/<case>/actual before each invocation.
+Write the same relative filenames and formats as the reference outputs:
+
+    datasets/<DSN>.txt          One record per line; GDGs include G####V##.
+    sysout/<JOB>.<STEP>.txt     Operator messages, one line each.
+    rc.json                    Job names mapped to {"maxrc": 0, "steps": {"STEP": 0}}.
+    db/<schema.table>.csv       Header and rows in the recorded order.
+
+Use the fixture's expected/manifest.json as the reference for dataset layouts;
+the candidate does not need to emit a manifest. Every selected golden output,
+including an empty file, must be present. The runner writes its report to
+work/parity-java/report.md and exits nonzero if any command or comparison fails.
+It does not call the legacy recorder or require Docker.
+
+Step-scoped comparison
+----------------------
+
+Use STEPS="POSTTRAN.STEP15 TRANREPT" with make, or compare an existing output:
+
+    python3 tools/parity/compare.py posting p01-baseline-mixed \
+        --actual work/parity-java/posting/p01-baseline-mixed/actual \
+        --label java --steps POSTTRAN.STEP15
+
+JOB selects its outputs and entire return-code entry. JOB.STEP selects only
+that step's outputs and its return code, not the job-level maxrc. Extra
+artifacts outside the scope are ignored. Dataset and DB snapshot ownership is
+declared in compare.py; SYSOUT belongs to the job and step in its filename.
+Unknown selectors or snapshots without an owner are errors in scoped mode.
+Omit STEPS/--steps to compare the full chain as make parity does.
+
+Harness self-test (not proof of a migration)
+-------------------------------------------
+
+This stand-in copies the goldens, then demonstrates that dropping one SYSOUT
+fails full comparison but passes when comparing only POSTTRAN. Run from root:
+
+    set -eu
+    stub=$(mktemp)
+    trap 'rm -f "$stub"' EXIT
+    cat > "$stub" <<'PY'
+    import argparse
+    import shutil
+    from pathlib import Path
+
+    parser = argparse.ArgumentParser()
+    for option in ("chain", "case", "input", "out", "clock"):
+        parser.add_argument(f"--{option}", required=True)
+    parser.add_argument("--drop", action="store_true")
+    args = parser.parse_args()
+    actual = Path(args.out)
+    shutil.copytree(Path(args.input).with_name("expected"), actual, dirs_exist_ok=True)
+    if args.drop:
+        (actual / "sysout/TRANREPT.STEP10R.txt").unlink()
+    PY
+
+    make parity-java CANDIDATE="python3 $stub"  # all 24 cases pass
+    if make parity-java CHAIN=posting CASE=p01-baseline-mixed CANDIDATE="python3 $stub --drop"; then
+        echo "missing SYSOUT unexpectedly passed" >&2
+        exit 1
+    fi
+    grep -F 'SYSOUT TRANREPT.STEP10R | `(file)` | present | missing' work/parity-java/report.md
+    make parity-java CHAIN=posting CASE=p01-baseline-mixed STEPS=POSTTRAN CANDIDATE="python3 $stub --drop"
