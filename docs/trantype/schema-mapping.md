@@ -8,7 +8,7 @@ Targets: `db/migration/V1__create_tables.sql`, `db/migration/V2__seed_data.sql` 
 | DB2 object | PostgreSQL object | Notes |
 |---|---|---|
 | Database `CARDDEMO`, stogroup `AWST1STG`, BP0, `CCSID EBCDIC` | Database `carddemo` (UTF-8) | Physical storage clauses dropped. EBCDIC → UTF-8: seed data is plain A–Z/0–9/space, no conversion issues. |
-| Tablespaces `CARDSPC1`, `CARDSTTC` (SEGSIZE 4, LOCKSIZE TABLE) | default tablespace | PostgreSQL uses row-level locks (MVCC) instead of table locks — fewer -911-style conflicts. |
+| Tablespaces `CARDSPC1`, `CARDSTTC` (SEGSIZE 4, LOCKSIZE TABLE) | default tablespace | PostgreSQL uses row locks for conflicting writes alongside table-level locks (MVCC) — different lock granularity. |
 | Schema/qualifier `CARDDEMO.` | `public` schema (unqualified) | Configurable via `spring.flyway.schemas` if required. |
 | `CARDDEMO.TRANSACTION_TYPE` | `transaction_type` | |
 | `CARDDEMO.TRANSACTION_TYPE_CATEGORY` | `transaction_type_category` | |
@@ -31,8 +31,8 @@ Targets: `db/migration/V1__create_tables.sql`, `db/migration/V2__seed_data.sql` 
 
 - **Kept as `CHAR(2)`** (not `VARCHAR`/`SMALLINT`) to preserve the DB2 key domain and its string ordering (`'01' < '02' < … < '10'`), which drives the keyset paging (`>=`, `<`, `ORDER BY`).
 - PostgreSQL `bpchar` blank-pads shorter values and ignores trailing blanks in comparisons, matching DB2 CHAR semantics.
-- The API normalizes every key to exactly two digits before it reaches SQL (COTRTUPC `1210-EDIT-TRANTYPE`: `NUMVAL` → `PIC 99`), and filter keys must already be two digits (COTRTLIC `1220-EDIT-TYPECD`). So no padded value like `'1 '` is ever stored. A one-character key would otherwise sort before `'01'` (`'1 '` > `'09'` lexically) and break paging.
-- Hibernate maps the columns with `@JdbcTypeCode(SqlTypes.CHAR)` and `length = 2` / `4` so `ddl-auto=validate` passes.
+- The API normalizes path/create keys to exactly two digits before SQL (COTRTUPC `1210-EDIT-TRANTYPE`: `NUMVAL` → `PIC 99`), and filter keys also accept trimmed 1–2 digits with an optional leading plus, normalize to two digits, and treat zero as no filter. Literal `*` is invalid, not missing. Paging cursors are passed through unchanged; clients use the keys returned by the API. Application writes do not store a padded one-character code such as `'1 '`, whose lexical order would differ from normalized codes.
+- JPA maps key columns with `columnDefinition = "char(2)"` / `"char(4)"` and length 2 / 4. `spring.jpa.hibernate.ddl-auto` is `none`; Flyway owns DDL. There is no `@JdbcTypeCode` annotation or Hibernate schema-validation claim.
 - No `CHECK (tr_type ~ '^[0-9]{2}$')` is added because DB2 has none. The application layer enforces it. Adding one is a recommended hardening step once batch loaders are migrated.
 
 ## 4. SQLCODE ↔ SQLSTATE
@@ -40,10 +40,10 @@ Targets: `db/migration/V1__create_tables.sql`, `db/migration/V2__seed_data.sql` 
 | DB2 SQLCODE | Meaning | PostgreSQL SQLSTATE | Spring exception | API mapping |
 |---|---|---|---|---|
 | 0 | success | 00000 | — | 2xx |
-| +100 | no row | (0 rows / empty result) | `Optional.empty()` / update count 0 | 404 `NOT_FOUND` |
+| +100 | no row | (0 rows / empty result) | `Optional.empty()` / update count 0 | GET/PATCH/DELETE: 404 `NOT_FOUND`; PUT save inserts if absent (201) |
 | -532 | delete restricted by RI | 23503 `foreign_key_violation` | `DataIntegrityViolationException` (cause `PSQLException` 23503) | 409 `FK_RESTRICT` |
 | -803 | duplicate key | 23505 `unique_violation` | `DataIntegrityViolationException` (23505) / `DuplicateKeyException` | 409 `DUPLICATE_KEY` |
-| -911 / -913 | deadlock / timeout | 40P01 `deadlock_detected`, 55P03 `lock_not_available`, 40001 | `PessimisticLockingFailureException` / `CannotAcquireLockException` | 409 `LOCK_CONFLICT` |
+| -911 / -913 | deadlock / timeout | 40P01 `deadlock_detected`, 55P03 `lock_not_available`, 40001 | `PessimisticLockingFailureException` / `CannotAcquireLockException` | 409 `LOCK_ERROR` |
 | other < 0 | error | any | `DataAccessException` | 500 `DB_ERROR` |
 
 ## 5. Seed data (CREADB21)
@@ -56,4 +56,6 @@ Targets: `db/migration/V1__create_tables.sql`, `db/migration/V2__seed_data.sql` 
 
 Every seeded type has at least one category, so deleting any seeded type is rejected (FK RESTRICT), as in DB2.
 
-Verified locally: both migrations apply cleanly on `postgres:15-alpine`; 7 + 18 rows; `DELETE FROM transaction_type WHERE tr_type='01'` fails with `fk_trc_type_code` (SQLSTATE 23503).
+The migrations define the 7 + 18 seed rows. `TransactionTypeApiIntegrationTest` starts `postgres:15-alpine` with Flyway: `firstPageShowsSevenSeededRows` checks the types and `deleteWithAndWithoutChildren` verifies a restricted delete with type 01 retained. This docs sync did not rerun migrations or manual SQL; no new manual verification result is claimed.
+
+Hikari initializes each connection with `SET lock_timeout = '${carddemo.db.lock-timeout:5s}'`. `updateBlockedByRowLock` overrides this to 1s, locks type 05 in a second transaction, checks PATCH and PUT return 409 `LOCK_ERROR` with their respective messages, rolls back the lock, and checks the description remains REFUND. See `target-spec.md` §3.3 for exact error strings (generic DB_ERROR includes SQLSTATE).
