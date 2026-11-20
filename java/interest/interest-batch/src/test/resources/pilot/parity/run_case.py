@@ -13,12 +13,18 @@ from tools.parity import record
 from tools.runjcl import runjcl
 
 
-def write_manifest(out):
+def write_manifest(runner, out):
     manifest = {}
     for dsn, layout in record.CHAINS["interest"]["outputs"].items():
-        name = dsn.replace("(0)", ".G0001V00")
-        lrecl = 350 if layout == "CVTRA05Y" else 300
+        name = runner.resolve_dsn(dsn)[0] if "(" in dsn else dsn
+        entry = runner.catalog.entry(name) or {}
         path = out / "datasets" / f"{name}.txt"
+        if not path.exists():
+            lrecl = entry.get("lrecl") or entry.get("recsize") or 80
+        elif entry.get("type") == "ksds":
+            lrecl = entry["recsize"]
+        else:
+            lrecl = entry.get("lrecl") or 80
         rows = path.read_bytes().splitlines()
         if any(len(row) > lrecl for row in rows):
             raise ValueError(f"overlength output record: {name}")
@@ -57,6 +63,10 @@ def run_case(case, out, jar, java):
         record.unload(runner, dsn, layout, inputs)
         (inputs / "datasets" / f"{dsn}.txt").rename(
             inputs / "datasets" / f"AWS.M2.CARDDEMO.{stem}.PS.txt")
+    step = runjcl.Job(runjcl.find_jcl("INTCALC")).steps[0]
+    runner.allocate(step, step.dds["TRANSACT"], out)
+    runner.catalog.commit_gdg(runner.pending_gdg)
+    runner.catalog.save()
     result = subprocess.run([
         java, "-jar", str(jar.resolve()), "--interest.pilot.run-on-startup=true",
         f"--interest.pilot.input-dir={inputs / 'datasets'}",
@@ -70,7 +80,7 @@ def run_case(case, out, jar, java):
     (out / "rc.json").write_text(json.dumps(
         {"INTCALC": {"maxrc": result.returncode, "steps": steps}}, indent=1, sort_keys=True))
     if result.returncode == 0:
-        write_manifest(out)
+        write_manifest(runner, out)
     print(f"interest/{case}: Java STEP15 RC={result.returncode}, outputs in {out}")
     return result.returncode
 

@@ -2,6 +2,7 @@ import json
 import tempfile
 import unittest
 from pathlib import Path
+from unittest.mock import Mock
 
 from run_case import write_manifest
 
@@ -15,14 +16,24 @@ class ManifestTest(unittest.TestCase):
             transaction = out / "datasets/AWS.M2.CARDDEMO.SYSTRAN.G0001V00.txt"
             account.write_bytes(b"account  \n")
             transaction.write_bytes(b"")
-            write_manifest(out)
+            runner = Mock()
+            runner.resolve_dsn.return_value = (transaction.stem, None)
+            entries = {account.stem: {"type": "ksds", "recsize": 12},
+                       transaction.stem: {"type": "flat", "lrecl": 17}}
+            runner.catalog.entry.side_effect = entries.get
+            write_manifest(runner, out)
             manifest = json.loads((out / "manifest.json").read_text())
             self.assertEqual(account.read_bytes(), b"account\n")
-            self.assertEqual(manifest[account.stem], {"layout": "CVACT01Y", "lrecl": 300, "records": 1})
+            self.assertEqual(manifest[account.stem], {"layout": "CVACT01Y", "lrecl": 12, "records": 1})
             self.assertEqual(manifest[transaction.stem]["records"], 0)
-            account.write_bytes(b"x" * 301 + b"\n")
+            self.assertEqual(manifest[transaction.stem]["lrecl"], 17)
+            entries[transaction.stem] = {}
+            write_manifest(runner, out)
+            manifest = json.loads((out / "manifest.json").read_text())
+            self.assertEqual(manifest[transaction.stem]["lrecl"], 80)
+            account.write_bytes(b"x" * 13 + b"\n")
             with self.assertRaises(ValueError):
-                write_manifest(out)
+                write_manifest(runner, out)
 
 
 if __name__ == "__main__":

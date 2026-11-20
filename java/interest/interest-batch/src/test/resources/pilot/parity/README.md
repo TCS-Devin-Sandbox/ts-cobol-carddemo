@@ -21,7 +21,11 @@ The Java exporter writes the changed ACCTDATA image, new SYSTRAN G0001V00 and
 `sysout/INTCALC.STEP15.txt` from committed Java SYSOUT rows (not application logs).
 The driver frames output exactly like `unload`: one record per LF-terminated
 line, only trailing spaces stripped, and adds the same layout/lrecl/records
-manifest. It does not load Java outputs back into legacy KSDS; this is a
+manifest. Names are resolved through Runner; lengths come from its catalog
+using the recorder's KSDS recsize / flat lrecl / 80 fallback rules. The driver
+uses Runner.allocate on the real STEP15 TRANSACT DD to register the new GDG and
+its JCL DCB before Java runs; this does not execute the COBOL step or add RCs.
+It does not load Java outputs back into legacy KSDS; this is a
 ticket-scoped parity bridge, not a production GDG/DISP adapter. No golden,
 comparator or legacy helper is changed. Setup job logs and intake unloads are
 retained under each actual directory for provenance.
