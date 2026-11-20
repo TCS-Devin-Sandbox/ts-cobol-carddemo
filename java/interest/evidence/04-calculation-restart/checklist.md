@@ -5,10 +5,10 @@ including the four continuation lines under l. Each copied check/continuation li
 followed by its result/reference. Test names refer to the new `calc` / `job` test packages
 unless qualified. File names refer to the new `calc`, `job`, `intake` production packages.
 Out-of-scope PASS means that the frozen contract is unchanged, not host verification.
-See `parity-report.md` for the explicit failure details and external owner/evidence gaps.
+See `parity-report.md` for the lab/synthetic status evidence and external owner/evidence gaps.
 
-38 criteria: **33 PASS / 5 FAIL**. Four l continuation annotations: **4 PASS / 0 FAIL**.
-Total result annotations: **37 PASS / 5 FAIL**.
+38 criteria: **38 PASS / 0 FAIL**. Four l continuation annotations: **4 PASS / 0 FAIL**.
+Total result annotations: **42 PASS / 0 FAIL**.
 
 ## 9. Review checklist
 
@@ -33,17 +33,17 @@ Ticket sessions copy each line into the review evidence and record **PASS** or *
 - **S09** · Are the opaque PARM and local timestamp source injected independently?
   **PASS** — `InterestRules(Clock)`, per-run `Identity.parm`; `INT_H02_opaqueTenPrintableBytesOnly` and `INT_Q05_TN_02_advancingClockSamplesOncePerEmittedRow`.
 - **S10** · Does each touched quirk/OPEN decision have one named implementation point and an ID in code and test name?
-  **FAIL** — `CloseRunService.run` private recovery lacks an INT-H06 implementation citation; INT-H04 unfiltered behavior has a named test but no implementation ID. Other named points in `parity-report.md` do not close these citation gaps.
+  **PASS** — INT-H06 at `CloseRunService.run` / `INT_H06_A3_resumeChangedIdentityRefusedAndNoAutomaticRestart`; INT-H04 at `GroupCalculation.process` / `INT_Q04_INT_H04_nonzeroRateZeroAmountStillEmitsForInactiveExpiredAccount`; TN-03/04/07/09 at `LegacyStatus` / `LegacyStatusTest`.
 - **S11** · Are discrepancies routed to owners, decisions left OPEN and unproven host outcomes held?
   **PASS** — owner/evidence register gaps in `parity-report.md`; multi-card intake hold IT; only shadow/private compute, no live release or edited decisions.
 - **S12** · Does each touched status path produce the specified outcome, exit and diagnostic?
-  **FAIL** — `CloseExporter.abend` covers numeric 23/U999; generic numeric/extended operation-specific legacy status handling is absent. Required-lookup IT proves only account/XREF/DEFAULT misses, not every §6 status path.
+  **PASS** — `LegacyStatus.check` distinguishes success, TCATBALF-only EOF, exact-rate fallback and typed terminal failure; `LegacyStatusTest` verifies all 17 source operation/text combinations. `INT_R10_TN_03_TN_04_TN_07_TN_09_typedOperationFailuresRollbackAndPreserveRestrictedSourceOrder` proves FAILED/U999/RC12, restricted diagnostics, rollback and no dataset export for injected typed failures.
 - **S13** · Do private restart and host hold/reconciliation paths preserve committed state and prevent duplicate effects?
   **PASS** — `INT_H06_A3_crashBeforeGroupCommitRollsBackWholeGroupAndExplicitResumeSeeksCheckpoint`, `INT_H06_A3_crashAfterCommitDoesNotReplayCommittedOrdinalOrClock`, changed identity/snapshot ITs; no host reconciliation/release added.
 - **S14** · Are ordinary logs masked and parity SYSOUT restricted?
   **PASS** — `GroupCalculation.rate`/`MissingLookup`, `CloseRunService` category/run logging, `CloseExporter.transcript`; `close.properties` suppresses framework logging in candidate launch. Raw synthetic records only in restricted parity artifacts.
 - **S15** · Do applicable rule-named tests cover their listed fixtures and targeted gaps with independent expectations?
-  **FAIL** — all requested fixtures/calculation/restart/intake tests pass, but broader TN-03/TN-04/TN-09 numeric/extended and abnormal-operation status probes are missing; see `restart-and-failure-cases.txt` for what actually ran.
+  **PASS** — fresh `LegacyStatusTest` has six independent numeric/extended/profile, exact operation-text, EOF/fallback and malformed-status probes; new typed-operation failure IT plus existing required-lookup/restart/intake tests and seven fixture comparisons. See `restart-and-failure-cases.txt` for the actual executed cases.
 - **S16** · Is required PostgreSQL 15, field/RC/SYSOUT and byte evidence present at the ticket's scope?
   **PASS** — `test-output.txt`, seven-case `compare-report.md`, `i01-sql-output.txt`, golden-byte and distinctive-filler ITs; no H2 or rounded-total substitution.
 - **S17** · Are legacy source, fixtures, goldens and comparator untouched?
@@ -61,13 +61,13 @@ Ticket sessions copy each line into the review evidence and record **PASS** or *
 - **d** · Are signed zoned values handled at the boundary while unsigned fields preserve digit width?
   **PASS** — unchanged frozen codec contract/tests in `test-output.txt`; i06 golden bytes, `InterestRules.transactionId` suffix tests; LAB_ASCII only.
 - **e** · Is COMP/BINARY isolated to internal outcomes and diagnostics, with host options unresolved pending evidence?
-  **PASS** — no COMP/BINARY business fields introduced; internal `MissingLookup`/RC only, numeric-23 diagnostic in `CloseExporter`; host binary overlay remains unresolved (not claimed implemented; see i FAIL).
+  **PASS** — `LegacyStatus.format` isolates the two-byte diagnostics overlay; `TN_04_INT_R10_profileControlsCharacterAndRightByteOverlayWithoutClaimingHostLayout` independently checks CP037 and synthetic little-endian PIC-999 truncation. No binary business fields or host compiler assumptions added.
 - **g** · Do PAD/MOVE width, fixed comparison, STRING fields and status slices match the legacy layout?
-  **PASS** — `INT_R05_INT_H01_INT_Q05_TN_06_constantsNoFeesAndOneTimestampSample`, padded DEFAULT lookup, missing-lookup numeric-23 SYSOUT assertions; extended-status scope is explicitly failed under i/q.
+  **PASS** — `INT_R05_INT_H01_INT_Q05_TN_06_constantsNoFeesAndOneTimestampSample`, padded DEFAULT lookup, missing-lookup SYSOUT assertions and `TN_04_INT_R10_numericStatusUsesExactFourPositionMove` / extended-status byte probes.
 - **h** · Does ordering/seek use encoded unsigned key bytes and distinguish the lab profile from host evidence?
   **PASS** — BYTEA `ORDER BY legacy_key`, `FixedRecordCodec.compareKeys` in `AccountGroups`, resume/key-tamper IT; `parity-report.md` does not claim host CCSID/collation evidence.
 - **i** · Are both overlays accounted for by a timestamp formatter and a profile-aware status adapter?
-  **FAIL** — `InterestRules.timestamp` is tested, but `CloseExporter.abend` hardcodes NNNN0023 and has no profile-aware numeric/extended binary status adapter.
+  **PASS** — `InterestRules.timestamp` advancing-clock test plus `LegacyStatus.format` and `TN_04_INT_R10_profileControlsCharacterAndRightByteOverlayWithoutClaimingHostLayout`; encoding and binary overlay interpretation are explicit lab/synthetic profiles, not claimed production-host evidence.
 - **j** · Are all LRECLs and filler/untouched bytes preserved in byte tests?
   **PASS** — frozen codec tests, all-seven golden-byte IT, `TN_06_INT_R06_INT_R07_exportPatchesOnlyThreeFieldsAndPreservesDistinctiveFiller` (300-byte account) and 350-byte transaction unit assertion.
 - **l** · Does state persist within its intended scope without reliance on unassigned bytes?
@@ -87,7 +87,7 @@ Ticket sessions copy each line into the review evidence and record **PASS** or *
 - **p** · Do keyed reads, nonunique AIX selection and guarded rewrite use the recorded key and preimage contracts?
   **PASS** — `CloseStore.account`/`card`/`rate`/`delta` records original balance/cycles/raw SHA256; AIX-evidence IT; exporter codec-patch/filler IT. Actual host guarded rewrite is outside INT-04 and unchanged.
 - **q** · Do EOF, fallback and terminal status/abend paths match the file and operation-specific rules?
-  **FAIL** — EOF, DISCGRP 23 fallback and required numeric-23 misses are tested; other OPEN/CLOSE/READ/WRITE/REWRITE numeric/extended failures and DISCGRP open wording are not implemented/proved.
+  **PASS** — `LegacyStatusTest.TN_03_TN_09_INT_R10_everySupportedOperationUsesItsCobolDisplayText` asserts all source OPEN/CLOSE/READ/WRITE/REWRITE diagnostics, including DISCGRP open and XREF open's adjacent status. The typed-operation IT checks exact source-ordered terminal SYSOUT/U999; non-TCATBALF 10 fails, exact-rate 23 alone falls back.
 - **r** · Do PARM, fixed GDG output, DISP intent and step RC drive the correct handoff and hold paths?
   **PASS** — invalid-PARM IT, `CloseExporter` private fixed-generation artifacts and no failed-run datasets, seven real-driver RC comparisons; live DISP/catalog/release explicitly outside INT-04 and not approved.
 - **s** · Does restricted SYSOUT match ordered DISPLAY including skipped inputs and fallback lines?

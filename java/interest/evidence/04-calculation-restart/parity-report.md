@@ -1,12 +1,16 @@
 # INT-04 – per-case parity report (open this first)
 
-Code revision: `667bbf87790abc751d38978d9bc3ffc1bb2e94da` on `demo/05-g2-logic`.
+Code revision: `aee3e1e9d6b7a0091b4daa0d3fb6728d53c1345e` on `demo/05-g2-logic`.
 Base: `origin/demo/05b-integration` = `c43bcf11a11a4814cfa9a5d07b53b093be79e30d`.
-Evidence was captured from the identical accepted code before its commit; no production/test code changed during evidence capture.
+Fresh Maven, seven-case Java comparison, SQL and diagnostics evidence was captured after the
+status-adapter fix, from the identical code before its commit. No production/test code changed afterward.
 Java 21.0.13.1, Maven 3.9.9, Spring Boot 3.3.5 / Spring Batch 5.1.2;
 PostgreSQL 15 (`postgres:15` compose, `postgres:15-alpine` Testcontainers).
-Fresh legacy baseline: `ESTATE_BASE_IMAGE=mirror.gcr.io/library/ubuntu:22.04 make parity`:
+Retained legacy baseline: `ESTATE_BASE_IMAGE=mirror.gcr.io/library/ubuntu:22.04 make parity`:
 24/24 PASS, zero FAIL (posting 7, interest 7, trantype-update 7, trantype-dynamic 3).
+The legacy and wrapper/driver inputs did not change in the status fix, so their passing
+`make-parity.txt`, `parity-driver-unittest.txt` and `job-wrapper-unittest.txt` evidence is
+retained from the preceding evidence commit, not represented as freshly rerun tests.
 
 **Candidate:** `com.carddemo.interest.job.InterestCloseApplication`, launched through
 `src/test/resources/job/parity/close_java.py`. The jar Start-Class remains
@@ -17,7 +21,9 @@ See `launcher-manifest.txt` and `job-wrapper-unittest.txt`.
 
 ## Exact evidence commands
 
-From the repository root, Bash, with pipeline failure propagation. The output-only
+From the repository root, Bash, with pipeline failure propagation. Maven and the two loops
+were rerun after the status fix; unchanged Python and legacy checks retain the preceding
+capture as noted above. The output-only
 redirection after tee avoids flooding the terminal; the complete streams are retained.
 
 ```sh
@@ -82,7 +88,7 @@ All seven cases gate INT-04, not merely informational replays.
 
 ## SQL and automated assertions
 
-i01 run: `9f021563-af41-4037-99ce-b234f4d6fc84`, database `interest_close`.
+i01 run: `f034f47c-81ab-432e-bfd2-3459ad3a4f02`, database `interest_close`.
 All ten SQL assertions in `i01-sql-output.txt` are **t**:
 private database, COMPUTED run/SEALED snapshot, 2 transactions totaling 47.00 with exact
 ordinals/IDs/cards/timestamps, one delta for `00000002001` (1000.00 -> 1010.00, cycle
@@ -93,12 +99,12 @@ row counts matching its snapshot manifest.
 Fresh Maven totals (`test-output.txt`):
 
 ```text
-[INFO] Tests run: 57, Failures: 0, Errors: 0, Skipped: 0
-[INFO] Tests run: 29, Failures: 0, Errors: 0, Skipped: 0
+[INFO] Tests run: 63, Failures: 0, Errors: 0, Skipped: 0
+[INFO] Tests run: 30, Failures: 0, Errors: 0, Skipped: 0
 [INFO] BUILD SUCCESS
 ```
 
-This retains the existing 44 unit / 16 integration tests and adds 13 unit / 13 integration
+This retains the existing 44 unit / 16 integration tests and adds 19 unit / 14 integration
 tests. Pilot parity driver: 1 test OK. New wrapper: 2 tests OK.
 Expected injected crashes and required-lookup exceptions appear in the successful Maven
 log; these are negative-path assertions, not test failures.
@@ -107,6 +113,27 @@ the corresponding diagnostic lines from `test-output.txt`; it is not a separate 
 It covers rollback before commit, no replay after commit, explicit resume, changed identity
 and snapshot refusal, required account/XREF/DEFAULT failure, held malformed/duplicate/missing
 input, held unevidenced multi-card input, and receiver/suffix overflow without lost rows.
+The status fix adds six `LegacyStatusTest` unit tests and one integration test containing
+six injected operation-failure scenarios. Unit expectations are literal strings from
+CBACT04C 234–648, including all 17 supported operation/diagnostic combinations, the
+misleading DISCGRP open text and XREF open's status concatenation. Numeric 23 renders
+NNNN0023; ASCII 99 renders NNNN9057 (second storage byte 0x39 = 57, not digit 9).
+CP037 and synthetic little-endian probes control both character decoding and the binary
+right-byte reinterpretation/PIC-999 receiver. This is synthetic adapter evidence, not a
+new recorded host status specimen; no general formatter existed in the frozen pilot to import.
+
+`LegacyStatus.check` returns typed SUCCESS, END_OF_INPUT (TCATBALF READ 10 only), or
+DEFAULT_RATE (first exact DISCGRP READ 23 only), otherwise a typed terminal failure.
+`GroupCalculation.MissingLookup` now uses this shared failure/formatter contract.
+`CloseRunService` unwraps typed failures from Spring Batch, marks the run FAILED, emits
+RC12/U999 diagnostics and exports no datasets. Restricted ordered DISPLAY prefixes are
+carried separately from the masked exception/log text; the exporter appends the exact
+operation/status/abend lines without replaying future input. The IT injects OPEN/READ/
+WRITE/REWRITE/CLOSE and DEFAULT-read failures at the transaction hook to prove this
+coordinator/exporter path, not to claim those physical legacy operations execute in Java.
+In particular it tests a rewrite's preceding lookahead DISPLAY, non-TCATBALF status 10,
+extended write/rewrite statuses and DISCGRP's open wording. Target/PostgreSQL failures
+remain target-category failures, never invented COBOL statuses.
 `InterestCloseIT.unchanged` independently compares raw input bytes, source digests,
 per-field manifest totals and counts. `TN_06_INT_R06_INT_R07_exportPatchesOnlyThreeFieldsAndPreservesDistinctiveFiller`
 checks distinctive filler and untouched account bytes, beyond field-level comparator evidence.
@@ -121,6 +148,7 @@ checks distinctive filler and untouched account bytes, beyond field-level compar
 | INT-R06/R07/R09, INT-Q02/Q06, INT-H09; CBACT04C 188–222, 325–356 | `AccountGroups.read`, `GroupWriter.write`, `CloseStore.delta` | EOF/empty/no-balance, golden accounts, SQL checkpoint/delta |
 | INT-H02/H03, A1/A2, INT-MAP A/X/B/D input bindings | `validateParm`, `SnapshotIntake.load`, `CloseStore.card` | invalid PARM, held intake, supplied AIX evidence tests |
 | A3, INT-H06 private recovery only | `CloseRunService.run`, `GroupWriter.write`, `CloseStore.checkpoint` | before/after commit crash and changed identity/snapshot tests |
+| INT-R10, INT-H08, TN-03/TN-04/TN-07/TN-09; CBACT04C 234–648 | `LegacyStatus.check`, `format`, `Failure.diagnostics`; coordinator/exporter typed-failure path | `LegacyStatusTest`, `INT_R10_TN_03_TN_04_TN_07_TN_09_typedOperationFailuresRollbackAndPreserveRestrictedSourceOrder` |
 
 Frozen `FixedRecordCodec` and V001/V002 contracts are consumed without edits. No pilot
 imports or new dependencies. Dedicated-database migration initialization avoids the shared
@@ -130,23 +158,18 @@ its reports/manifest so it is neither in that status nor committed. `work/` rema
 
 ## Gaps and unverified assumptions
 
-**This is lab/private-compute parity, not host/live-release approval.** The checklist has
-33 PASS / 5 FAIL criteria (S10, S12, S15, i, q). Its four verbatim continuation lines under
-l each have a separate PASS reference, making 37 PASS / 5 FAIL result annotations in total.
+**This is lab/private-compute parity, not host/live-release approval.** The checklist now has
+38 PASS / 0 FAIL criteria. Its four verbatim continuation lines under l each have a separate
+PASS reference, making 42 PASS / 0 FAIL result annotations in total. The prior S10 failure
+is closed by single-point INT-H06/INT-H04 implementation citations and existing ID-named
+tests. Prior S12/i/q/S15 failures are closed by the profile-controlled adapter and independent
+operation/formatting/job-failure tests described above, not by merely relabelling fixture parity.
 
-- **S10:** Full rule-ID traceability is incomplete: private restart is labelled A3/S13 but
-  lacks an INT-H06 citation in its implementation; the unfiltered account path has an
-  INT-H04-named test but no INT-H04 implementation citation. The accepted code is not changed
-  in this evidence-only handoff.
-- **S12, i, q:** Required numeric-23 misses, DEFAULT fallback, normal EOF and local U999/RC12
-  are exercised. `CloseExporter.abend` hardcodes the numeric-23 diagnostic; it is not a
-  profile-aware numeric/extended-status adapter. Other legacy OPEN/CLOSE/READ/WRITE/REWRITE
-  status paths (including the DISCGRP `DALY REJECTS FILE` open diagnostic) are not implemented
-  or verified here. Target failures have separate categories; RC12 is not proof of arbitrary
-  legacy I/O equivalence.
-- **S15:** Rule-named tests cover the requested calculation/restart/intake cases, but synthetic
-  numeric/extended status and abnormal-operation cases required by the broader standards
-  are absent. Normal-path comparator PASS must not be read as those tests passing.
+- The adapter's LAB_ASCII profile models the lab's big-endian two-byte binary overlay;
+  CP037 and little-endian profiles are explicitly synthetic probes. The caller supplies
+  the observed restricted DISPLAY prefix for a generic typed failure. The job does not
+  invent legacy statuses from target I/O exceptions. Physical host fault injection and
+  actual production binary/CCSID behavior are not verified by these synthetic tests.
 - All standards §4 **“Confirm on the mainframe”** items remain unverified: production
   compiler/ARITH/NUMPROC/TRUNC and arithmetic/overflow evidence, sign/transfer/CCSID and
   key ordering specimens, numeric/extended binary status overlays and operation statuses,

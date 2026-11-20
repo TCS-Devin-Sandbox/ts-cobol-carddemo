@@ -9,39 +9,35 @@ $ git diff --stat origin/demo/05b-integration -- java/interest
  .../04-calculation-restart/launcher-manifest.txt   |   13 +
  .../04-calculation-restart/make-parity.txt         |   25 +
  .../parity-driver-unittest.txt                     |    6 +
- .../04-calculation-restart/parity-report.md        |  188 ++
- .../restart-and-failure-cases.txt                  |   45 +
- .../04-calculation-restart/test-output.txt         | 2207 ++++++++++++++++++++
+ .../04-calculation-restart/parity-report.md        |  211 ++
+ .../restart-and-failure-cases.txt                  |   74 +
+ .../evidence/04-calculation-restart/scope.txt      |   43 +
+ .../04-calculation-restart/test-output.txt         | 2721 ++++++++++++++++++++
  .../com/carddemo/interest/calc/AccountGroups.java  |   35 +
- .../carddemo/interest/calc/GroupCalculation.java   |   61 +
+ .../carddemo/interest/calc/GroupCalculation.java   |   64 +
  .../com/carddemo/interest/calc/GroupWriter.java    |   37 +
  .../com/carddemo/interest/calc/InterestRules.java  |   63 +
+ .../com/carddemo/interest/calc/LegacyStatus.java   |  111 +
  .../carddemo/interest/intake/SnapshotIntake.java   |  163 ++
  .../com/carddemo/interest/job/CloseDatabase.java   |   65 +
- .../com/carddemo/interest/job/CloseExporter.java   |  120 ++
- .../com/carddemo/interest/job/CloseRunService.java |  119 ++
+ .../com/carddemo/interest/job/CloseExporter.java   |  128 +
+ .../com/carddemo/interest/job/CloseRunService.java |  128 +
  .../java/com/carddemo/interest/job/CloseStore.java |   90 +
  .../interest/job/InterestCloseApplication.java     |   70 +
  .../src/main/resources/job/close.properties        |   21 +
  .../interest/calc/GroupCalculationTest.java        |  108 +
  .../carddemo/interest/calc/InterestRulesTest.java  |   72 +
- .../com/carddemo/interest/job/InterestCloseIT.java |  316 +++
+ .../carddemo/interest/calc/LegacyStatusTest.java   |   92 +
+ .../com/carddemo/interest/job/InterestCloseIT.java |  357 +++
  .../src/test/resources/job/parity/close_java.py    |   26 +
  .../test/resources/job/parity/test_close_java.py   |   25 +
- 29 files changed, 4305 insertions(+)
+ 32 files changed, 5178 insertions(+)
 
 $ git status --porcelain
-A  java/interest/evidence/04-calculation-restart/checklist.md
-A  java/interest/evidence/04-calculation-restart/compare-report.md
-A  java/interest/evidence/04-calculation-restart/compare-stdout.txt
-A  java/interest/evidence/04-calculation-restart/e2e-run.log
-A  java/interest/evidence/04-calculation-restart/i01-sql-output.txt
-A  java/interest/evidence/04-calculation-restart/i01-sql.sql
-A  java/interest/evidence/04-calculation-restart/job-wrapper-unittest.txt
-A  java/interest/evidence/04-calculation-restart/launcher-manifest.txt
-A  java/interest/evidence/04-calculation-restart/make-parity.txt
-A  java/interest/evidence/04-calculation-restart/parity-driver-unittest.txt
-A  java/interest/evidence/04-calculation-restart/parity-report.md
-A  java/interest/evidence/04-calculation-restart/restart-and-failure-cases.txt
-A  java/interest/evidence/04-calculation-restart/test-output.txt
-?? java/interest/evidence/04-calculation-restart/scope.txt
+M  java/interest/evidence/04-calculation-restart/checklist.md
+M  java/interest/evidence/04-calculation-restart/e2e-run.log
+M  java/interest/evidence/04-calculation-restart/i01-sql-output.txt
+M  java/interest/evidence/04-calculation-restart/parity-report.md
+M  java/interest/evidence/04-calculation-restart/restart-and-failure-cases.txt
+M  java/interest/evidence/04-calculation-restart/scope.txt
+M  java/interest/evidence/04-calculation-restart/test-output.txt
