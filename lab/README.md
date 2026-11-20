@@ -176,6 +176,7 @@ Latest automated Chromium result: **12 passed** (one test per UI plan row).
 - `gate-negative-output.txt`: full half-even negative-control output and exit code.
 - `classified-report.md` and `report.json`: the normal gate's classified report.
 - `ui/row-01.png` through `ui/row-12.png`: manual desktop check screenshots.
+- [`ui-test-recording.mp4`](evidence/ui-test-recording.mp4): manual desktop rerun recording.
 - `golden-run.html`: saved script-free all-golden snapshot from the manual check.
 
 Captured reports name the tested baseline SHA; the evidence commit itself will
