@@ -7,6 +7,8 @@ using CardDemo.Domain;
 
 namespace CardDemo.Orchestration;
 
+public sealed record JobState(Dictionary<string, int> Completed, Dictionary<string, int> Generations);
+
 public sealed record LedgerEntry(string RunId, string Job, string Step, string Program, DateTime StartedAt, DateTime EndedAt, int ReturnCode, string Status, int RecordsRead, int RecordsWritten, string? Message);
 
 /// <summary>
@@ -30,10 +32,11 @@ public sealed class JobRunner(DatasetCatalog catalog, DateTime clock, string run
 
     public int Run(JobDefinition job)
     {
-        catalog.BeginJob();
-        var completed = Restart && File.Exists(StatePath(job.Name))
-            ? JsonSerializer.Deserialize<Dictionary<string, int>>(File.ReadAllText(StatePath(job.Name)))!
-            : new Dictionary<string, int>();
+        var state = Restart && File.Exists(StatePath(job.Name))
+            ? JsonSerializer.Deserialize<JobState>(File.ReadAllText(StatePath(job.Name)))!
+            : new JobState([], []);
+        catalog.BeginJob(state.Generations);
+        var completed = state.Completed;
         var maxRc = 0;
         foreach (var step in job.Steps)
         {
@@ -93,7 +96,7 @@ public sealed class JobRunner(DatasetCatalog catalog, DateTime clock, string run
     private void SaveState(string job, Dictionary<string, int> completed)
     {
         Directory.CreateDirectory(Path.GetDirectoryName(StatePath(job))!);
-        File.WriteAllText(StatePath(job), JsonSerializer.Serialize(completed));
+        File.WriteAllText(StatePath(job), JsonSerializer.Serialize(new JobState(completed, catalog.JobGenerations.ToDictionary(kv => kv.Key, kv => kv.Value))));
     }
 
     private void WriteSysout(string job, string step, List<string> lines)

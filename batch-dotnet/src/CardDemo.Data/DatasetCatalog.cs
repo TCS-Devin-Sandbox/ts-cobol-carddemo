@@ -32,7 +32,17 @@ public sealed partial class DatasetCatalog(string workDir, IKsdsPersistence? ksd
     public IKsdsPersistence Persistence { get; } = ksdsPersistence ?? new FilePersistence(Path.Combine(workDir, "datasets"));
 
     /// <summary>A new job starts: (+n) references are re-evaluated against the catalog.</summary>
-    public void BeginJob() => _jobGenerations.Clear();
+    public void BeginJob(IReadOnlyDictionary<string, int>? pinned = null)
+    {
+        _jobGenerations.Clear();
+        foreach (var (k, v) in pinned ?? new Dictionary<string, int>())
+        {
+            _jobGenerations[k] = v;
+        }
+    }
+
+    /// <summary>(+n) generations created by the current job - persisted so a restart writes the same generation.</summary>
+    public IReadOnlyDictionary<string, int> JobGenerations => _jobGenerations;
 
     public string Resolve(string dsn)
     {
