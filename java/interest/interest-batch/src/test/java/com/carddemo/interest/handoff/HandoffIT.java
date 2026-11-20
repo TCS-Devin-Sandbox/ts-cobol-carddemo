@@ -99,7 +99,7 @@ class HandoffIT {
     }
 
     @Test
-    void packetIsDeterministicWithTwoOrdered350ByteRecordsExactDigestAndOneGuardedDelta() throws Exception {
+    void INT_R08_packetIsDeterministicWithTwoOrdered350ByteRecordsExactDigestAndOneGuardedDelta() throws Exception {
         PacketBuilder builder = new PacketBuilder(publisher);
         ExportPacket first = builder.build(run);
         ExportPacket second = builder.build(run);
@@ -175,7 +175,7 @@ class HandoffIT {
     }
 
     @Test
-    void repeatedVerifiedReceiptDoesNotDuplicateGenerationOrSuccessCondition() throws Exception {
+    void INT_H06_repeatedVerifiedReceiptDoesNotDuplicateGenerationOrSuccessCondition() throws Exception {
         coordinator.handoff(run);
         int mutations = host.mutations;
         HandoffOutcome again = coordinator.handoff(run);
@@ -189,7 +189,7 @@ class HandoffIT {
     }
 
     @Test
-    void wrongAccountPreimageHoldsBeforeAnyMutation() throws Exception {
+    void INT_R06_wrongAccountPreimageHoldsBeforeAnyMutation() throws Exception {
         byte[] changed = host.accounts.get("00000002001").clone();
         changed[299] = 'X';
         host.accounts.put("00000002001", changed);
@@ -221,7 +221,7 @@ class HandoffIT {
     }
 
     @Test
-    void backupTransactionIdCollisionHoldsBeforeAnyMutation() throws Exception {
+    void INT_H05_backupTransactionIdCollisionHoldsBeforeAnyMutation() throws Exception {
         host.existingIds.add("2022071800000002");
         assertHeldWithoutMutation(HoldReason.TXN_ID_COLLISION, "txn-id-collision");
     }
@@ -237,7 +237,7 @@ class HandoffIT {
     }
 
     @Test
-    void missingReceiptAfterApplyAndCatalogHoldsUntilVerifiedReceiptArrives() throws Exception {
+    void INT_H06_missingReceiptAfterApplyAndCatalogHoldsUntilVerifiedReceiptArrives() throws Exception {
         host.receiptMode = SimulatedHost.ReceiptMode.NONE;
         HandoffOutcome outcome = coordinator.handoff(run);
         assertEquals(new Held(run, HoldReason.RECEIPT_MISSING), outcome);
@@ -253,7 +253,7 @@ class HandoffIT {
     }
 
     @Test
-    void mismatchedReceiptHoldsWithoutSuccessCondition() throws Exception {
+    void INT_H06_mismatchedReceiptHoldsWithoutSuccessCondition() throws Exception {
         host.receiptMode = SimulatedHost.ReceiptMode.WRONG_DIGEST;
         HandoffOutcome outcome = coordinator.handoff(run);
         assertEquals(new Held(run, HoldReason.RECEIPT_MISMATCH), outcome);
@@ -263,7 +263,7 @@ class HandoffIT {
     }
 
     @Test
-    void partialAccountApplyHoldsWithoutCatalogOrReapply() throws Exception {
+    void INT_H06_partialAccountApplyHoldsWithoutCatalogOrReapply() throws Exception {
         UUID twoDeltas = seed("live", cycle + "-P");
         owner.update("""
                 INSERT INTO interest.account_delta SELECT ?, acct_id, current_balance, current_balance + 1.00,
@@ -289,7 +289,7 @@ class HandoffIT {
     }
 
     @Test
-    void unknownApplyOutcomeHoldsWithoutCatalog() throws Exception {
+    void INT_H06_unknownApplyOutcomeHoldsWithoutCatalog() throws Exception {
         host.applyFault.put("00000002001", ApplyStatus.UNKNOWN);
         host.applyFaultStillWrites.put("00000002001", true);
         HandoffOutcome outcome = coordinator.handoff(run);
@@ -300,7 +300,7 @@ class HandoffIT {
     }
 
     @Test
-    void ambiguousCatalogStaysHeldUntilVerifiedReceiptThenReleasesOneGeneration() throws Exception {
+    void INT_H06_ambiguousCatalogStaysHeldUntilVerifiedReceiptThenReleasesOneGeneration() throws Exception {
         host.catalogReply = CatalogStatus.UNKNOWN;
         host.catalogWritesAnyway = true;
         HandoffOutcome outcome = coordinator.handoff(run);
@@ -315,7 +315,7 @@ class HandoffIT {
     }
 
     @Test
-    void failedCatalogWithoutReceiptStaysHeld() throws Exception {
+    void INT_H06_failedCatalogWithoutReceiptStaysHeld() throws Exception {
         host.catalogReply = CatalogStatus.FAILED;
         HandoffOutcome outcome = coordinator.handoff(run);
         assertEquals(new Held(run, HoldReason.CATALOG_AMBIGUOUS), outcome);
@@ -327,7 +327,7 @@ class HandoffIT {
     }
 
     @Test
-    void secondLiveRunForSameDestinationAndCycleIsRefusedWithoutClaim() throws Exception {
+    void INT_H06_secondLiveRunForSameDestinationAndCycleIsRefusedWithoutClaim() throws Exception {
         coordinator.handoff(run);
         UUID second = seed("live", cycle);
         SimulatedHost other = hostFor(DESTINATION, cycle);
