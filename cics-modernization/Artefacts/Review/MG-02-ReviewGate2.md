@@ -55,3 +55,12 @@ None.
   - EIBCALEN=0 → sign-on: the `App.test` guard
   - PF3 → sign-out: `App.test`
 - Legacy defect (BDD Gap 4, the invalid-option fall-through) is not reproduced. Menus now enforce role (BDD Gap 6).
+
+## 8. Sign-off
+- **Gate 2: APPROVED** by the user ("ok proceed", 2026-11-20 15:25 IST).
+- The current build choices are kept:
+  - GH-2: separate unknown-user and wrong-password messages, kept for legacy parity.
+  - GH-5: shortened menu names.
+  - A-1: SignOnService is the interim identity provider.
+  - A-2: one shell SPA hosts every group's screens.
+- No Good-to-Have findings were applied at this gate.
