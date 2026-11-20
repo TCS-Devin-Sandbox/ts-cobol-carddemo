@@ -24,15 +24,15 @@ class VsamMastersSchemaTest {
             new PostgreSQLContainer<>("postgres:15-alpine");
 
     private static final String[] LAYOUTS = {
-            "account acct_id:9(11) acct_active_status:X(01) acct_curr_bal:S9(10)V99 acct_credit_limit:S9(10)V99 acct_cash_credit_limit:S9(10)V99 acct_open_date:X(10) acct_expiraion_date:X(10) acct_reissue_date:X(10) acct_curr_cyc_credit:S9(10)V99 acct_curr_cyc_debit:S9(10)V99 acct_addr_zip:X(10) acct_group_id:X(10) filler:X(178)",
-            "card card_num:X(16) card_acct_id:9(11) card_cvv_cd:9(03) card_embossed_name:X(50) card_expiraion_date:X(10) card_active_status:X(01) filler:X(59)",
-            "customer cust_id:9(09) cust_first_name:X(25) cust_middle_name:X(25) cust_last_name:X(25) cust_addr_line_1:X(50) cust_addr_line_2:X(50) cust_addr_line_3:X(50) cust_addr_state_cd:X(02) cust_addr_country_cd:X(03) cust_addr_zip:X(10) cust_phone_num_1:X(15) cust_phone_num_2:X(15) cust_ssn:9(09) cust_govt_issued_id:X(20) cust_dob_yyyy_mm_dd:X(10) cust_eft_account_id:X(10) cust_pri_card_holder_ind:X(01) cust_fico_credit_score:9(03) filler:X(168)",
-            "card_xref xref_card_num:X(16) xref_cust_id:9(09) xref_acct_id:9(11) filler:X(14)",
-            "tran_cat_bal trancat_acct_id:9(11) trancat_type_cd:X(02) trancat_cd:9(04) tran_cat_bal:S9(09)V99 filler:X(22)",
-            "disclosure_group dis_acct_group_id:X(10) dis_tran_type_cd:X(02) dis_tran_cat_cd:9(04) dis_int_rate:S9(04)V99 filler:X(28)",
-            "transaction tran_id:X(16) tran_type_cd:X(02) tran_cat_cd:9(04) tran_source:X(10) tran_desc:X(100) tran_amt:S9(09)V99 tran_merchant_id:9(09) tran_merchant_name:X(50) tran_merchant_city:X(50) tran_merchant_zip:X(10) tran_card_num:X(16) tran_orig_ts:X(26) tran_proc_ts:X(26) filler:X(20)",
-            "tran_type tran_type:X(02) tran_type_desc:X(50) filler:X(08)",
-            "tran_category tran_type_cd:X(02) tran_cat_cd:9(04) tran_cat_type_desc:X(50) filler:X(04)"
+            "account account_id:9(11) active_status:X(01) current_balance:S9(10)V99 credit_limit:S9(10)V99 cash_credit_limit:S9(10)V99 open_date:X(10) expiration_date:X(10) reissue_date:X(10) current_cycle_credit:S9(10)V99 current_cycle_debit:S9(10)V99 zip_code:X(10) account_group_id:X(10) filler:X(178)",
+            "card card_number:X(16) account_id:9(11) card_verification_value:9(03) embossed_name:X(50) expiration_date:X(10) active_status:X(01) filler:X(59)",
+            "customer customer_id:9(09) first_name:X(25) middle_name:X(25) last_name:X(25) address_line_1:X(50) address_line_2:X(50) address_line_3:X(50) state_code:X(02) country_code:X(03) zip_code:X(10) phone_number_1:X(15) phone_number_2:X(15) social_security_number:9(09) government_issued_id:X(20) date_of_birth:X(10) electronic_funds_transfer_account_id:X(10) primary_cardholder_indicator:X(01) fico_credit_score:9(03) filler:X(168)",
+            "card_xref card_number:X(16) customer_id:9(09) account_id:9(11) filler:X(14)",
+            "transaction_category_balance account_id:9(11) transaction_type_code:X(02) transaction_category_code:9(04) balance:S9(09)V99 filler:X(22)",
+            "disclosure_group account_group_id:X(10) transaction_type_code:X(02) transaction_category_code:9(04) interest_rate:S9(04)V99 filler:X(28)",
+            "transaction transaction_id:X(16) transaction_type_code:X(02) transaction_category_code:9(04) source:X(10) description:X(100) amount:S9(09)V99 merchant_id:9(09) merchant_name:X(50) merchant_city:X(50) merchant_zip_code:X(10) card_number:X(16) origination_timestamp:X(26) processed_timestamp:X(26) filler:X(20)",
+            "tran_type transaction_type_code:X(02) description:X(50) filler:X(08)",
+            "tran_category transaction_type_code:X(02) transaction_category_code:9(04) description:X(50) filler:X(04)"
     };
 
     @Test
