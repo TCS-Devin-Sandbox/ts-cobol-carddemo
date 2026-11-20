@@ -57,7 +57,13 @@ public final class CloseExporter {
             }
             Path sysout = staging.resolve(SYSOUT);
             Files.createDirectories(sysout.getParent());
-            Files.writeString(sysout, String.join("\n", transcript(snapshot, rc == 0, failure, lastReachedAccount)) + "\n", StandardCharsets.ISO_8859_1);
+            boolean computed = rc == 0;
+            if (!computed && failure == null && lastReachedAccount == null && snapshot != null) {
+                computed = Boolean.TRUE.equals(store.jdbc().queryForObject(
+                        "SELECT EXISTS (SELECT 1 FROM interest.run WHERE run_id=? AND snapshot_id=? AND state='COMPUTED')",
+                        Boolean.class, run, snapshot));
+            }
+            Files.writeString(sysout, String.join("\n", transcript(snapshot, computed, failure, lastReachedAccount)) + "\n", StandardCharsets.ISO_8859_1);
             Files.deleteIfExists(output.resolve("rc.json"));
             for (String artifact : ARTIFACTS) {
                 Files.deleteIfExists(output.resolve(artifact));
