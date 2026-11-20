@@ -101,4 +101,6 @@ other. The pilot's own evidence stays under
      step 4;
    - a list of the raw files beside it: `test-output.txt`, `e2e-run.log`,
      `compare-stdout.txt`, `compare-report.md`, the SQL script and its output.
-7. Commit `java/interest/evidence/<ticket>/`; `work/` is runtime output and is not committed.
+7. For a new ticket, commit `java/interest/evidence/<ticket>/`. For the pilot replay, commit
+   the new `java/interest/evidence/01-pilot/parity-report.md` only; leave the pilot's existing
+   evidence files unchanged. `work/` is runtime output and is not committed.
