@@ -310,6 +310,48 @@ class InterestCloseIT {
         assertEquals("9999999999999999", ((CardXref) store.card(sealed.snapshotId(), card.acctId()).orElseThrow().fields()).cardNumber());
     }
 
+    @Test void INT_H03_firstReturnEvidencePropertyReachesCoordinatorAndSelectedCardIsEmitted() throws Exception {
+        Path input = copy(CASES.getFirst());
+        var cards = SnapshotIntake.decodeLines(Layout.XREF, Files.readAllBytes(ps(input, "CARDXREF")));
+        CardXref original = (CardXref) cards.getFirst().fields();
+        var raw = new ArrayList<>(cards.stream().map(Decoded::original).toList());
+        raw.add(FixedRecordCodec.encode(cards.getFirst(), Map.of("cardNumber", "9999999999999999")));
+        CloseExporter.writeFixed(ps(input, "CARDXREF"), raw);
+        var held = service.run(input, out(), ID, null);
+        assertEquals("TARGET_INTAKE_HELD", held.category());
+        Path evidence = temp.resolve("first-return.tsv");
+        Files.writeString(evidence, original.acctId() + "\t9999999999999999\tsynthetic-host-first-return\n");
+        options(Map.of("interest.close.first-return-evidence", evidence.toString()));
+        var result = service.run(input, out(), ID, null);
+        assertEquals(0, result.rc(), result.category()); assertEquals("COMPUTED", state(result.runId()));
+        assertEquals("9999999999999999", ((CardXref) store.card(result.snapshotId(), original.acctId()).orElseThrow().fields()).cardNumber());
+        assertEquals("synthetic-host-first-return", store.jdbc().queryForObject(
+                "SELECT aix_evidence FROM interest.card_xref_input WHERE snapshot_id=? AND acct_id=? AND aix_first",
+                String.class, result.snapshotId(), original.acctId()));
+        assertEquals("9999999999999999", store.jdbc().queryForObject(
+                "SELECT card_number FROM interest.interest_tx WHERE run_id=? AND emit_ordinal=1", String.class, result.runId()));
+        unchanged(result.snapshotId(), input);
+        Files.writeString(evidence, "");
+        assertEquals("TARGET_INTAKE_HELD", service.run(input, out(), ID, null).category());
+        assertEquals(0, service.run(input(CASES.getFirst()), out(), ID, null).rc());
+    }
+
+    @Test void INT_H03_invalidOrUnreadableFirstReturnEvidenceHoldsIntakeWithoutReadyRun() throws Exception {
+        Path evidence = temp.resolve("invalid-first-return.tsv");
+        for (String text : List.of("missing-columns", "00000002001\tshort-card\tproof\n", "00000002001\t9999999999999999\t \n",
+                "00000002001\t9999999999999999\tproof\n00000002001\t9999999999999999\tduplicate\n")) {
+            Files.writeString(evidence, text);
+            options(Map.of("interest.close.first-return-evidence", evidence.toString()));
+            var held = service.run(input(CASES.getFirst()), out(), ID, null);
+            assertEquals(12, held.rc()); assertEquals("TARGET_INTAKE_HELD", held.category());
+            assertEquals("HELD", store.jdbc().queryForObject("SELECT state FROM interest.snapshot WHERE snapshot_id=?", String.class, held.snapshotId()));
+            assertEquals(0, store.jdbc().queryForObject("SELECT count(*) FROM interest.run WHERE run_id=?", Integer.class, held.runId()));
+        }
+        Files.delete(evidence);
+        var held = service.run(input(CASES.getFirst()), out(), ID, null);
+        assertEquals(12, held.rc()); assertEquals("TARGET_INTAKE_HELD", held.category());
+    }
+
     @Test void INT_Q02_INT_Q06_INT_H09_emptyAndSingleAccountNeverProduceDeltaOrClearInputs() throws Exception {
         for (boolean empty : List.of(true, false)) {
             Path input = copy("i05-multi-category");

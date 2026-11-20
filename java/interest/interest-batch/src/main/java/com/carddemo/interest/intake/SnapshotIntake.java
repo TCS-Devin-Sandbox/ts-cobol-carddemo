@@ -7,6 +7,7 @@ import com.carddemo.interest.codec.FixedRecordCodec.Layout;
 import com.carddemo.interest.codec.FixedRecordCodec.Profile;
 import java.io.IOException;
 import java.math.BigDecimal;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.security.MessageDigest;
@@ -46,6 +47,26 @@ public final class SnapshotIntake {
 
     public Result load(Path directory) {
         return load(directory, Map.of());
+    }
+
+    /** INT-H03: UTF-8 TSV rows contain account, externally observed first card, and evidence reference. */
+    public Result load(Path directory, Path evidenceFile) {
+        try {
+            Map<String, FirstReturn> firstCards = new LinkedHashMap<>();
+            List<String> lines = Files.readAllLines(evidenceFile, StandardCharsets.UTF_8);
+            for (int i = 0; i < lines.size(); i++) {
+                String[] fields = lines.get(i).split("\t", -1);
+                if (fields.length != 3 || !fields[0].matches("[0-9]{11}") || !fields[1].matches("[0-9]{16}")
+                        || fields[2].isBlank() || firstCards.putIfAbsent(fields[0], new FirstReturn(fields[1], fields[2])) != null)
+                    throw new Rejected("XREF/X03 row=" + (i + 1) + " offset=25 reason=INT-H03_AIX_EVIDENCE_INVALID");
+            }
+            return load(directory, Map.copyOf(firstCards));
+        } catch (IOException | Rejected e) {
+            UUID id = UUID.randomUUID();
+            String reason = e instanceof Rejected ? e.getMessage() : "XREF/X03 row=0 offset=25 reason=INT-H03_AIX_EVIDENCE_UNREADABLE";
+            jdbc.update("INSERT INTO interest.snapshot VALUES (?, jsonb_build_object('reason',?::text), 'LAB_ASCII', 'HELD', CURRENT_TIMESTAMP)", id, reason);
+            return new Result(id, false, reason);
+        }
     }
 
     /** INT-H03: evidence maps an account to the externally observed first-return card, never MIN(card). */
