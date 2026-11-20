@@ -1,0 +1,41 @@
+# INT-01 field slice: i01-baseline (pilot candidate vs golden)
+
+run_id: bc9780d1-0881-4a6a-920a-c73c865cfa09
+
+| Dataset | Record | Slice | Golden | Pilot | Match |
+|---|---|---|---|---|---|
+| SYSTRAN | 1 | T01 TRAN-ID | `2022071800000001` | `2022071800000001` | yes |
+| SYSTRAN | 1 | T02 TRAN-TYPE-CD | `01` | `01` | yes |
+| SYSTRAN | 1 | T03 TRAN-CAT-CD | `0005` | `0005` | yes |
+| SYSTRAN | 1 | T04 TRAN-SOURCE | `System` | `System` | yes |
+| SYSTRAN | 1 | T05 TRAN-DESC | `Int. for a/c 00000002001` | `Int. for a/c 00000002001` | yes |
+| SYSTRAN | 1 | T06 TRAN-AMT | `0000000100{` | `0000000100{` | yes |
+| SYSTRAN | 1 | T07 TRAN-MERCHANT-ID | `000000000` | `000000000` | yes |
+| SYSTRAN | 1 | T08 TRAN-MERCHANT-NAME | `` | `` | yes |
+| SYSTRAN | 1 | T09 TRAN-MERCHANT-CITY | `` | `` | yes |
+| SYSTRAN | 1 | T10 TRAN-MERCHANT-ZIP | `` | `` | yes |
+| SYSTRAN | 1 | T11 TRAN-CARD-NUM | `4000000000002001` | `4000000000002001` | yes |
+| SYSTRAN | 1 | T12 TRAN-ORIG-TS | `2022-07-05-10.00.00.000000` | `2022-07-05-10.00.00.000000` | yes |
+| SYSTRAN | 1 | T13 TRAN-PROC-TS | `2022-07-05-10.00.00.000000` | `2022-07-05-10.00.00.000000` | yes |
+| SYSTRAN | 2 | T01 TRAN-ID | `2022071800000002` | `2022071800000002` | yes |
+| SYSTRAN | 2 | T02 TRAN-TYPE-CD | `01` | `01` | yes |
+| SYSTRAN | 2 | T03 TRAN-CAT-CD | `0005` | `0005` | yes |
+| SYSTRAN | 2 | T04 TRAN-SOURCE | `System` | `System` | yes |
+| SYSTRAN | 2 | T05 TRAN-DESC | `Int. for a/c 00000002002` | `Int. for a/c 00000002002` | yes |
+| SYSTRAN | 2 | T06 TRAN-AMT | `0000000370{` | `0000000370{` | yes |
+| SYSTRAN | 2 | T07 TRAN-MERCHANT-ID | `000000000` | `000000000` | yes |
+| SYSTRAN | 2 | T08 TRAN-MERCHANT-NAME | `` | `` | yes |
+| SYSTRAN | 2 | T09 TRAN-MERCHANT-CITY | `` | `` | yes |
+| SYSTRAN | 2 | T10 TRAN-MERCHANT-ZIP | `` | `` | yes |
+| SYSTRAN | 2 | T11 TRAN-CARD-NUM | `4000000000002002` | `4000000000002002` | yes |
+| SYSTRAN | 2 | T12 TRAN-ORIG-TS | `2022-07-05-10.00.00.000000` | `2022-07-05-10.00.00.000000` | yes |
+| SYSTRAN | 2 | T13 TRAN-PROC-TS | `2022-07-05-10.00.00.000000` | `2022-07-05-10.00.00.000000` | yes |
+| ACCTDATA | 1 | A03 ACCT-CURR-BAL | `00000010100{` | `00000010100{` | yes |
+| ACCTDATA | 1 | A09 ACCT-CURR-CYC-CREDIT | `00000000000{` | `00000000000{` | yes |
+| ACCTDATA | 1 | A10 ACCT-CURR-CYC-DEBIT | `00000000000{` | `00000000000{` | yes |
+| ACCTDATA | 2 | A03 ACCT-CURR-BAL | `00000024000{` | `00000024000{` | yes |
+| ACCTDATA | 2 | A09 ACCT-CURR-CYC-CREDIT | `00000024000{` | `00000024000{` | yes |
+| ACCTDATA | 2 | A10 ACCT-CURR-CYC-DEBIT | `00000000000{` | `00000000000{` | yes |
+
+Matched rows: 4 (SYSTRAN 2, ACCTDATA 2, including untouched account 00000002002). Interest cents matched: 4700.
+This is a field slice (T01-T13, A03/A09-A10 plus whole ACCTDATA records), not full parity.
