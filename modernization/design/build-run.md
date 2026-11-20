@@ -1,10 +1,10 @@
 # Step 5b build run - interest tickets 02-06 in four groups
 
-Status: **all four groups passed; final combined check passed** on `demo/05b-integration` @ `9f78de6`.
+Status: **all four groups passed; review rerun combined check passed** on `demo/05b-integration` @ `731c551` (original workflow check: `9f78de6`).
 Workflow run `wfr-a2207d5a0fb04ea68deeca07ca05b2c6` (script `build-workflow.py` @ `ef8d77f`), 4 child
 sessions, 0 retries, 0 skipped, 0 needs-decision, 3335 s wall time, 35.04 ACUs.
 
-**Open this file first.** Read with it: `evidence/final-combined-check.txt` (final check output) and
+**Open this file first.** Read with it: `../../java/interest/evidence/combined-check-final.txt` (review rerun output; original workflow output remains `evidence/final-combined-check.txt`) and
 the four group PRs.
 
 ## Regrouping (decided by the presenter - to be confirmed by a person)
@@ -65,7 +65,7 @@ waited for); both met every item of the step prompt's list above. To be confirme
 |---|---|---|---|---|---|---|---|---|
 | 02-schema | g1-groundwork | passed | devin-4822d57e768940809d2423c7720bd650 | [#18](https://github.com/TCS-Devin-Sandbox/ts-cobol-carddemo/pull/18) | Surefire 36, Failsafe 16 (6 SchemaIT PG15), 0 fail/err/skip | compare.py 7/7 PASS; make parity 24/24 | 38 PASS / 0 FAIL | standards, build, verify, pitfalls, carddemo-parity |
 | 03-record-codecs | g1-groundwork | passed | devin-4822d57e768940809d2423c7720bd650 | [#18](https://github.com/TCS-Devin-Sandbox/ts-cobol-carddemo/pull/18) | Surefire 44 (8 FixedRecordCodecTest), Failsafe 16, 0 fail/err/skip | compare.py 7/7 PASS; make parity 24/24; SQL N/A | 38 PASS / 0 FAIL | standards, build, verify, pitfalls, carddemo-parity |
-| 04-calculation-restart | g2-logic | passed | devin-c454fcaca7244cd1b0d65cc9ee0beeb7 | [#21](https://github.com/TCS-Devin-Sandbox/ts-cobol-carddemo/pull/21) | 63 unit + 30 IT on branch; 70 unit + 57 IT after combining; 0 fail/err/skip; i01 SQL 10/10 | compare.py 7/7 PASS; make parity 24/24 | 38 PASS / 0 FAIL | standards, build, verify, pitfalls |
+| 04-calculation-restart | g2-logic | passed (review rerun) | devin-c454fcaca7244cd1b0d65cc9ee0beeb7 | [#21](https://github.com/TCS-Devin-Sandbox/ts-cobol-carddemo/pull/21) | Integration rerun: 70 unit + 88 IT (InterestCloseIT 21; packaging failure IT 1), 0 fail/err/skip; real process halt before/after commit | compare.py 7/7 PASS; make parity 24/24 | 38 PASS / 0 FAIL | standards, build, verify, pitfalls |
 | 05-shadow-handoff | g3-data-flow | passed | devin-4c499227fc654dbba3867a5e93d7dd32 | [#20](https://github.com/TCS-Devin-Sandbox/ts-cobol-carddemo/pull/20) | 51 unit + 43 IT (HandoffIT 27, HandoffRulesTest 7), 0 fail/err/skip | compare.py 7/7 PASS; make parity 24/24 | 38 PASS / 0 FAIL | standards, build, verify, pitfalls |
 | 06-parity-gate | g4-gate | passed | devin-65427584a9c247fab4eb91875519949d | [#22](https://github.com/TCS-Devin-Sandbox/ts-cobol-carddemo/pull/22) | 70 unit + 80 IT, 0 fail/err/skip; byte check 7 cases/14 files; SQL 7 runs; 7 rehearsal scenarios | compare.py 7/7 PASS (joined job); make parity 24/24 | 38 PASS / 0 FAIL | standards, build, verify, pitfalls |
 
@@ -91,6 +91,35 @@ Full output: `evidence/final-combined-check.txt`.
 ## Failures
 
 None. No group failed, was retried, skipped or returned needs-decision.
+
+## Review findings #4/#5 (rerun)
+
+Code revision checked: `731c55106b3cd1ffbac1aed4c9c52d1de9eb8a6d` (the subsequent evidence-only commit records these results).
+Cherry-picked exactly `c0447ed`, `320594a`, `c78c66c`, `8d700ce` from g2 as
+`c9554de`, `8cbd12c`, `05553e0`, `eee4e2e`: explicit abandoned-COMPUTING resume,
+external first-return evidence, reached-group failure transcript bounds, and preservation of
+completed SYSOUT on packaging failure. No other g2 branch changes were incorporated;
+integration's g4 code, gate SQL and INT-06 evidence are unchanged.
+
+Two new PostgreSQL integration tests halt a child JVM before/after a checkpoint group commit,
+not a handled exception. Each leaves COMPUTING; an unconfirmed resume returns RC12 without
+changing state/checkpoint; `--interest.close.abandoned=true` returns RC0 with the same sealed
+snapshot, byte-identical prior committed rows and golden output. No automatic restart was added.
+The independent estate rehearsal injects the halt with a test-only entry point and resumes with
+the real `InterestCloseApplication` CLI. Transcript with commands, RCs, SQL totals and checkpoint
+rows: `../../java/interest/evidence/04-calculation-restart/crash-resume-cli.txt`.
+Before commit: 0 transactions / 0 deltas / no checkpoint; after commit: 1 transaction (10.00),
+1 delta (new balance 1010.00), checkpoint ordinal 1. Both recover to 2 transactions (47.00),
+1 delta (1010.00), terminal checkpoint ordinal 2. Halt RC77, refusal RC12, confirmed resume RC0
+in both scenarios.
+
+Combined rerun: **70 unit + 88 integration tests, 0 failures/errors/skips; BUILD SUCCESS**;
+parity-driver unittest **1 test, OK**; joined Java driver plus unchanged `compare.py`
+**7/7 PASS, 0 differences**; `make parity` **24/24 PASS**.
+Full output: `../../java/interest/evidence/combined-check-final.txt`. Refreshed INT-04
+`test-output.txt`, `restart-and-failure-cases.txt`, and checklist restart entry identify this revision.
+An initial test-harness run failed with two primary CommitHook beans (2 test failures); the
+child harness now makes its crash hook the sole primary. Final rerun has zero failures.
 
 ## Skill corrections (applied, one commit per skill)
 
@@ -122,4 +151,4 @@ None. No group failed, was retried, skipped or returned needs-decision.
 - The nine standards proposals.
 - Devin Review on PR #24, left unfixed (child code; for a person to decide):
   - 05 `handoff/PacketBuilder.java`: `txn_ids` in the manifest are not JSON-escaped; a PARM holding `"` or `\` gives invalid JSON. Fix on `demo/05-g3-data-flow`.
-  - 04 `job/CloseRunService.java`: resume accepts only a `FAILED` run, so a run left `COMPUTING` by a JVM crash cannot be resumed. Needs a design decision on abandoned-run recovery; fix on `demo/05-g2-logic`.
+  - 04 `job/CloseRunService.java`: resolved in the review rerun above; COMPUTING resumes require explicit operator abandonment, covered by process-halt tests and estate CLI evidence.
