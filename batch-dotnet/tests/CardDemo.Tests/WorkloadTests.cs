@@ -67,7 +67,8 @@ public class WorkloadTests
         Assert.Equal(999, rc);
         Assert.True(File.Exists(Path.Combine(restarted, "checkpoints", "POSTTRAN.STEP15.checkpoint.json")));
 
-        ChainRunner.Run("posting", fixture, restarted, restart: true, chunkSize: 1);
+        Assert.True(ChainRunner.Run("posting", fixture, restarted, restart: true, chunkSize: 1) <= 4);
+        Assert.False(File.Exists(Path.Combine(restarted, "state", "chain.json")));
         AssertSameOutputs(clean, restarted);
         var ledger = File.ReadAllLines(Path.Combine(restarted, "ledger", "batch_run_ledger.jsonl"));
         Assert.Contains(ledger, l => l.Contains("\"Status\":\"ABEND\"", StringComparison.Ordinal));
@@ -87,7 +88,8 @@ public class WorkloadTests
         var restarted = Temp("restart");
         ChainRunner.Run("posting", fixture, clean);
         Assert.Equal(999, ChainRunner.Run("posting", fixture, restarted, programOverride: (job, step) => step == "STEP10R" ? new Failing() : null));
-        ChainRunner.Run("posting", fixture, restarted, restart: true);
+        Assert.True(ChainRunner.Run("posting", fixture, restarted, restart: true) <= 4);
+        Assert.False(File.Exists(Path.Combine(restarted, "state", "chain.json")));
         AssertSameOutputs(clean, restarted);
     }
 

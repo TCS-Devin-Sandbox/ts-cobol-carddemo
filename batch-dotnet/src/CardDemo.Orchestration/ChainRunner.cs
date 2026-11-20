@@ -82,7 +82,7 @@ public static class ChainRunner
             state.Steps[job] = new Dictionary<string, int>(steps);
             SaveChainState(statePath, state);
             runner.StepReturnCodes.Clear();
-            overall = Math.Max(overall, rc);
+            overall = rcs.Values.Max(v => v.MaxRc);
             if (rc > 8)
             {
                 break;
