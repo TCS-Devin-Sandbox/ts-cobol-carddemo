@@ -94,6 +94,42 @@ public class WorkloadTests
 
     private static readonly object Db2Lock = new();
 
+    [Fact]
+    public void Missing_db2_connection_keeps_previous_output()
+    {
+        var outDir = Temp("nodb2");
+        Directory.CreateDirectory(outDir);
+        File.WriteAllText(Path.Combine(outDir, "keep.txt"), "x");
+        Assert.Throws<InvalidOperationException>(() => ChainRunner.Run("trantype-update", Path.Combine(Root, "fixtures", "trantype-update", "t01-add"), outDir));
+        Assert.True(File.Exists(Path.Combine(outDir, "keep.txt")));
+    }
+
+    /// <summary>CHAR(2) codes with a trailing blank match like ocesql's untyped host variables; blank DYNSQL fails PREPARE but COBTUPDT still runs.</summary>
+    [Fact]
+    public void Db2_padded_code_and_blank_dynsql()
+    {
+        var db2 = Environment.GetEnvironmentVariable("CARDDEMO_DB2");
+        if (string.IsNullOrEmpty(db2))
+        {
+            return;
+        }
+        lock (Db2Lock)
+        {
+            var caseDir = Temp("db2case");
+            Directory.CreateDirectory(Path.Combine(caseDir, "input", "db"));
+            File.Copy(Path.Combine(Root, "fixtures", "trantype-update", "t01-add", "input", "db", "seed.sql"), Path.Combine(caseDir, "input", "db", "seed.sql"));
+            File.WriteAllText(Path.Combine(caseDir, "input", "DYNSQL.txt"), "-- nothing to run\n");
+            File.WriteAllText(Path.Combine(caseDir, "input", "INPFILE.txt"), "A7 Padded\r\nU7 Renamed\r\nD7 \r\n");
+            var outDir = Temp("db2out");
+            Assert.Equal(0, ChainRunner.Run("trantype-dynamic", caseDir, outDir, db2: db2)); // CBTRNDYN RC 8 is lost after CALL COBTUPDT (GAP-007)
+            var sysout = File.ReadAllText(Path.Combine(outDir, "sysout", "MNTTRDYN.STEP1.txt"));
+            Assert.Contains("CBTRNDYN: PREPARE FAILED SQLCODE -0000000400", sysout, StringComparison.Ordinal);
+            Assert.Contains("RECORD UPDATED SUCCESSFULLY", sysout, StringComparison.Ordinal);
+            Assert.DoesNotContain("7 ", File.ReadAllText(Path.Combine(outDir, "db", "carddemo.transaction_type.csv")), StringComparison.Ordinal);
+            Assert.DoesNotContain("\r", sysout, StringComparison.Ordinal);
+        }
+    }
+
     /// <summary>Chunk checkpoint + step restart: a POSTTRAN failure after record 2, restarted, gives the clean-run outputs.</summary>
     [Fact]
     public void Posttran_restart_from_checkpoint_matches_clean_run()

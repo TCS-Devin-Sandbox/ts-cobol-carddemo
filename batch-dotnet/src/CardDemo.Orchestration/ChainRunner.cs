@@ -14,6 +14,11 @@ public static class ChainRunner
         bool restart = false, Func<string, string, Batch.IBatchProgram?>? programOverride = null, int chunkSize = 1000, Action<string>? commitHook = null, string? db2 = null)
     {
         var (setup, jobs) = JobCatalog.Chains[chain];
+        JobCatalog.Db2Tables.TryGetValue(chain, out var db2Tables);
+        if (db2Tables is not null && db2 is null)
+        {
+            throw new InvalidOperationException($"chain {chain} runs Db2 programs: pass a PostgreSQL connection (--db2)");
+        }
         if (!restart)
         {
             if (Directory.Exists(outDir))
@@ -25,11 +30,6 @@ public static class ChainRunner
             {
                 File.Copy(input, Path.Combine(outDir, "datasets", Path.GetFileName(input)));
             }
-        }
-        JobCatalog.Db2Tables.TryGetValue(chain, out var db2Tables);
-        if (db2Tables is not null && db2 is null)
-        {
-            throw new InvalidOperationException($"chain {chain} runs Db2 programs: pass a PostgreSQL connection (--db2)");
         }
         if (db2Tables is not null && !restart)
         {

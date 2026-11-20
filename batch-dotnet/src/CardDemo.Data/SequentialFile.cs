@@ -23,7 +23,8 @@ public static class SequentialFile
             if (i == data.Length || data[i] == (byte)'\n')
             {
                 var rec = Enumerable.Repeat((byte)' ', lrecl).ToArray();
-                Array.Copy(data, start, rec, 0, Math.Min(i - start, lrecl));
+                var end = i > start && data[i - 1] == (byte)'\r' ? i - 1 : i; // CRLF lines, as tools/parity/record.py strips them
+                Array.Copy(data, start, rec, 0, Math.Min(end - start, lrecl));
                 records.Add(rec);
                 start = i + 1;
             }

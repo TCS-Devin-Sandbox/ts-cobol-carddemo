@@ -124,11 +124,19 @@ public sealed class Cbtrndyn : IDb2Program
         var sql = stmt.Length > 800 ? stmt.ToString(0, 800) : stmt.ToString();
         ctx.Display("CBTRNDYN: " + (lines % 100).ToString("00", CultureInfo.InvariantCulture) + " SQL LINES READ");
         var rc = 0;
-        var sqlcode = db.Execute(sql.TrimEnd()); // PREPARE + EXECUTE: ocesql reports statement errors at EXECUTE (BR-DYN-002)
-        ctx.Display("CBTRNDYN: EXECUTE SQLCODE " + (sqlcode < 0 ? "-" : "+") + Math.Abs(sqlcode).ToString("0000000000", CultureInfo.InvariantCulture));
-        if (sqlcode < 0)
+        if (string.IsNullOrWhiteSpace(sql))
         {
-            rc = 8; // [Trace("CBTRNDYN 2000-RUN-DYNAMIC-SQL", "BR-DYN-003")]
+            ctx.Display("CBTRNDYN: PREPARE FAILED SQLCODE " + SqlCode(-400)); // empty statement: PREPARE fails (GAP-006: ocesql code assumed -400)
+            rc = 8;
+        }
+        else
+        {
+            var sqlcode = db.Execute(sql.TrimEnd()); // PREPARE + EXECUTE: ocesql reports statement errors at EXECUTE (BR-DYN-002)
+            ctx.Display("CBTRNDYN: EXECUTE SQLCODE " + SqlCode(sqlcode));
+            if (sqlcode < 0)
+            {
+                rc = 8; // [Trace("CBTRNDYN 2000-RUN-DYNAMIC-SQL", "BR-DYN-003")]
+            }
         }
         if (!string.IsNullOrEmpty(parm))
         {
@@ -140,4 +148,7 @@ public sealed class Cbtrndyn : IDb2Program
         ctx.Display("CBTRNDYN: END");
         return rc;
     }
+
+    /// <summary>DISPLAY of SQLCODE (S9(9) COMP-5): sign and 10 digits.</summary>
+    private static string SqlCode(int sqlcode) => (sqlcode < 0 ? "-" : "+") + Math.Abs(sqlcode).ToString("0000000000", CultureInfo.InvariantCulture);
 }

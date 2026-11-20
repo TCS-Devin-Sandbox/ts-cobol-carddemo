@@ -30,7 +30,8 @@ public sealed class Db2Session : IDisposable
             using var cmd = new NpgsqlCommand(sql, _conn, _tx);
             foreach (var a in args)
             {
-                cmd.Parameters.Add(new NpgsqlParameter { Value = a });
+                // Untyped, as ocesql sends host variables: the server infers CHAR(n), so trailing blanks compare equal.
+                cmd.Parameters.Add(a is string ? new NpgsqlParameter { Value = a, NpgsqlDbType = NpgsqlTypes.NpgsqlDbType.Unknown } : new NpgsqlParameter { Value = a });
             }
             cmd.ExecuteNonQuery();
             return 0;
