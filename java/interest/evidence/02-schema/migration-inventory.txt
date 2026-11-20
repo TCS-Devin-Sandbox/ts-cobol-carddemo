@@ -1,0 +1,3 @@
+a1795eb43d80b2eeaf9d592516a8360aecaef067c303e1d8eb7b0e2603b1d476  java/interest/interest-batch/src/main/resources/db/migration/V001__interest.sql
+9f7517198efba2cfcdb1fd728850c7fab5b2d3fac9f05919db385d58503e04c6  java/interest/interest-batch/src/main/resources/db/migration/V002__batch_repository.sql
+ebc8f0e910eb9e752b69e12ed4e1f5924fde350ae35b0b25ed8542075a3e87d2  java/interest/interest-batch/src/test/java/com/carddemo/interest/schema/SchemaIT.java
