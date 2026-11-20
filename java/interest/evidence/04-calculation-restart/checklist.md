@@ -85,7 +85,7 @@ Ticket sessions copy each line into the review evidence and record **PASS** or *
 - **o** · Are success and EOF typed outcomes with no APPL-RESULT leakage into RC?
   **PASS** — Spring Batch `ItemReader` null EOF contract, `Group` lookahead, `CloseRunService.Result`; empty-input IT returns RC0 and no delta.
 - **p** · Do keyed reads, nonunique AIX selection and guarded rewrite use the recorded key and preimage contracts?
-  **PASS** — `CloseStore.account`/`card`/`rate`/`delta` records original balance/cycles/raw SHA256; AIX-evidence IT; exporter codec-patch/filler IT. Actual host guarded rewrite is outside INT-04 and unchanged.
+  **PASS** — `CloseStore.account`/`card`/`rate`/`delta` records original balance/cycles/raw SHA256; `INT_H03_firstReturnEvidencePropertyReachesCoordinatorAndSelectedCardIsEmitted`, invalid/unreadable evidence IT and intake AIX-evidence IT; exporter codec-patch/filler IT. Actual host guarded rewrite is outside INT-04 and unchanged.
 - **q** · Do EOF, fallback and terminal status/abend paths match the file and operation-specific rules?
   **PASS** — `LegacyStatusTest.TN_03_TN_09_INT_R10_everySupportedOperationUsesItsCobolDisplayText` asserts all source OPEN/CLOSE/READ/WRITE/REWRITE diagnostics, including DISCGRP open and XREF open's adjacent status. The typed-operation IT checks exact source-ordered terminal SYSOUT/U999; non-TCATBALF 10 fails, exact-rate 23 alone falls back.
 - **r** · Do PARM, fixed GDG output, DISP intent and step RC drive the correct handoff and hold paths?

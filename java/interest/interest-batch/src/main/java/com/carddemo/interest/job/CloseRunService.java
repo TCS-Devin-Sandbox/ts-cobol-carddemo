@@ -56,7 +56,8 @@ public final class CloseRunService {
             return new Result(run, null, 12, "TARGET_PARM_HELD");
         }
         if (resume == null) {
-            var capture = intake.load(input);
+            String evidence = environment.getProperty("interest.close.first-return-evidence");
+            var capture = evidence == null ? intake.load(input) : intake.load(input, Path.of(evidence));
             snapshot = capture.snapshotId();
             if (!capture.sealed()) {
                 exporter.export(run, snapshot, output, 12, "TARGET_INTAKE_HELD");
