@@ -1,0 +1,70 @@
+$ git diff --stat origin/demo/05b-integration -- java/interest
+ .../docs/verification/INT-06-release-readiness.md  | 116 +++++++++++++
+ .../interest-batch/scripts/parity/byte_check.py    | 108 ++++++++++++
+ .../interest-batch/scripts/parity/gate-sql.sql     |  24 +++
+ .../interest-batch/scripts/parity/intcalc_java.py  |  26 +++
+ .../interest-batch/scripts/parity/run_gate.sh      |  47 ++++++
+ .../scripts/parity/test_byte_check.py              |  56 +++++++
+ .../scripts/parity/test_intcalc_java.py            |  25 +++
+ .../interest/batch/InterestBatchApplication.java   |  73 ++++++++
+ .../carddemo/interest/batch/InterestJobConfig.java |  92 ++++++++++
+ .../carddemo/interest/batch/InterestBatchIT.java   | 108 ++++++++++++
+ .../interest/gate/CandidateParityGateIT.java       |  68 ++++++++
+ .../java/com/carddemo/interest/gate/GateHost.java  |  77 +++++++++
+ .../com/carddemo/interest/gate/GateSupport.java    | 120 +++++++++++++
+ .../carddemo/interest/gate/ReleaseRehearsalIT.java | 185 +++++++++++++++++++++
+ 14 files changed, 1125 insertions(+)
+
+$ git status --short --untracked-files=normal
+?? java/interest/evidence/06-parity-gate/
+?? java/interest/interest-batch/target/
+
+$ git ls-files --others --exclude-standard -- java/interest/evidence/06-parity-gate
+java/interest/evidence/06-parity-gate/byte-check.txt
+java/interest/evidence/06-parity-gate/checklist.md
+java/interest/evidence/06-parity-gate/compare-report.md
+java/interest/evidence/06-parity-gate/compare-stdout.txt
+java/interest/evidence/06-parity-gate/e2e-run.log
+java/interest/evidence/06-parity-gate/gate-output.txt
+java/interest/evidence/06-parity-gate/gate-revision.txt
+java/interest/evidence/06-parity-gate/make-parity.txt
+java/interest/evidence/06-parity-gate/parity-driver-unittest.txt
+java/interest/evidence/06-parity-gate/parity-report.md
+java/interest/evidence/06-parity-gate/parity-unittest.txt
+java/interest/evidence/06-parity-gate/scope.txt
+java/interest/evidence/06-parity-gate/sql-output.txt
+java/interest/evidence/06-parity-gate/test-output.txt
+java/interest/evidence/06-parity-gate/wrapper-unittest.txt
+
+ALLOWED SCOPE AUDIT
+ALLOWED java/interest/evidence/06-parity-gate/byte-check.txt
+ALLOWED java/interest/evidence/06-parity-gate/checklist.md
+ALLOWED java/interest/evidence/06-parity-gate/compare-report.md
+ALLOWED java/interest/evidence/06-parity-gate/compare-stdout.txt
+ALLOWED java/interest/evidence/06-parity-gate/e2e-run.log
+ALLOWED java/interest/evidence/06-parity-gate/gate-output.txt
+ALLOWED java/interest/evidence/06-parity-gate/gate-revision.txt
+ALLOWED java/interest/evidence/06-parity-gate/make-parity.txt
+ALLOWED java/interest/evidence/06-parity-gate/parity-driver-unittest.txt
+ALLOWED java/interest/evidence/06-parity-gate/parity-report.md
+ALLOWED java/interest/evidence/06-parity-gate/parity-unittest.txt
+ALLOWED java/interest/evidence/06-parity-gate/scope.txt
+ALLOWED java/interest/evidence/06-parity-gate/sql-output.txt
+ALLOWED java/interest/evidence/06-parity-gate/test-output.txt
+ALLOWED java/interest/evidence/06-parity-gate/wrapper-unittest.txt
+ALLOWED java/interest/interest-batch/docs/verification/INT-06-release-readiness.md
+ALLOWED java/interest/interest-batch/scripts/parity/byte_check.py
+ALLOWED java/interest/interest-batch/scripts/parity/gate-sql.sql
+ALLOWED java/interest/interest-batch/scripts/parity/intcalc_java.py
+ALLOWED java/interest/interest-batch/scripts/parity/run_gate.sh
+ALLOWED java/interest/interest-batch/scripts/parity/test_byte_check.py
+ALLOWED java/interest/interest-batch/scripts/parity/test_intcalc_java.py
+ALLOWED java/interest/interest-batch/src/main/java/com/carddemo/interest/batch/InterestBatchApplication.java
+ALLOWED java/interest/interest-batch/src/main/java/com/carddemo/interest/batch/InterestJobConfig.java
+ALLOWED java/interest/interest-batch/src/test/java/com/carddemo/interest/batch/InterestBatchIT.java
+ALLOWED java/interest/interest-batch/src/test/java/com/carddemo/interest/gate/CandidateParityGateIT.java
+ALLOWED java/interest/interest-batch/src/test/java/com/carddemo/interest/gate/GateHost.java
+ALLOWED java/interest/interest-batch/src/test/java/com/carddemo/interest/gate/GateSupport.java
+ALLOWED java/interest/interest-batch/src/test/java/com/carddemo/interest/gate/ReleaseRehearsalIT.java
+EXCLUDED generated target/: 262 untracked files; must not be committed
+SCOPE PASS: 29 allowed paths, 0 outside scope
