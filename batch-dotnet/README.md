@@ -33,3 +33,15 @@ PostgreSQL tables come from `db/migrations/001_create_vsam_tables.sql`, which is
 - `tests/CardDemo.Tests`: codec unit tests, golden-fixture contract tests and the restart test.
 - `Artefacts/`: Discovery, Planning (IR files and ADRs), Review (gates 1 and 2), Reports (parity and 5-level reconciliation), and Audits (gate 3 and the traceability matrix).
 - `tools/`: the phase scripts (discovery, codegen, planning, review, validation, audit).
+
+## Db2 workloads (trantype-update, trantype-dynamic)
+
+`MNTTRDB2` (IKJEFT01 -> `COBTUPDT`) and `MNTTRDYN` (IKJEFT01 -> `CBTRNDYN`: dynamic SQL, then a dynamic CALL of `COBTUPDT`)
+run through `Dsnrun` and `Db2Session` (`src/CardDemo.Batch/Programs/Db2Programs.cs`, `src/CardDemo.Data/Db2Session.cs`) against
+PostgreSQL, one unit of work per task. They need a database with `db/postgres/01-transaction-type.sql` applied:
+
+```sh
+CARDDEMO_DB2="Host=...;Username=...;Password=...;Database=..." tools/parity_dotnet.sh "trantype-update trantype-dynamic"
+```
+
+SQLCODEs and the aborted-transaction behaviour follow the golden (Open COBOL ESQL / PostgreSQL) runs: see GAP-006, GAP-007 and ADR-007.

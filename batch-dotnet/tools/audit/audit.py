@@ -13,7 +13,8 @@ BD = Path(__file__).resolve().parents[2]
 ROOT = BD.parent
 ART = BD / "Artefacts"
 DOTNET = os.environ.get("DOTNET", str(Path.home() / ".dotnet" / "dotnet"))
-PROGRAM_WORKLOAD = {"CBACT01C": "READACCT", "CBACT02C": "READCARD", "CBACT04C": "INTCALC", "CBTRN02C": "POSTTRAN", "CBTRN03C": "TRANREPT"}
+PROGRAM_WORKLOAD = {"CBACT01C": "READACCT", "CBACT02C": "READCARD", "CBACT04C": "INTCALC", "CBTRN02C": "POSTTRAN", "CBTRN03C": "TRANREPT", "COBTUPDT": "MNTTRDB2", "CBTRNDYN": "MNTTRDYN"}
+SOURCE_DIR = {"COBTUPDT": "app/app-transaction-type-db2/cbl", "CBTRNDYN": "app/app-transaction-type-db2/cbl"}
 SECRET = re.compile(r"(password|pwd|secret|apikey|token)\s*=\s*\"[^\"]+\"", re.I)
 
 
@@ -36,7 +37,7 @@ def main() -> int:
                 refs.setdefault(rid, []).append(f"{rel}:{i}")
             if SECRET.search(line):
                 findings.append(("CRITICAL", "ALL", f"{rel}:{i}", "hard-coded credential"))
-            if "NpgsqlCommand($\"" in line and "tables[dsn]" not in line and "{tables" not in line and "Column" not in line:
+            if "NpgsqlCommand($\"" in line and "tables[dsn]" not in line and "{tables" not in line and "Column" not in line and "Ident(" not in line:
                 findings.append(("HIGH", "ALL", f"{rel}:{i}", "interpolated SQL"))
     tests = (BD / "tests").rglob("*.cs")
     test_text = "\n".join(t.read_text() for t in tests)
@@ -44,10 +45,11 @@ def main() -> int:
     for r in rules:
         wl = PROGRAM_WORKLOAD[r["program"]]
         target = refs.get(r["id"], [])
-        proof = "golden fixtures (parity + 5-level reconciliation)" if wl in ("POSTTRAN", "TRANREPT", "INTCALC") else "unit tests + sample run (GAP-001)"
+        proof = ("golden fixtures (parity + 5-level reconciliation)" if wl in ("POSTTRAN", "TRANREPT", "INTCALC")
+                 else "golden fixtures (SYSOUT, RC, table snapshots on PostgreSQL)" if wl in ("MNTTRDB2", "MNTTRDYN") else "unit tests + sample run (GAP-001)")
         if not target:
             findings.append(("MEDIUM", wl, r["id"], "rule not referenced by target code"))
-        rows.append((r["id"], wl, f"app/cbl/{r['program']}.cbl:{r['line']}", r["statement"], target, proof))
+        rows.append((r["id"], wl, f"{SOURCE_DIR.get(r['program'], 'app/cbl')}/{r['program']}.cbl:{r['line']}", r["statement"], target, proof))
     rc, out = subprocess.run([DOTNET, "list", str(BD / "CardDemo.Batch.sln"), "package", "--vulnerable", "--include-transitive"],
                              capture_output=True, text=True).returncode, ""
     vuln = subprocess.run([DOTNET, "list", str(BD / "CardDemo.Batch.sln"), "package", "--vulnerable", "--include-transitive"],
@@ -62,7 +64,7 @@ def main() -> int:
     checks = [f"- Rule traceability: {covered}/{len(rows)} rules referenced from target code",
               f"- Dependency audit (`dotnet list package --vulnerable`): {vuln_status}",
               "- Secrets scan: hard-coded credential patterns in src/",
-              "- SQL: PostgreSQL access is parameterised; table names come from the internal cluster map only",
+              "- SQL: PostgreSQL access is parameterised; table names come from internal maps only and are validated by `Ident()`; DYNSQL text is executed as the legacy program does (operator-supplied ad-hoc SQL, GAP-006)",
               "- Numeric safety: decimal only, truncation per ADR-003 (enforced by GATE 2)",
               "- Determinism: injected frozen clock, no wall-clock reads in programs (GATE 2)"]
     for wl in PROGRAM_WORKLOAD.values():

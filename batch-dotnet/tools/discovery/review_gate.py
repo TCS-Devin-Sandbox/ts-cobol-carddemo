@@ -18,7 +18,7 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).parent))
 import extract_facts as ef  # noqa: E402
 
-UTILITY_DDS = {"SYSOUT", "SYSPRINT", "STEPLIB", "SYSIN"}
+UTILITY_DDS = {"SYSOUT", "SYSPRINT", "STEPLIB", "SYSIN", "DBRMLIB", "SYSTSPRT", "SYSTSIN", "SYSUDUMP"}
 
 
 def main() -> int:
@@ -27,7 +27,7 @@ def main() -> int:
     for job, pgms in ef.WORKLOADS.items():
         jcl = ef.parse_jcl(job)
         for pgm in pgms:
-            step = next((s for s in jcl["steps"] if s["target"] == pgm), None)
+            step = next((s for s in jcl["steps"] if pgm in (s["target"], s.get("dsn_program"))), None)
             if step is None:
                 findings.append(("CRITICAL", job, f"no step executes {pgm}"))
                 continue
@@ -51,7 +51,7 @@ def main() -> int:
             rows.append(f"| {job} | {step['step']} | {pgm} | {len(needed)} | {len(needed & bound)} | {len(facts['copybooks'])} | {len(ef.RULES.get(pgm, []))} |")
     rules = json.loads((ef.OUT / "rules.json").read_text())
     for r in rules:
-        src = ef.lines(ef.APP / "cbl" / f"{r['program']}.cbl")
+        src = ef.lines(ef.cbl_path(r["program"]))
         if r["line"] > len(src):
             findings.append(("CRITICAL", r["id"], "cited line out of range"))
     critical = [f for f in findings if f[0] == "CRITICAL"]

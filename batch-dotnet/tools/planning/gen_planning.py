@@ -31,6 +31,16 @@ WORKLOADS = {
     "TRANREPT": dict(program="CBTRN03C", cls="Cbtrn03c", file="Programs/Cbtrn03c.cs", steps=["STEP05R.PRC001 REPRO -> TRANSACT.BKUP(+1)", "STEP05R SORT (263,16,ZD,A) INCLUDE 305,10", "STEP10R CBTRN03C"],
                      inputs=["TRANSACT.DALY(+1)", "CARDXREF", "TRANTYPE", "TRANCATG", "DATEPARM"], outputs=["TRANREPT(+1) (133-byte report, CVTRA07Y)"],
                      purpose="Back up, filter/sort and print the daily transaction detail report with page/account/grand totals."),
+    "MNTTRDB2": dict(program="COBTUPDT", cls="Cobtupdt", file="Programs/Db2Programs.cs", src="app/app-transaction-type-db2/cbl",
+                     steps=["STEP1 IKJEFT01: DSN RUN PROGRAM(COBTUPDT) PLAN(CARDDEMO)"],
+                     inputs=["INPFILE (FB 53: type, code, description)", "CARDDEMO.TRANSACTION_TYPE (Db2 -> PostgreSQL)"],
+                     outputs=["CARDDEMO.TRANSACTION_TYPE inserted/updated/deleted", "SYSTSPRT messages", "RC 4 on any SQL error"],
+                     purpose="Weekly maintenance of the transaction-type reference table from an A/U/D file."),
+    "MNTTRDYN": dict(program="CBTRNDYN", cls="Cbtrndyn", file="Programs/Db2Programs.cs", src="app/app-transaction-type-db2/cbl",
+                     steps=["STEP1 IKJEFT01: DSN RUN PROGRAM(CBTRNDYN) PLAN(CARDDEMO) PARMS('COBTUPDT')"],
+                     inputs=["DYNSQL (FB 80: one ad-hoc SQL statement)", "INPFILE (FB 53)", "CARDDEMO.TRANSACTION_TYPE"],
+                     outputs=["Dynamic statement applied, then COBTUPDT's changes, committed together", "RC 8 when EXECUTE fails (lost after COBTUPDT, GAP-007)"],
+                     purpose="Ad-hoc dynamic SQL (PREPARE/EXECUTE) followed by a dynamic CALL of COBTUPDT in the same unit of work."),
 }
 
 ADRS = [
@@ -47,6 +57,10 @@ ADRS = [
     ("ADR-006", "Deterministic clock and GDG catalog",
      "The frozen chain clock (2022-07-05 10:00:00.00) is injected into `StepContext`; `Db2Timestamp` reproduces Z-GET-DB2-FORMAT-TIMESTAMP. `DatasetCatalog` resolves GDG relative generations per job like the z/OS catalog."),
 ]
+
+
+ADRS.append(("ADR-007", "Db2 SQL programs -> Npgsql `Db2Session` with Open COBOL ESQL semantics",
+             "IKJEFT01 `DSN RUN PROGRAM` becomes `Dsnrun`: one PostgreSQL transaction per task, committed at end of task. Embedded SQL becomes parameterised Npgsql commands; dynamic SQL (PREPARE/EXECUTE) executes the DYNSQL text as is, and dynamic CALL resolves the PARMS program name at run time (`Dsnrun.Resolve`). SQLCODEs follow what the golden runs recorded through ocesql: -403 duplicate key, -400 other errors, 0 when no row matched; a failed statement aborts the unit of work as PostgreSQL does (GAP-006). The callee's STOP RUN ends the task with its return code (GAP-007). A Db2-faithful savepoint per statement is a migration decision, not done silently."))
 
 
 def main() -> int:
@@ -72,7 +86,7 @@ def main() -> int:
                 {"source_construct": f"PROGRAM {w['program']}", "target_construct": f"CardDemo.Batch.Programs.{w['cls']}", "adr": "ADR-001"},
                 {"source_construct": "JCL job / step / DD", "target_construct": "CardDemo.Orchestration.JobCatalog + JobRunner", "adr": "ADR-005"},
             ],
-            "business_rules": [{"id": r["id"], "source": f"app/cbl/{r['program']}.cbl:{r['line']}", "statement": r["statement"],
+            "business_rules": [{"id": r["id"], "source": f"{w.get('src', 'app/cbl')}/{r['program']}.cbl:{r['line']}", "statement": r["statement"],
                                 "target": f"src/CardDemo.Batch/{w['file']}"} for r in wr],
             "gaps": [{"id": g[0], "description": g[2].strip()} for g in gaps if w["program"] in g[1] or g[1].strip() in ("ALL", wl)],
         }}
@@ -83,7 +97,7 @@ def main() -> int:
                 f"- Job definition: `JobCatalog.Jobs[\"{wl}\"]`", "- Data: `KeyedStore`, `SequentialFile`, generated `Layouts`", "",
                 "## Business rules", "| Rule | Source | Statement |", "|---|---|---|",
                 *[f"| {r['id']} | {r['program']}.cbl:{r['line']} | {r['statement']} |" for r in wr], "",
-                "## Proof", "- Golden fixtures via `batch-dotnet/tools/parity_dotnet.sh`" if wl in ("POSTTRAN", "TRANREPT", "INTCALC")
+                "## Proof", "- Golden fixtures via `batch-dotnet/tools/parity_dotnet.sh`" if wl in ("POSTTRAN", "TRANREPT", "INTCALC", "MNTTRDB2", "MNTTRDYN")
                 else "- No legacy golden run on the harness (GAP-001 for READACCT); unit tests + sample run", ""]
         (PLAN / f"{wl}-DotNet-Plan.md").write_text("\n".join(plan))
         if not wr:
@@ -91,10 +105,10 @@ def main() -> int:
     arch = ["# .NET Batch Architecture Plan", "",
             "| Layer | Project | Responsibility |", "|---|---|---|",
             "| Domain | CardDemo.Domain | Generated copybook layouts, `CobolCodec` (zoned/COMP-3/COMP/edit), `FixedRecord`, `[Trace]` |",
-            "| Data | CardDemo.Data | `KeyedStore` (VSAM KSDS + AIX), `PostgresPersistence` / `FilePersistence`, `SequentialFile`, `DatasetCatalog` (GDG) |",
+            "| Data | CardDemo.Data | `KeyedStore` (VSAM KSDS + AIX), `PostgresPersistence` / `FilePersistence`, `SequentialFile`, `DatasetCatalog` (GDG), `Db2Session` (Db2 SQL on PostgreSQL) |",
             "| Batch | CardDemo.Batch | One `IBatchProgram` per COBOL program, SORT/IDCAMS utilities, `StepContext`, chunk checkpoints |",
             "| Orchestration | CardDemo.Orchestration | `JobCatalog` (JCL transcribed), `JobRunner` (RC/abend/restart/ledger), `ChainRunner` (parity contract) |",
-            "| Host | CardDemo.Host | `carddemo-batch run-chain <chain> <case> <out> [--postgres] [--restart]` |",
+            "| Host | CardDemo.Host | `carddemo-batch run-chain <chain> <case> <out> [--postgres] [--db2] [--restart]` |",
             "| Tests | tests/CardDemo.Tests | Codec unit tests, golden-fixture contract tests, restart test |", "",
             "## Decisions", *[f"- [{a}](ADRs/{a}.md): {t}" for a, t, _ in ADRS], "",
             "## Workloads", *[f"- [{wl}]({wl}-DotNet-Plan.md) - {w['program']}" for wl, w in WORKLOADS.items()], ""]

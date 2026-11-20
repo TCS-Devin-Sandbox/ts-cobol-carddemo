@@ -25,15 +25,44 @@ ROOT = Path(__file__).resolve().parents[3]
 APP = ROOT / "app"
 OUT = ROOT / "batch-dotnet" / "Artefacts" / "Discovery"
 
+DB2_APP = APP / "app-transaction-type-db2"
+DB2_PROGRAMS = {"COBTUPDT", "CBTRNDYN"}
+DB2_JOBS = {"MNTTRDB2", "MNTTRDYN"}
+
+
+def cbl_path(pgm: str) -> Path:
+    return (DB2_APP if pgm in DB2_PROGRAMS else APP) / "cbl" / f"{pgm}.cbl"
+
+
+def jcl_path(job: str) -> Path:
+    return (DB2_APP if job in DB2_JOBS else APP) / "jcl" / f"{job}.jcl"
+
+
 WORKLOADS = {
     "READACCT": ["CBACT01C"],
     "READCARD": ["CBACT02C"],
     "INTCALC": ["CBACT04C"],
     "POSTTRAN": ["CBTRN02C"],
     "TRANREPT": ["CBTRN03C"],
+    "MNTTRDB2": ["COBTUPDT"],
+    "MNTTRDYN": ["CBTRNDYN"],
 }
 
 RULES = {
+    "COBTUPDT": [
+        ("BR-TUP-001", "OPEN FILE OK / NOT OK is displayed and the read loop runs either way (0001-OPEN-FILES falls through).", r"DISPLAY 'OPEN FILE OK'"),
+        ("BR-TUP-002", "Record type A inserts, U updates, D deletes, '*' is a comment; any other type is an error.", r"EVALUATE INPUT-REC-TYPE"),
+        ("BR-TUP-003", "INSERT/UPDATE bind the 2-character type code and the full 50-character description (trailing spaces stored).", r":INPUT-REC-DESC"),
+        ("BR-TUP-004", "SQLCODE +100 on UPDATE/DELETE would report 'No records found.', but Open COBOL ESQL returns 0 when no row matches, so a missing row reports success (fixture t05).", r"WHEN SQLCODE = \+100"),
+        ("BR-TUP-005", "An error DISPLAYs WS-RETURN-MSG (never cleared), sets RETURN-CODE 4 and processing continues with the next record.", r"MOVE 4 TO RETURN-CODE"),
+        ("BR-TUP-006", "Negative SQLCODE message: 'Error accessing: TRANSACTION_TYPE table. SQLCODE:' followed by SQLCODE edited ----9.", r"' TRANSACTION_TYPE table\. SQLCODE:'"),
+    ],
+    "CBTRNDYN": [
+        ("BR-DYN-001", "DYNSQL lines starting with '--' are skipped; columns 1-72 of the other lines are concatenated, each followed by one blank, into an 800-byte statement.", r"IF DYNSQL-REC\(1:2\) NOT = '--'"),
+        ("BR-DYN-002", "The statement is PREPAREd and EXECUTEd; the EXECUTE SQLCODE is displayed (statement errors surface at EXECUTE under ocesql).", r"EXECUTE DYNSTMT"),
+        ("BR-DYN-003", "A failed PREPARE or EXECUTE sets RETURN-CODE 8 and processing continues.", r"MOVE 8 TO RETURN-CODE"),
+        ("BR-DYN-004", "The program named in PARMS is CALLed dynamically (CALL identifier); COBTUPDT's STOP RUN ends the run unit, so 'CBTRNDYN: END' is not reached.", r"CALL WS-PGM-NAME"),
+    ],
     "CBACT04C": [
         ("BR-INT-001", "Interest is computed per TCATBALF record as (TRAN-CAT-BAL * DIS-INT-RATE) / 1200 with no ROUNDED phrase: the result is truncated to 2 decimals.", r"=\s*\(\s*TRAN-CAT-BAL\s*\*\s*DIS-INT-RATE\)\s*/\s*1200"),
         ("BR-INT-002", "Interest is only computed when the disclosure-group rate is non-zero.", r"IF\s+DIS-INT-RATE\s+NOT\s*=\s*0"),
@@ -88,6 +117,8 @@ GAPS = [
     ("GAP-002", "CBACT01C", "OUT-ACCT-CURR-CYC-DEBIT is only moved when the debit is zero; otherwise the FD buffer keeps the previous record's value. The .NET port reproduces 'carry previous value' (initial value 0).", "Low"),
     ("GAP-003", "CBACT04C", "XREF alternate index (account id) with duplicates: VSAM returns the first card in AIX order; the port returns the lowest card number for the account.", "Low"),
     ("GAP-004", "ALL", "Plugin numeric convention prescribes MidpointRounding.AwayFromZero; the legacy source has no ROUNDED and golden fixtures prove truncation (i02-tie-half-cent). Legacy truncation is kept (ADR-003).", "High - resolved by ADR"),
+    ("GAP-006", "COBTUPDT,CBTRNDYN", "SQLCODEs come from Open COBOL ESQL over PostgreSQL, not Db2: unique violation -403, any other error -400, no row found 0 (+100 never raised). Under PostgreSQL a failed statement aborts the whole unit of work (d03: COBTUPDT's later UPDATE also fails); Db2 would roll back only the failed statement. The port reproduces the golden (PostgreSQL) behaviour; a savepoint-per-statement policy is a migration decision (ADR-007).", "High - decision needed"),
+    ("GAP-007", "CBTRNDYN", "After CALL COBTUPDT the run unit ends at COBTUPDT's STOP RUN with COBTUPDT's RETURN-CODE, so CBTRNDYN's RC 8 from a failed EXECUTE is lost (d03 ends RC 4). Kept as observed (ADR-007).", "Medium"),
     ("GAP-005", "TRANREPT", "SORT is DFSORT on z/OS; ordering of equal keys is not stated (no EQUALS). The harness and port use a stable sort.", "Low"),
 ]
 
@@ -112,7 +143,7 @@ def rel(path: Path) -> str:
 
 
 def parse_jcl(job: str) -> dict:
-    path = APP / "jcl" / f"{job}.jcl"
+    path = jcl_path(job)
     steps, cur, dd = [], None, None
     for n, raw in enumerate(lines(path), 1):
         if raw.startswith("//*"):
@@ -124,6 +155,8 @@ def parse_jcl(job: str) -> dict:
                    "parm": parm.group(1) if parm else None, "dds": []}
             steps.append(cur)
             continue
+        if cur is not None and (dsn := re.search(r"RUN\s+PROGRAM\(([A-Z0-9#@$]+)\)", raw)):
+            cur["dsn_program"], cur["dsn_line"] = dsn.group(1), n
         m = re.match(r"//(\S+)\s+DD\s+(.*)", raw)
         if m and cur is not None:
             dd = {"dd": m.group(1), "line": n, "dsn": None, "disp": None, "dcb": None, "sysout": "SYSOUT=" in raw or "SYSOUT=" in m.group(2)}
@@ -139,7 +172,7 @@ def parse_jcl(job: str) -> dict:
 
 
 def parse_program(pgm: str) -> dict:
-    path = APP / "cbl" / f"{pgm}.cbl"
+    path = cbl_path(pgm)
     src = lines(path)
     facts = {"program": pgm, "path": rel(path), "files": [], "copybooks": [], "paragraphs": [], "calls": [], "io": [], "displays": 0}
     for n, raw in enumerate(src, 1):
@@ -169,14 +202,19 @@ def parse_program(pgm: str) -> dict:
     return facts
 
 
+def exe(s: dict) -> str:
+    dsn = f" (DSN RUN PROGRAM({s['dsn_program']}) L{s['dsn_line']})" if s.get("dsn_program") else ""
+    return f"{s['kind']}={s['target']}{dsn}"
+
+
 def write_jcl_facts(info: dict) -> None:
     out = [f"# {info['job']} - JCL facts", "", f"Source: `{info['path']}` (read-only estate).", "",
            "| Step | Line | Program/Proc | PARM | DD | DSN | DISP | DCB |", "|---|---|---|---|---|---|---|---|"]
     for s in info["steps"]:
         if not s["dds"]:
-            out.append(f"| {s['step']} | L{s['line']} | {s['kind']}={s['target']} | {s['parm'] or ''} | | | | |")
+            out.append(f"| {s['step']} | L{s['line']} | {exe(s)} | {s['parm'] or ''} | | | | |")
         for i, d in enumerate(s["dds"]):
-            head = f"| {s['step']} | L{s['line']} | {s['kind']}={s['target']} | {s['parm'] or ''} " if i == 0 else "| | | | "
+            head = f"| {s['step']} | L{s['line']} | {exe(s)} | {s['parm'] or ''} " if i == 0 else "| | | | "
             out.append(f"{head}| {d['dd']} (L{d['line']}) | {d['dsn'] or ('SYSOUT' if d['sysout'] else 'instream')} | {d['disp'] or ''} | {d['dcb'] or ''} |")
     (OUT / "Workloads" / f"{info['job']}-Jcl-Facts.md").write_text("\n".join(out) + "\n")
 
@@ -195,7 +233,7 @@ def write_program_facts(f: dict) -> None:
 
 
 def write_rules(pgm: str) -> list[dict]:
-    path = APP / "cbl" / f"{pgm}.cbl"
+    path = cbl_path(pgm)
     resolved = []
     out = [f"# {pgm} - business rules (BRE)", "", f"Every rule cites `{rel(path)}`; the line is resolved by `tools/discovery/extract_facts.py`.", "",
            "| Rule | Statement | Evidence |", "|---|---|---|"]
@@ -203,7 +241,7 @@ def write_rules(pgm: str) -> list[dict]:
         n = cite(path, rx)
         resolved.append({"id": rid, "program": pgm, "line": n, "statement": text})
         out.append(f"| {rid} | {text} | `{path.name}` L{n}: `{lines(path)[n - 1][6:72].strip()}` |")
-    gaps = [g for g in GAPS if g[1] in (pgm, "ALL")]
+    gaps = [g for g in GAPS if pgm in g[1].split(",") or g[1] == "ALL"]
     if gaps:
         out += ["", "## Gaps", ""] + [f"* **{g[0]}** ({g[3]}): {g[2]}" for g in gaps]
     (OUT / "Rules" / f"{pgm}-BRE.md").write_text("\n".join(out) + "\n")
@@ -230,7 +268,7 @@ def schedule_graph(jobs: dict) -> dict:
                 graph["edges"].append({"from": producers[i], "to": name, "condition": i})
     for job, info in jobs.items():
         graph["jobs"].setdefault(job, {"folder": None, "in": [], "out": [], "in_scope": True})
-        graph["jobs"][job]["steps"] = [{"step": s["step"], "exec": f"{s['kind']}={s['target']}", "line": s["line"]} for s in info["steps"]]
+        graph["jobs"][job]["steps"] = [{"step": s["step"], "exec": f"{exe(s)}", "line": s["line"]} for s in info["steps"]]
     graph["harness_chains"] = json.loads((ROOT / "tools" / "runjcl" / "chains.json").read_text())
     graph["harness_chains"] = {k: v["jobs"] for k, v in graph["harness_chains"].items()}
     return graph

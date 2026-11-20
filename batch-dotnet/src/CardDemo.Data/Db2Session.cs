@@ -52,15 +52,21 @@ public sealed class Db2Session : IDisposable
 }
 
 /// <summary>Database side of the parity contract (tools/parity/record.py reset_database / snapshot_database).</summary>
-public static class Db2Fixture
+public static partial class Db2Fixture
 {
+    /// <summary>Table and column lists come from JobCatalog; anything that is not a plain identifier list is refused.</summary>
+    private static string Ident(string text) => IdentList().IsMatch(text) ? text : throw new ArgumentException($"not an identifier list: {text}");
+
+    [System.Text.RegularExpressions.GeneratedRegex(@"^[a-z_][a-z0-9_]*(\.[a-z_][a-z0-9_]*)?(, [a-z_][a-z0-9_]*)*$")]
+    private static partial System.Text.RegularExpressions.Regex IdentList();
+
     public static void Reset(string connectionString, IEnumerable<string> tables, string seedFile)
     {
         using var conn = new NpgsqlConnection(connectionString);
         conn.Open();
         foreach (var t in tables)
         {
-            using var cmd = new NpgsqlCommand($"TRUNCATE TABLE {t} CASCADE", conn);
+            using var cmd = new NpgsqlCommand($"TRUNCATE TABLE {Ident(t)} CASCADE", conn);
             cmd.ExecuteNonQuery();
         }
         if (File.Exists(seedFile))
@@ -77,7 +83,7 @@ public static class Db2Fixture
         conn.Open();
         foreach (var (t, order) in tables)
         {
-            using var reader = conn.BeginTextExport($"COPY (SELECT * FROM {t} ORDER BY {order}) TO STDOUT WITH CSV HEADER");
+            using var reader = conn.BeginTextExport($"COPY (SELECT * FROM {Ident(t)} ORDER BY {Ident(order)}) TO STDOUT WITH CSV HEADER");
             File.WriteAllText(Path.Combine(outDir, t + ".csv"), reader.ReadToEnd());
         }
     }

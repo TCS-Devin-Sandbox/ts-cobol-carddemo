@@ -220,5 +220,65 @@
     "program": "CBTRN03C",
     "line": 370,
     "statement": "The detail line carries id, account, type code/desc, category code/desc, source and the edited amount (-ZZZ,ZZZ,ZZZ.ZZ)."
+  },
+  {
+    "id": "BR-TUP-001",
+    "program": "COBTUPDT",
+    "line": 85,
+    "statement": "OPEN FILE OK / NOT OK is displayed and the read loop runs either way (0001-OPEN-FILES falls through)."
+  },
+  {
+    "id": "BR-TUP-002",
+    "program": "COBTUPDT",
+    "line": 110,
+    "statement": "Record type A inserts, U updates, D deletes, '*' is a comment; any other type is an error."
+  },
+  {
+    "id": "BR-TUP-003",
+    "program": "COBTUPDT",
+    "line": 146,
+    "statement": "INSERT/UPDATE bind the 2-character type code and the full 50-character description (trailing spaces stored)."
+  },
+  {
+    "id": "BR-TUP-004",
+    "program": "COBTUPDT",
+    "line": 180,
+    "statement": "SQLCODE +100 on UPDATE/DELETE would report 'No records found.', but Open COBOL ESQL returns 0 when no row matches, so a missing row reports success (fixture t05)."
+  },
+  {
+    "id": "BR-TUP-005",
+    "program": "COBTUPDT",
+    "line": 232,
+    "statement": "An error DISPLAYs WS-RETURN-MSG (never cleared), sets RETURN-CODE 4 and processing continues with the next record."
+  },
+  {
+    "id": "BR-TUP-006",
+    "program": "COBTUPDT",
+    "line": 157,
+    "statement": "Negative SQLCODE message: 'Error accessing: TRANSACTION_TYPE table. SQLCODE:' followed by SQLCODE edited ----9."
+  },
+  {
+    "id": "BR-DYN-001",
+    "program": "CBTRNDYN",
+    "line": 73,
+    "statement": "DYNSQL lines starting with '--' are skipped; columns 1-72 of the other lines are concatenated, each followed by one blank, into an 800-byte statement."
+  },
+  {
+    "id": "BR-DYN-002",
+    "program": "CBTRNDYN",
+    "line": 96,
+    "statement": "The statement is PREPAREd and EXECUTEd; the EXECUTE SQLCODE is displayed (statement errors surface at EXECUTE under ocesql)."
+  },
+  {
+    "id": "BR-DYN-003",
+    "program": "CBTRNDYN",
+    "line": 93,
+    "statement": "A failed PREPARE or EXECUTE sets RETURN-CODE 8 and processing continues."
+  },
+  {
+    "id": "BR-DYN-004",
+    "program": "CBTRNDYN",
+    "line": 62,
+    "statement": "The program named in PARMS is CALLed dynamically (CALL identifier); COBTUPDT's STOP RUN ends the run unit, so 'CBTRNDYN: END' is not reached."
   }
 ]

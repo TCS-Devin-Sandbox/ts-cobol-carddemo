@@ -53,6 +53,47 @@ public class WorkloadTests
         Assert.True(p.ExitCode == 0, output);
     }
 
+    public static TheoryData<string, string> Db2Cases()
+    {
+        var data = new TheoryData<string, string>();
+        foreach (var chain in new[] { "trantype-update", "trantype-dynamic" })
+        {
+            foreach (var dir in Directory.EnumerateDirectories(Path.Combine(FindRoot(), "fixtures", chain)).Order(StringComparer.Ordinal))
+            {
+                data.Add(chain, Path.GetFileName(dir));
+            }
+        }
+        return data;
+    }
+
+    /// <summary>Db2 contract (CARDDEMO_DB2 set): SYSOUT, RC and table snapshots equal the legacy golden files.</summary>
+    [Theory]
+    [MemberData(nameof(Db2Cases))]
+    public void Db2_target_matches_legacy_golden_files(string chain, string fixture)
+    {
+        var db2 = Environment.GetEnvironmentVariable("CARDDEMO_DB2");
+        if (string.IsNullOrEmpty(db2))
+        {
+            return;
+        }
+        lock (Db2Lock)
+        {
+            var outDir = Temp(fixture);
+            ChainRunner.Run(chain, Path.Combine(Root, "fixtures", chain, fixture), outDir, db2: db2);
+            var expected = Path.Combine(Root, "fixtures", chain, fixture, "expected");
+            Assert.Equal(File.ReadAllText(Path.Combine(expected, "rc.json")), File.ReadAllText(Path.Combine(outDir, "rc.json")));
+            foreach (var sub in new[] { "sysout", "db" })
+            {
+                foreach (var file in Directory.EnumerateFiles(Path.Combine(expected, sub)))
+                {
+                    Assert.Equal(File.ReadAllText(file), File.ReadAllText(Path.Combine(outDir, sub, Path.GetFileName(file))));
+                }
+            }
+        }
+    }
+
+    private static readonly object Db2Lock = new();
+
     /// <summary>Chunk checkpoint + step restart: a POSTTRAN failure after record 2, restarted, gives the clean-run outputs.</summary>
     [Fact]
     public void Posttran_restart_from_checkpoint_matches_clean_run()

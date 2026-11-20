@@ -12,8 +12,9 @@ from pathlib import Path
 BD = Path(__file__).resolve().parents[2]
 ROOT = BD.parent
 DOTNET = os.environ.get("DOTNET", str(Path.home() / ".dotnet" / "dotnet"))
-IGNORED_DD = {"STEPLIB", "SYSOUT", "SYSPRINT", "SYSIN", "SYMNAMES", "SYSUDUMP", "CEEDUMP", "SYSTSPRT", "DD01", "DD02", "DD03"}
-JOBS = {"READACCT": "CBACT01C", "READCARD": "CBACT02C", "INTCALC": "CBACT04C", "POSTTRAN": "CBTRN02C", "TRANREPT": "CBTRN03C"}
+IGNORED_DD = {"STEPLIB", "SYSOUT", "SYSPRINT", "SYSIN", "SYMNAMES", "SYSUDUMP", "CEEDUMP", "SYSTSPRT", "SYSTSIN", "DBRMLIB", "DD01", "DD02", "DD03"}
+JOBS = {"READACCT": "CBACT01C", "READCARD": "CBACT02C", "INTCALC": "CBACT04C", "POSTTRAN": "CBTRN02C", "TRANREPT": "CBTRN03C", "MNTTRDB2": "IKJEFT01", "MNTTRDYN": "IKJEFT01"}
+DB2_JCL = ROOT / "app" / "app-transaction-type-db2" / "jcl"
 
 
 def run(cmd: list[str]) -> tuple[int, str]:
@@ -23,7 +24,8 @@ def run(cmd: list[str]) -> tuple[int, str]:
 
 def jcl_dds(job: str, program: str) -> set[str]:
     dds, inside = set(), False
-    for line in (ROOT / "app" / "jcl" / f"{job}.jcl").read_text().splitlines():
+    path = DB2_JCL / f"{job}.jcl" if (DB2_JCL / f"{job}.jcl").exists() else ROOT / "app" / "jcl" / f"{job}.jcl"
+    for line in path.read_text().splitlines():
         m = re.match(r"^//(\S+)\s+(EXEC|DD)\b", line)
         if not m:
             continue

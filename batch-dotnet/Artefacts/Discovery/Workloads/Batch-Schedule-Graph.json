@@ -43,7 +43,14 @@
       "out": [
         "WEEKLY-TransactionTypesDBRefresh-MNTTRDB2"
       ],
-      "in_scope": false
+      "in_scope": true,
+      "steps": [
+        {
+          "step": "STEP1",
+          "exec": "PGM=IKJEFT01 (DSN RUN PROGRAM(COBTUPDT) L30)",
+          "line": 21
+        }
+      ]
     },
     "DISCGRP": {
       "folder": "WEEKLY-DisclosureGroupsRefresh",
@@ -154,6 +161,19 @@
           "step": "STEP10R",
           "exec": "PGM=CBTRN03C",
           "line": 59
+        }
+      ]
+    },
+    "MNTTRDYN": {
+      "folder": null,
+      "in": [],
+      "out": [],
+      "in_scope": true,
+      "steps": [
+        {
+          "step": "STEP1",
+          "exec": "PGM=IKJEFT01 (DSN RUN PROGRAM(CBTRNDYN) L33)",
+          "line": 23
         }
       ]
     }

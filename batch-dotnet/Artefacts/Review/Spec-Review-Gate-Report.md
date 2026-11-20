@@ -2,10 +2,10 @@
 
 Verdict: **PASS**
 
-- Workloads planned: 5
-- Rules mapped to target components: 37
-- Gaps carried: 5
-- ADRs: 6
+- Workloads planned: 7
+- Rules mapped to target components: 47
+- Gaps carried: 7
+- ADRs: 7
 
 | Severity | Item | Finding |
 |---|---|---|
