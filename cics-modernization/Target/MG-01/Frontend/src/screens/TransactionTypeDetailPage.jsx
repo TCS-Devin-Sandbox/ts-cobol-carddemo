@@ -167,7 +167,7 @@ export default function TransactionTypeDetailPage() {
                 setDescription(v);
                 setFieldError(null);
               }}
-              onBlur={() => setFieldError(validateDescription(description))}
+              onBlur={(e) => e.relatedTarget?.type !== 'submit' && setFieldError(validateDescription(description))}
               maxLength={MAX_DESCRIPTION}
               error={fieldError}
               hint={unchanged ? 'No changes to save.' : `Letters, numbers and spaces. ${description.length}/${MAX_DESCRIPTION}`}

@@ -74,7 +74,7 @@ export default function TransactionTypeAddPage() {
             required
             value={typeCode}
             onChange={(v) => setTypeCode(v)}
-            onBlur={() => setErrors((x) => ({ ...x, typeCode: validateTypeCode(typeCode) }))}
+            onBlur={(e) => e.relatedTarget?.type !== 'submit' && setErrors((x) => ({ ...x, typeCode: validateTypeCode(typeCode) }))}
             maxLength={2}
             inputMode="numeric"
             mono
@@ -94,7 +94,7 @@ export default function TransactionTypeAddPage() {
             required
             value={description}
             onChange={(v) => setDescription(v)}
-            onBlur={() => setErrors((x) => ({ ...x, description: validateDescription(description) }))}
+            onBlur={(e) => e.relatedTarget?.type !== 'submit' && setErrors((x) => ({ ...x, description: validateDescription(description) }))}
             maxLength={MAX_DESCRIPTION}
             error={errors.description}
             hint={`Letters, numbers and spaces. ${description.length}/${MAX_DESCRIPTION}`}
