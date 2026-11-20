@@ -35,9 +35,13 @@
 | | **TOTAL** | **63** | **62** | **1** | **0** | **Fail** | **0** |
 
 ## 3. Overall Verdict
-Run 1 ran 63 cases: **62 passed, 1 failed, 0 blocked, 0 expected deviations.** The pass rate is 98.4%. **Verdict: FAIL** because of BND-002.
+Run 1 ran 63 cases: **62 passed, 1 failed, 0 blocked, 0 expected deviations.** The pass rate is 98.4%. **Run 1 verdict: FAIL** because of BND-002.
+
+The user approved correcting the BND-002 test input. Run 2 re-ran BND-002 only: **63 passed, 0 failed, 0 blocked, so the verdict is PASS.**
 
 ## 4. Failed Scenarios
+Run 2 has no open failures. The run 1 entry below is kept for the record.
+
 > **Boundary & numeric edge cases — ❌ FAIL (4/5)**
 > - **MG02-BND-002 — Leading space in password:** sign in `USER0001` with password ` PASSWORD` (a leading space plus 8 characters, 9 in total).
 >   - Expected: `401 WRONG_PASSWORD` · Actual: `400 FIELD_TOO_LONG` "User ID and password are at most 8 characters." ❌
@@ -66,7 +70,7 @@ None.
 - After each SignOnService restart, the MG-01 API was restarted too. In Development the signing key is ephemeral (Gate 2 GH-4), and MG-01 caches the JWKS.
 - **MG-01 follow-up:** MG02-AUTHZ-003 and MG02-AUTHZ-004 run the scenarios MG-01 had blocked (AUTHZ-001 and AUTHZ-002, which needed a non-admin token). A user token now gets 403 from MG-01 for both read and write.
 - No test data was left behind. `usrsec` is unchanged (same checksum before and after), and `transaction_type` 05 is unchanged.
-- **N1 — test-case defect (test-bug-fix agent, self-fix mode):** BND-002 is *provably wrong*. Its input has 9 characters, but the legacy password field holds 8 (COSGN00.bms `PASSWD LENGTH=8`; CSUSR01Y `SEC-USR-PWD PIC X(08)`). The target rejects input over 8 characters by design, and FV-005 verifies that. The scenario's intent (a leading space is significant) needs an 8-character input such as ` PASSWOR`. Per the bug-fix agent's change discipline, the agent changed no code or test document. The decision goes to the user.
+- **N1 — test-case defect (test-bug-fix agent, self-fix mode):** BND-002 is *provably wrong*. Its input has 9 characters, but the legacy password field holds 8 (COSGN00.bms `PASSWD LENGTH=8`; CSUSR01Y `SEC-USR-PWD PIC X(08)`). The target rejects input over 8 characters by design, and FV-005 verifies that. The scenario's intent (a leading space is significant) needs an 8-character input such as ` PASSWOR`. Per the bug-fix agent's change discipline, the agent changed no code or test document. The decision went to the user, who chose to correct the input to ` PASSWOR`, which is 8 characters. On re-run the case returned `401 WRONG_PASSWORD` "Wrong Password. Try again ...", so it passes.
 
 ## 8. Overall Scorecard
 | # | Test Group | Passed | Total Cases | Pass % |
@@ -85,6 +89,6 @@ None.
 | 12 | PSF | 0 | 0 | N/A |
 | 13 | BND | 4 | 5 | 80% |
 
-**Overall:** 62 of 63 passed (98.4%).
+**Overall:** run 1 passed 62 of 63 (98.4%). Run 2 passed **63 of 63 (100%)**; BND is now 5/5.
 
-**Quality judgment:** **Low risk.** The single failure comes from a test-case input that breaks the 8-character limit the target enforces correctly. No application defect was found.
+**Quality judgment:** **Low risk.** The only failure was a test-case input defect, now corrected. No application defect was found.

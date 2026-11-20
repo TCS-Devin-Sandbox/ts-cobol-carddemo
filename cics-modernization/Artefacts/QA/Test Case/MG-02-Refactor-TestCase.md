@@ -141,7 +141,7 @@ Not applicable for this group: MG-02 has no list or inquiry surface. The MG-01 l
 | Test Case ID | Scenario / Title | Preconditions | Input / Action | Expected Result | Source (artefact citation) |
 |---|---|---|---|---|---|
 | MG02-BND-001 | 8-character user ID | seed | `ADMIN001` | 200 | X(08) |
-| MG02-BND-002 | Leading space in password | seed | ` PASSWORD` | 401 `WRONG_PASSWORD` | X(08) compare (leading space significant) |
+| MG02-BND-002 | Leading space in password | seed | ` PASSWOR` (8 characters, the field maximum) | 401 `WRONG_PASSWORD` | X(08) compare (leading space significant) |
 | MG02-BND-003 | Lower case with trailing spaces | seed | `admin001  ` | 200 | UPPER-CASE + padding |
 | MG02-BND-004 | Option with surrounding space | admin menu | Go ` 5` | navigates to `/transaction-types` | BDD b. "Option input is right-trimmed and zero-filled" |
 | MG02-BND-005 | Oversized body | — | body > 1 KB | 413 or 400 | Backend spec §5 |
