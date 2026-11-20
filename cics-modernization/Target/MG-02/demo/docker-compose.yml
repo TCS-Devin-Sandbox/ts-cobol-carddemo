@@ -30,6 +30,7 @@ services:
       ASPNETCORE_ENVIRONMENT: Development
       ASPNETCORE_URLS: http://+:5001
       Auth__Issuer: http://signon:5001
+      RateLimit__SignInPerMinute: ${SIGNON_RATE_LIMIT:-5}
       AllowedHosts: "localhost;signon"
       ConnectionStrings__SignOn: Host=db;Port=5432;Database=carddemo;Username=carddemo_signon;Password=${CARDDEMO_SIGNON_PASSWORD}
     depends_on:
