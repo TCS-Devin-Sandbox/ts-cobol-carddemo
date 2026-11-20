@@ -170,10 +170,18 @@ class Handler(BaseHTTPRequestHandler):
             return self.send({'error': 'not found'}, 404)
         custom = False
         try:
-            # This local tool accepts only same-origin browser submissions.
-            origin = self.headers.get('Origin')
-            if origin and urlsplit(origin).netloc != self.headers.get('Host'):
-                return self.send({'error': 'cross-origin submission refused'}, 403)
+            hosts = self.headers.get_all('Host', [])
+            host = urlsplit('//' + hosts[0]) if len(hosts) == 1 else None
+            if (host is None or host.hostname not in ('localhost', '127.0.0.1')
+                    or host.username is not None or host.password is not None
+                    or host.path or host.query or host.fragment
+                    or (host.port or 80) != self.server.server_port):
+                return self.send({'error': 'non-local Host refused'}, 403)
+            for header in ('Origin', 'Referer'):
+                for value in self.headers.get_all(header, []):
+                    source = urlsplit(value)
+                    if (source.scheme != 'http' or source.netloc != host.netloc):
+                        return self.send({'error': 'cross-origin submission refused'}, 403)
             length = int(self.headers.get('Content-Length', '0'))
             if not 0 < length <= MAX_BODY:
                 raise ValueError('request body must be between 1 byte and 2 MiB')
@@ -215,7 +223,7 @@ class Handler(BaseHTTPRequestHandler):
 
 def main():
     port = int(os.environ.get('LAB_PORT', '8090'))
-    server = ThreadingHTTPServer(('0.0.0.0', port), Handler)
+    server = ThreadingHTTPServer((os.environ.get('LAB_HOST', '127.0.0.1'), port), Handler)
     server.metadata = startup_metadata()
     threading.Thread(target=worker, daemon=True).start()
     print(f'Interest replay lab: http://localhost:{port}', flush=True)

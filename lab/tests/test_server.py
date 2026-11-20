@@ -38,6 +38,30 @@ class ServerTests(unittest.TestCase):
         self.assertEqual(error.exception.code, 400)
         self.assertIn('choose exactly one', json.loads(error.exception.read())['error'])
 
+    def test_untrusted_post_is_not_queued(self):
+        for headers in [
+            {'Host': 'attacker.example'},
+            {'Host': 'attacker.example', 'Origin': 'http://attacker.example'},
+            {'Referer': 'http://attacker.example/form'},
+            {'Origin': self.url, 'Referer': 'http://attacker.example/form'},
+            {'Origin': 'null'},
+            {'Host': 'localhost:1'},
+        ]:
+            with self.subTest(headers=headers), patch('lab.server.QUEUE.put') as enqueue:
+                request = Request(self.url + '/api/runs', data=b'{"set":"golden"}', headers=headers)
+                with self.assertRaises(HTTPError) as error:
+                    urlopen(request)
+                self.assertEqual(error.exception.code, 403)
+                enqueue.assert_not_called()
+
+    def test_same_origin_post_is_queued(self):
+        for headers in [{}, {'Origin': self.url}, {'Referer': self.url + '/'}]:
+            with self.subTest(headers=headers), patch('lab.server.QUEUE.put') as enqueue:
+                request = Request(self.url + '/api/runs', data=b'{"set":"golden"}', headers=headers)
+                with urlopen(request) as response:
+                    self.assertEqual(response.status, 202)
+                enqueue.assert_called_once()
+
     def test_invalid_custom_input_names(self):
         request = Request(self.url + '/api/runs', data=b'{"inputs":{"../escape":"x"}}', headers={'Content-Type': 'application/json'})
         with urlopen(request) as response:
