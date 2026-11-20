@@ -1,7 +1,8 @@
 package com.carddemo.batch.common.codec;
 
 import java.io.IOException;
-import java.nio.file.Path;
+import java.io.InputStreamReader;
+import java.nio.charset.StandardCharsets;
 
 public enum CardDemoLayout {
     CVACT01Y(300), CVACT02Y(150), CVACT03Y(50), CVCUS01Y(500),
@@ -14,10 +15,13 @@ public enum CardDemoLayout {
         this.length = length;
     }
 
-    public RecordLayout load(Path estateRoot) throws IOException {
-        Path directory = estateRoot.resolve(this == REJTRAN ? "tools/parity/layouts" : "app/cpy");
-        RecordLayout layout = RecordLayout.fromCopybook(directory.resolve(name() + ".cpy"));
-        if (layout.length() != length) throw new IllegalArgumentException("Copybook length changed: " + name());
-        return layout;
+    public RecordLayout load() throws IOException {
+        String resource = "/copybooks/" + name() + ".cpy";
+        try (var stream = CardDemoLayout.class.getResourceAsStream(resource)) {
+            if (stream == null) throw new IOException("Missing copybook resource: " + resource);
+            RecordLayout layout = RecordLayout.fromCopybook(new InputStreamReader(stream, StandardCharsets.UTF_8));
+            if (layout.length() != length) throw new IllegalArgumentException("Copybook length changed: " + name());
+            return layout;
+        }
     }
 }

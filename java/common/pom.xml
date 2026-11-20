@@ -10,6 +10,39 @@
     </parent>
     <artifactId>carddemo-batch-common</artifactId>
 
+    <build>
+        <resources>
+            <resource>
+                <directory>src/main/resources</directory>
+            </resource>
+            <resource>
+                <directory>../../app/cpy</directory>
+                <targetPath>copybooks</targetPath>
+                <filtering>false</filtering>
+                <includes>
+                    <include>CVACT01Y.cpy</include>
+                    <include>CVACT02Y.cpy</include>
+                    <include>CVACT03Y.cpy</include>
+                    <include>CVCUS01Y.cpy</include>
+                    <include>CVTRA01Y.cpy</include>
+                    <include>CVTRA02Y.cpy</include>
+                    <include>CVTRA03Y.cpy</include>
+                    <include>CVTRA04Y.cpy</include>
+                    <include>CVTRA05Y.cpy</include>
+                    <include>CVTRA06Y.cpy</include>
+                </includes>
+            </resource>
+            <resource>
+                <directory>../../tools/parity/layouts</directory>
+                <targetPath>copybooks</targetPath>
+                <filtering>false</filtering>
+                <includes>
+                    <include>REJTRAN.cpy</include>
+                </includes>
+            </resource>
+        </resources>
+    </build>
+
     <dependencies>
         <dependency>
             <groupId>org.flywaydb</groupId>

@@ -50,12 +50,12 @@ class FixtureRoundTripTest {
             assertNotNull(meta, "Missing comparator manifest entry: " + path);
             int length = ((Number) meta.get("lrecl")).intValue();
             RecordLayout result = meta.get("layout").equals("text") ? text(length)
-                    : CardDemoLayout.valueOf((String) meta.get("layout")).load(ROOT);
+                    : CardDemoLayout.valueOf((String) meta.get("layout")).load();
             assertEquals(length, result.length());
             return result;
         }
         for (var entry : INPUTS.entrySet()) {
-            if (name.startsWith("AWS.M2.CARDDEMO." + entry.getKey() + ".")) return entry.getValue().load(ROOT);
+            if (name.startsWith("AWS.M2.CARDDEMO." + entry.getKey() + ".")) return entry.getValue().load();
         }
         if (name.equals("AWS.M2.CARDDEMO.DATEPARM.txt") || name.equals("DYNSQL.txt")) return text(80);
         if (name.equals("INPFILE.txt")) return new RecordLayout(List.of(
@@ -97,8 +97,11 @@ class FixtureRoundTripTest {
     }
 
     @Test
-    void allElevenCopybooksHaveContractLengths() throws Exception {
-        for (var layout : CardDemoLayout.values()) layout.load(ROOT);
+    void allElevenClasspathCopybooksMatchEstateAndHaveContractLengths() throws Exception {
+        for (var layout : CardDemoLayout.values()) {
+            Path directory = ROOT.resolve(layout == CardDemoLayout.REJTRAN ? "tools/parity/layouts" : "app/cpy");
+            assertEquals(RecordLayout.fromCopybook(directory.resolve(layout.name() + ".cpy")), layout.load());
+        }
     }
 
     @Test

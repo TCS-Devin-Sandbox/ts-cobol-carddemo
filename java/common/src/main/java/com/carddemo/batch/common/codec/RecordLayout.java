@@ -1,6 +1,8 @@
 package com.carddemo.batch.common.codec;
 
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.Reader;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
@@ -32,8 +34,16 @@ public record RecordLayout(List<Field> fields) {
 
     /** Parses the elementary PIC subset used by the eleven B2 copybooks. */
     public static RecordLayout fromCopybook(Path path) throws IOException {
+        try (var reader = Files.newBufferedReader(path)) {
+            return fromCopybook(reader);
+        }
+    }
+
+    public static RecordLayout fromCopybook(Reader reader) throws IOException {
         var source = new StringBuilder();
-        for (String raw : Files.readAllLines(path)) {
+        var buffered = new BufferedReader(reader);
+        String raw;
+        while ((raw = buffered.readLine()) != null) {
             String line = expandTabs(raw);
             if (line.length() <= 6 || line.charAt(6) == '*' || line.charAt(6) == '/') continue;
             source.append(line.substring(6, Math.min(72, line.length())).trim()).append(' ');
@@ -71,7 +81,7 @@ public record RecordLayout(List<Field> fields) {
                     kind, length, digits, scale, signed));
             offset += length;
         }
-        if (fields.isEmpty()) throw new IllegalArgumentException("No fields in " + path);
+        if (fields.isEmpty()) throw new IllegalArgumentException("No fields in copybook");
         return new RecordLayout(fields);
     }
 
