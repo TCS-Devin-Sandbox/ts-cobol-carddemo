@@ -1,7 +1,20 @@
-import { act, renderHook } from '@testing-library/react';
+import { createElement } from 'react';
+import { act, render, renderHook, screen } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 import { useFunctionKeys, type KeyHandlers } from './useFunctionKeys';
 
 describe('useFunctionKeys', () => {
+  it('lets Enter activate a focused button instead of processing the page', async () => {
+    const enter = vi.fn();
+    const save = vi.fn();
+    renderHook(() => useFunctionKeys({ Enter: enter }));
+    render(createElement('button', { onClick: save }, 'Save'));
+    screen.getByRole('button').focus();
+    await userEvent.keyboard('{Enter}');
+    expect(save).toHaveBeenCalledOnce();
+    expect(enter).not.toHaveBeenCalled();
+  });
+
   it('does not confirm delete when F4 auto-repeats', () => {
     const handler = vi.fn();
     renderHook(() => useFunctionKeys({ F4: handler }));
