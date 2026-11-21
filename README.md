@@ -417,4 +417,11 @@ The CardDemo application has been enhanced with optional features that extend it
 
 These optional features make CardDemo an even more useful resource for customers looking to modernize their mainframe applications. With modules for DB2, MQ, IMS DB, JCL utilities, and more data formats now available, customers can leverage CardDemo to test a wider array of mainframe migration, refactoring, replatforming, and augmentation scenarios.
 
+## VSAM production data load
+
+`make data-load INPUT=work/unloads MANIFEST=work/unloads/manifest.json`
+loads fixed-record IBM037 unloads into PostgreSQL and produces per-copybook-field
+checksums and record counts in JSON and Markdown. See [the loader guide](java/data-load/README.md)
+for manifest examples, database settings, replacement/rollback semantics and verification-only mode.
+
 Last updated: April 2025

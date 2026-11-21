@@ -118,6 +118,14 @@ endif
 endif
 export CANDIDATE
 
+# Fixed EBCDIC unloads; isolated from the legacy Db2 tables in the same service.
+.PHONY: data-load
+data-load:
+	@test -n "$(INPUT)" -a -n "$(MANIFEST)" || { echo 'usage: make data-load INPUT=<directory> MANIFEST=<json> [REPORT=work/data-load] [VERIFY_ONLY=1]'; exit 2; }
+	mvn -B -f java/pom.xml -pl data-load -am -DskipTests package
+	$(COMPOSE) up -d --wait db estate
+	$(EXEC) sh -c 'JDBC_URL=jdbc:postgresql://db:5432/carddemo JDBC_USER="$$PGUSER" JDBC_PASSWORD="$$PGPASSWORD" JDBC_SCHEMA=vsam exec java -jar java/data-load/target/data-load.jar "$(INPUT)" "$(MANIFEST)" "$(if $(REPORT),$(REPORT),work/data-load)" $(if $(VERIFY_ONLY),--verify-only)'
+
 ifeq ($(CHAIN),read-masters)
 ifeq ($(strip $(CANDIDATE)),)
 parity-java: CANDIDATE = java -jar java/read-masters/target/read-masters.jar
