@@ -26,7 +26,8 @@ All of it runs inside the `estate` container; the host only needs Docker and
 Chains (`tools/runjcl/chains.json`): `posting` (POSTTRAN + TRANREPT ->
 CBTRN02C, CBTRN03C), `interest` (INTCALC -> CBACT04C), `trantype-update`
 (MNTTRDB2 -> COBTUPDT via ocesql/PostgreSQL), `trantype-dynamic` (MNTTRDYN ->
-CBTRNDYN dynamic SQL + dynamic CALL).  Fixtures: `fixtures/<chain>/<case>/`
+CBTRNDYN dynamic SQL + dynamic CALL), `read-masters` (READACCT, READCARD,
+READXREF, READCUST).  Fixtures: `fixtures/<chain>/<case>/`
 with `input/`, `expected/` and a `README.md` stating what the case proves.
 
 ## Rules

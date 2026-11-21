@@ -80,7 +80,22 @@ def snapshot_database(chain: dict, out: Path) -> None:
         (out / "db" / f"{table}.csv").write_text(csv.stdout)
 
 
-def unload(runner: runjcl.Runner, dsn: str, layout: str, out: Path) -> None:
+def variable_records(data: bytes, dsn: str) -> list[bytes]:
+    records = []
+    offset = 0
+    while offset < len(data):
+        header = data[offset:offset + 4]
+        size = int.from_bytes(header[:2], "big")
+        offset += len(header)
+        if len(header) != 4 or header[2:] != b"\x00\x00" or not size or offset + size > len(data):
+            raise SystemExit(f"{dsn}: invalid GnuCOBOL variable record")
+        records.append(data[offset:offset + size])
+        offset += size
+    return records
+
+
+def unload(runner: runjcl.Runner, dsn: str, output: str | dict, out: Path) -> None:
+    meta = {"layout": output} if isinstance(output, str) else dict(output)
     catalog = runner.catalog
     if "(" in dsn:
         dsn, _ = runner.resolve_dsn(dsn)
@@ -98,12 +113,22 @@ def unload(runner: runjcl.Runner, dsn: str, layout: str, out: Path) -> None:
         data, lrecl = flat.read_bytes(), entry["recsize"]
     else:
         data, lrecl = path.read_bytes(), entry.get("lrecl") or 80
-    records = [data[i:i + lrecl] for i in range(0, len(data), lrecl)]
+    variable = entry.get("recfm") == "VB"
+    if variable:
+        records = variable_records(data, dsn)
+    else:
+        records = [data[i:i + lrecl] for i in range(0, len(data), lrecl)]
+    if meta.get("serialization") == "hex":
+        lines = (r.hex().encode("ascii") for r in records)
+    elif variable:
+        lines = iter(records)
+    else:
+        lines = (r.rstrip(b" ") for r in records)
     (out / "datasets").mkdir(parents=True, exist_ok=True)
     target = out / "datasets" / f"{dsn}.txt"
-    target.write_bytes(b"".join(r.rstrip(b" ") + b"\n" for r in records))
+    target.write_bytes(b"".join(line + b"\n" for line in lines))
     manifest = json.loads((out / "manifest.json").read_text()) if (out / "manifest.json").exists() else {}
-    manifest[dsn] = {"layout": layout, "lrecl": lrecl, "records": len(records)}
+    manifest[dsn] = {**meta, "lrecl": lrecl, "records": len(records)}
     (out / "manifest.json").write_text(json.dumps(manifest, indent=1, sort_keys=True))
 
 
@@ -126,6 +151,9 @@ def run_case(chain_name: str, case: str, out: Path, verbose: bool = False) -> in
         rc = runner.run_job(runjcl.find_jcl(job))
         if rc > 8:
             raise SystemExit(f"setup job {job} failed with RC {rc}")
+    # The original posting and interest goldens include setup steps in the first job.
+    if not chain.get("include_setup_steps_in_rc"):
+        runner.rcs = {}
     for job in chain["jobs"]:
         rc = runner.run_job(runjcl.find_jcl(job))
         rcs[job] = {"maxrc": rc, "steps": {k: v for k, v in runner.rcs.items() if "." not in k or k.startswith(job)}}
@@ -136,8 +164,8 @@ def run_case(chain_name: str, case: str, out: Path, verbose: bool = False) -> in
         job, step = ref.split("/")
         src = runner.joblog / job / step.replace(".", "_") / "SYSOUT.txt"
         (out / "sysout" / f"{job}.{step}.txt").write_text(src.read_text() if src.exists() else "")
-    for dsn, layout in chain["outputs"].items():
-        unload(runner, dsn, layout, out)
+    for dsn, output in chain["outputs"].items():
+        unload(runner, dsn, output, out)
     snapshot_database(chain, out)
     return max((r["maxrc"] for r in rcs.values()), default=0)
 

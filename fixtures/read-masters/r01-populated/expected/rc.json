@@ -1,0 +1,27 @@
+{
+ "READACCT": {
+  "maxrc": 0,
+  "steps": {
+   "PREDEL": 0,
+   "STEP05": 0
+  }
+ },
+ "READCARD": {
+  "maxrc": 0,
+  "steps": {
+   "STEP05": 0
+  }
+ },
+ "READCUST": {
+  "maxrc": 0,
+  "steps": {
+   "STEP05": 0
+  }
+ },
+ "READXREF": {
+  "maxrc": 0,
+  "steps": {
+   "STEP05": 0
+  }
+ }
+}

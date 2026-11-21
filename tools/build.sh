@@ -35,8 +35,8 @@ for src in app/cbl/CB*.cbl app/cbl/CSUTLDTC.cbl app/cbl/COBSWAIT.cbl; do
     esac
 done
 
-# Local stand-ins (PARM driver, LE abend stub, synthetic PL/I caller).
-for src in tools/stubs/PARMDRV.cbl tools/stubs/CEE3ABD.cbl; do
+# Local stand-ins for the PARM driver, LE abend service and HLASM date service.
+for src in tools/stubs/PARMDRV.cbl tools/stubs/CEE3ABD.cbl tools/stubs/COBDATFT.cbl; do
     compile "$src"
 done
 

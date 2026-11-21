@@ -29,6 +29,10 @@ including an empty file, must be present. The runner writes its report to
 work/parity-java/report.md and exits nonzero if any command or comparison fails.
 It does not call the legacy recorder or require Docker.
 
+Datasets marked "serialization": "hex" in the manifest use one hex-encoded
+record per line, including all padding, to carry packed fields. READACCT's
+VBPS stores one variable-length text payload per line without runtime headers.
+
 Step-scoped comparison
 ----------------------
 

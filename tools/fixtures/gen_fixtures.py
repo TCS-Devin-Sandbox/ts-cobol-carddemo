@@ -91,6 +91,23 @@ def posting_case(name: str, readme: str, accounts: list[dict], xrefs: list[dict]
     (inp.parent / "README.md").write_text(readme.strip() + "\n")
 
 
+def read_masters_case(name: str, readme: str, accounts: list[dict], xrefs: list[dict]) -> None:
+    inp = FIXTURES / "read-masters" / name / "input"
+    by_id = {a["ACCT-ID"]: a for a in accounts}
+    write(inp / "AWS.M2.CARDDEMO.ACCTDATA.PS.txt", "CVACT01Y", accounts)
+    write(inp / "AWS.M2.CARDDEMO.CARDXREF.PS.txt", "CVACT03Y", xrefs)
+    write(inp / "AWS.M2.CARDDEMO.CARDDATA.PS.txt", "CVACT02Y",
+          [{"CARD-NUM": r["XREF-CARD-NUM"], "CARD-ACCT-ID": r["XREF-ACCT-ID"],
+            "CARD-EMBOSSED-NAME": f"TEST CUSTOMER {r['XREF-CUST-ID']}",
+            "CARD-EXPIRAION-DATE": by_id[r["XREF-ACCT-ID"]]["ACCT-EXPIRAION-DATE"],
+            "CARD-ACTIVE-STATUS": by_id[r["XREF-ACCT-ID"]]["ACCT-ACTIVE-STATUS"]} for r in xrefs])
+    write(inp / "AWS.M2.CARDDEMO.CUSTDATA.PS.txt", "CVCUS01Y",
+          [{"CUST-ID": r["XREF-CUST-ID"], "CUST-FIRST-NAME": "TEST",
+            "CUST-LAST-NAME": f"CUSTOMER {r['XREF-CUST-ID']}",
+            "CUST-ADDR-COUNTRY-CD": "USA", "CUST-PRI-CARD-HOLDER-IND": "Y"} for r in xrefs])
+    (inp.parent / "README.md").write_text(readme.strip() + "\n")
+
+
 def interest_case(name: str, readme: str, accounts: list[dict], xrefs: list[dict], balances: list[dict],
                   discgrp: list | None = None) -> None:
     inp = FIXTURES / "interest" / name / "input"
@@ -133,12 +150,13 @@ def assert_tie(balance: str, rate: str, is_tie: bool) -> None:
 
 def main() -> None:
     # ---------------------------------------------------------------- posting
+    baseline_accounts = [account(1001, "500.00", "5000.00", "GOLD"), account(1002, "1200.50", "3000.00", "STANDARD")]
+    baseline_xrefs = [xref(1001), xref(1002)]
     posting_case("p01-baseline-mixed", """
 # p01-baseline-mixed
 Two active accounts, four valid transactions (purchase, purchase, payment, refund).
 Everything posts; CBTRN02C ends with RC 0 and the TRANREPT report lists all four.
-""", [account(1001, "500.00", "5000.00", "GOLD"), account(1002, "1200.50", "3000.00", "STANDARD")],
-        [xref(1001), xref(1002)],
+""", baseline_accounts, baseline_xrefs,
         [tcatbal(1001, "01", 1, "500.00"), tcatbal(1001, "02", 1, "0"), tcatbal(1002, "01", 1, "1200.50"),
          tcatbal(1002, "05", 1, "0")],
         [tran(1, "01", 1, "125.00", card(1001), "Bookshop purchase"),
@@ -202,6 +220,23 @@ creates it ("TCATBAL record not found ... Creating").  RC 0.
 No daily transactions at all.  CBTRN02C ends with RC 0, writes nothing to TRANSACT
 or DALYREJS, and TRANREPT produces a report with headers and zero detail lines.
 """, [account(1001, "500.00", "5000.00", "GOLD")], [xref(1001)], [tcatbal(1001, "01", 1, "500.00")], [])
+
+    # ----------------------------------------------------------- read masters
+    read_masters_case("r01-populated", """
+# r01-populated
+Reuses the posting baseline accounts and cross-references, with matching synthetic
+cards and customers. All four jobs read two records in key order and return RC 0.
+READACCT writes two packed-field records, two array records (including negative
+values) and four variable records. The local COBDATFT stand-in supplies the
+compact reissue date in PSCOMP; this is not a run of the HLASM load module.
+""", baseline_accounts, baseline_xrefs)
+
+    read_masters_case("r02-empty", """
+# r02-empty
+All four indexed masters are empty. Each reader reaches EOF immediately and
+returns RC 0 without printing detail records. READACCT creates all three
+output datasets with zero records.
+""", [], [])
 
     # --------------------------------------------------------------- interest
     assert_tie("1000.00", "12.00", False)
