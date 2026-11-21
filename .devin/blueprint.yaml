@@ -24,13 +24,16 @@ knowledge:
   - name: statement json extract
     contents: |
       ./scripts/run_statement_json.sh   # writes app/data/json/statements.json
-  - name: spring boot build
+  - name: online app tests
     contents: |
-      (cd spring-boot && mvn -q clean verify)   # needs JAVA_HOME on a Java 21 JDK
-  - name: spring boot startup
+      (cd carddemo-online-api && mvn -B verify)   # needs Docker (Testcontainers)
+      (cd carddemo-online-ui && npm ci && npm test)
+  - name: online app startup
     contents: |
-      (cd spring-boot && mvn -q spring-boot:run)   # H2 in-memory, seeds from app/data on startup
+      docker compose up -d --wait postgres
+      (cd carddemo-online-api && SPRING_PROFILES_ACTIVE=dev mvn spring-boot:run)
+      (cd carddemo-online-ui && npm ci && npm run dev -- --host 0.0.0.0)
   - name: notes
     contents: |
       ASCII data in app/data/ASCII uses zoned-decimal overpunch signs, so compile with -fsign=EBCDIC.
-      /usr/bin/java is Java 8 on this image; the Spring Boot module requires Java 21 (JAVA_HOME=/usr/lib/jvm/java-21-openjdk-amd64).
+      The online API targets Java 17; the batch Maven modules require Java 21.

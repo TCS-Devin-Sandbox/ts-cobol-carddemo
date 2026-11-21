@@ -211,20 +211,21 @@ The DB2 transaction-type screens `CTLI` (COTRTLIC) and `CTTU` (COTRTUPC) from `a
 | Path | Content |
 |---|---|
 | [docs/trantype/](docs/trantype/) | discovery, requirements/RTM, schema mapping, target spec, test plan, deviations |
-| `db/migration/` | Flyway migrations (`V1__create_tables.sql`, `V2__seed_data.sql`) |
-| `carddemo-trantype-api/` | Spring Boot API (Java 17, Maven) |
-| `carddemo-trantype-ui/` | React + TypeScript UI (Vite, MUI) |
+| `db/migration/` | Flyway migrations for the DB2-derived transaction-type tables |
+| `java/common/src/main/resources/db/migration/` | Shared VSAM master migrations (separate Flyway history in the online database) |
+| `carddemo-online-api/` | Spring Boot API (Java 17, Maven) |
+| `carddemo-online-ui/` | React + TypeScript UI (Vite, MUI) |
 | `docker-compose.yml` | local PostgreSQL 15 |
 
 Quick start:
 
 ```sh
 docker compose up -d postgres
-(cd carddemo-trantype-api && SPRING_PROFILES_ACTIVE=dev mvn spring-boot:run)  # http://localhost:8080, dev-only credentials
-(cd carddemo-trantype-ui && npm install && npm run dev) # http://localhost:5173, sign on as admin/admin123
+(cd carddemo-online-api && SPRING_PROFILES_ACTIVE=dev mvn spring-boot:run)  # http://localhost:8080, dev-only credentials
+(cd carddemo-online-ui && npm install && npm run dev) # http://localhost:5173, sign on as admin/admin123
 ```
 
-Tests: `mvn test` in `carddemo-trantype-api` (unit + Testcontainers integration, needs Docker) and `npm test` in `carddemo-trantype-ui`.
+Tests: `mvn test` in `carddemo-online-api` (unit + Testcontainers integration, needs Docker) and `npm test` in `carddemo-online-ui`.
 
 ## Running Batch Jobs
 
@@ -417,4 +418,3 @@ The CardDemo application has been enhanced with optional features that extend it
 These optional features make CardDemo an even more useful resource for customers looking to modernize their mainframe applications. With modules for DB2, MQ, IMS DB, JCL utilities, and more data formats now available, customers can leverage CardDemo to test a wider array of mainframe migration, refactoring, replatforming, and augmentation scenarios.
 
 Last updated: April 2025
-

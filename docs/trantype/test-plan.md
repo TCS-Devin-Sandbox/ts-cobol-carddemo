@@ -4,10 +4,10 @@ Expected results come from the COBOL source (see `discovery-ctli-cttu.md`) and t
 
 | Layer | Tooling | Location |
 |---|---|---|
-| API unit | JUnit 5 + Mockito, AssertJ | `carddemo-trantype-api/src/test/java/**/{service,validation,web}` |
+| API unit | JUnit 5 + Mockito, AssertJ | `carddemo-online-api/src/test/java/**/{service,validation,web}` |
 | API slice | `@WebMvcTest` + spring-security-test (JWT) | `TransactionTypeControllerTest` |
 | API integration | `@SpringBootTest` + Testcontainers `postgres:15-alpine` + Flyway | `it/TransactionTypeApiIntegrationTest` (Surefire, runs under `mvn test`) |
-| UI component | Vitest + React Testing Library + user-event (API mocked) | `carddemo-trantype-ui/src/**/*.test.ts(x)` |
+| UI component | Vitest + React Testing Library + user-event (API mocked) | `carddemo-online-ui/src/**/*.test.ts(x)` |
 
 ## Matrix
 

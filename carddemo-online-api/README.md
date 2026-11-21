@@ -1,13 +1,13 @@
-# carddemo-trantype-api
+# carddemo-online-api
 
-Spring Boot 3 / Java 17 replacement for CICS transactions CTLI (COTRTLIC) and CTTU (COTRTUPC). Contract: `../docs/target-spec.md`.
+Spring Boot 3 / Java 17 API for CardDemo's online transactions. It currently serves CTLI (COTRTLIC) and CTTU (COTRTUPC); see [the transaction-type contract](../docs/trantype/target-spec.md).
 
 ## Run
 ```sh
 docker compose -f ../docker-compose.yml up -d postgres
 SPRING_PROFILES_ACTIVE=dev mvn spring-boot:run   # dev profile supplies local-only JWT secret and passwords
 ```
-Flyway applies `../db/migration` (packaged into the jar as `classpath:db/migration`).
+Flyway keeps the existing DB2-derived definitions and seed data from `../db/migration`. It applies the [shared VSAM master migrations](../java/common/src/main/resources/db/migration/) in the same schema (`public` by default), using a separate `flyway_vsam_schema_history` table so the two migration sequences do not collide. Transaction-type endpoints retain their existing tables and data.
 
 | Env var | Default |
 |---|---|
