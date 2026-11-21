@@ -3,8 +3,11 @@ package com.carddemo.account;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.Map;
+import java.util.regex.Pattern;
 
 final class AccountUpdateEdits {
+    private static final Pattern CURRENCY = Pattern.compile(
+            "(?<prefix>[+-] *\\$?|\\$ *[+-]?)? *(?<number>[0-9][0-9,]*(?:\\.[0-9]*)?|\\.[0-9]+) *(?<suffix>[+-]|CR|DB)?");
     record Invalid(String field, String message) { }
     private final Map<String, String> fields;
 
@@ -89,10 +92,15 @@ final class AccountUpdateEdits {
     }
 
     static BigDecimal amount(String value) {
-        String number = value.trim().replace(",", "").replace("$", "").replace(" ", "");
-        if (number.endsWith("CR") || number.endsWith("DB")) number = "-" + number.substring(0, number.length() - 2);
-        if (number.endsWith("-") || number.endsWith("+")) number = number.charAt(number.length() - 1) + number.substring(0, number.length() - 1);
-        if (!number.matches("[+-]?(?:[0-9]+(?:\\.[0-9]*)?|\\.[0-9]+)")) throw new NumberFormatException();
+        var match = CURRENCY.matcher(value.trim());
+        if (!match.matches()) throw new NumberFormatException();
+        String prefix = match.group("prefix"), suffix = match.group("suffix");
+        if (prefix != null && (prefix.contains("+") || prefix.contains("-")) && suffix != null) {
+            throw new NumberFormatException();
+        }
+        String number = match.group("number").replace(",", "");
+        if ((prefix != null && prefix.contains("-")) || "-".equals(suffix)
+                || "CR".equals(suffix) || "DB".equals(suffix)) number = "-" + number;
         return new BigDecimal(number).setScale(2, java.math.RoundingMode.DOWN).remainder(new BigDecimal("10000000000"));
     }
 

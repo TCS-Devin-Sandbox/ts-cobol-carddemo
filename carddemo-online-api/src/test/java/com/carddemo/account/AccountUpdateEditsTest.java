@@ -120,6 +120,20 @@ class AccountUpdateEditsTest {
         assertThat(new AccountUpdateEdits(fields).validate()).isNull();
     }
 
+    @ParameterizedTest
+    @ValueSource(strings = {"$1$00", "1$00", "100$", "1 00", ",100", "100.0,0", "+100CR", "100cr", "--100"})
+    void p1250RejectsInvalidNumvalCCurrencySyntax(String value) {
+        var fields = valid(); fields.put("creditLimit", value);
+        assertThat(new AccountUpdateEdits(fields).validate()).isEqualTo(
+                new AccountUpdateEdits.Invalid("creditLimit", "Credit Limit is not valid"));
+    }
+
+    @ParameterizedTest
+    @ValueSource(strings = {"$-100", "-$100", "100 CR", "100DB", "100-", "$ - 100"})
+    void p1250AcceptsNumvalCSignAndCurrencyPositions(String value) {
+        assertThat(AccountUpdateEdits.amount(value)).isEqualByComparingTo("-100.00");
+    }
+
     @Test
     void p1260BlankAreaAndPrefixIgnoreLineAndPunctuationIsNotEdited() {
         var fields = valid(); fields.put("phoneNumber1", "x   x   x1234");
