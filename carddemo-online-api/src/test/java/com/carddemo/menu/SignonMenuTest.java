@@ -83,7 +83,9 @@ class SignonMenuTest {
         for (String option : new String[]{" 2", "2 "}) {
             mvc.perform(post("/api/menus/main/select").with(jwt()).contentType(MediaType.APPLICATION_JSON)
                     .content("{\"option\":\"" + option + "\"}")).andExpect(status().isOk())
-                    .andExpect(jsonPath("$.message").value("This option is not installed ..."));
+                    .andExpect(jsonPath("$.program").value("COACTUPC"))
+                    .andExpect(jsonPath("$.tranId").value("CAUP"))
+                    .andExpect(jsonPath("$.route").value("/accounts/update"));
         }
     }
 

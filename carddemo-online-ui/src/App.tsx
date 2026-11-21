@@ -1,6 +1,7 @@
 import { Navigate, Route, Routes } from 'react-router-dom';
 import { RequireAdmin } from './components/RequireAdmin';
 import { AccountViewPage } from './pages/AccountViewPage';
+import { AccountUpdatePage } from './pages/AccountUpdatePage';
 import { AdminMenuPage } from './pages/AdminMenuPage';
 import { LoginPage } from './pages/LoginPage';
 import { ReportRequestPage } from './pages/ReportRequestPage';
@@ -20,6 +21,10 @@ function SessionAccountView() {
   return getSession() ? <AccountViewPage /> : <Navigate to="/login" replace />;
 }
 
+function SessionAccountUpdate() {
+  return getSession() ? <AccountUpdatePage /> : <Navigate to="/login" replace />;
+}
+
 function SessionReports() {
   return getSession() ? <ReportRequestPage /> : <Navigate to="/login" replace />;
 }
@@ -32,6 +37,7 @@ export function App() {
       <Route path="/cards" element={<CardListPage />} />
       <Route path="/cards/view" element={<CardViewPage />} />
       <Route path="/accounts/view" element={<SessionAccountView />} />
+      <Route path="/accounts/update" element={<SessionAccountUpdate />} />
       <Route path="/transactions" element={<TransactionListPage />} />
       <Route path="/transactions/view" element={<TransactionViewPage />} />
       <Route path="/reports" element={<SessionReports />} />
