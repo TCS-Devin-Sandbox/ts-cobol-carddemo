@@ -79,6 +79,9 @@ public class MenuController {
     }
 
     ResponseEntity<?> target(Option option) {
+        if (option.program().equals("COACTUPC")) {
+            return ResponseEntity.ok(Map.of("program", option.program(), "tranId", "CAUP", "route", "/accounts/update"));
+        }
         if (option.program().equals("COACTVWC")) {
             return ResponseEntity.ok(Map.of("program", option.program(), "tranId", "CAVW", "route", "/accounts/view"));
         }

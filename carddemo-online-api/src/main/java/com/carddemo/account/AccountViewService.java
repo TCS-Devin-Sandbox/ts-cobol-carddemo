@@ -46,6 +46,11 @@ public class AccountViewService {
             return Screen.invalidAccount("XREF_DUPLICATE", "File Error: READ on CXACAIX returned RESP 15 REAS 140");
         }
 
+        return lookupCustomer(accountId, customerIds.get(0));
+    }
+
+    Screen lookupCustomer(String accountId, long customerId) {
+        long key = Long.parseLong(accountId);
         var account = jdbc.sql("""
                 SELECT active_status, current_balance, credit_limit, cash_credit_limit, open_date, expiration_date,
                        reissue_date, current_cycle_credit, current_cycle_debit, rtrim(account_group_id) AS account_group_id
@@ -63,7 +68,7 @@ public class AccountViewService {
                        rtrim(electronic_funds_transfer_account_id) AS electronic_funds_transfer_account_id,
                        primary_cardholder_indicator, lpad(fico_credit_score::text, 3, '0') AS fico_credit_score
                 FROM customer WHERE customer_id = ?
-                """).param(customerIds.get(0)).query(Customer.class).optional().orElse(null);
+                """).param(customerId).query(Customer.class).optional().orElse(null);
 
         // The NOTFND flag in 9300 is commented out: still read the customer and keep the first error.
         Problem error = null;
@@ -71,7 +76,7 @@ public class AccountViewService {
             error = new Problem("ACCOUNT_NOT_FOUND", "Account:" + accountId + " not found in Acct Master file.", true);
         } else if (customer == null) {
             error = new Problem("CUSTOMER_NOT_FOUND",
-                    String.format(Locale.ROOT, "CustId:%09d not found in customer master.", customerIds.get(0)), false);
+                    String.format(Locale.ROOT, "CustId:%09d not found in customer master.", customerId), false);
         }
         return new Screen(account, customer, error);
     }
