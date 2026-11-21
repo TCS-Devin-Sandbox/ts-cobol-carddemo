@@ -46,7 +46,7 @@ GET `/api/menus/main` or `/api/menus/admin` returns tranId/program,
 title01/title02 and numbered options (two-digit PIC 9(02), names PIC X(35)).
 POST the same path plus `/select` with `{option}` returns a migrated route
 or a literal message and severity error/info (DFHRED/DFHGREEN).
-Only COTRTLIC and COTRTUPC have routes. CA00 and transaction-type routes
+E2 installs the COTRTLIC and COTRTUPC routes. CA00 and transaction-type routes
 require ADMIN; CM00 requires authentication. F3 is client-side sign-off.
 
 ## Deviations and preserved quirks
