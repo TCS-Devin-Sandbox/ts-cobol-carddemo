@@ -1,4 +1,6 @@
-# MNTTRDB2 / COBTUPDT
+# Transaction-type batch jobs
+
+## MNTTRDB2 / COBTUPDT
 
 The Java 21 Spring Batch job reads the fixture/unloaded form of INPFILE
 (one Latin-1 record per line). It pads or truncates each line to 53 bytes:
@@ -37,3 +39,26 @@ Use a different `run.id` job parameter to submit the same paths as a new run.
   end of task. An invalid operation also raises RC 4 but does not abort the
   transaction. The Spring Batch execution can complete with RC 4 in `rc.json`;
   a process failure instead indicates the job did not finish.
+
+## MNTTRDYN / CBTRNDYN
+
+```sh
+make parity-java CHAIN=trantype-dynamic
+```
+
+To run with the same datasource setup as MNTTRDB2:
+
+```sh
+java -jar java/trantype-batch/target/trantype-batch.jar --spring.batch.job.name=MNTTRDYN \
+  dynsql=/path/to/DYNSQL.txt parm=COBTUPDT input=/path/to/INPFILE.txt out=/path/to/output
+```
+
+DYNSQL is a trusted operator-supplied file, not application input. The job takes
+columns 1–72 from each Latin-1 record, skipping records that start with `--`, and
+runs one parameterless INSERT, UPDATE, or DELETE with the `carddemo` search path.
+Use a dedicated database role with only the privileges the job needs.
+
+PARM supports `COBTUPDT` (requires INPFILE), or blank to run only the SQL.
+The SQL and COBTUPDT use the same PostgreSQL transaction. A failed statement
+leaves the transaction aborted; COBTUPDT still runs and controls the step RC
+when called. This preserves `d03-bad-statement` (RC 4, no committed writes).

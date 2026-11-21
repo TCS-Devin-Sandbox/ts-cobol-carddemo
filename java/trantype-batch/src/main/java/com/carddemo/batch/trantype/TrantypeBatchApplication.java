@@ -21,7 +21,9 @@ import org.springframework.context.annotation.Bean;
 public class TrantypeBatchApplication {
 
     public static void main(String[] args) {
-        System.exit(SpringApplication.exit(SpringApplication.run(TrantypeBatchApplication.class, args)));
+        var application = new SpringApplication(TrantypeBatchApplication.class);
+        application.setDefaultProperties(Map.of("spring.batch.job.name", "MNTTRDB2"));
+        System.exit(SpringApplication.exit(application.run(args)));
     }
 
     @Bean
@@ -39,6 +41,29 @@ public class TrantypeBatchApplication {
                 .build();
         return new JobBuilder("MNTTRDB2", repository)
                 .validator(new DefaultJobParametersValidator(new String[]{"input", "out"}, new String[]{"run.id"}))
+                .start(step)
+                .build();
+    }
+
+    @Bean
+    Job mnttrdyn(JobRepository repository, DataSource dataSource) {
+        var step = new StepBuilder("STEP1", repository)
+                .tasklet((contribution, context) -> {
+                    var parameters = context.getStepContext().getJobParameters();
+                    Path dynsql = Path.of((String) parameters.get("dynsql"));
+                    String inputParameter = (String) parameters.get("input");
+                    Path input = inputParameter == null ? null : Path.of(inputParameter);
+                    String parm = (String) parameters.getOrDefault("parm", "");
+                    Path out = Path.of((String) parameters.get("out"));
+                    int rc = new DynamicTransactionTypeUpdate(dataSource)
+                            .run(dynsql, input, parm, out.resolve("sysout/MNTTRDYN.STEP1.txt"));
+                    BatchArtifacts.writeReturnCodes(out, Map.of("MNTTRDYN", Map.of("STEP1", rc)));
+                    return RepeatStatus.FINISHED;
+                }, new ResourcelessTransactionManager())
+                .build();
+        return new JobBuilder("MNTTRDYN", repository)
+                .validator(new DefaultJobParametersValidator(new String[]{"dynsql", "out"},
+                        new String[]{"input", "parm", "run.id"}))
                 .start(step)
                 .build();
     }

@@ -104,14 +104,14 @@ reset:
 	rm -rf datasets loadlib work
 	$(COMPOSE) down -v
 
-# MNTTRDB2 uses its own PostgreSQL fixture databases; custom candidates bypass this setup.
-ifeq ($(CHAIN),trantype-update)
+# Transaction-type jobs use scratch PostgreSQL databases; custom candidates bypass this setup.
+ifneq ($(filter trantype-update trantype-dynamic,$(CHAIN)),)
 ifeq ($(origin CANDIDATE),undefined)
 CANDIDATE := bash java/trantype-batch/run-parity-case.sh
 export COMPOSE
-parity-java: prepare-trantype-update
-.PHONY: prepare-trantype-update
-prepare-trantype-update:
+parity-java: prepare-trantype-batch
+.PHONY: prepare-trantype-batch
+prepare-trantype-batch:
 	mvn -B -f java/pom.xml -pl trantype-batch -am -DskipTests package
 	$(COMPOSE) up -d --wait postgres
 endif
