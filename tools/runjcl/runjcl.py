@@ -185,6 +185,17 @@ def read_statements(lines: list[str]) -> list[tuple[str, str, str, list[str] | N
         name, op, operands = match.group(1), match.group(2).upper(), match.group(3) or ""
         if op in ("IF", "ELSE", "ENDIF") or (name and op in ("IF",)):
             pass
+        def dd_operands(value: str) -> str:
+            quoted = False
+            for pos, char in enumerate(value):
+                if char == "'":
+                    quoted = not quoted
+                elif char.isspace() and not quoted:
+                    return value[:pos]
+            return value
+
+        if op == "DD":
+            operands = dd_operands(operands)
         # join continuation lines
         while operands.rstrip().endswith(",") and i < len(lines):
             nxt = lines[i].rstrip("\n")[:72]
@@ -194,7 +205,8 @@ def read_statements(lines: list[str]) -> list[tuple[str, str, str, list[str] | N
             if not nxt.startswith("//"):
                 break
             i += 1
-            operands = operands.rstrip() + nxt[2:].strip()
+            continuation = nxt[2:].strip()
+            operands = operands.rstrip() + (dd_operands(continuation) if op == "DD" else continuation)
         # IF statements may continue without trailing comma until THEN
         if op == "IF":
             while "THEN" not in operands.upper() and i < len(lines) and lines[i].startswith("//"):
@@ -989,7 +1001,15 @@ class Runner:
             lrecl = self.catalog.entry(src_dsn).get("recsize") if src_dsn and self.catalog.entry(src_dsn) else None
         if not lrecl:
             raise JclError(f"SORT: record length of {src_dsn} unknown")
-        data = Path(env["DD_SORTIN"]).read_bytes()
+        source = Path(env["DD_SORTIN"])
+        if src_dsn and self.catalog.is_ksds(src_dsn):
+            flat = stepdir / "sortin.unload"
+            rc = self._cobcrun([ksds_module(self.catalog.entry(src_dsn), unload=True)],
+                              {"DD_KSDSFILE": str(source), "DD_FLATFILE": str(flat)}, quiet=True)
+            if rc:
+                raise JclError(f"SORT unload of {src_dsn} failed")
+            source = flat
+        data = source.read_bytes()
         records = [data[i:i + lrecl] for i in range(0, len(data), lrecl)]
 
         def operand(token: str, rest: list[str]) -> tuple:
@@ -1044,6 +1064,33 @@ class Runner:
                 keys.append((spec, order))
             for spec, order in reversed(keys):
                 records.sort(key=lambda r: value(r, spec), reverse=(order == "D"))
+        m = re.search(r"OUTREC\s+FIELDS=\((.*?)\)(?:\s|,|$)", text)
+        if m:
+            tokens = split_params(m.group(1))
+            fields = []
+            cursor = 0
+            while tokens:
+                token = tokens.pop(0)
+                if ":" in token:
+                    dest, pos = map(int, token.split(":"))
+                    cursor = dest - 1
+                else:
+                    pos = int(token)
+                length = int(tokens.pop(0))
+                if cursor < 0 or pos < 1 or length < 1 or pos - 1 + length > lrecl:
+                    raise JclError("SORT OUTREC field outside record")
+                fields.append((cursor, pos - 1, length))
+                cursor += length
+            output_length = self.catalog.lrecl(infos.get("SORTOUT", {}).get("dsn")) or cursor
+            if any(dest + length > output_length for dest, _, length in fields):
+                raise JclError("SORT OUTREC field exceeds SORTOUT LRECL")
+            def reformat(record: bytes) -> bytes:
+                result = bytearray(b" " * output_length)
+                for dest, pos, length in fields:
+                    result[dest:dest + length] = record[pos:pos + length]
+                return bytes(result)
+            records = [reformat(record) for record in records]
+            lrecl = output_length
         out_path = Path(env["DD_SORTOUT"])
         out_path.write_bytes(b"".join(records))
         if infos.get("SORTOUT", {}).get("dsn"):

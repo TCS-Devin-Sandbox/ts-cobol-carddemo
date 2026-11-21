@@ -286,7 +286,9 @@ graph LR
 | C3 | C | TRANREPT | [#45](https://github.com/TCS-Devin-Sandbox/ts-cobol-carddemo/pull/45) | merged |
 | C4 | C | MNTTRDB2 | [#44](https://github.com/TCS-Devin-Sandbox/ts-cobol-carddemo/pull/44) | merged |
 | C5 | C | MNTTRDYN | [#48](https://github.com/TCS-Devin-Sandbox/ts-cobol-carddemo/pull/48) | merged |
-| D1-D4 | D | Oracle extension + remaining batch | | not started |
+| D1 | D | Read-masters oracle | [#50](https://github.com/TCS-Devin-Sandbox/ts-cobol-carddemo/pull/50) | in review |
+| D2 | D | Statements oracle (scratch-only TIOT adaptation) | | implemented; owner-approved goldens recorded |
+| D3-D4 | D | Remaining Java batch ports | | not started |
 | D5 | D | FEECALC | [#46](https://github.com/TCS-Devin-Sandbox/ts-cobol-carddemo/pull/46) | merged |
 | D6 | D | HLASM date and wait routines | [#47](https://github.com/TCS-Devin-Sandbox/ts-cobol-carddemo/pull/47) | merged |
 | E1-E11 | E | Online screens | | not started |

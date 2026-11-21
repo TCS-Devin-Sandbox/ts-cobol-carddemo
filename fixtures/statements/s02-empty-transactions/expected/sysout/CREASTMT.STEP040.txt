@@ -1,0 +1,13 @@
+ERROR READING TRNXFILE
+RETURN CODE: 10
+ABENDING PROGRAM
+CEE3ABD: USER ABEND U
+
+attempt to reference unallocated memory (signal SIGSEGV)
+
+libcob: warning: implicit CLOSE of TRNX-FILE ('TRNXFILE')
+libcob: warning: implicit CLOSE of HTML-FILE ('HTMLFILE')
+libcob: warning: implicit CLOSE of STMT-FILE ('STMTFILE')
+
+ Last statement of CEE3ABD unknown
+ Last statement of CBSTM03A unknown

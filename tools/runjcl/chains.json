@@ -74,6 +74,25 @@
       "READCUST/STEP05"
     ]
   },
+  "statements": {
+    "description": "Account statements: CREASTMT (SORT OUTREC, REPRO, CBSTM03A/B); scratch-only TIOT adaptation",
+    "clock": "2022-07-05 10:00:00.00",
+    "inputs": {
+      "AWS.M2.CARDDEMO.ACCTDATA.PS": 300,
+      "AWS.M2.CARDDEMO.CARDXREF.PS": 50,
+      "AWS.M2.CARDDEMO.CUSTDATA.PS": 500,
+      "AWS.M2.CARDDEMO.DALYTRAN.PS.INIT": 350
+    },
+    "setup": ["ACCTFILE", "XREFFILE", "CUSTFILE", "TRANFILE"],
+    "jobs": ["CREASTMT"],
+    "outputs": {
+      "AWS.M2.CARDDEMO.TRXFL.SEQ": "COSTM01",
+      "AWS.M2.CARDDEMO.TRXFL.VSAM.KSDS": "COSTM01",
+      "AWS.M2.CARDDEMO.STATEMNT.PS": "text",
+      "AWS.M2.CARDDEMO.STATEMNT.HTML": "text"
+    },
+    "sysout": ["CREASTMT/STEP010", "CREASTMT/STEP020", "CREASTMT/STEP040"]
+  },
   "interest": {
     "description": "Monthly interest calculation: INTCALC (CBACT04C)",
     "clock": "2022-07-05 10:00:00.00",

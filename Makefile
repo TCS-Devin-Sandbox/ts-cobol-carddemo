@@ -20,7 +20,7 @@ export GID := $(shell id -g)
 
 COMPOSE ?= docker compose
 EXEC     = $(COMPOSE) exec -T estate
-CHAINS  ?= posting interest trantype-update trantype-dynamic read-masters
+CHAINS  ?= posting interest trantype-update trantype-dynamic read-masters statements
 CHAIN   ?=
 CASE    ?=
 PY       = python3

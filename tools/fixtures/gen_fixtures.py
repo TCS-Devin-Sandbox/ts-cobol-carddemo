@@ -108,6 +108,33 @@ def read_masters_case(name: str, readme: str, accounts: list[dict], xrefs: list[
     (inp.parent / "README.md").write_text(readme.strip() + "\n")
 
 
+def statements_case(name: str, readme: str, accounts: list[dict], xrefs: list[dict],
+                    trans: list[dict], customers: list[dict] | None = None) -> None:
+    inp = FIXTURES / "statements" / name / "input"
+    write(inp / "AWS.M2.CARDDEMO.ACCTDATA.PS.txt", "CVACT01Y", accounts)
+    write(inp / "AWS.M2.CARDDEMO.CARDXREF.PS.txt", "CVACT03Y", xrefs)
+    if customers is None:
+        customers = [{"CUST-ID": r["XREF-CUST-ID"], "CUST-FIRST-NAME": "TEST",
+                      "CUST-LAST-NAME": f"CUSTOMER {r['XREF-CUST-ID']}",
+                      "CUST-ADDR-LINE-1": "1 SYNTHETIC STREET", "CUST-ADDR-LINE-3": "TESTVILLE",
+                      "CUST-ADDR-STATE-CD": "VA", "CUST-ADDR-COUNTRY-CD": "USA",
+                      "CUST-ADDR-ZIP": "00000", "CUST-FICO-CREDIT-SCORE": 700} for r in xrefs]
+    write(inp / "AWS.M2.CARDDEMO.CUSTDATA.PS.txt", "CVCUS01Y", customers)
+    transactions = [{k.replace("DALYTRAN-", "TRAN-"): v for k, v in r.items()} for r in trans]
+    write(inp / "AWS.M2.CARDDEMO.DALYTRAN.PS.INIT.txt", "CVTRA05Y", transactions)
+    adaptation = """
+The off-host oracle uses tools/statements_prep.py scratch copies under work/:
+PSA/TCB/TIOT traversal is skipped, COSTM01.CPY case and CUSTREC.cpy tabs are
+normalized. Originals under app/ are unchanged. This proves statement processing,
+not real PSA/TCB/TIOT traversal. The z/OS Running JCL / DD Names from TIOT / UCB
+SYSOUT diagnostics are not reproduced. See docs/BASELINE.md for legacy quirks.
+Error cases record off-host RC 11: CBSTM03A calls CEE3ABD without the code
+argument its local stand-in expects, causing SIGSEGV after the error display.
+This does not prove z/OS LE abend-code equivalence.
+"""
+    (inp.parent / "README.md").write_text(readme.strip() + "\n\n" + adaptation.strip() + "\n")
+
+
 def interest_case(name: str, readme: str, accounts: list[dict], xrefs: list[dict], balances: list[dict],
                   discgrp: list | None = None) -> None:
     inp = FIXTURES / "interest" / name / "input"
@@ -237,6 +264,42 @@ All four indexed masters are empty. Each reader reaches EOF immediately and
 returns RC 0 without printing detail records. READACCT creates all three
 output datasets with zero records.
 """, [], [])
+
+    # ------------------------------------------------------------- statements
+    statement_trans = [tran(1, "01", 1, "80.25", card(1002), "Second card purchase"),
+                       tran(2, "01", 1, "125.00", card(1001), "First card purchase"),
+                       tran(3, "02", 1, "-200.00", card(1001), "Payment received"),
+                       tran(4, "05", 1, "-15.75", card(1002), "Refund received")]
+    statements_case("s01-mixed-cards", """
+# s01-mixed-cards
+Transactions arrive in transaction-ID order, interleaving two cards; SORT orders
+by card then transaction ID and OUTREC builds the 32-byte composite key before
+REPRO. Purchases, a payment and a refund prove signed amounts and per-card totals
+(-75.00 and 64.50). A third cross-reference with no transactions still gets a
+zero-total statement. Both 80-byte text and 100-byte HTML output are captured.
+""", baseline_accounts + [account(1003, "-25.00", "3000.00", "GOLD")],
+        baseline_xrefs + [xref(1003)], statement_trans)
+    statements_case("s02-empty-transactions", """
+# s02-empty-transactions
+Empty transaction input: SORT and REPRO produce zero records. CBSTM03A treats
+the initial TRNXFILE EOF (status 10) as an error and abends, rather than producing
+zero-total statements. Empty text/HTML outputs and error SYSOUT are intentional.
+""", baseline_accounts, baseline_xrefs, [])
+    statements_case("s03-empty-xrefs", """
+# s03-empty-xrefs
+Transactions exist but there are no cross-references. The statement loop reaches
+XREFFILE EOF immediately, closes all files and produces empty text/HTML at RC 0.
+""", baseline_accounts, [], statement_trans)
+    statements_case("s04-missing-customer", """
+# s04-missing-customer
+A cross-reference names a customer absent from CUSTDATA. CBSTM03B's keyed read
+returns status 23; CBSTM03A displays the error and abends before writing a statement.
+""", baseline_accounts, baseline_xrefs, statement_trans, customers=[])
+    statements_case("s05-missing-account", """
+# s05-missing-account
+Customers and cross-references exist but ACCTDATA is empty. The first keyed
+account read returns status 23 and abends before writing a statement.
+""", [], baseline_xrefs, statement_trans)
 
     # --------------------------------------------------------------- interest
     assert_tie("1000.00", "12.00", False)
