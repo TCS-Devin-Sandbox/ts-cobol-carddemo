@@ -14,6 +14,7 @@ import { getSession } from './api/client';
 import { CardListPage, CardViewPage } from './pages/CardPages';
 import { CardUpdatePage } from './pages/CardUpdatePage';
 import { TransactionListPage, TransactionViewPage } from './pages/TransactionPages';
+import { TransactionAddPage } from './pages/TransactionAddPage';
 
 function SessionMenu() {
   return getSession() ? <AdminMenuPage main /> : <Navigate to="/login" replace />;
@@ -47,6 +48,7 @@ export function App() {
       <Route path="/accounts/update" element={<SessionAccountUpdate />} />
       <Route path="/transactions" element={<TransactionListPage />} />
       <Route path="/transactions/view" element={<TransactionViewPage />} />
+      <Route path="/transactions/add" element={<TransactionAddPage />} />
       <Route path="/reports" element={<SessionReports />} />
       <Route path="/bill-pay" element={<SessionBillPay />} />
       <Route path="/admin" element={<RequireAdmin><AdminMenuPage /></RequireAdmin>} />

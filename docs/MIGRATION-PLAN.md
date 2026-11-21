@@ -201,7 +201,7 @@ parity: CICS cannot run off-host.
 | E6 | Transaction list/view CT00, CT01 | online api/ui | Tests | E2 |
 | E7 | Account update CAUP (optimistic lock replaces READ UPDATE) | online api/ui | Tests incl. concurrent update | E4 |
 | E8 | Card update CCUP | online api/ui | Tests | E5 |
-| E9 | Transaction add CT02 | online api/ui | Tests; the row it writes is accepted by C2 posting job | E6, C2 |
+| E9 | Transaction add CT02 ([trace](online/CT02.md)) | online api/ui | Implemented; paragraph tests and opt-in API→CVTRA06Y→C2 posting acceptance | E6, C2 |
 | E10 | Bill pay CB00 | online api/ui | Tests; balance consistent with C2 | E4, C2 |
 | E11 | Report request CR00 launching the C3 job (replaces JOBS TD queue) | online api/ui, `java/posting` launcher | Tests; launched job passes posting parity | E2, C3 |
 
