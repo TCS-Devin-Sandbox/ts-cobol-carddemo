@@ -145,6 +145,18 @@ class AccountUpdateIntegrationTest {
     }
 
     @Test
+    void p1205PunctuationOnlyPhoneChangeDoesNotWriteEitherMaster() {
+        Screen old = read(ID);
+        var fields = new LinkedHashMap<>(old.fields());
+        fields.put("phoneNumber1", "x201x234x5678");
+        fields.put("phoneNumber2", "(   )   -");
+        var unchanged = update(new Change(ID, old.version(), fields, true));
+        assertThat(unchanged.message()).isEqualTo(AccountUpdateService.NO_CHANGE);
+        assertThat(read(ID).version()).isEqualTo(old.version());
+        assertThat(read(ID).fields()).isEqualTo(old.fields());
+    }
+
+    @Test
     void p1200RejectsOversizedCompactDateWithoutPersistingTruncatedValue() {
         Screen old = read(ID);
         var fields = new LinkedHashMap<>(old.fields()); fields.put("openDate", "202001011");

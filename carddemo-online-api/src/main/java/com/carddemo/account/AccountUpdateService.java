@@ -161,6 +161,13 @@ public class AccountUpdateService {
         return before.entrySet().stream().allMatch(entry -> {
             String value = after.get(entry.getKey());
             if (value == null) return false;
+            if (entry.getKey().startsWith("phoneNumber")) {
+                String oldPhone = String.format("%-13s", entry.getValue());
+                String newPhone = String.format("%-13s", value);
+                return oldPhone.substring(1, 4).equals(newPhone.substring(1, 4))
+                        && oldPhone.substring(5, 8).equals(newPhone.substring(5, 8))
+                        && oldPhone.substring(9, 13).equals(newPhone.substring(9, 13));
+            }
             if (entry.getKey().endsWith("Date") || entry.getKey().equals("dateOfBirth")) {
                 return entry.getValue().replace("-", "").equals(value.replace("-", ""));
             }

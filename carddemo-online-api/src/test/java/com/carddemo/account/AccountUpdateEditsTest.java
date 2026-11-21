@@ -156,6 +156,22 @@ class AccountUpdateEditsTest {
     }
 
     @Test
+    void p1205ComparesOnlyPhoneAreaPrefixAndLineIncludingBlankPhones() {
+        var before = valid();
+        var after = new LinkedHashMap<>(before);
+        after.put("phoneNumber1", "x201x234x5678");
+        after.put("phoneNumber2", "(   )   -");
+        assertThat(AccountUpdateService.same(before, after)).isTrue();
+        for (String phone : new String[]{"(202)234-5678", "(201)235-5678", "(201)234-5679"}) {
+            after.put("phoneNumber1", phone);
+            assertThat(AccountUpdateService.same(before, after)).isFalse();
+        }
+        after.put("phoneNumber1", before.get("phoneNumber1"));
+        after.put("phoneNumber2", "(201)234-5678");
+        assertThat(AccountUpdateService.same(before, after)).isFalse();
+    }
+
+    @Test
     void p1100NormalizesStarMissingAndBmsFieldWidths() {
         assertThat(AccountUpdateService.normalize(Map.of("firstName", "*", "zipCode", "90210-1234")))
                 .containsEntry("firstName", "").containsEntry("zipCode", "90210").containsEntry("lastName", "");
