@@ -283,12 +283,12 @@ graph LR
 | B4 | B | Loader/exporter | [#41](https://github.com/TCS-Devin-Sandbox/ts-cobol-carddemo/pull/41) | merged |
 | C1 | C | INTCALC | [#43](https://github.com/TCS-Devin-Sandbox/ts-cobol-carddemo/pull/43) | merged |
 | C2 | C | POSTTRAN | [#42](https://github.com/TCS-Devin-Sandbox/ts-cobol-carddemo/pull/42) | merged |
-| C3 | C | TRANREPT | [#45](https://github.com/TCS-Devin-Sandbox/ts-cobol-carddemo/pull/45) | in review |
+| C3 | C | TRANREPT | [#45](https://github.com/TCS-Devin-Sandbox/ts-cobol-carddemo/pull/45) | merged |
 | C4 | C | MNTTRDB2 | [#44](https://github.com/TCS-Devin-Sandbox/ts-cobol-carddemo/pull/44) | merged |
-| C5 | C | MNTTRDYN | [#48](https://github.com/TCS-Devin-Sandbox/ts-cobol-carddemo/pull/48) | in review |
+| C5 | C | MNTTRDYN | [#48](https://github.com/TCS-Devin-Sandbox/ts-cobol-carddemo/pull/48) | merged |
 | D1-D4 | D | Oracle extension + remaining batch | | not started |
-| D5 | D | FEECALC | [#46](https://github.com/TCS-Devin-Sandbox/ts-cobol-carddemo/pull/46) | in review |
-| D6 | D | HLASM date and wait routines | [#47](https://github.com/TCS-Devin-Sandbox/ts-cobol-carddemo/pull/47) | in review |
+| D5 | D | FEECALC | [#46](https://github.com/TCS-Devin-Sandbox/ts-cobol-carddemo/pull/46) | merged |
+| D6 | D | HLASM date and wait routines | [#47](https://github.com/TCS-Devin-Sandbox/ts-cobol-carddemo/pull/47) | merged |
 | E1-E11 | E | Online screens | | not started |
 | F1-F4 | F | Data load, scheduling, shadow run, cutover | | not started |
 | G | G | Authorization, VSAM/MQ | | needs decision |
