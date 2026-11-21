@@ -15,10 +15,16 @@ import com.carddemo.batch.common.VsamDataset;
 import com.carddemo.batch.common.VsamTransfer;
 import com.carddemo.batch.common.codec.CardDemoLayout;
 import com.carddemo.batch.common.codec.FixedRecordCodec;
+import org.springframework.batch.core.Job;
+import org.springframework.batch.core.JobParameters;
 import org.springframework.batch.core.Step;
+import org.springframework.batch.core.job.builder.JobBuilder;
 import org.springframework.batch.core.repository.JobRepository;
 import org.springframework.batch.core.step.builder.StepBuilder;
 import org.springframework.batch.repeat.RepeatStatus;
+import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.datasource.DataSourceUtils;
 import org.springframework.transaction.PlatformTransactionManager;
@@ -26,10 +32,20 @@ import org.springframework.transaction.PlatformTransactionManager;
 import static com.carddemo.batch.posting.PostingTasklet.PREFIX;
 import static java.nio.charset.StandardCharsets.ISO_8859_1;
 
+@Configuration(proxyBeanMethods = false)
+@EnableAutoConfiguration
 class TransactionReportJob {
     private static final String BACKUP = "TRANSACT.BKUP";
     private static final String DAILY = "TRANSACT.DALY";
     private static final DateRange SORT_RANGE = new DateRange("2022-01-01", "2022-07-06");
+
+    @Bean
+    Job tranrept(JobRepository repository, PlatformTransactionManager transactions, DataSource dataSource,
+                 JdbcTemplate jdbc) {
+        var reportSteps = steps(repository, transactions, dataSource, jdbc);
+        return new JobBuilder("tranrept", repository).start(reportSteps.get(0))
+                .next(reportSteps.get(1)).next(reportSteps.get(2)).build();
+    }
 
     static List<Step> steps(JobRepository repository, PlatformTransactionManager transactions, DataSource dataSource,
                             JdbcTemplate jdbc) {
@@ -44,38 +60,45 @@ class TransactionReportJob {
             return RepeatStatus.FINISHED;
         }, transactions).build();
         var sort = new StepBuilder("TRANREPT.STEP05R", repository).tasklet((contribution, context) -> {
-            sort(Path.of(contribution.getStepExecution().getJobParameters().getString("out")));
+            var parameters = contribution.getStepExecution().getJobParameters();
+            sort(Path.of(parameters.getString("out")), requestRange(parameters, SORT_RANGE));
             return RepeatStatus.FINISHED;
         }, transactions).build();
         var report = new StepBuilder("TRANREPT.STEP10R", repository).tasklet((contribution, context) -> {
             var step = contribution.getStepExecution();
-            var input = Path.of(step.getJobParameters().getString("input"));
-            var out = Path.of(step.getJobParameters().getString("out"));
-            step.getExecutionContext().putInt("returnCode", writeReport(input, out, jdbc));
+            var parameters = step.getJobParameters();
+            var out = Path.of(parameters.getString("out"));
+            var range = parameters.getString("startDate") == null
+                    ? readDateParameter(Path.of(parameters.getString("input")).resolve(PREFIX + "DATEPARM.txt"))
+                    : requestRange(parameters, null);
+            step.getExecutionContext().putInt("returnCode", writeReport(range, out, jdbc));
             return RepeatStatus.FINISHED;
         }, transactions).build();
         return List.of(repro, sort, report);
     }
 
-    static void sort(Path out) throws IOException {
+    private static DateRange requestRange(JobParameters parameters, DateRange fallback) {
+        var start = parameters.getString("startDate");
+        return start == null ? fallback : new DateRange(start, parameters.getString("endDate"));
+    }
+
+    static void sort(Path out, DateRange range) throws IOException {
         // JCL TRAN-CARD-NUM (263,16) and TRAN-PROC-DT (305,10); ties retain KSDS key order.
         var sorted = Files.readAllLines(dataset(out, BACKUP), ISO_8859_1).stream()
-                .filter(row -> SORT_RANGE.includes(row.substring(304, 314)))
+                .filter(row -> range.includes(row.substring(304, 314)))
                 .sorted(Comparator.comparing(row -> row.substring(262, 278)))
                 .toList();
         Files.write(dataset(out, DAILY), sorted, ISO_8859_1);
     }
 
-    static int writeReport(Path input, Path out, JdbcTemplate jdbc) throws Exception {
+    private static int writeReport(DateRange range, Path out, JdbcTemplate jdbc) throws Exception {
         var sysout = new StringBuilder("START OF EXECUTION OF PROGRAM CBTRN03C\n");
         var layout = CardDemoLayout.CVTRA05Y.load();
         var codec = new FixedRecordCodec(layout);
         int returnCode = 0;
         try (var dailyInput = Files.newBufferedReader(dataset(out, DAILY), ISO_8859_1);
                 var output = Files.newBufferedWriter(dataset(out, "TRANREPT"), ISO_8859_1)) {
-            String dates = readDateParameter(input.resolve(PREFIX + "DATEPARM.txt"));
-            if (dates != null) {
-                var range = DateRange.fromParameter(dates);
+            if (range != null) {
                 sysout.append("Reporting from ").append(range.start()).append(" to ").append(range.end()).append('\n');
                 var report = new TransactionReport(output, range.start(), range.end());
                 String card = null;
@@ -130,10 +153,11 @@ class TransactionReportJob {
         return returnCode;
     }
 
-    private static String readDateParameter(Path file) throws IOException {
+    private static DateRange readDateParameter(Path file) throws IOException {
         if (Files.notExists(file)) return null;
         try (var reader = Files.newBufferedReader(file, ISO_8859_1)) {
-            return reader.readLine();
+            String line = reader.readLine();
+            return line == null ? null : DateRange.fromParameter(line);
         }
     }
 
@@ -152,7 +176,7 @@ class TransactionReportJob {
         return out.resolve("datasets").resolve(PREFIX + name + ".G0001V00.txt");
     }
 
-    private record DateRange(String start, String end) {
+    record DateRange(String start, String end) {
         static DateRange fromParameter(String line) {
             String fields = TransactionReport.field(line, 21);
             return new DateRange(fields.substring(0, 10), fields.substring(11));

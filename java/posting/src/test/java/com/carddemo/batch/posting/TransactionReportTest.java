@@ -25,7 +25,7 @@ class TransactionReportTest {
         List<String> input = List.of(lastDate, firstDate, before, after, sameCard);
         Files.write(backup, input, ISO_8859_1);
 
-        TransactionReportJob.sort(out);
+        TransactionReportJob.sort(out, new TransactionReportJob.DateRange("2022-01-01", "2022-07-06"));
 
         assertThat(Files.readAllLines(backup, ISO_8859_1)).containsExactlyElementsOf(input);
         assertThat(Files.readAllLines(TransactionReportJob.dataset(out, "TRANSACT.DALY"), ISO_8859_1))
