@@ -197,6 +197,27 @@ class AccountUpdateIntegrationTest {
     }
 
     @Test
+    void p9700LocksCrossReferenceBeforeResolvingAndRewritingCustomer() throws Exception {
+        Screen old = read(ID);
+        try (var connection = dataSource.getConnection(); var statement = connection.createStatement()) {
+            connection.setAutoCommit(false);
+            try {
+                statement.execute("SELECT * FROM card_xref WHERE account_id = 42 FOR UPDATE");
+                var response = rest.postForEntity(UPDATE,
+                        new HttpEntity<>(change(old, "Updated", true), headers), ErrorResponse.class);
+                assertThat(response.getStatusCode()).isEqualTo(HttpStatus.SERVICE_UNAVAILABLE);
+                assertThat(read(ID).fields()).isEqualTo(old.fields());
+            } finally { connection.rollback(); }
+        }
+        assertThat(update(change(old, "Updated", true)).customerId()).isEqualTo("000000007");
+        old = read(ID);
+        jdbc.update("UPDATE card_xref SET customer_id = 8 WHERE account_id = 42");
+        var response = rest.postForEntity(UPDATE,
+                new HttpEntity<>(change(old, "Other", true), headers), ErrorResponse.class);
+        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.CONFLICT);
+    }
+
+    @Test
     void p9600RollsBackAccountWhenCustomerRewriteFails() {
         Screen old = read(ID);
         jdbc.execute("""

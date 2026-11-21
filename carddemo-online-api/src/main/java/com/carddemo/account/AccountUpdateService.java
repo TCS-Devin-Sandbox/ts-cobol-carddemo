@@ -68,7 +68,12 @@ public class AccountUpdateService {
     }
 
     private Screen readDetails(String accountId) {
-        var details = view.lookup(accountId);
+        return readDetails(accountId, null);
+    }
+
+    private Screen readDetails(String accountId, String lockedCustomerId) {
+        var details = lockedCustomerId == null ? view.lookup(accountId)
+                : view.lookupCustomer(accountId, Long.parseLong(lockedCustomerId));
         if (details.error() != null) {
             String message = details.error().message();
             return new Screen(accountId, null, null, Map.of(), "SEARCH", message, "accountId");
@@ -88,13 +93,13 @@ public class AccountUpdateService {
     public Screen change(Change change) {
         String error = keyError(change.accountId());
         if (error != null) return new Screen(change.accountId(), null, null, Map.of(), "SEARCH", error, "accountId");
-        // Lock in account/customer order, then compare tokens from the locked row versions.
-        var customers = jdbc.sql("SELECT customer_id::text FROM card_xref WHERE account_id = ? LIMIT 2")
+        // Keep the customer association stable while locking and rewriting both masters.
+        var customers = jdbc.sql("SELECT customer_id::text FROM card_xref WHERE account_id = ? LIMIT 2 FOR UPDATE")
                 .param(Long.parseLong(change.accountId())).query(String.class).list();
         if (customers.size() != 1) throw conflict();
         String customerId = customers.get(0);
         if (change.version() == null || !change.version().equals(token(change.accountId(), customerId, true))) throw conflict();
-        Screen old = readDetails(change.accountId());
+        Screen old = readDetails(change.accountId(), customerId);
         if (old.version() == null) throw conflict();
         Map<String, String> fields = normalize(change.fields());
         fields.put("countryCode", old.fields().get("countryCode"));
@@ -106,7 +111,7 @@ public class AccountUpdateService {
                 "CONFIRM", "Changes validated.Press F5 to save", null);
         write("account", "account_id", change.accountId(), ACCOUNT, fields);
         write("customer", "customer_id", customerId, CUSTOMER, fields);
-        var saved = readDetails(change.accountId());
+        var saved = readDetails(change.accountId(), customerId);
         return new Screen(saved.accountId(), saved.customerId(), saved.version(), saved.fields(),
                 "SAVED", "Changes committed to database", null);
     }
