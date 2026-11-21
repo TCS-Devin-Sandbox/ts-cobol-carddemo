@@ -1,5 +1,6 @@
 package com.carddemo.batch.posting;
 
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -14,6 +15,8 @@ import com.carddemo.batch.common.VsamDataset;
 import com.carddemo.batch.common.VsamTransfer;
 import org.springframework.batch.core.BatchStatus;
 import org.springframework.batch.core.Job;
+import org.springframework.batch.core.JobExecution;
+import org.springframework.batch.core.JobParameters;
 import org.springframework.batch.core.JobParametersBuilder;
 import org.springframework.batch.core.launch.JobLauncher;
 import org.springframework.boot.SpringBootConfiguration;
@@ -29,7 +32,7 @@ import static java.time.ZoneOffset.UTC;
 
 @SpringBootConfiguration
 @EnableAutoConfiguration
-@Import(PostingJob.class)
+@Import({PostingJob.class, TransactionReportJob.class})
 public class PostingCandidate {
     private static final DateTimeFormatter HARNESS_CLOCK = DateTimeFormatter
             .ofPattern("uuuu-MM-dd HH:mm:ss.SS", Locale.ROOT).withResolverStyle(ResolverStyle.STRICT);
@@ -37,7 +40,7 @@ public class PostingCandidate {
     public static void main(String[] args) throws Exception {
         var options = options(args);
         if (!option(options, "--chain").equals("posting")) {
-            throw new IllegalArgumentException("The POSTTRAN candidate only supports the posting chain");
+            throw new IllegalArgumentException("The candidate only supports the posting chain");
         }
         Path input = Path.of(option(options, "--input"));
         Path out = Path.of(option(options, "--out"));
@@ -63,6 +66,10 @@ public class PostingCandidate {
                 for (var dataset : new VsamDataset[]{VsamDataset.ACCOUNT, VsamDataset.CARD_XREF, VsamDataset.CATEGORY_BALANCE}) {
                     transfer.load(dataset, input.resolve(PREFIX + dataset.inputName + ".PS.txt"));
                 }
+                for (var dataset : new VsamDataset[]{VsamDataset.TYPE, VsamDataset.CATEGORY}) {
+                    Path file = input.resolve(PREFIX + dataset.inputName + ".PS.txt");
+                    if (!Files.notExists(file)) transfer.load(dataset, file);
+                }
                 connection.commit();
             }
             var parameters = new JobParametersBuilder()
@@ -70,11 +77,9 @@ public class PostingCandidate {
                     .addString("out", out.toString())
                     .addString("clock", at.toString())
                     .toJobParameters();
-            var result = context.getBean(JobLauncher.class).run(context.getBean(Job.class), parameters);
-            if (result.getStatus() != BatchStatus.COMPLETED) {
-                throw new IllegalStateException("POSTTRAN failed: " + result.getExitStatus());
-            }
-            var step = result.getStepExecutions().iterator().next();
+            var launcher = context.getBean(JobLauncher.class);
+            var posting = run(launcher, context.getBean("posttran", Job.class), parameters);
+            var report = run(launcher, context.getBean("tranrept", Job.class), parameters);
             try (var connection = dataSource.getConnection()) {
                 var transfer = new VsamTransfer(connection);
                 Path datasets = out.resolve("datasets");
@@ -82,12 +87,28 @@ public class PostingCandidate {
                 transfer.export(VsamDataset.CATEGORY_BALANCE, datasets.resolve(PREFIX + "TCATBALF.VSAM.KSDS.txt"));
                 transfer.export(VsamDataset.TRANSACTION, datasets.resolve(PREFIX + "TRANSACT.VSAM.KSDS.txt"));
             }
-            BatchArtifacts.writeReturnCodes(out, Map.of("POSTTRAN", Map.of(
-                    "STEP15", step.getExecutionContext().getInt("returnCode"),
-                    "CLCIFIL", 0, "OPCIFIL", 0, "STEP05", 0, "STEP10", 0, "STEP20", 0, "STEP25", 0, "STEP30", 0)));
+            BatchArtifacts.writeReturnCodes(out, Map.of(
+                    "POSTTRAN", Map.of("STEP15", returnCodes(posting).get("STEP15"),
+                            "CLCIFIL", 0, "OPCIFIL", 0, "STEP05", 0, "STEP10", 0, "STEP20", 0, "STEP25", 0, "STEP30", 0),
+                    "TRANREPT", returnCodes(report)));
         } finally {
             admin.execute("DROP SCHEMA " + schema + " CASCADE");
         }
+    }
+
+    private static JobExecution run(JobLauncher launcher, Job job, JobParameters parameters) throws Exception {
+        var result = launcher.run(job, parameters);
+        if (result.getStatus() != BatchStatus.COMPLETED) {
+            throw new IllegalStateException(job.getName() + " failed: " + result.getAllFailureExceptions());
+        }
+        return result;
+    }
+
+    private static Map<String, Integer> returnCodes(JobExecution result) {
+        var codes = new HashMap<String, Integer>();
+        result.getStepExecutions().forEach(step ->
+                codes.put(step.getStepName(), step.getExecutionContext().getInt("returnCode", 0)));
+        return codes;
     }
 
     private static Map<String, String> options(String[] args) {
