@@ -7,7 +7,7 @@ Spring Boot 3 / Java 17 API for CardDemo's online transactions. It currently ser
 docker compose -f ../docker-compose.yml up -d postgres
 SPRING_PROFILES_ACTIVE=dev mvn spring-boot:run   # dev profile supplies local-only JWT secret and passwords
 ```
-Flyway keeps the existing DB2-derived definitions and seed data from `../db/migration` in `public` (the default). It applies the [shared VSAM master migrations](../java/common/src/main/resources/db/migration/) in the `vsam` schema, with a separate Flyway history. Use schema-qualified names such as `vsam.account` for the shared masters; transaction-type endpoints retain their existing tables and data.
+Flyway keeps the existing DB2-derived definitions and seed data from `../db/migration`. It applies the [shared VSAM master migrations](../java/common/src/main/resources/db/migration/) in the same schema (`public` by default), using a separate `flyway_vsam_schema_history` table so the two migration sequences do not collide. Transaction-type endpoints retain their existing tables and data.
 
 | Env var | Default |
 |---|---|

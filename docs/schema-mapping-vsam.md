@@ -1,6 +1,7 @@
 # VSAM master schema
 
-Flyway V1 creates nine tables in the configured schema (the online API uses `vsam`).
+Flyway V1 creates nine tables in the configured schema (normally `public`).
+The online API records these migrations in `flyway_vsam_schema_history`.
 Group items are flattened, not duplicated. Use a new versioned migration for
 changes once V1 has been applied to a persistent online database.
 
@@ -32,8 +33,8 @@ changes once V1 has been applied to a persistent online database.
   representable legacy data, or prevent loading masters independently.
 * The Db2 harness in `db/postgres` has its own transaction-type tables. The online
   API keeps its existing Db2-derived `public.transaction_type` and
-  `public.transaction_type_category`. The shared `vsam.tran_type` and
-  `vsam.tran_category` represent distinct VSAM masters; they are not seeded by
+  `public.transaction_type_category`. The shared `tran_type` and
+  `tran_category` represent distinct VSAM masters; they are not seeded by
   the API's Db2 migrations or kept in sync with the Db2-derived tables.
   The SQL keyword-like table name transaction is consistently double-quoted.
 

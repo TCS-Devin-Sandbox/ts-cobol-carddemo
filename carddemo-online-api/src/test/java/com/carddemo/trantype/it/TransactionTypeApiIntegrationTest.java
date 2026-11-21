@@ -4,6 +4,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 import org.flywaydb.core.Flyway;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -19,6 +20,7 @@ import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.datasource.DriverManagerDataSource;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.TestPropertySource;
 import org.testcontainers.containers.PostgreSQLContainer;
@@ -54,7 +56,7 @@ class TransactionTypeApiIntegrationTest {
     @BeforeEach
     void resetDatabase() {
         flyway.clean();
-        flyway.migrate();
+        migrations.migrate(flyway);
     }
 
     private String token(String user, String password) {
@@ -77,20 +79,33 @@ class TransactionTypeApiIntegrationTest {
     }
 
     @Test
-    void sharedVsamMigrationsLeaveExistingTransactionTypesIntact() {
-        // Start from the schema layout of an existing transaction-type deployment.
-        jdbc.execute("DROP SCHEMA vsam CASCADE");
-        jdbc.update("UPDATE transaction_type SET tr_description = 'EXISTING' WHERE tr_type = '01'");
-        migrations.migrate(flyway);
+    void sharedVsamMigrationsUpgradeExistingDatabaseWithSchemaScopedRole() {
+        var password = UUID.randomUUID().toString();
+        jdbc.execute("CREATE ROLE online_migrator LOGIN PASSWORD '" + password + "'");
+        jdbc.execute("CREATE SCHEMA online_upgrade AUTHORIZATION online_migrator");
+        assertThat(jdbc.queryForObject("""
+                SELECT has_database_privilege('online_migrator', current_database(), 'CREATE')
+                """, Boolean.class)).isFalse();
+
+        var upgradeDataSource = new DriverManagerDataSource(postgres.getJdbcUrl(), "online_migrator", password);
+        var existingMigrations = Flyway.configure().dataSource(upgradeDataSource).schemas("online_upgrade")
+                .createSchemas(false).load();
+        existingMigrations.migrate();
+        jdbc.update("UPDATE online_upgrade.transaction_type SET tr_description = 'EXISTING' WHERE tr_type = '01'");
+
+        migrations.migrate(existingMigrations);
 
         assertThat(jdbc.queryForList("""
                 SELECT table_name FROM information_schema.tables
-                WHERE table_schema = 'vsam' AND table_name <> 'flyway_schema_history'
+                WHERE table_schema = 'online_upgrade' AND table_name NOT IN
+                    ('flyway_schema_history', 'flyway_vsam_schema_history', 'transaction_type',
+                     'transaction_type_category')
                 """, String.class)).containsExactlyInAnyOrder("account", "card", "customer", "card_xref",
                 "transaction_category_balance", "disclosure_group", "transaction", "tran_type", "tran_category");
-        assertThat(jdbc.queryForObject("SELECT tr_description FROM transaction_type WHERE tr_type = '01'",
-                String.class)).isEqualTo("EXISTING");
-        assertThat(jdbc.queryForObject("SELECT count(*) FROM vsam.tran_type", Integer.class)).isZero();
+        assertThat(jdbc.queryForObject("""
+                SELECT tr_description FROM online_upgrade.transaction_type WHERE tr_type = '01'
+                """, String.class)).isEqualTo("EXISTING");
+        assertThat(jdbc.queryForObject("SELECT count(*) FROM online_upgrade.tran_type", Integer.class)).isZero();
     }
 
     @Test

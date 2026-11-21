@@ -212,7 +212,7 @@ The DB2 transaction-type screens `CTLI` (COTRTLIC) and `CTTU` (COTRTUPC) from `a
 |---|---|
 | [docs/trantype/](docs/trantype/) | discovery, requirements/RTM, schema mapping, target spec, test plan, deviations |
 | `db/migration/` | Flyway migrations for the DB2-derived transaction-type tables |
-| `java/common/src/main/resources/db/migration/` | Shared VSAM master migrations (Flyway, `vsam` schema in the online database) |
+| `java/common/src/main/resources/db/migration/` | Shared VSAM master migrations (separate Flyway history in the online database) |
 | `carddemo-online-api/` | Spring Boot API (Java 17, Maven) |
 | `carddemo-online-ui/` | React + TypeScript UI (Vite, MUI) |
 | `docker-compose.yml` | local PostgreSQL 15 |

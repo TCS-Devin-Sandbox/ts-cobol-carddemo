@@ -18,11 +18,17 @@ public class OnlineApplication {
     FlywayMigrationStrategy migrateOnlineSchemas() {
         return transactionTypes -> {
             transactionTypes.migrate();
-            // The DB2-derived transaction-type migrations already own V1/V2 in public.
+            var config = transactionTypes.getConfiguration();
+            // Reuse the existing schema without competing for the DB2-derived V1/V2 history.
             Flyway.configure()
-                    .dataSource(transactionTypes.getConfiguration().getDataSource())
-                    .schemas("vsam")
+                    .dataSource(config.getDataSource())
+                    .schemas(config.getSchemas())
+                    .defaultSchema(config.getDefaultSchema())
+                    .createSchemas(false)
+                    .table("flyway_vsam_schema_history")
                     .locations("classpath:db/vsam")
+                    .baselineOnMigrate(true)
+                    .baselineVersion("0")
                     .load()
                     .migrate();
         };
