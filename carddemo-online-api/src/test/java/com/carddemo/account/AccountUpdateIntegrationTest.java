@@ -145,6 +145,16 @@ class AccountUpdateIntegrationTest {
     }
 
     @Test
+    void p1200RejectsOversizedCompactDateWithoutPersistingTruncatedValue() {
+        Screen old = read(ID);
+        var fields = new LinkedHashMap<>(old.fields()); fields.put("openDate", "202001011");
+        var invalid = update(new Change(ID, old.version(), fields, true));
+        assertThat(invalid.invalidField()).isEqualTo("openDate");
+        assertThat(invalid.message()).isEqualTo("Open Date:day must be a number between 1 and 31.");
+        assertThat(read(ID).version()).isEqualTo(old.version());
+    }
+
+    @Test
     void p9600ReconstructsPhonePunctuationAndDateSeparatorsAndKeepsCountryProtected() {
         Screen old = read(ID);
         var fields = new LinkedHashMap<>(old.fields());

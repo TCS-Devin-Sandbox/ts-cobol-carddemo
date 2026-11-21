@@ -106,7 +106,7 @@ final class AccountUpdateEdits {
 
     private void date(String key, String label, boolean birth) {
         String value = value(key).replace("-", "");
-        String year = part(value, 0, 4), month = part(value, 4, 6), day = part(value, 6, 8);
+        String year = part(value, 0, 4), month = part(value, 4, 6), day = part(value, 6, value.length());
         if (year.isBlank()) fail(key, label + " : Year must be supplied.");
         if (!year.matches("[0-9]{4}")) fail(key, label + " must be 4 digit number.");
         int y = Integer.parseInt(year);
