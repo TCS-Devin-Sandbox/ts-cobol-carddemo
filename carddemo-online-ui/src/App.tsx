@@ -3,6 +3,7 @@ import { RequireAdmin } from './components/RequireAdmin';
 import { AccountViewPage } from './pages/AccountViewPage';
 import { AdminMenuPage } from './pages/AdminMenuPage';
 import { LoginPage } from './pages/LoginPage';
+import { ReportRequestPage } from './pages/ReportRequestPage';
 import { TransactionTypeEditPage } from './pages/TransactionTypeEditPage';
 import { TransactionTypeListPage } from './pages/TransactionTypeListPage';
 import { UserListPage } from './pages/UserListPage';
@@ -18,6 +19,10 @@ function SessionAccountView() {
   return getSession() ? <AccountViewPage /> : <Navigate to="/login" replace />;
 }
 
+function SessionReports() {
+  return getSession() ? <ReportRequestPage /> : <Navigate to="/login" replace />;
+}
+
 export function App() {
   return (
     <Routes>
@@ -26,6 +31,7 @@ export function App() {
       <Route path="/accounts/view" element={<SessionAccountView />} />
       <Route path="/transactions" element={<TransactionListPage />} />
       <Route path="/transactions/view" element={<TransactionViewPage />} />
+      <Route path="/reports" element={<SessionReports />} />
       <Route path="/admin" element={<RequireAdmin><AdminMenuPage /></RequireAdmin>} />
       <Route path="/admin/users" element={<RequireAdmin><UserListPage /></RequireAdmin>} />
       <Route path="/admin/users/add" element={<RequireAdmin><UserMaintenancePage key="add" mode="add" /></RequireAdmin>} />

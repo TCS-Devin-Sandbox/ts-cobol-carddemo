@@ -88,6 +88,9 @@ public class MenuController {
         if (option.program().startsWith("DUMMY")) {
             return message(200, "This option " + option.name().split(" ")[0] + "is coming soon ...", "info");
         }
+        if (option.program().equals("CORPT00C")) {
+            return ResponseEntity.ok(Map.of("program", option.program(), "tranId", "CR00", "route", "/reports"));
+        }
         String route = switch (option.program()) {
             case "COUSR00C" -> "/admin/users";
             case "COUSR01C" -> "/admin/users/add";
