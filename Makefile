@@ -118,6 +118,12 @@ endif
 endif
 export CANDIDATE
 
+.PHONY: shadow
+shadow:
+	mvn -B -f java/pom.xml -pl data-load,posting,interest,read-masters,trantype-batch -am -DskipTests package
+	$(COMPOSE) up -d --wait postgres
+	$(PY) tools/parity/shadow.py $(if $(DROP),--drop "$(DROP)") $(if $(RUN_ID),--run-id "$(RUN_ID)") $(if $(NEGATIVE_PROOF),--negative-proof)
+
 # Fixed EBCDIC unloads; isolated from the legacy Db2 tables in the same service.
 .PHONY: data-load
 data-load:
