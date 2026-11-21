@@ -27,6 +27,13 @@ accounts with no fee. The average daily balance is not written to FEEOUT.
 * Average is calculated before the no-late-days early return.
 * ZERODIVIDE returns fee zero, average zero, RC 8; SIZE returns fee zero, RC 8
   and leaves the average unchanged. Fee size is checked **before** the cap.
+  Both handlers emit their CBFEECAL account diagnostic to an injectable
+  `PrintStream` (SYSPRINT); `FeeDriver.main` defaults it to `System.out`,
+  separate from FEEOUT. PL/I `PUT SKIP LIST` formatting is approximated by
+  one newline-terminated message, retaining the literal's trailing blank plus
+  one list-item separator blank before the account ID (two blanks total).
+  Host-specific PL/I printer spacing, pagination and carriage control are not
+  oracle-verified.
 * GOLD uses case-sensitive, blank-padded CHAR comparison; balance below 100
   is waived with RC 4, after the late-days check.
 * Fee is 2.5 percent, truncated to cents, then floor 5.00, then cap 35.00.

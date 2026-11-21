@@ -1,14 +1,27 @@
 package com.carddemo.batch.fees;
 
+import java.io.PrintStream;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 
 public final class FeeCalculator {
     private static final BigDecimal ZERO = new BigDecimal("0.00");
+    private final PrintStream sysprint;
+
+    public FeeCalculator() {
+        this(System.out);
+    }
+
+    public FeeCalculator(PrintStream sysprint) {
+        this.sysprint = sysprint;
+    }
 
     public FeeRequest calculate(FeeRequest request) {
         BigDecimal average = request.FEE_AVG_DAILY();
-        if (request.FEE_CYCLE_DAYS() == 0) return result(request, ZERO, ZERO, 8);
+        if (request.FEE_CYCLE_DAYS() == 0) {
+            sysprint.println("CBFEECAL: ZERODIVIDE FOR ACCOUNT  " + request.FEE_ACCT_ID());
+            return result(request, ZERO, ZERO, 8);
+        }
         try {
             average = decimal(request.FEE_CYCLE_BAL().divide(
                     BigDecimal.valueOf(request.FEE_CYCLE_DAYS()), 2, RoundingMode.DOWN), 12);
@@ -23,6 +36,7 @@ public final class FeeCalculator {
             fee = fee.max(new BigDecimal("5.00")).min(new BigDecimal("35.00"));
             return result(request, fee, average, 0);
         } catch (ArithmeticException size) {
+            sysprint.println("CBFEECAL: SIZE CONDITION FOR ACCOUNT  " + request.FEE_ACCT_ID());
             return result(request, ZERO, average, 8);
         }
     }

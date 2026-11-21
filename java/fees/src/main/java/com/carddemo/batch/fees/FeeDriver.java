@@ -3,6 +3,7 @@ package com.carddemo.batch.fees;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.io.PrintStream;
 import java.math.BigDecimal;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -18,13 +19,18 @@ import com.carddemo.batch.common.codec.RecordLayout.Kind;
 
 public final class FeeDriver {
     private final FixedRecordCodec accounts = new FixedRecordCodec(CardDemoLayout.CVACT01Y.load());
-    private final FeeCalculator calculator = new FeeCalculator();
+    private final FeeCalculator calculator;
     private final FixedRecordCodec lines = new FixedRecordCodec(new RecordLayout(List.of(
             text("FL-ACCT-ID", 11), text("FILLER@11", 1), text("FL-GROUP-ID", 10),
             text("FILLER@22", 1), text("FL-CYCLE-BAL", 14), text("FILLER@37", 1),
             text("FL-FEE-AMT", 11), text("FILLER@49", 1), text("FL-RC", 2), text("FILLER@52", 28))));
 
     public FeeDriver() throws IOException {
+        this(System.out);
+    }
+
+    public FeeDriver(PrintStream sysprint) throws IOException {
+        calculator = new FeeCalculator(sysprint);
     }
 
     public FeeRequest request(byte[] account) {
@@ -59,7 +65,7 @@ public final class FeeDriver {
         if (args.length != 2) throw new IllegalArgumentException("Usage: FeeDriver ACCTFILE FEEOUT (fixed records)");
         try (var input = Files.newInputStream(Path.of(args[0]));
              var output = Files.newOutputStream(Path.of(args[1]))) {
-            new FeeDriver().run(input, output);
+            new FeeDriver(System.out).run(input, output);
         }
     }
 

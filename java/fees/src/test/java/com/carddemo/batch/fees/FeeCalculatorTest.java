@@ -2,13 +2,27 @@ package com.carddemo.batch.fees;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+import java.io.ByteArrayOutputStream;
+import java.io.PrintStream;
 import java.math.BigDecimal;
+import java.nio.charset.StandardCharsets;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 
 class FeeCalculatorTest {
+    @ParameterizedTest
+    @CsvSource({"1000.00,0,ZERODIVIDE", "400000000.00,30,SIZE CONDITION"})
+    void writesConditionDiagnosticToSysprint(String balance, int cycleDays, String condition) {
+        var output = new ByteArrayOutputStream();
+        var calculator = new FeeCalculator(new PrintStream(output, true, StandardCharsets.UTF_8));
+        var result = calculator.calculate(request("STANDARD", balance, 10, cycleDays));
+        assertEquals(8, result.FEE_RC());
+        assertEquals("CBFEECAL: " + condition + " FOR ACCOUNT  00000000001" + System.lineSeparator(),
+                output.toString(StandardCharsets.UTF_8));
+    }
+
     @ParameterizedTest
     @CsvSource({
             "STANDARD,1234.56,10,30,30.86,41.15,0",
