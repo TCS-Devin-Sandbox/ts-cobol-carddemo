@@ -1,0 +1,22 @@
+{
+ "AWS.M2.CARDDEMO.STATEMNT.HTML": {
+  "layout": "text",
+  "lrecl": 100,
+  "records": 0
+ },
+ "AWS.M2.CARDDEMO.STATEMNT.PS": {
+  "layout": "text",
+  "lrecl": 80,
+  "records": 0
+ },
+ "AWS.M2.CARDDEMO.TRXFL.SEQ": {
+  "layout": "COSTM01",
+  "lrecl": 350,
+  "records": 0
+ },
+ "AWS.M2.CARDDEMO.TRXFL.VSAM.KSDS": {
+  "layout": "COSTM01",
+  "lrecl": 350,
+  "records": 0
+ }
+}

@@ -13,6 +13,8 @@ for cpy in app/cpy/*.cpy; do
     expand -t8 "$cpy" > "$CPY/$(basename "$cpy")"
 done
 
+python3 tools/statements_prep.py
+
 COBC="cobc -m -std=ibm -fsign=EBCDIC -I $CPY"
 failed=0
 
@@ -33,6 +35,10 @@ for src in app/cbl/CB*.cbl app/cbl/CSUTLDTC.cbl app/cbl/COBSWAIT.cbl; do
         CBEXPORT.cbl|CBIMPORT.cbl) echo "$(basename "$src" .cbl): skipped (known GnuCOBOL failure, docs/BASELINE.md)";;
         *) compile "$src";;
     esac
+done
+
+for src in work/statements/CBSTM03A.cbl work/statements/CBSTM03B.cbl; do
+    compile "$src"
 done
 
 # Local stand-ins for the PARM driver, LE abend service and HLASM date service.

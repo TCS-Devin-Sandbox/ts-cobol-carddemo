@@ -34,7 +34,10 @@ def jcl_statements(text: str) -> list[tuple[str, str, str]]:
             continue
         body = line[2:]
         if pending is not None:
-            pending = (pending[0], pending[1], pending[2] + body.strip())
+            continuation = body.strip()
+            if pending[1] == "DD":
+                continuation = re.split(r"\s+(?=(?:[^']*'[^']*')*[^']*$)", continuation, maxsplit=1)[0]
+            pending = (pending[0], pending[1], pending[2] + continuation)
         else:
             parts = body.split(None, 2)
             if len(parts) >= 2 and parts[1] in ("JOB", "EXEC", "DD", "PROC", "PEND", "SET"):
@@ -54,7 +57,7 @@ def parse_jobs() -> dict[str, dict]:
     procs = {p.stem.upper(): p for p in PROC_DIR.glob("*.prc")} if PROC_DIR.exists() else {}
     jobs: dict[str, dict] = {}
     for d in JCL_DIRS:
-        for path in sorted(d.glob("*.jcl")):
+        for path in sorted(p for p in d.iterdir() if p.suffix.lower() == ".jcl"):
             text = path.read_text(errors="replace")
             steps = parse_steps(text, procs, text)
             jobs[path.stem.upper()] = {"path": path.relative_to(ROOT).as_posix(), "steps": steps}

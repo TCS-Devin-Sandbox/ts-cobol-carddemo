@@ -1,0 +1,12 @@
+{
+ "CREASTMT": {
+  "maxrc": 11,
+  "steps": {
+   "DELDEF01": 0,
+   "STEP010": 0,
+   "STEP020": 0,
+   "STEP030": 0,
+   "STEP040": 11
+  }
+ }
+}

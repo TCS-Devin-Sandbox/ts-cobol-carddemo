@@ -18,7 +18,7 @@ the mainframe `{ A-I } J-R` convention).
 | CBACT03C | yes | **read-masters** (`READXREF.jcl`) | cross-reference file print |
 | CBACT04C | yes | **interest** (`INTCALC.jcl`) | truncating interest arithmetic, see below |
 | CBCUS01C | yes | **read-masters** (`READCUST.jcl`) | customer file print |
-| CBSTM03A / CBSTM03B | yes | no | statement generation; needs `COBSWAIT` |
+| CBSTM03A / CBSTM03B | yes | **statements** (`CREASTMT.JCL`) | scratch-only TIOT adaptation; see below |
 | CBTRN01C | yes | no | daily transaction pre-validation |
 | CBTRN02C | yes | **posting** (`POSTTRAN.jcl`) | rejects -> RC 4 |
 | CBTRN03C | yes | **posting** (`TRANREPT.jcl`) | 133-byte report after SORT |
@@ -27,6 +27,47 @@ the mainframe `{ A-I } J-R` convention).
 | CBFEEDRV (new, lab) | yes | no | COBOL caller of the PL/I `CBFEECAL`; `FEECALC.jcl` documented only |
 | CBEXPORT | **no** | - | `'EXPORT-SEQUENCE-NUM' is not defined`: the program references a field that no shipped copybook declares (upstream defect; fails on z/OS too without the missing copybook) |
 | CBIMPORT | **no** | - | same missing `EXPORT-SEQUENCE-NUM` |
+
+### Statement oracle adaptations and quirks
+
+`tools/statements_prep.py` prepares only scratch files under `work/`:
+`CBSTM03A.CBL` and `CBSTM03B.CBL` become lowercase-extension build inputs,
+`COSTM01.CPY` becomes `work/cpy/COSTM01.cpy`, and `CUSTREC.cpy` uses one-column
+tab expansion to keep its over-indented PIC clauses within column 72. No original
+COBOL or copybook is changed. The build explicitly includes these two uppercase
+programs; unrelated uppercase programs are not newly compiled.
+
+The CBSTM03A startup PSA → TCB → TIOT pointer traversal is removed from the
+scratch source: those z/OS control blocks do not exist off-host. The oracle
+proves statement processing, **not real PSA/TCB/TIOT traversal**. Its z/OS
+`Running JCL`, `DD Names from TIOT` and per-DD UCB SYSOUT diagnostics are not
+reproduced. CBSTM03B's indexed-file processing is unchanged.
+
+CREASTMT's SORT reads an indexed master, orders by card / transaction ID and
+uses OUTREC to move the card to the front. The runner unloads KSDS input and
+emulates positional OUTREC fields, padding to the output DD's LRECL. The shipped
+STMTFILE SPACE continuation has stray text after a blank (`00,RECFM=...`);
+the DD parser now treats unquoted whitespace as the JCL inline-comment boundary,
+preserving the following DSN continuation without editing the JCL.
+
+Recorded behavior (synthetic cases under `fixtures/statements/`):
+
+* One statement per cross-reference, even if that card has no transactions.
+  Purchases, payments and refunds contribute signed amounts to each card's total.
+* An entirely empty transaction file is an error: the initial read accepts only
+  statuses 00/04, not EOF 10. In contrast, empty cross-references produce empty
+  reports and RC 0 if transaction input is nonempty.
+* Missing customer or account records return status 23 and call CEE3ABD.
+  CBSTM03A passes **no arguments** to that service, while the local stand-in
+  expects an abend code. In these error cases it prints `CEE3ABD: USER ABEND U`
+  then GnuCOBOL reports SIGSEGV (RC 11), with implicit-close warnings. These
+  goldens capture the off-host failure, not a z/OS LE abend-code equivalence.
+* Customer name/address STRING operations stop each component at its first
+  space; multiword names are truncated. Each card emits its own complete HTML
+  document, concatenated in the output. Negative amounts use trailing minus;
+  the zero expenditure total displays `.00` rather than `0.00`.
+* Internal transaction storage is bounded (51 cards and 10 transactions per
+  card); overflow behavior is not covered by these fixtures.
 
 ## CICS programs (`app/cbl/CO*`)
 

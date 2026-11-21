@@ -60,7 +60,15 @@ class FixtureRoundTripTest {
         if (layout.equals("text")) return text(length);
         Path parityCopybook = ROOT.resolve("tools/parity/layouts").resolve(layout + ".cpy");
         if (Files.isRegularFile(parityCopybook)) return RecordLayout.fromCopybook(parityCopybook);
-        return CardDemoLayout.valueOf(layout).load();
+        for (var known : CardDemoLayout.values()) {
+            if (known.name().equals(layout)) return known.load();
+        }
+        try (var copybooks = Files.list(ROOT.resolve("app/cpy"))) {
+            Path estateCopybook = copybooks
+                    .filter(path -> path.getFileName().toString().equalsIgnoreCase(layout + ".cpy"))
+                    .findFirst().orElseThrow(() -> new IllegalArgumentException("Unknown fixture layout: " + layout));
+            return RecordLayout.fromCopybook(estateCopybook);
+        }
     }
 
     private RecordLayout inputLayout(Path path) throws Exception {
@@ -134,6 +142,13 @@ class FixtureRoundTripTest {
             Path directory = ROOT.resolve(layout == CardDemoLayout.REJTRAN ? "tools/parity/layouts" : "app/cpy");
             assertEquals(RecordLayout.fromCopybook(directory.resolve(layout.name() + ".cpy")), layout.load());
         }
+    }
+
+    @Test
+    void statementOutputUsesEstateCopybookWithOriginalCase() throws Exception {
+        RecordLayout layout = outputLayout("COSTM01", 350);
+        assertEquals(350, layout.length());
+        assertEquals(RecordLayout.fromCopybook(ROOT.resolve("app/cpy/COSTM01.CPY")), layout);
     }
 
     @Test
