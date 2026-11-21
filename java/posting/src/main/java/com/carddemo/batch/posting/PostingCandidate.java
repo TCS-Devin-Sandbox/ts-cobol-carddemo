@@ -2,6 +2,7 @@ package com.carddemo.batch.posting;
 
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.ResolverStyle;
@@ -14,6 +15,7 @@ import com.carddemo.batch.common.ChainRun;
 import com.carddemo.batch.common.VsamDataset;
 import com.carddemo.batch.common.VsamTransfer;
 import org.springframework.batch.core.JobInstance;
+import org.springframework.batch.core.JobParametersBuilder;
 import org.springframework.batch.core.repository.JobRepository;
 import org.springframework.boot.SpringBootConfiguration;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
@@ -31,17 +33,37 @@ public class PostingCandidate {
 
     public static void main(String[] args) throws Exception {
         var options = options(args);
-        if (!option(options, "--chain").equals("posting")) {
-            throw new IllegalArgumentException("The candidate only supports the posting chain");
-        }
-        Path input = Path.of(option(options, "--input"));
-        Path out = Path.of(option(options, "--out"));
-        var at = LocalDateTime.parse(option(options, "--clock"), HARNESS_CLOCK).toInstant(UTC);
-
         String url = System.getenv().getOrDefault("POSTING_JDBC_URL", "jdbc:postgresql://localhost:5432/carddemo");
         String user = System.getenv().getOrDefault("PGUSER", "carddemo");
         String password = System.getenv().getOrDefault("PGPASSWORD", "carddemo");
-        run(input, out, at.toString(), options.get("--run-id"), url, user, password);
+        Path out = Path.of(option(options, "--out"));
+        switch (option(options, "--chain")) {
+            case "posting" -> {
+                Path input = Path.of(option(options, "--input"));
+                var at = LocalDateTime.parse(option(options, "--clock"), HARNESS_CLOCK).toInstant(UTC);
+                run(input, out, at.toString(), options.get("--run-id"), url, user, password);
+            }
+            case "tranrept" -> runReport(out, LocalDate.parse(option(options, "--start-date")),
+                    LocalDate.parse(option(options, "--end-date")), url, user, password);
+            default -> throw new IllegalArgumentException("Expected posting or tranrept");
+        }
+    }
+
+    static void runReport(Path out, LocalDate start, LocalDate end, String url, String user, String password)
+            throws Exception {
+        var parameters = new JobParametersBuilder().addString("out", out.toAbsolutePath().toString())
+                .addString("startDate", start.toString()).addString("endDate", end.toString()).toJobParameters();
+        ChainRun.run(TransactionReportJob.class, "tranrept", null, url, user, password, parameters,
+                connection -> new VsamTransfer(connection).stageFromPublic(VsamDataset.TRANSACTION,
+                        VsamDataset.CARD_XREF, VsamDataset.TYPE, VsamDataset.CATEGORY),
+                (dataSource, repository, execution) -> {
+                    var job = execution.getJobInstance();
+                    int rc = returnCode(repository, job, "TRANREPT.STEP10R");
+                    BatchArtifacts.writeReturnCodes(out, Map.of(
+                            "TRANREPT", Map.of("PRC001", returnCode(repository, job, "TRANREPT.PRC001"),
+                                    "STEP05R", returnCode(repository, job, "TRANREPT.STEP05R"), "STEP10R", rc)));
+                    if (rc != 0) throw new IllegalStateException("TRANREPT.STEP10R returned " + rc);
+                });
     }
 
     static void run(Path input, Path out, String clock, String runId, String url, String user, String password)

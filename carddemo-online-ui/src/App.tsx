@@ -3,12 +3,14 @@ import { RequireAdmin } from './components/RequireAdmin';
 import { AccountViewPage } from './pages/AccountViewPage';
 import { AdminMenuPage } from './pages/AdminMenuPage';
 import { LoginPage } from './pages/LoginPage';
+import { ReportRequestPage } from './pages/ReportRequestPage';
 import { TransactionTypeEditPage } from './pages/TransactionTypeEditPage';
 import { TransactionTypeListPage } from './pages/TransactionTypeListPage';
 import { UserListPage } from './pages/UserListPage';
 import { UserMaintenancePage } from './pages/UserMaintenancePage';
 import { getSession } from './api/client';
 import { CardListPage, CardViewPage } from './pages/CardPages';
+import { TransactionListPage, TransactionViewPage } from './pages/TransactionPages';
 
 function SessionMenu() {
   return getSession() ? <AdminMenuPage main /> : <Navigate to="/login" replace />;
@@ -16,6 +18,10 @@ function SessionMenu() {
 
 function SessionAccountView() {
   return getSession() ? <AccountViewPage /> : <Navigate to="/login" replace />;
+}
+
+function SessionReports() {
+  return getSession() ? <ReportRequestPage /> : <Navigate to="/login" replace />;
 }
 
 export function App() {
@@ -26,6 +32,9 @@ export function App() {
       <Route path="/cards" element={<CardListPage />} />
       <Route path="/cards/view" element={<CardViewPage />} />
       <Route path="/accounts/view" element={<SessionAccountView />} />
+      <Route path="/transactions" element={<TransactionListPage />} />
+      <Route path="/transactions/view" element={<TransactionViewPage />} />
+      <Route path="/reports" element={<SessionReports />} />
       <Route path="/admin" element={<RequireAdmin><AdminMenuPage /></RequireAdmin>} />
       <Route path="/admin/users" element={<RequireAdmin><UserListPage /></RequireAdmin>} />
       <Route path="/admin/users/add" element={<RequireAdmin><UserMaintenancePage key="add" mode="add" /></RequireAdmin>} />

@@ -48,6 +48,24 @@ public final class VsamTransfer {
         this.connection = connection;
     }
 
+    public void stageFromPublic(VsamDataset... datasets) throws Exception {
+        String schema = connection.getSchema();
+        if (connection.getAutoCommit() || schema == null || "public".equals(schema)) {
+            throw new IllegalStateException("Staging requires a transaction in a separate schema");
+        }
+        // A single SQL statement keeps the copied tables on the same PostgreSQL snapshot.
+        var copies = new java.util.StringJoiner(", ", "WITH ", " SELECT 1");
+        for (var dataset : datasets) {
+            String table = "\"" + dataset.table + "\"";
+            String columns = String.join(",", dataset.columns);
+            copies.add("stage_" + dataset.table + " AS (INSERT INTO " + table + " (" + columns
+                    + ") SELECT " + columns + " FROM public." + table + ")");
+        }
+        try (var sql = connection.createStatement()) {
+            sql.execute(copies.toString());
+        }
+    }
+
     public void load(VsamDataset dataset, Path input) throws Exception {
         if (connection.getAutoCommit()) throw new IllegalStateException("Loading requires an explicit transaction");
         var layout = dataset.layout.load();

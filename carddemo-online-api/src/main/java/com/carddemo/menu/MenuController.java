@@ -88,11 +88,16 @@ public class MenuController {
         if (option.program().startsWith("DUMMY")) {
             return message(200, "This option " + option.name().split(" ")[0] + "is coming soon ...", "info");
         }
+        if (option.program().equals("CORPT00C")) {
+            return ResponseEntity.ok(Map.of("program", option.program(), "tranId", "CR00", "route", "/reports"));
+        }
         String route = switch (option.program()) {
             case "COUSR00C" -> "/admin/users";
             case "COUSR01C" -> "/admin/users/add";
             case "COUSR02C" -> "/admin/users/update";
             case "COUSR03C" -> "/admin/users/delete";
+            case "COTRN00C" -> "/transactions";
+            case "COTRN01C" -> "/transactions/view";
             case "COTRTLIC" -> "/transaction-types";
             case "COTRTUPC" -> "/transaction-types/maintain";
             case "COCRDLIC" -> "/cards";
@@ -109,6 +114,8 @@ public class MenuController {
             case "COUSR03C" -> "CU03";
             case "COCRDLIC" -> "CCLI";
             case "COCRDSLC" -> "CCDL";
+            case "COTRN00C" -> "CT00";
+            case "COTRN01C" -> "CT01";
             case "COTRTLIC" -> "CTLI";
             default -> "CTTU";
         };
