@@ -17,9 +17,10 @@ export function CardUpdatePage() {
   const [screen, setScreen] = useState<Screen | null>(null);
   const [fields, setFields] = useState<Fields>({ embossedName: '', activeStatus: '', expirationMonth: '', expirationYear: '' });
   const [error, setError] = useState<string | null>(null);
+  const [info, setInfo] = useState<string | null>('Please enter Account and Card Number');
   const [busy, setBusy] = useState(false);
   const savedSuccessfully = screen?.message === 'Changes committed to database';
-  const accept = (result: Screen) => { setScreen(result); setFields(result.fields); };
+  const accept = (result: Screen) => { setScreen(result); setFields(result.fields); setInfo(result.message); };
   useEffect(() => {
     if (!saved?.cardNumber || !getSession()) return;
     let live = true;
@@ -29,10 +30,10 @@ export function CardUpdatePage() {
   }, [saved]);
   const act = async (key = 'ENTER') => {
     if (busy || (key === 'PF5' && !screen?.confirm) || (key === 'PF12' && !screen)) return;
-    setBusy(true); setError(null);
+    setBusy(true); setError(null); setInfo(null);
     if (savedSuccessfully) {
       if (saved?.list) navigate('/cards', { state: { ...saved.list, refresh: true } });
-      else { setScreen(null); setAccount(''); setCard(''); setFields({ embossedName: '', activeStatus: '', expirationMonth: '', expirationYear: '' }); }
+      else { setScreen(null); setAccount(''); setCard(''); setFields({ embossedName: '', activeStatus: '', expirationMonth: '', expirationYear: '' }); setInfo('Please enter Account and Card Number'); }
       setBusy(false); return;
     }
     try {
@@ -56,7 +57,7 @@ export function CardUpdatePage() {
         <TextField key={key} label={label} value={fields[key]} inputProps={{ maxLength, readOnly: !screen || screen.confirm || savedSuccessfully }}
           onChange={e => setFields({ ...fields, [key]: e.target.value })} />)}
     </Box>
-    <MessageLine info={screen?.message ?? 'Please enter Account and Card Number'} error={error} />
+    <MessageLine info={info} error={error} />
     <FunctionKeyBar keys={[{ label: 'Enter=Process', onClick: () => void act(), disabled: busy }, { label: 'F3=Exit', onClick: back },
       { label: 'F5=Save', onClick: () => void act('PF5'), disabled: busy || !screen?.confirm },
       { label: 'F12=Cancel', onClick: () => void act('PF12'), disabled: busy || !screen }]} />

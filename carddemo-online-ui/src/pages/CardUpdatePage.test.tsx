@@ -7,6 +7,25 @@ import { loginAsAdmin, mockFetch } from '../test/fetchMock';
 
 const fields = { embossedName: 'OLD NAME', activeStatus: 'Y', expirationMonth: '12', expirationYear: '2030' };
 const result = { token: 't', accountId: '10000000001', cardNumber: '4000000000000001', fields, message: 'Update card details presented above.', confirm: false };
+it('1200-EDIT-MAP-INPUTS / 3250-SETUP-INFOMSG: a new validation error clears previous no-change information', async () => {
+  const noChange = 'No change detected with respect to values fetched.';
+  mockFetch((method, _url, body) => {
+    if (method === 'GET') return { status: 200, body: result };
+    const action = body as { fields: typeof fields };
+    return action.fields.embossedName ? { status: 200, body: { ...result, message: noChange } }
+      : { status: 400, body: { message: 'Card name not provided' } };
+  });
+  page();
+  await userEvent.click(screen.getByText('Enter=Process'));
+  await screen.findByDisplayValue('OLD NAME');
+  fireEvent.keyDown(window, { key: 'Enter' });
+  await screen.findByText(noChange);
+  await userEvent.clear(screen.getByLabelText('Name on Card'));
+  fireEvent.keyDown(window, { key: 'Enter' });
+  expect(await screen.findByRole('alert')).toHaveTextContent('Card name not provided');
+  expect(screen.queryByText(noChange)).not.toBeInTheDocument();
+  expect(screen.queryByTestId('infomsg')).not.toBeInTheDocument();
+});
 function page() {
   loginAsAdmin();
   render(<MemoryRouter initialEntries={['/cards/update']}><Routes>
