@@ -1,8 +1,10 @@
 package com.carddemo.batch.common.codec;
 
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Arrays;
+import java.util.HexFormat;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Stream;
@@ -18,6 +20,7 @@ class FixtureRoundTripTest {
     static final Path ROOT = findRoot();
     private static final Map<String, CardDemoLayout> INPUTS = Map.of(
             "ACCTDATA", CardDemoLayout.CVACT01Y, "CARDXREF", CardDemoLayout.CVACT03Y,
+            "CARDDATA", CardDemoLayout.CVACT02Y, "CUSTDATA", CardDemoLayout.CVCUS01Y,
             "TCATBALF", CardDemoLayout.CVTRA01Y, "DISCGRP", CardDemoLayout.CVTRA02Y,
             "TRANTYPE", CardDemoLayout.CVTRA03Y, "TRANCATG", CardDemoLayout.CVTRA04Y,
             "DALYTRAN", CardDemoLayout.CVTRA06Y);
@@ -36,24 +39,32 @@ class FixtureRoundTripTest {
                     System.out.println("SKIP " + ROOT.relativize(path) + ": PostgreSQL seed script, not fixed records");
                     return;
                 }
-                roundTrip(path, layout(path));
+                if (path.getParent().getFileName().toString().equals("datasets")) {
+                    var manifest = JsonParserFactory.getJsonParser().parseMap(
+                            Files.readString(path.getParent().getParent().resolve("manifest.json")));
+                    String name = path.getFileName().toString();
+                    var meta = (Map<?, ?>) manifest.get(name.substring(0, name.length() - 4));
+                    assertNotNull(meta, "Missing comparator manifest entry: " + path);
+                    int length = ((Number) meta.get("lrecl")).intValue();
+                    RecordLayout layout = outputLayout((String) meta.get("layout"), length);
+                    assertEquals(length, layout.length());
+                    roundTrip(path, layout, "hex".equals(meta.get("serialization")));
+                } else {
+                    roundTrip(path, inputLayout(path), false);
+                }
             }));
         }
     }
 
-    private RecordLayout layout(Path path) throws Exception {
+    private RecordLayout outputLayout(String layout, int length) throws Exception {
+        if (layout.equals("text")) return text(length);
+        Path parityCopybook = ROOT.resolve("tools/parity/layouts").resolve(layout + ".cpy");
+        if (Files.isRegularFile(parityCopybook)) return RecordLayout.fromCopybook(parityCopybook);
+        return CardDemoLayout.valueOf(layout).load();
+    }
+
+    private RecordLayout inputLayout(Path path) throws Exception {
         String name = path.getFileName().toString();
-        if (path.getParent().getFileName().toString().equals("datasets")) {
-            var manifest = JsonParserFactory.getJsonParser().parseMap(
-                    Files.readString(path.getParent().getParent().resolve("manifest.json")));
-            var meta = (Map<?, ?>) manifest.get(name.substring(0, name.length() - 4));
-            assertNotNull(meta, "Missing comparator manifest entry: " + path);
-            int length = ((Number) meta.get("lrecl")).intValue();
-            RecordLayout result = meta.get("layout").equals("text") ? text(length)
-                    : CardDemoLayout.valueOf((String) meta.get("layout")).load();
-            assertEquals(length, result.length());
-            return result;
-        }
         for (var entry : INPUTS.entrySet()) {
             if (name.startsWith("AWS.M2.CARDDEMO." + entry.getKey() + ".")) return entry.getValue().load();
         }
@@ -69,15 +80,20 @@ class FixtureRoundTripTest {
         return new RecordLayout(List.of(new RecordLayout.Field("TEXT", RecordLayout.Kind.TEXT, length, length, 0, false)));
     }
 
-    private void roundTrip(Path path, RecordLayout layout) throws Exception {
+    private void roundTrip(Path path, RecordLayout layout, boolean hexRecords) throws Exception {
         byte[] file = Files.readAllBytes(path);
         var rebuilt = new java.io.ByteArrayOutputStream();
         int start = 0;
         var codec = new FixedRecordCodec(layout);
+        var hex = HexFormat.of();
         for (int end = 0; end <= file.length; end++) {
             if (end < file.length && file[end] != '\n') continue;
             if (end == file.length && start == end) break;
             byte[] line = Arrays.copyOfRange(file, start, end);
+            if (hexRecords) {
+                line = hex.parseHex(new String(line, StandardCharsets.US_ASCII));
+                assertEquals(layout.length(), line.length, "Wrong record size: " + path);
+            }
             assertTrue(line.length <= layout.length(), "Record too long: " + path);
             byte[] padded = new byte[layout.length()];
             Arrays.fill(padded, (byte) ' ');
@@ -88,12 +104,28 @@ class FixtureRoundTripTest {
                 else assertEquals(field.scale(), assertInstanceOf(java.math.BigDecimal.class, values.get(field.name())).scale());
             }
             byte[] encoded = codec.encode(values);
+            if (hexRecords) preserveInitializedZeros(layout, padded, encoded);
             assertArrayEquals(padded, encoded);
-            rebuilt.write(encoded, 0, line.length);
+            if (hexRecords) rebuilt.write(hex.formatHex(encoded).getBytes(StandardCharsets.US_ASCII));
+            else rebuilt.write(encoded, 0, line.length);
             if (end < file.length) rebuilt.write('\n');
             start = end + 1;
         }
         assertArrayEquals(file, rebuilt.toByteArray());
+    }
+
+    private static void preserveInitializedZeros(RecordLayout layout, byte[] original, byte[] encoded) {
+        // GnuCOBOL INITIALIZE writes plain digits for signed DISPLAY zeros in the unused array entries.
+        int offset = 0;
+        for (var field : layout.fields()) {
+            int last = offset + field.length() - 1;
+            if (field.kind() == RecordLayout.Kind.DISPLAY && field.signed() && encoded[last] == '{'
+                    && new String(original, offset, field.length(), StandardCharsets.US_ASCII)
+                            .equals("0".repeat(field.length()))) {
+                encoded[last] = '0';
+            }
+            offset = last + 1;
+        }
     }
 
     @Test
