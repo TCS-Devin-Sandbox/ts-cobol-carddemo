@@ -9,4 +9,4 @@ npm test           # Vitest + React Testing Library
 npm run lint && npm run typecheck && npm run build
 ```
 
-Routes: `/login`, `/admin` (admin menu placeholder: options 5 and 6), `/transaction-types` (CTLI), `/transaction-types/maintain` (CTTU). PF keys are buttons (`F2=Add`, `F3=Exit`, `F7=Page Up`, `F8=Page Dn`, `F10=Save`, `F4=Delete`, `F5=Save`, `F12=Cancel`).
+Routes: `/login` (CC00), `/menu` (CM00), `/admin` (CA00), `/transaction-types` (CTLI), `/transaction-types/maintain` (CTTU). Sign-on sends `{userId,password}` and routes administrators to CA00, users to CM00. Dev users: admin/admin123, user/user123, ADMIN001/PASSWORD, USER0001/PASSWORD (case-insensitive). Session storage holds token/userId/userType/roles. F3 exits sign-on with a thank-you message and signs off from either menu. See [E2 contract](../docs/online/signon-menus.md).

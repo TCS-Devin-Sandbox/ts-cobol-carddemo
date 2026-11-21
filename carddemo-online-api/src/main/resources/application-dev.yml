@@ -2,3 +2,18 @@
 JWT_SECRET: local-dev-only-secret-change-me-0123456789abcdef
 ADMIN_PASSWORD: admin123
 USER_PASSWORD: user123
+carddemo:
+  security:
+    users:
+      - username: admin
+        password: ${ADMIN_PASSWORD}
+        roles: [ADMIN]
+      - username: user
+        password: ${USER_PASSWORD}
+        roles: [USER]
+      - username: ADMIN001
+        password: PASSWORD
+        roles: [ADMIN]
+      - username: USER0001
+        password: PASSWORD
+        roles: [USER]

@@ -292,7 +292,8 @@ graph LR
 | D5 | D | FEECALC | [#46](https://github.com/TCS-Devin-Sandbox/ts-cobol-carddemo/pull/46) | merged |
 | D6 | D | HLASM date and wait routines | [#47](https://github.com/TCS-Devin-Sandbox/ts-cobol-carddemo/pull/47) | merged |
 | E1 | E | Online API/UI foundation | [#54](https://github.com/TCS-Devin-Sandbox/ts-cobol-carddemo/pull/54) | in review |
-| E2-E11 | E | Online screens | | not started |
+| E2 | E | Sign-on CC00 and menus CM00/CA00 | | in review |
+| E3-E11 | E | Online screens | | not started |
 | F1 | F | [Data load and reconciliation](../java/data-load/README.md) | | in review |
 | F2-F4 | F | Scheduling, shadow run, cutover | | not started |
 | G | G | Authorization, VSAM/MQ | | needs decision |

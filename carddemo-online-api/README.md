@@ -17,9 +17,13 @@ Flyway keeps the existing DB2-derived definitions and seed data from `../db/migr
 
 ```sh
 TOKEN=$(curl -s -XPOST localhost:8080/api/auth/login -H 'Content-Type: application/json' \
-  -d '{"username":"admin","password":"admin123"}' | jq -r .token)
+  -d '{"userId":"admin","password":"admin123"}' | jq -r .token)
 curl -s -H "Authorization: Bearer $TOKEN" 'localhost:8080/api/transaction-types?size=7'
 ```
 
 ## Test
+Sign-on and menus: [E2 contract and traceability](../docs/online/signon-menus.md).
+Dev also seeds ADMIN001/PASSWORD and USER0001/PASSWORD. IDs and passwords are case-insensitive.
+Configured users are inserted only if absent; changing an environment password does not overwrite an existing user.
+
 `mvn test` — unit tests (JUnit 5, Mockito, MockMvc) and `TransactionTypeApiIntegrationTest` (`@SpringBootTest` + Testcontainers `postgres:15-alpine`; requires Docker).

@@ -18,7 +18,7 @@ export function mockFetch(handler: Handler) {
 }
 
 export function loginAsAdmin() {
-  setSession({ token: 't', username: 'admin', roles: ['ADMIN'] });
+  setSession({ token: 't', userId: 'ADMIN', userType: 'A', roles: ['ADMIN'] });
 }
 
 export const rows = (from: number, count: number) =>

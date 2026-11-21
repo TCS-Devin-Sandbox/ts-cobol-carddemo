@@ -1,6 +1,6 @@
 import { useEffect, useRef } from 'react';
 
-export type KeyHandlers = Partial<Record<'Enter' | 'F2' | 'F3' | 'F4' | 'F5' | 'F7' | 'F8' | 'F10' | 'F12', () => void>>;
+export type KeyHandlers = Partial<Record<'Enter' | 'F2' | 'F3' | 'F4' | 'F5' | 'F7' | 'F8' | 'F10' | 'F12' | 'onInvalid', () => void>>;
 
 /** Binds 3270-style AID keys (Enter, PFn) to handlers; unbound keys are ignored. */
 export function useFunctionKeys(handlers: KeyHandlers) {
@@ -16,6 +16,10 @@ export function useFunctionKeys(handlers: KeyHandlers) {
         return;
       }
       const handler = ref.current[e.key as keyof KeyHandlers];
+      if (!handler && ref.current.onInvalid && (/^F\d+$/.test(e.key) || e.key === 'Escape')) {
+        e.preventDefault();
+        ref.current.onInvalid?.();
+      }
       if (handler) {
         e.preventDefault();
         if (!e.repeat) handler();
