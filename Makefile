@@ -128,3 +128,4 @@ endif
 .PHONY: read-masters-candidate
 read-masters-candidate:
 	mvn -B -f java/pom.xml -pl read-masters -am -DskipTests package
+	$(COMPOSE) up -d --wait postgres
