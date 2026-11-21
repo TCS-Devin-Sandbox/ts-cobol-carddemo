@@ -13,6 +13,21 @@ interface View { transaction: Transaction | null; message: string }
 const invalidKey = 'Invalid key pressed. Please see below...';
 const amount = (value: string | number) => `${Number(value) < 0 ? '-' : '+'}${Math.abs(Number(value)).toFixed(2).slice(-11).padStart(11, '0')}`;
 const date = (value: string | number) => { const text = String(value); return `${text.slice(5, 7)}-${text.slice(8, 10)}-${text.slice(2, 4)}`; };
+const viewFields = [
+  { key: 'transaction_id', label: 'Transaction ID:', length: 16 },
+  { key: 'card_number', label: 'Card Number:', length: 16 },
+  { key: 'transaction_type_code', label: 'Type CD:', length: 2 },
+  { key: 'transaction_category_code', label: 'Category CD:', length: 4, numeric: true },
+  { key: 'source', label: 'Source:', length: 10 },
+  { key: 'description', label: 'Description:', length: 60 },
+  { key: 'amount', label: 'Amount:', length: 12 },
+  { key: 'origination_timestamp', label: 'Orig Date:', length: 10 },
+  { key: 'processed_timestamp', label: 'Proc Date:', length: 10 },
+  { key: 'merchant_id', label: 'Merchant ID:', length: 9, numeric: true },
+  { key: 'merchant_name', label: 'Merchant Name:', length: 30 },
+  { key: 'merchant_city', label: 'Merchant City:', length: 25 },
+  { key: 'merchant_zip_code', label: 'Merchant Zip:', length: 10 },
+];
 
 export function TransactionListPage() {
   const navigate = useNavigate();
@@ -53,7 +68,7 @@ export function TransactionListPage() {
     <table><thead><tr><th>Select</th><th>Transaction ID</th><th>Date</th><th>Description</th><th>Amount</th></tr></thead>
       <tbody>{page.rows.map((row, i) => <tr key={String(row.transaction_id)}>
         <td><TextField inputProps={{ maxLength: 1, 'aria-label': `Select row ${i + 1}` }} value={selection[i] ?? ''} onChange={e => setSelection(old => { const values = [...old]; values[i] = e.target.value; return values; })} /></td>
-        <td>{row.transaction_id}</td><td>{date(row.origination_timestamp)}</td><td>{String(row.description).slice(0, 26)}</td><td>{amount(row.amount)}</td>
+        <td>{String(row.transaction_id).slice(0, 16)}</td><td>{date(row.origination_timestamp)}</td><td>{String(row.description).slice(0, 26)}</td><td>{amount(row.amount)}</td>
       </tr>)}</tbody></table>
     <MessageLine error={message || null} />
     <FunctionKeyBar keys={[{ label: 'Enter=Select', onClick: () => void browse() }, { label: 'F3=Back', onClick: back }, { label: 'F7=Backward', onClick: previous }, { label: 'F8=Forward', onClick: next }]} />
@@ -79,7 +94,13 @@ export function TransactionViewPage() {
   return <Box sx={{ maxWidth: 1000, mx: 'auto', p: 2 }}>
     <ScreenHeader tranId="CT01" program="COTRN01C" title="Transaction View" />
     <TextField label="Tran ID" value={id} onChange={e => setId(e.target.value)} inputProps={{ maxLength: 16 }} autoFocus />
-    <dl>{Object.entries(view.transaction ?? {}).filter(([key]) => key !== 'filler').map(([key, value]) => <div key={key}><dt>{key.replace(/_/g, ' ')}</dt><dd>{key === 'amount' ? amount(value) : String(value)}</dd></div>)}</dl>
+    <dl>{viewFields.map(field => {
+      const value = view.transaction?.[field.key];
+      const text = value === undefined ? '' : field.key === 'amount' ? amount(value)
+        : field.numeric ? String(value).padStart(field.length, '0').slice(-field.length)
+          : String(value).slice(0, field.length);
+      return <div key={field.key}><dt id={`label-${field.key}`}>{field.label}</dt><dd aria-labelledby={`label-${field.key}`}>{text}</dd></div>;
+    })}</dl>
     <MessageLine error={view.message || null} />
     <FunctionKeyBar keys={[{ label: 'Enter=View', onClick: () => void lookup() }, { label: 'F3=Back', onClick: back }, { label: 'F4=Clear', onClick: clear }, { label: 'F5=Browse', onClick: browse }]} />
   </Box>;

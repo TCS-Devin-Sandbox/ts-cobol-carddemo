@@ -14,6 +14,14 @@ function renderPage(view = false) {
   </Routes></MemoryRouter>);
 }
 describe('CT00', () => {
+  it('POPULATE-TRAN-DATA formats every list column to the COTRN00 BMS width', async () => {
+    mockFetch(() => ({ status: 200, body: { rows: [{ ...row, transaction_id: '1234567890123456EXTRA', description: 'D'.repeat(100), amount: 100000001.23 }], pageNumber: 1, message: '' } }));
+    renderPage();
+    expect(await screen.findByText('1234567890123456')).toBeInTheDocument();
+    expect(screen.getByText('07-05-22')).toBeInTheDocument();
+    expect(screen.getByText('D'.repeat(26))).toBeInTheDocument();
+    expect(screen.getByText('+00000001.23')).toBeInTheDocument();
+  });
   it('PROCESS-ENTER-KEY permits selecting a later row with preceding blank selection fields', async () => {
     const second = { ...row, transaction_id: '0000000000000002' };
     const fetch = mockFetch((_method, url) => ({ status: 200, body: url.includes('/view') ? { transaction: second, message: '' } : { rows: [row, second], pageNumber: 1, message: '' } }));
@@ -83,6 +91,33 @@ describe('CT00', () => {
   });
 });
 describe('CT01', () => {
+  const formattingCases: [string, string | number, string, string][] = [
+    ['transaction_id', '1234567890123456EXTRA', 'Transaction ID:', '1234567890123456'],
+    ['card_number', '9876543210987654EXTRA', 'Card Number:', '9876543210987654'],
+    ['transaction_type_code', '01EXTRA', 'Type CD:', '01'],
+    ['transaction_category_code', 7, 'Category CD:', '0007'],
+    ['source', '1234567890EXTRA', 'Source:', '1234567890'],
+    ['description', 'D'.repeat(100), 'Description:', 'D'.repeat(60)],
+    ['amount', 1.23, 'Amount:', '+00000001.23'],
+    ['origination_timestamp', '2022-07-05 10:00:00.000000', 'Orig Date:', '2022-07-05'],
+    ['processed_timestamp', '2022-08-06 11:22:33.444444', 'Proc Date:', '2022-08-06'],
+    ['merchant_id', 12345, 'Merchant ID:', '000012345'],
+    ['merchant_name', 'N'.repeat(50), 'Merchant Name:', 'N'.repeat(30)],
+    ['merchant_city', 'C'.repeat(50), 'Merchant City:', 'C'.repeat(25)],
+    ['merchant_zip_code', '1234567890EXTRA', 'Merchant Zip:', '1234567890'],
+  ];
+  it.each(formattingCases)('PROCESS-ENTER-KEY COTRN01 BMS formats %s', async (key, value, label, expected) => {
+    mockFetch(() => ({ status: 200, body: { transaction: { ...row, [key]: value }, message: '' } }));
+    renderPage(true);
+    await userEvent.type(screen.getByLabelText('Tran ID'), '1');
+    fireEvent.keyDown(window, { key: 'Enter' });
+    await waitFor(() => expect(screen.getByLabelText(label).textContent).toBe(expected));
+  });
+  it('SEND-TRNVIEW-SCREEN renders labeled fields in BMS order and blanks on INITIALIZE-ALL-FIELDS', async () => {
+    renderPage(true);
+    expect(screen.getAllByRole('term').map(element => element.textContent)).toEqual(formattingCases.map(([, , label]) => label));
+    expect(screen.getAllByRole('definition').every(element => element.textContent === '')).toBe(true);
+  });
   it('PROCESS-ENTER-KEY preserves WS-TRAN-AMT eight-digit truncation', async () => {
     mockFetch(() => ({ status: 200, body: { transaction: { ...row, amount: -100000001.23 }, message: '' } }));
     renderPage(true);
