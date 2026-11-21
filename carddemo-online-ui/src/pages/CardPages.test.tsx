@@ -16,6 +16,7 @@ function login(type: 'A' | 'U' = 'U') {
 function renderPage(path = '/cards') {
   return render(<MemoryRouter initialEntries={[path]}><Routes>
     <Route path="/cards" element={<CardListPage />} /><Route path="/cards/view" element={<CardViewPage />} />
+    <Route path="/cards/update" element={<div>CARD UPDATE</div>} />
     <Route path="/menu" element={<div>MAIN MENU</div>} /><Route path="/login" element={<div>SIGN ON</div>} />
   </Routes></MemoryRouter>);
 }
@@ -84,11 +85,12 @@ describe('CCLI paragraphs', () => {
     expect(screen.getByText('MAIN MENU')).toBeInTheDocument();
   });
 
-  it('2250-EDIT-ARRAY: invalid action, only-one selection, and U not installed', async () => {
+  it('2250-EDIT-ARRAY: invalid action, only-one selection, and U update routing', async () => {
     login();
     const fetch = mockFetch((method, _url, body) => {
       if (method === 'GET') return { status: 200, body: page };
       const actions = (body as { selections: { action: string }[] }).selections.map(row => row.action).filter(Boolean);
+      if (actions.length === 1 && actions[0] === 'U') return { status: 200, body: { route: '/cards/update', ...rows[1] } };
       return { status: actions.includes('X') || actions.length > 1 ? 400 : 200, body: { message: actions.includes('X')
         ? 'INVALID ACTION CODE' : actions.length > 1 ? 'PLEASE SELECT ONLY ONE RECORD TO VIEW OR UPDATE' : 'This option is not installed ...' } };
     });
@@ -104,7 +106,7 @@ describe('CCLI paragraphs', () => {
     await waitFor(() => expect(screen.getByRole('alert')).toHaveTextContent('PLEASE SELECT ONLY ONE RECORD TO VIEW OR UPDATE'));
     await userEvent.clear(screen.getByLabelText(`action ${rows[0].cardNumber}`));
     await userEvent.click(screen.getByText('Enter=Select'));
-    expect(await screen.findByText('This option is not installed ...')).toBeInTheDocument();
+    expect(await screen.findByText('CARD UPDATE')).toBeInTheDocument();
     expect(JSON.parse(String(fetch.mock.calls[6][1]?.body)).selections[1].action).toBe('U');
   });
 

@@ -24,8 +24,8 @@ from list. There is no account claim and no new authorization policy.
   Clients must carry this paging state, as the terminal COMMAREA did.
 * `POST /api/cards/select` with `{"selections":[{"action":"S",
   "accountId":"10000000001","cardNumber":"4000000000000001"}]}` accepts
-  up to seven row actions. Blank means no action; uppercase S views, U reports
-  `This option is not installed ...` (E2 convention, pending E8). Multiple S/U
+  up to seven row actions. Blank means no action; uppercase S views, U routes
+  to `/cards/update` ([E8 CCUP](CCUP.md)). Multiple S/U
   actions take precedence over invalid-action errors. Lowercase is invalid.
   The UI validates filters before submitting row selections, in source order.
 * `GET /api/cards/view?accountId=10000000001&cardNumber=4000000000000001`:

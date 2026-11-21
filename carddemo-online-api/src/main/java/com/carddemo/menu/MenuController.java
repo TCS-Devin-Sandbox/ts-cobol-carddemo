@@ -105,6 +105,7 @@ public class MenuController {
             case "COTRTUPC" -> "/transaction-types/maintain";
             case "COCRDLIC" -> "/cards";
             case "COCRDSLC" -> "/cards/view";
+            case "COCRDUPC" -> "/cards/update";
             default -> null;
         };
         if (route == null) {
@@ -117,6 +118,7 @@ public class MenuController {
             case "COUSR03C" -> "CU03";
             case "COCRDLIC" -> "CCLI";
             case "COCRDSLC" -> "CCDL";
+            case "COCRDUPC" -> "CCUP";
             case "COTRN00C" -> "CT00";
             case "COTRN01C" -> "CT01";
             case "COTRTLIC" -> "CTLI";
