@@ -134,8 +134,8 @@ def main():
                     raise ValueError("VSAM mainframe output manifest.json is required")
                 diffs, checked = compare.compare_case(chain, case.name, actual, expected=expected)
                 row["differences"] = diffs
-                row["verdict"] = "MATCH" if not diffs and row["chain_exit"] == 0 else "DRIFT"
                 compare.write_report(work / "comparisons.md", chain, case.name, "shadow", diffs, checked)
+                row["verdict"] = "MATCH" if not diffs and row["chain_exit"] == 0 else "DRIFT"
             except (Exception, SystemExit) as exc:
                 row["error"] = str(exc)
             print(f"{chain}/{case.name}: F1={row['reconciliation']} exit={row['chain_exit']} {row['verdict']}")
