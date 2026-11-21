@@ -115,8 +115,9 @@ final class StatementProgram {
         String address1 = pad(text(customer, "CUST-ADDR-LINE-1"), 50);
         String address2 = pad(text(customer, "CUST-ADDR-LINE-2"), 50);
         String address3 = StatementFormat.concat(80, StatementFormat.untilSpace(text(customer, "CUST-ADDR-LINE-3")),
-                " ", pad(text(customer, "CUST-ADDR-STATE-CD"), 2), " ", pad(text(customer, "CUST-ADDR-COUNTRY-CD"), 3),
-                " ", pad(text(customer, "CUST-ADDR-ZIP"), 10), " ");
+                " ", StatementFormat.untilSpace(text(customer, "CUST-ADDR-STATE-CD")), " ",
+                StatementFormat.untilSpace(text(customer, "CUST-ADDR-COUNTRY-CD")), " ",
+                StatementFormat.untilSpace(text(customer, "CUST-ADDR-ZIP")), " ");
         String accountId = pad(StatementFormat.digits((BigDecimal) account.get("ACCT-ID"), 11), 20);
         String balance = StatementFormat.unsignedEdited((BigDecimal) account.get("ACCT-CURR-BAL"));
         String fico = pad(StatementFormat.digits((BigDecimal) customer.get("CUST-FICO-CREDIT-SCORE"), 3), 20);
