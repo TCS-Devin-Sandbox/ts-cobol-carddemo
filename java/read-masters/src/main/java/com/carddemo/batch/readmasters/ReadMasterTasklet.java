@@ -39,7 +39,7 @@ final class ReadMasterTasklet implements Tasklet {
         Files.createDirectories(out.resolve("datasets"));
         var sysout = new StringBuilder("START OF EXECUTION OF PROGRAM " + master.program + "\n");
         int rc = 0;
-        if ("true".equals(parameters.getString("missingInput"))) {
+        if ("true".equals(parameters.getString("missing." + master.job))) {
             abend(sysout, "ERROR OPENING " + master.ddname, "35");
             rc = 12;
         } else {
