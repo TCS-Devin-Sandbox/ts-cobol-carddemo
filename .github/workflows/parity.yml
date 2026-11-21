@@ -196,3 +196,31 @@ jobs:
         run: |
           npm ci
           npm test
+
+  read-masters-parity:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up JDK 21 with Maven cache
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '21'
+          cache: maven
+          cache-dependency-path: java/**/pom.xml
+
+      - name: Start PostgreSQL 15
+        run: docker compose up -d --wait postgres
+
+      - name: Read masters Java parity against the COBOL goldens
+        run: make parity-java CHAIN=read-masters
+
+      - name: Upload read-masters parity report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: read-masters-parity-report
+          path: work/parity-java/report.md
+          if-no-files-found: ignore
