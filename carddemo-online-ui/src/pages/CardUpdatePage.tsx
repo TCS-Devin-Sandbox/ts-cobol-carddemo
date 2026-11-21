@@ -18,6 +18,7 @@ export function CardUpdatePage() {
   const [fields, setFields] = useState<Fields>({ embossedName: '', activeStatus: '', expirationMonth: '', expirationYear: '' });
   const [error, setError] = useState<string | null>(null);
   const [busy, setBusy] = useState(false);
+  const savedSuccessfully = screen?.message === 'Changes committed to database';
   const accept = (result: Screen) => { setScreen(result); setFields(result.fields); };
   useEffect(() => {
     if (!saved?.cardNumber || !getSession()) return;
@@ -29,7 +30,7 @@ export function CardUpdatePage() {
   const act = async (key = 'ENTER') => {
     if (busy || (key === 'PF5' && !screen?.confirm) || (key === 'PF12' && !screen)) return;
     setBusy(true); setError(null);
-    if (screen?.message === 'Changes committed to database') {
+    if (savedSuccessfully) {
       if (saved?.list) navigate('/cards', { state: { ...saved.list, refresh: true } });
       else { setScreen(null); setAccount(''); setCard(''); setFields({ embossedName: '', activeStatus: '', expirationMonth: '', expirationYear: '' }); }
       setBusy(false); return;
@@ -52,7 +53,7 @@ export function CardUpdatePage() {
     </Box>
     <Box sx={{ mt: 3, display: 'grid', gap: 2 }}>
       {([['embossedName', 'Name on Card', 50], ['activeStatus', 'Active Status', 1], ['expirationMonth', 'Expiration Month', 2], ['expirationYear', 'Expiration Year', 4]] as const).map(([key, label, maxLength]) =>
-        <TextField key={key} label={label} value={fields[key]} inputProps={{ maxLength, readOnly: !screen || screen.confirm }}
+        <TextField key={key} label={label} value={fields[key]} inputProps={{ maxLength, readOnly: !screen || screen.confirm || savedSuccessfully }}
           onChange={e => setFields({ ...fields, [key]: e.target.value })} />)}
     </Box>
     <MessageLine info={screen?.message ?? 'Please enter Account and Card Number'} error={error} />

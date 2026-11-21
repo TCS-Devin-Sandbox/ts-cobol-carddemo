@@ -89,4 +89,13 @@ it('1200-EDIT-MAP-INPUTS / 2000-DECIDE-ACTION / 3250-SETUP-INFOMSG: validation, 
   await screen.findByText('Changes validated.Press F5 to save');
   fireEvent.keyDown(window, { key: 'F5' });
   expect(await screen.findByText('Changes committed to database')).toBeInTheDocument();
+  for (const label of ['Name on Card', 'Active Status', 'Expiration Month', 'Expiration Year']) {
+    expect(screen.getByLabelText(label)).toHaveAttribute('readonly');
+    const value = (screen.getByLabelText(label) as HTMLInputElement).value;
+    await userEvent.type(screen.getByLabelText(label), 'X');
+    expect(screen.getByLabelText(label)).toHaveValue(value);
+  }
+  fireEvent.keyDown(window, { key: 'Enter' });
+  expect(screen.getByText('Please enter Account and Card Number')).toBeInTheDocument();
+  expect(screen.getByLabelText('Name on Card')).toHaveValue('');
 });
