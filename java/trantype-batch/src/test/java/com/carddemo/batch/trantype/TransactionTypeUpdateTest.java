@@ -7,6 +7,8 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
@@ -97,6 +99,18 @@ class TransactionTypeUpdateTest {
         assertThat(new DynamicTransactionTypeUpdate(dataSource).run(sql, null, "", sysout)).isEqualTo(8);
         assertThat(Files.readAllLines(sysout)).containsSubsequence(
                 "CBTRNDYN: 00 SQL LINES READ", "CBTRNDYN: EXECUTE SQLCODE -0000000212", "CBTRNDYN: END");
+    }
+
+    @ParameterizedTest
+    @ValueSource(strings = {"-- operator note", "/* operator note */"})
+    void executesMaintenanceWithTrailingComment(String comment) throws Exception {
+        Path sql = Files.writeString(directory.resolve("sql"),
+                "DELETE FROM transaction_type WHERE tr_type = '01'; " + comment);
+        Path input = Files.writeString(directory.resolve("input"), "A02Replacement\n");
+        Path sysout = directory.resolve("sysout");
+
+        assertThat(new DynamicTransactionTypeUpdate(dataSource).run(sql, input, "COBTUPDT", sysout)).isZero();
+        assertThat(db.queryForList("SELECT tr_type FROM carddemo.transaction_type", String.class)).containsExactly("02");
     }
 
     @Test

@@ -79,7 +79,10 @@ final class DynamicTransactionTypeUpdate {
         if (sql.isBlank()) return -212;
         boolean standardStrings = "on".equals(
                 connection.unwrap(PGConnection.class).getParameterStatus("standard_conforming_strings"));
-        var queries = Parser.parseJdbcSql(sql, standardStrings, true, true, false, false);
+        var queries = Parser.parseJdbcSql(sql, standardStrings, true, true, false, false).stream()
+                .filter(query -> !isCommentOrWhitespace(query.nativeSql))
+                .toList();
+        if (queries.isEmpty()) return -212;
         if (queries.size() != 1 || queries.getFirst().bindPositions.length != 0
                 || switch (queries.getFirst().getCommand().getType()) {
                     case INSERT, UPDATE, DELETE -> false;
@@ -97,5 +100,20 @@ final class DynamicTransactionTypeUpdate {
         } catch (SQLException failure) {
             return DsnBatch.sqlCode(failure);
         }
+    }
+
+    private static boolean isCommentOrWhitespace(String sql) {
+        char[] text = sql.toCharArray();
+        for (int i = 0; i < text.length; i++) {
+            if (Parser.isSpace(text[i])) continue;
+            int end = switch (text[i]) {
+                case '-' -> Parser.parseLineComment(text, i);
+                case '/' -> Parser.parseBlockComment(text, i);
+                default -> i;
+            };
+            if (end == i || end == text.length) return false;
+            i = end;
+        }
+        return true;
     }
 }
