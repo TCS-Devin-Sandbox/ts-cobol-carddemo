@@ -11,6 +11,7 @@ import { UserListPage } from './pages/UserListPage';
 import { UserMaintenancePage } from './pages/UserMaintenancePage';
 import { getSession } from './api/client';
 import { CardListPage, CardViewPage } from './pages/CardPages';
+import { CardUpdatePage } from './pages/CardUpdatePage';
 import { TransactionListPage, TransactionViewPage } from './pages/TransactionPages';
 
 function SessionMenu() {
@@ -36,6 +37,7 @@ export function App() {
       <Route path="/menu" element={<SessionMenu />} />
       <Route path="/cards" element={<CardListPage />} />
       <Route path="/cards/view" element={<CardViewPage />} />
+      <Route path="/cards/update" element={<CardUpdatePage />} />
       <Route path="/accounts/view" element={<SessionAccountView />} />
       <Route path="/accounts/update" element={<SessionAccountUpdate />} />
       <Route path="/transactions" element={<TransactionListPage />} />

@@ -13,7 +13,7 @@ interface CardPage {
   pageNumber: number; lastPageShown: boolean; message: string | null; info: string | null;
 }
 interface CardDetail extends CardRow { embossedName: string; expirationMonth: string; expirationYear: string }
-interface ListState { accountId: string; cardNumber: string; page: CardPage | null }
+interface ListState { accountId: string; cardNumber: string; page: CardPage | null; refresh?: boolean }
 interface ViewState { accountId: string; cardNumber: string; list: ListState }
 const prompt = 'Please enter Account and Card Number';
 
@@ -25,16 +25,19 @@ export function CardListPage() {
   const saved = location.state as ListState | null;
   const [accountId, setAccount] = useState(saved?.accountId ?? '');
   const [cardNumber, setCard] = useState(saved?.cardNumber ?? '');
-  const [page, setPage] = useState<CardPage | null>(saved?.page ?? null);
+  const [page, setPage] = useState<CardPage | null>(saved?.refresh ? null : saved?.page ?? null);
   const [actions, setActions] = useState<Record<string, string>>({});
   const [error, setError] = useState<string | null>(null);
   const [info, setInfo] = useState<string | null>(saved?.page?.info ?? null);
   const [busy, setBusy] = useState(false);
 
   useEffect(() => {
-    if (saved?.page || !getSession()) return;
+    if ((saved?.page && !saved.refresh) || !getSession()) return;
     let live = true;
-    request<CardPage>('GET', '/api/cards').then(result => {
+    const params = saved?.refresh ? new URLSearchParams({ accountId: saved.accountId, cardNumber: saved.cardNumber,
+      key: 'RETURN', cursor: saved.page?.firstKey ?? '', firstKey: saved.page?.firstKey ?? '',
+      pageNumber: String(saved.page?.pageNumber ?? 1) }) : null;
+    request<CardPage>('GET', params ? `/api/cards?${params}` : '/api/cards').then(result => {
       if (live) { setPage(result); setInfo(result.info); setError(result.message); }
     }).catch(e => { if (live) setError(failure(e)); });
     return () => { live = false; };

@@ -174,7 +174,7 @@ class CardApiIntegrationTest {
         var selected = select(action("S"));
         assertThat(selected.getStatusCode().value()).isEqualTo(200);
         assertThat(selected.getBody()).containsEntry("route", "/cards/view").containsEntry("tranId", "CCDL");
-        assertThat(select(action("U")).getBody()).containsEntry("message", "This option is not installed ...");
+        assertThat(select(action("U")).getBody()).containsEntry("route", "/cards/update");
         assertThat(select(action(" ")).getBody()).containsEntry("message", CardService.ACTIONS);
         assertThat(select().getBody()).containsEntry("message", CardService.ACTIONS);
         for (String action : List.of("X", "s", "u", "SU")) {

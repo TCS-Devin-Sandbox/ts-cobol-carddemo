@@ -114,7 +114,8 @@ public class CardService {
             selected = s;
         }
         if (selected == null) return Map.of("message", ACTIONS, "severity", "info");
-        if (selected.action().equals("U")) return Map.of("message", "This option is not installed ...", "severity", "info");
+        if (selected.action().equals("U")) return Map.of("route", "/cards/update", "accountId", selected.accountId(),
+                "cardNumber", selected.cardNumber(), "program", "COCRDUPC", "tranId", "CCUP");
         var card = view(selected.accountId(), selected.cardNumber());
         return Map.of("route", "/cards/view", "accountId", card.accountId(), "cardNumber", card.cardNumber(),
                 "program", "COCRDSLC", "tranId", "CCDL");
