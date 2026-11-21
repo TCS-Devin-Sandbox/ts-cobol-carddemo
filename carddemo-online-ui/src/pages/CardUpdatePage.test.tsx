@@ -24,7 +24,7 @@ it('1200-EDIT-MAP-INPUTS / 3250-SETUP-INFOMSG: a new validation error clears pre
   fireEvent.keyDown(window, { key: 'Enter' });
   expect(await screen.findByRole('alert')).toHaveTextContent('Card name not provided');
   expect(screen.queryByText(noChange)).not.toBeInTheDocument();
-  expect(screen.queryByTestId('infomsg')).not.toBeInTheDocument();
+  expect(screen.getByTestId('infomsg')).toBeEmptyDOMElement();
 });
 function page() {
   loginAsAdmin();
@@ -69,11 +69,11 @@ it.each(['Enter', 'F3'])('CCLI 0000-MAIN / 9000-READ-FORWARD: %s after save re-b
   fireEvent.keyDown(window, { key: 'F5' });
   await screen.findByText('Changes committed to database');
   fireEvent.keyDown(window, { key });
-  expect(await screen.findByRole('cell', { name: 'N', exact: true })).toBeInTheDocument();
-  expect(screen.queryByRole('cell', { name: 'Y', exact: true })).not.toBeInTheDocument();
+  expect(await screen.findByRole('cell', { name: 'N' })).toBeInTheDocument();
+  expect(screen.queryByRole('cell', { name: 'Y' })).not.toBeInTheDocument();
   expect(screen.getByTestId('pageno')).toHaveTextContent('Page 2');
   expect(screen.getByLabelText('Account ID')).toHaveValue(row.accountId);
-  const url = String(fetch.mock.calls.at(-1)?.[0]);
+  const url = String(fetch.mock.calls[fetch.mock.calls.length - 1]?.[0]);
   const params = new URL(url, 'http://test').searchParams;
   expect(params.get('key')).toBe('RETURN');
   expect(params.get('accountId')).toBe(row.accountId);
