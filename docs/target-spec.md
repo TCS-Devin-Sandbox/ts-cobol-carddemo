@@ -1,6 +1,6 @@
 # Target specification — Transaction Type maintenance (Spring Boot + React)
 
-Requirements: `docs/requirements-ctli-cttu.md`. Backend `carddemo-trantype-api` (port 8080), frontend `carddemo-trantype-ui` (port 5173, proxies `/api`).
+Requirements: `docs/requirements-ctli-cttu.md`. Backend `carddemo-online-api` (port 8080), frontend `carddemo-online-ui` (port 5173, proxies `/api`).
 
 ## 1. Authentication (REQ-CTLI-027, REQ-CTTU-018, NFR-004)
 Choice: **stateless JWT (HS256) bearer tokens**. The source has no per-transaction security (CICS relies on the admin menu); a stateless token matches the stateless cursor design and needs no server session or CSRF handling.

@@ -1,6 +1,6 @@
 # Phase 4 — Target specification
 
-Target: `carddemo-trantype-api` (Spring Boot 3.3, Java 17, Spring Data JPA, Bean Validation, Flyway, PostgreSQL 15) and `carddemo-trantype-ui` (React 18, TypeScript, Vite, MUI 5, React Router 7, fetch).
+Target: `carddemo-online-api` (Spring Boot 3.3, Java 17, Spring Data JPA, Bean Validation, Flyway, PostgreSQL 15) and `carddemo-online-ui` (React 18, TypeScript, Vite, MUI 5, React Router 7, fetch).
 Requirements: `requirements-ctli-cttu.md`. Deviations from source: `deviations.md`.
 
 ## 1. Architecture

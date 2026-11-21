@@ -1,6 +1,6 @@
 # Phase 2 — Requirements and Requirements Traceability Matrix (RTM)
 
-Derived from `discovery-ctli-cttu.md`. Source paragraphs anchor the original intent; requirements below describe the retained implementation, with differences recorded in `deviations.md`. "Shall" statements describe the modernized system (Spring Boot API `carddemo-trantype-api` + React UI `carddemo-trantype-ui`). Exact message strings are normative unless marked *(new)*.
+Derived from `discovery-ctli-cttu.md`. Source paragraphs anchor the original intent; requirements below describe the retained implementation, with differences recorded in `deviations.md`. "Shall" statements describe the modernized system (Spring Boot API `carddemo-online-api` + React UI `carddemo-online-ui`). Exact message strings are normative unless marked *(new)*.
 
 Priority: **M** = must (source behaviour), **S** = should (UX parity), **N** = new (no source equivalent).
 

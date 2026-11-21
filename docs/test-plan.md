@@ -1,6 +1,6 @@
 # Test plan and results — CTLI / CTTU modernisation
 
-Suites: backend `mvn test` in `carddemo-trantype-api` (JUnit 5 / Mockito / MockMvc + `@SpringBootTest` with Testcontainers PostgreSQL 15); frontend `npm test` in `carddemo-trantype-ui` (Vitest + React Testing Library). Expected values are COBOL literals / SQLCODE branches from `docs/discovery-ctli-cttu.md`.
+Suites: backend `mvn test` in `carddemo-online-api` (JUnit 5 / Mockito / MockMvc + `@SpringBootTest` with Testcontainers PostgreSQL 15); frontend `npm test` in `carddemo-online-ui` (Vitest + React Testing Library). Expected values are COBOL literals / SQLCODE branches from `docs/discovery-ctli-cttu.md`.
 
 Abbreviations: **IT** = `TransactionTypeApiIntegrationTest`, **ST** = `TransactionTypeServiceTest`, **CT** = `TransactionTypeControllerTest`, **RT** = `TranTypeRulesTest`, **LP** = `TransactionTypeListPage.test.tsx`, **EP** = `TransactionTypeEditPage.test.tsx`, **AP** = `App.test.tsx`, **VT** = `validation.test.ts`.
 
@@ -74,4 +74,4 @@ Not automated: REQ-CTLI-012 (filter change restarts at page 1) is covered by LP 
 | NFR-005 | §2 lock mapping | `PessimisticLockingFailureException` handling | T12, T22 | Pass |
 | NFR-006 | — | PK-index keyset queries | not measured | Not measured |
 | NFR-007 | schema-mapping | `db/migration` | IT (Flyway migrate each test) | Pass |
-| NFR-008 | §3 | `carddemo-trantype-ui` | LP, EP, AP | Pass |
+| NFR-008 | §3 | `carddemo-online-ui` | LP, EP, AP | Pass |

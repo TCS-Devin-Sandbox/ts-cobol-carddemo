@@ -1,6 +1,6 @@
 spring:
   application:
-    name: carddemo-trantype-api
+    name: carddemo-online-api
   datasource:
     hikari:
       connection-init-sql: SET lock_timeout = '${carddemo.db.lock-timeout:5s}'

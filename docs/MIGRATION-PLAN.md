@@ -7,8 +7,8 @@ below gets its link and status filled in the [tracker](#7-tracker) as it lands.
 Target (default from `docs/LAB.md` and the transaction-type module already on main):
 **Java 21 / Spring Boot 3.3 / Spring Batch on PostgreSQL 15**, Maven, Testcontainers.
 New batch code goes in a new top-level `java/` directory (as `docs/LAB.md` prompt 2
-asks); online screens follow the REST + React pattern of `carddemo-trantype-api` /
-`carddemo-trantype-ui`. The existing transaction-type code is on Java 17; Java 21 is
+asks); online screens follow the REST + React pattern of `carddemo-online-api` /
+`carddemo-online-ui`. The existing transaction-type code is on Java 17; Java 21 is
 backward compatible, so it is not upgraded until a PR needs it.
 
 ## 1. Rules every PR follows
@@ -118,7 +118,7 @@ parallel with the mainframe.
 
 | Work | Where | State | What this plan takes from it |
 |---|---|---|---|
-| CTLI/CTTU transaction-type list/update | `carddemo-trantype-api` + `-ui` (top level) **and** `modernized-trantype/` (nested copy) | **On main.** Spring Boot 3.3.5, Java 17, Flyway, JWT, React/Vite. Tests pass per their docs; not in CI | Done for the online side; two copies must become one (A4); docs (`target-spec`, `schema-mapping`, 22 `deviations`, `test-plan`) are the template for every online PR. Deviation D-20: no TRANEXTR/VSAM sync, so batch consumers of the extract diverge until Batch F |
+| CTLI/CTTU transaction-type list/update | `carddemo-online-api` + `carddemo-online-ui` (top level) | Spring Boot 3.3.5, Java 17, Flyway, JWT, React/Vite; tested in CI | [Transaction-type docs](trantype/) are the template for every online PR. Deviation D-20: no TRANEXTR/VSAM sync, so batch consumers of the extract diverge until Batch F |
 | .NET 8 batch port (READACCT, READCARD, INTCALC, POSTTRAN, TRANREPT) + atomic chunk commits | PRs #19, #23 | **Reverted** by PR #28 (98 + 14 files). No reason recorded in the commits | Landed as one 98-file PR on a non-default stack. This plan keeps Java as the target and splits the same scope into ~10 PRs, each proving one chain |
 | Java ports of CBACT04C and CBTRN02C | `devin/1785356770-cbact04c-java-port`, `devin/1785356347-cbtrn02c-java-port` | Branches, isolated `java/` modules with unit tests; comparator parity never shown | Starting code for C1/C2; their codecs and the final-account behaviour are reused only after passing `compare.py` |
 | Java data layer (entities for all masters, ASCII loader) | `devin/1785941621-carddemo-data-layer` | Branch | Input for B2/B3 schema and loader |

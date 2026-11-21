@@ -1,8 +1,8 @@
 # VSAM master schema
 
-Flyway V1 creates nine tables in the connection's default schema (normally public).
-Group items are flattened, not duplicated. V1 is edited in place because only
-ephemeral Testcontainers databases have applied it; no deployed migration needs upgrading.
+Flyway V1 creates nine tables in the configured schema (the online API uses `vsam`).
+Group items are flattened, not duplicated. Use a new versioned migration for
+changes once V1 has been applied to a persistent online database.
 
 ## Representation and export contract
 
@@ -30,12 +30,11 @@ ephemeral Testcontainers databases have applied it; no deployed migration needs 
   truncation toward zero (RoundingMode.DOWN), not PostgreSQL rounding, in chain code.
 * No foreign keys, status enums, date checks or FICO/rate limits: they could reject
   representable legacy data, or prevent loading masters independently.
-* Existing Db2 translations in db/postgres define carddemo.transaction_type and
-  carddemo.transaction_type_categor. Separately, db/migration/V1__create_tables.sql
-  creates unqualified transaction_type for carddemo-trantype-api. Neither that
-  API nor java/common configures a different default schema/search_path, so both
-  target public by default. Keep tran_type and tran_category to avoid collision
-  with the API's public.transaction_type and keep the lookup pair consistent.
+* The Db2 harness in `db/postgres` has its own transaction-type tables. The online
+  API keeps its existing Db2-derived `public.transaction_type` and
+  `public.transaction_type_category`. The shared `vsam.tran_type` and
+  `vsam.tran_category` represent distinct VSAM masters; they are not seeded by
+  the API's Db2 migrations or kept in sync with the Db2-derived tables.
   The SQL keyword-like table name transaction is consistently double-quoted.
 
 ## Keys and source evidence

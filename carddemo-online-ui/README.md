@@ -1,4 +1,4 @@
-# carddemo-trantype-ui
+# carddemo-online-ui
 
 React 18 + TypeScript (Vite, MUI, React Router) UI for the transaction-type screens. Spec: `../docs/target-spec.md` §3.
 

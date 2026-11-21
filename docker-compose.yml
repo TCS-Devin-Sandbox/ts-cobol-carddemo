@@ -1,4 +1,5 @@
 services:
+  # Online database: the API migrates the existing transaction types and shared VSAM masters.
   postgres:
     image: postgres:15-alpine
     container_name: carddemo-postgres

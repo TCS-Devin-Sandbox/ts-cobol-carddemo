@@ -9,10 +9,10 @@
         <relativePath/>
     </parent>
     <groupId>com.carddemo</groupId>
-    <artifactId>carddemo-trantype-api</artifactId>
+    <artifactId>carddemo-online-api</artifactId>
     <version>1.0.0</version>
-    <name>carddemo-trantype-api</name>
-    <description>Transaction Type maintenance API (modernised CTLI/CTTU)</description>
+    <name>carddemo-online-api</name>
+    <description>CardDemo online transaction API</description>
 
     <properties>
         <java.version>17</java.version>
@@ -44,6 +44,10 @@
             <resource>
                 <directory>${project.basedir}/../db/migration</directory>
                 <targetPath>db/migration</targetPath>
+            </resource>
+            <resource>
+                <directory>${project.basedir}/../java/common/src/main/resources/db/migration</directory>
+                <targetPath>db/vsam</targetPath>
             </resource>
         </resources>
         <plugins>

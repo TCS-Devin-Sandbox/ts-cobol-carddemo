@@ -8,6 +8,7 @@ import org.flywaydb.core.Flyway;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.flyway.FlywayMigrationStrategy;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.boot.testcontainers.service.connection.ServiceConnection;
@@ -45,6 +46,9 @@ class TransactionTypeApiIntegrationTest {
     Flyway flyway;
 
     @Autowired
+    FlywayMigrationStrategy migrations;
+
+    @Autowired
     JdbcTemplate jdbc;
 
     @BeforeEach
@@ -70,6 +74,23 @@ class TransactionTypeApiIntegrationTest {
     private static List<String> keys(ResponseEntity<Map<String, Object>> res) {
         return ((List<Map<String, Object>>) res.getBody().get("rows")).stream()
                 .map(r -> (String) r.get("trType")).toList();
+    }
+
+    @Test
+    void sharedVsamMigrationsLeaveExistingTransactionTypesIntact() {
+        // Start from the schema layout of an existing transaction-type deployment.
+        jdbc.execute("DROP SCHEMA vsam CASCADE");
+        jdbc.update("UPDATE transaction_type SET tr_description = 'EXISTING' WHERE tr_type = '01'");
+        migrations.migrate(flyway);
+
+        assertThat(jdbc.queryForList("""
+                SELECT table_name FROM information_schema.tables
+                WHERE table_schema = 'vsam' AND table_name <> 'flyway_schema_history'
+                """, String.class)).containsExactlyInAnyOrder("account", "card", "customer", "card_xref",
+                "transaction_category_balance", "disclosure_group", "transaction", "tran_type", "tran_category");
+        assertThat(jdbc.queryForObject("SELECT tr_description FROM transaction_type WHERE tr_type = '01'",
+                String.class)).isEqualTo("EXISTING");
+        assertThat(jdbc.queryForObject("SELECT count(*) FROM vsam.tran_type", Integer.class)).isZero();
     }
 
     @Test
