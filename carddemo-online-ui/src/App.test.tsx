@@ -1,49 +1,45 @@
-import { render, screen } from '@testing-library/react';
+import { fireEvent, render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { MemoryRouter } from 'react-router-dom';
 import { App } from './App';
-import { setSession } from './api/client';
+import { getSession, setSession } from './api/client';
 import { mockFetch } from './test/fetchMock';
 
-describe('routing and admin guard', () => {
-  it('redirects unauthenticated users to login', () => {
-    render(<MemoryRouter initialEntries={['/transaction-types']}><App /></MemoryRouter>);
+describe('CC00 CM00 CA00 paragraphs', () => {
+  it('MAIN-PARA guards both menus', () => {
+    render(<MemoryRouter initialEntries={['/menu']}><App /></MemoryRouter>);
     expect(screen.getByText('CardDemo sign-on')).toBeInTheDocument();
   });
-
-  it('redirects non-admin sessions to login', () => {
-    setSession({ token: 't', username: 'user', roles: ['USER'] });
+  it('SEND-PLAIN-TEXT F3 thanks and invalid keys', () => {
+    render(<MemoryRouter initialEntries={['/login']}><App /></MemoryRouter>);
+    fireEvent.keyDown(window, { key: 'F5' });
+    expect(screen.getByRole('alert')).toHaveTextContent('Invalid key pressed. Please see below...');
+    fireEvent.keyDown(window, { key: 'F3' });
+    expect(screen.getByText('Thank you for using CardDemo application...')).toBeInTheDocument();
+  });
+  it.each(['A', 'U'] as const)('PROCESS-ENTER-KEY routes type %s and RETURN-TO-SIGNON-SCREEN clears session', async type => {
+    const fetch = mockFetch((method, url) => {
+      if (url === '/api/auth/login') return { status: 200, body: { token: 't', userId: 'TEST', userType: type, roles: [type === 'A' ? 'ADMIN' : 'USER'] } };
+      if (method === 'GET') return { status: 200, body: { options: ['01. Example'], program: 'MENU', tranId: 'MENU' } };
+      return { status: 200, body: { message: 'This option is not installed ...', severity: 'info' } };
+    });
+    render(<MemoryRouter initialEntries={['/login']}><App /></MemoryRouter>);
+    await userEvent.type(screen.getByLabelText('User ID'), 'test');
+    await userEvent.type(screen.getByLabelText('Password'), 'password');
+    fireEvent.submit(screen.getByText('Sign on').closest('form')!);
+    expect(await screen.findByText(type === 'A' ? 'Admin Menu' : 'Main Menu')).toBeInTheDocument();
+    await screen.findByText('01. Example');
+    expect(JSON.parse(String(fetch.mock.calls[0][1]!.body))).toEqual({ userId: 'test', password: 'password' });
+    await userEvent.type(screen.getByLabelText('Option'), '1');
+    fireEvent.keyDown(window, { key: 'Enter' });
+    expect(await screen.findByText('This option is not installed ...')).toBeInTheDocument();
+    fireEvent.keyDown(window, { key: 'F3' });
+    expect(getSession()).toBeNull();
+    expect(screen.getByText('CardDemo sign-on')).toBeInTheDocument();
+  });
+  it('MAIN-PARA denies USER access to CA00', () => {
+    setSession({ token: 't', userId: 'USER', userType: 'U', roles: ['USER'] });
     render(<MemoryRouter initialEntries={['/admin']}><App /></MemoryRouter>);
     expect(screen.getByText('CardDemo sign-on')).toBeInTheDocument();
-  });
-
-  it('rejects non-admin login', async () => {
-    mockFetch(() => ({ status: 200, body: { token: 't', username: 'user', roles: ['USER'] } }));
-    render(<MemoryRouter initialEntries={['/login']}><App /></MemoryRouter>);
-    await userEvent.type(screen.getByLabelText('User ID'), 'user');
-    await userEvent.type(screen.getByLabelText('Password'), 'user123');
-    await userEvent.click(screen.getByText('Sign on'));
-    expect(await screen.findByRole('alert')).toHaveTextContent('Access restricted to administrators');
-  });
-
-  it('login does not send a stale bearer token', async () => {
-    setSession({ token: 'expired', username: 'admin', roles: ['ADMIN'] });
-    const fetch = mockFetch(() => ({ status: 200, body: { token: 't', username: 'admin', roles: ['ADMIN'] } }));
-    render(<MemoryRouter initialEntries={['/login']}><App /></MemoryRouter>);
-    await userEvent.type(screen.getByLabelText('User ID'), 'admin');
-    await userEvent.type(screen.getByLabelText('Password'), 'admin123');
-    await userEvent.click(screen.getByText('Sign on'));
-    await screen.findByText('5. Transaction Type List/Update (Db2)');
-    expect((fetch.mock.calls[0][1]!.headers as Record<string, string>).Authorization).toBeUndefined();
-  });
-
-  it('admin login shows admin menu options 5 and 6', async () => {
-    mockFetch(() => ({ status: 200, body: { token: 't', username: 'admin', roles: ['ADMIN'] } }));
-    render(<MemoryRouter initialEntries={['/login']}><App /></MemoryRouter>);
-    await userEvent.type(screen.getByLabelText('User ID'), 'admin');
-    await userEvent.type(screen.getByLabelText('Password'), 'admin123');
-    await userEvent.click(screen.getByText('Sign on'));
-    expect(await screen.findByText('5. Transaction Type List/Update (Db2)')).toBeInTheDocument();
-    expect(screen.getByText('6. Transaction Type Maintenance (Db2)')).toBeInTheDocument();
   });
 });

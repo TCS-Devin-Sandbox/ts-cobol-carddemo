@@ -53,17 +53,37 @@ class TransactionTypeApiIntegrationTest {
     @Autowired
     JdbcTemplate jdbc;
 
+    @Autowired
+    com.carddemo.trantype.security.UserSecurity users;
+
     @BeforeEach
     void resetDatabase() {
         flyway.clean();
         migrations.migrate(flyway);
+        users.run(null);
     }
 
     private String token(String user, String password) {
         ResponseEntity<Map<String, Object>> res = rest.exchange("/api/auth/login", HttpMethod.POST,
-                new HttpEntity<>(Map.of("username", user, "password", password)), MAP);
+                new HttpEntity<>(Map.of("userId", user, "password", password)), MAP);
         assertThat(res.getStatusCode()).isEqualTo(HttpStatus.OK);
         return (String) res.getBody().get("token");
+    }
+
+    @Test
+    void COSGN00C_MAIN_PARA_READ_USER_SEC_FILE_JWT_COMMAREA() throws Exception {
+        String token = token("admin001", "password");
+        var claims = com.nimbusds.jwt.SignedJWT.parse(token).getJWTClaimsSet();
+        assertThat(claims.getSubject()).isEqualTo("ADMIN001");
+        assertThat(claims.getStringClaim("user_type")).isEqualTo("A");
+        assertThat(claims.getStringClaim("from_tranid")).isEqualTo("CC00");
+        assertThat(claims.getStringClaim("from_program")).isEqualTo("COSGN00C");
+        assertThat(claims.getStringListClaim("roles")).containsExactly("ADMIN");
+        assertThat(jdbc.queryForObject("SELECT password_hash FROM user_security WHERE user_id='ADMIN001'", String.class))
+                .startsWith("$2").isNotEqualTo("PASSWORD");
+        users.run(null);
+        assertThat(jdbc.queryForObject("SELECT count(*) FROM user_security", Integer.class)).isEqualTo(4);
+        token("user0001", "PaSsWoRd");
     }
 
     private ResponseEntity<Map<String, Object>> call(HttpMethod method, String url, Object body) {
@@ -99,7 +119,7 @@ class TransactionTypeApiIntegrationTest {
                 SELECT table_name FROM information_schema.tables
                 WHERE table_schema = 'online_upgrade' AND table_name NOT IN
                     ('flyway_schema_history', 'flyway_vsam_schema_history', 'transaction_type',
-                     'transaction_type_category')
+                     'transaction_type_category', 'user_security')
                 """, String.class)).containsExactlyInAnyOrder("account", "card", "customer", "card_xref",
                 "transaction_category_balance", "disclosure_group", "transaction", "tran_type", "tran_category");
         assertThat(jdbc.queryForObject("""
@@ -260,7 +280,7 @@ class TransactionTypeApiIntegrationTest {
         var anon = rest.exchange("/api/transaction-types", HttpMethod.GET, HttpEntity.EMPTY, MAP);
         assertThat(anon.getStatusCode()).isEqualTo(HttpStatus.UNAUTHORIZED);
         var badLogin = rest.exchange("/api/auth/login", HttpMethod.POST,
-                new HttpEntity<>(Map.of("username", "admin", "password", "wrong")), MAP);
+                new HttpEntity<>(Map.of("userId", "admin", "password", "wrong")), MAP);
         assertThat(badLogin.getStatusCode()).isEqualTo(HttpStatus.UNAUTHORIZED);
     }
 }

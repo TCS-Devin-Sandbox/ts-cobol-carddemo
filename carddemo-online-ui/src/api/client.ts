@@ -25,7 +25,8 @@ export interface PageQuery {
 
 export interface Session {
   token: string;
-  username: string;
+  userId: string;
+  userType: 'A' | 'U';
   roles: string[];
 }
 
@@ -52,7 +53,7 @@ export function setSession(session: Session | null): void {
   else sessionStorage.removeItem(SESSION_KEY);
 }
 
-async function request<T>(method: string, url: string, body?: unknown): Promise<T> {
+export async function request<T>(method: string, url: string, body?: unknown): Promise<T> {
   const headers: Record<string, string> = { Accept: 'application/json' };
   const session = getSession();
   if (session && url !== LOGIN_URL) headers.Authorization = `Bearer ${session.token}`;
@@ -69,8 +70,8 @@ async function request<T>(method: string, url: string, body?: unknown): Promise<
 const BASE = '/api/transaction-types';
 
 export const api = {
-  login: (username: string, password: string) =>
-    request<Session>('POST', LOGIN_URL, { username, password }),
+  login: (userId: string, password: string) =>
+    request<Session>('POST', LOGIN_URL, { userId, password }),
   list: (q: PageQuery) => {
     const params = new URLSearchParams();
     Object.entries(q).forEach(([k, v]) => {

@@ -4,7 +4,7 @@ import { Typography } from '@mui/material';
 export function MessageLine({ info, error }: { info?: string | null; error?: string | null }) {
   return (
     <>
-      <Typography data-testid="infomsg" align="center" sx={{ minHeight: 24, mt: 2 }}>
+      <Typography data-testid="infomsg" align="center" color="success.main" sx={{ minHeight: 24, mt: 2 }}>
         {info ?? ''}
       </Typography>
       <Typography
