@@ -35,11 +35,22 @@ public class UserSecurity implements ApplicationRunner {
 
     @Override
     public void run(ApplicationArguments args) {
+        properties.users().forEach(user -> {
+            validateWidth("user ID", user.username());
+            validateWidth("password", user.password());
+        });
         properties.users().forEach(user -> jdbc.update("""
                 INSERT INTO user_security(user_id, first_name, last_name, password_hash, user_type, filler)
                 VALUES (?, '', '', ?, ?, '') ON CONFLICT (user_id) DO NOTHING
-                """, user.username().toUpperCase(Locale.ROOT),
+                """, user.username().stripTrailing().toUpperCase(Locale.ROOT),
                 encoder.encode(user.password().stripTrailing().toUpperCase(Locale.ROOT)),
                 user.roles().contains("ADMIN") ? "A" : "U"));
+    }
+
+    private void validateWidth(String field, String value) {
+        if (value.stripTrailing().toUpperCase(Locale.ROOT).length() > 8) {
+            throw new IllegalArgumentException("Configured security " + field
+                    + " must be at most 8 characters after trimming trailing whitespace (USRSEC PIC X(08))");
+        }
     }
 }

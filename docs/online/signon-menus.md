@@ -23,6 +23,15 @@ are never overwritten, including passwords. JWT_SECRET, ADMIN_PASSWORD and
 USER_PASSWORD retain their environment configuration; dev additionally supplies
 the synthetic ADMIN001/USER0001 users with PASSWORD.
 
+Configured user IDs and passwords must be at most 8 characters after
+right-trimming trailing whitespace (USRSEC PIC X(08), matching the UI's
+maxLength 8). Startup validates all configured credentials before any seeding
+and fails with a field-specific message if the limit is exceeded; passwords
+are never included in the error. IDs and passwords are uppercased before
+storage, and trailing password padding is removed before both hashing and
+matching, so `abc` and `abc   ` match a configured `ABC`. All-blank login
+passwords still produce `Please enter Password ...`.
+
 ## HTTP and session contract
 
 POST `/api/auth/login` accepts `{userId,password}` and returns
@@ -72,6 +81,8 @@ require ADMIN; CM00 requires authentication. F3 is client-side sign-off.
 | COADM01C PROCESS-ENTER-KEY, XCTL | SignonMenuTest.COADM01C_PROCESS_ENTER_KEY_XCTL |
 | COMEN01C / COADM01C RETURN-TO-SIGNON-SCREEN | App.test.tsx PROCESS-ENTER-KEY / RETURN-TO-SIGNON-SCREEN (A and U) |
 | COSGN00C PROCESS-ENTER-KEY, blank-field UI messages | App.test.tsx COSGN00C PROCESS-ENTER-KEY displays blank-field messages in source order |
+| COSGN00C READ-USER-SEC-FILE, PIC X(08) password padding | UserSecurityTest.READ_USER_SEC_FILE_matchesFixedWidthPasswordPadding |
+| Startup configuration width validation | UserSecurityTest.MAIN_PARA_rejectsOverlengthConfiguredCredentialsBeforeSeeding; MAIN_PARA_acceptsEightCharacterCredentialsWithTrailingPaddingAndEmptyConfiguration |
 
 `SignonMenuTest` lives in `com.carddemo.menu`. Its PGMIDERR test explicitly
 checks ` 1` and `1 ` as option 1, and rejects `0`, `12`, `x`, empty and
