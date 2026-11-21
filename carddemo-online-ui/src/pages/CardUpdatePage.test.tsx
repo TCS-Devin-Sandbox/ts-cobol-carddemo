@@ -2,6 +2,7 @@ import { fireEvent, render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { MemoryRouter, Route, Routes } from 'react-router-dom';
 import { CardUpdatePage } from './CardUpdatePage';
+import { CardListPage } from './CardPages';
 import { loginAsAdmin, mockFetch } from '../test/fetchMock';
 
 const fields = { embossedName: 'OLD NAME', activeStatus: 'Y', expirationMonth: '12', expirationYear: '2030' };
@@ -24,6 +25,42 @@ it('0000-MAIN / 1000-PROCESS-INPUTS / 1100-RECEIVE-MAP / 3000-SEND-MAP / 3100-SC
   expect(screen.getByLabelText('Account ID')).toHaveAttribute('readonly');
   fireEvent.keyDown(window, { key: 'F3' });
   expect(screen.getByText('MENU')).toBeInTheDocument();
+});
+it.each(['Enter', 'F3'])('CCLI 0000-MAIN / 9000-READ-FORWARD: %s after save re-browses the current filtered page', async key => {
+  loginAsAdmin();
+  const row = { accountId: result.accountId, cardNumber: '4000000000000008', activeStatus: 'Y' };
+  const listPage = { rows: [row], firstKey: row.cardNumber, nextCursor: null, pageNumber: 2,
+    lastPageShown: false, message: null, info: 'TYPE S FOR DETAIL, U TO UPDATE ANY RECORD' };
+  const fetch = mockFetch((method, url, body) => {
+    if (url.startsWith('/api/cards?')) return { status: 200, body: { ...listPage, rows: [{ ...row, activeStatus: 'N' }] } };
+    if (method === 'GET') return { status: 200, body: { ...result, cardNumber: row.cardNumber } };
+    const action = body as { key: string; fields: typeof fields };
+    return { status: 200, body: { ...result, fields: action.fields, confirm: action.key !== 'PF5',
+      message: action.key === 'PF5' ? 'Changes committed to database' : 'Changes validated.Press F5 to save' } };
+  });
+  render(<MemoryRouter initialEntries={[{ pathname: '/cards/update', state: { ...row,
+    list: { accountId: row.accountId, cardNumber: '', page: listPage } } }]}><Routes>
+    <Route path="/cards/update" element={<CardUpdatePage />} /><Route path="/cards" element={<CardListPage />} />
+  </Routes></MemoryRouter>);
+  await screen.findByDisplayValue('OLD NAME');
+  await userEvent.clear(screen.getByLabelText('Active Status'));
+  await userEvent.type(screen.getByLabelText('Active Status'), 'N');
+  fireEvent.keyDown(window, { key: 'Enter' });
+  await screen.findByText('Changes validated.Press F5 to save');
+  fireEvent.keyDown(window, { key: 'F5' });
+  await screen.findByText('Changes committed to database');
+  fireEvent.keyDown(window, { key });
+  expect(await screen.findByRole('cell', { name: 'N', exact: true })).toBeInTheDocument();
+  expect(screen.queryByRole('cell', { name: 'Y', exact: true })).not.toBeInTheDocument();
+  expect(screen.getByTestId('pageno')).toHaveTextContent('Page 2');
+  expect(screen.getByLabelText('Account ID')).toHaveValue(row.accountId);
+  const url = String(fetch.mock.calls.at(-1)?.[0]);
+  const params = new URL(url, 'http://test').searchParams;
+  expect(params.get('key')).toBe('RETURN');
+  expect(params.get('accountId')).toBe(row.accountId);
+  expect(params.get('cardNumber')).toBe('');
+  expect(params.get('cursor')).toBe(row.cardNumber);
+  expect(params.get('pageNumber')).toBe('2');
 });
 it('1200-EDIT-MAP-INPUTS / 2000-DECIDE-ACTION / 3250-SETUP-INFOMSG: validation, confirmation F5 and F12', async () => {
   mockFetch((method, _url, body) => {

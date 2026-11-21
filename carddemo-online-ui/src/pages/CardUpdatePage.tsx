@@ -30,7 +30,7 @@ export function CardUpdatePage() {
     if (busy || (key === 'PF5' && !screen?.confirm) || (key === 'PF12' && !screen)) return;
     setBusy(true); setError(null);
     if (screen?.message === 'Changes committed to database') {
-      if (saved?.list) navigate('/cards', { state: saved.list });
+      if (saved?.list) navigate('/cards', { state: { ...saved.list, refresh: true } });
       else { setScreen(null); setAccount(''); setCard(''); setFields({ embossedName: '', activeStatus: '', expirationMonth: '', expirationYear: '' }); }
       setBusy(false); return;
     }
@@ -40,7 +40,7 @@ export function CardUpdatePage() {
     } catch (e) { setError(e instanceof Error ? e.message : 'Error reading Card Data File'); }
     finally { setBusy(false); }
   };
-  const back = () => saved?.list ? navigate('/cards', { state: saved.list }) : navigate('/menu');
+  const back = () => saved?.list ? navigate('/cards', { state: { ...saved.list, refresh: true } }) : navigate('/menu');
   useFunctionKeys({ Enter: () => void act(), F3: back, F5: () => void act(screen?.confirm ? 'PF5' : 'ENTER'),
     F12: () => void act(screen ? 'PF12' : 'ENTER'), onInvalid: () => void act() });
   if (!getSession()) return <Navigate to="/login" replace />;
