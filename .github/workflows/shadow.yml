@@ -1,0 +1,37 @@
+name: nightly-shadow
+on:
+  schedule:
+    - cron: '30 2 * * *'
+  workflow_dispatch:
+jobs:
+  synthetic-shadow:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '21'
+          cache: maven
+          cache-dependency-path: java/**/pom.xml
+      - name: Comparator override and error report tests
+        run: python3 -m unittest tools.parity.test_shadow -v
+      - name: Synthetic unload to Java shadow comparison
+        run: make shadow
+      - name: Negative proof
+        run: |
+          set +e
+          make shadow RUN_ID=shadow_negative NEGATIVE_PROOF=1
+          rc=$?
+          set -e
+          test "$rc" -ne 0
+          python3 -c 'import json; r=json.load(open("work/shadow/shadow_negative/drift.json")); assert any(c["verdict"] == "DRIFT" and c["differences"] for c in r["cases"])'
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: shadow-drift
+          path: |
+            work/shadow/*/drift.*
+            work/shadow/*/comparisons.md
+            work/shadow/*/*/*/reconciliation/
