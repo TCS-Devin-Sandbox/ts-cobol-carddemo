@@ -79,6 +79,9 @@ public class MenuController {
     }
 
     ResponseEntity<?> target(Option option) {
+        if (option.program().equals("COACTVWC")) {
+            return ResponseEntity.ok(Map.of("program", option.program(), "tranId", "CAVW", "route", "/accounts/view"));
+        }
         if (option.program().equals("COPAUS0C")) {
             return message(200, "This option " + option.name() + " is not installed...", "error");
         }

@@ -80,11 +80,20 @@ class SignonMenuTest {
                     .andExpect(status().isBadRequest()).andExpect(jsonPath("$.severity").value("error"))
                     .andExpect(jsonPath("$.message").value("Please enter a valid option number..."));
         }
-        for (String option : new String[]{" 1", "1 "}) {
+        for (String option : new String[]{" 2", "2 "}) {
             mvc.perform(post("/api/menus/main/select").with(jwt()).contentType(MediaType.APPLICATION_JSON)
                     .content("{\"option\":\"" + option + "\"}")).andExpect(status().isOk())
                     .andExpect(jsonPath("$.message").value("This option is not installed ..."));
         }
+    }
+
+    @Test
+    void COMEN01C_PROCESS_ENTER_KEY_ROUTES_TO_CAVW() throws Exception {
+        mvc.perform(post("/api/menus/main/select").with(jwt()).contentType(MediaType.APPLICATION_JSON)
+                .content("{\"option\":\" 1\"}")).andExpect(status().isOk())
+                .andExpect(jsonPath("$.program").value("COACTVWC"))
+                .andExpect(jsonPath("$.tranId").value("CAVW"))
+                .andExpect(jsonPath("$.route").value("/accounts/view"));
     }
 
     @Test
