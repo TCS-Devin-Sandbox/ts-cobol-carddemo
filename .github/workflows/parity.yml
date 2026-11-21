@@ -6,6 +6,30 @@ on:
   pull_request:
 
 jobs:
+  trantype-update-parity:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '21'
+          cache: maven
+          cache-dependency-path: java/**/pom.xml
+
+      - name: MNTTRDB2 Java parity
+        run: make parity-java CHAIN=trantype-update
+
+      - name: Upload MNTTRDB2 parity report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: trantype-update-parity-report
+          path: work/parity-java/report.md
+          if-no-files-found: ignore
+
   parity:
     runs-on: ubuntu-latest
     timeout-minutes: 45
