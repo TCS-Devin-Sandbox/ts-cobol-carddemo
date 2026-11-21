@@ -22,7 +22,8 @@ class TransactionReportTest {
         String before = record("3", "4000000000001000", "2021-12-31");
         String after = record("4", "4000000000001000", "2022-07-07");
         String sameCard = record("5", "4000000000001001", "2022-02-01");
-        List<String> input = List.of(lastDate, firstDate, before, after, sameCard);
+        String blankTimestamp = record("6", "4000000000001000", "").stripTrailing();
+        List<String> input = List.of(lastDate, firstDate, before, after, sameCard, blankTimestamp);
         Files.write(backup, input, ISO_8859_1);
 
         TransactionReportJob.sort(out, new TransactionReportJob.DateRange("2022-01-01", "2022-07-06"));

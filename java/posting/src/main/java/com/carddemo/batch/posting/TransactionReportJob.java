@@ -85,7 +85,7 @@ class TransactionReportJob {
     static void sort(Path out, DateRange range) throws IOException {
         // JCL TRAN-CARD-NUM (263,16) and TRAN-PROC-DT (305,10); ties retain KSDS key order.
         var sorted = Files.readAllLines(dataset(out, BACKUP), ISO_8859_1).stream()
-                .filter(row -> range.includes(row.substring(304, 314)))
+                .filter(row -> range.includes(TransactionReport.field(row, 314).substring(304)))
                 .sorted(Comparator.comparing(row -> row.substring(262, 278)))
                 .toList();
         Files.write(dataset(out, DAILY), sorted, ISO_8859_1);
