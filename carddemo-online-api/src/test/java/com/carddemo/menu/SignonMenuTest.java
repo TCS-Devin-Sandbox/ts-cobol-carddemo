@@ -45,6 +45,7 @@ class SignonMenuTest {
     @Test void COSGN00C_PROCESS_ENTER_KEY_SEND_SIGNON_SCREEN() throws Exception {
         login("{}", 400, "Please enter User ID ...");
         login("{\"userId\":\"A\"}", 400, "Please enter Password ...");
+        login("{\"userId\":\"A\",\"password\":\"   \"}", 400, "Please enter Password ...");
         verifyNoInteractions(users);
     }
 

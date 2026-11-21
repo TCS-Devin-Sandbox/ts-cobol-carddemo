@@ -30,7 +30,7 @@ public class UserSecurity implements ApplicationRunner {
     }
 
     public boolean matches(String password, User user) {
-        return encoder.matches(password.toUpperCase(Locale.ROOT), user.passwordHash());
+        return encoder.matches(password.stripTrailing().toUpperCase(Locale.ROOT), user.passwordHash());
     }
 
     @Override
@@ -39,7 +39,7 @@ public class UserSecurity implements ApplicationRunner {
                 INSERT INTO user_security(user_id, first_name, last_name, password_hash, user_type, filler)
                 VALUES (?, '', '', ?, ?, '') ON CONFLICT (user_id) DO NOTHING
                 """, user.username().toUpperCase(Locale.ROOT),
-                encoder.encode(user.password().toUpperCase(Locale.ROOT)),
+                encoder.encode(user.password().stripTrailing().toUpperCase(Locale.ROOT)),
                 user.roles().contains("ADMIN") ? "A" : "U"));
     }
 }
