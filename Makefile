@@ -129,3 +129,15 @@ endif
 read-masters-candidate:
 	mvn -B -f java/pom.xml -pl read-masters -am -DskipTests package
 	$(COMPOSE) up -d --wait postgres
+
+ifeq ($(CHAIN),statements)
+ifeq ($(strip $(CANDIDATE)),)
+parity-java: CANDIDATE = java -jar java/statements/target/statements.jar
+parity-java: statements-candidate
+endif
+endif
+
+.PHONY: statements-candidate
+statements-candidate:
+	mvn -B -f java/pom.xml -pl statements -am -DskipTests package
+	$(COMPOSE) up -d --wait postgres

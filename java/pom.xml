@@ -26,5 +26,6 @@
         <module>posting</module>
         <module>fees</module>
         <module>read-masters</module>
+        <module>statements</module>
     </modules>
 </project>
