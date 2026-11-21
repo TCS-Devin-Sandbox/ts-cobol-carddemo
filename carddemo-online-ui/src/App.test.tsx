@@ -17,6 +17,22 @@ describe('CC00 CM00 CA00 paragraphs', () => {
     fireEvent.keyDown(window, { key: 'F3' });
     expect(screen.getByText('Thank you for using CardDemo application...')).toBeInTheDocument();
   });
+  it('COSGN00C PROCESS-ENTER-KEY displays blank-field messages in source order', async () => {
+    const fetch = mockFetch((_method, _url, body) => {
+      const login = body as { userId: string; password: string };
+      return { status: 400, body: { code: 'SIGNON', message: login.userId.trim()
+        ? 'Please enter Password ...' : 'Please enter User ID ...' } };
+    });
+    render(<MemoryRouter initialEntries={['/login']}><App /></MemoryRouter>);
+    await userEvent.click(screen.getByText('Sign on'));
+    expect(await screen.findByRole('alert')).toHaveTextContent('Please enter User ID ...');
+    expect(JSON.parse(String(fetch.mock.calls[0][1]!.body))).toEqual({ userId: '', password: '' });
+    await userEvent.type(screen.getByLabelText('User ID'), 'user0001');
+    await userEvent.click(screen.getByText('Sign on'));
+    expect(await screen.findByRole('alert')).toHaveTextContent('Please enter Password ...');
+    expect(JSON.parse(String(fetch.mock.calls[1][1]!.body))).toEqual({ userId: 'user0001', password: '' });
+    expect(getSession()).toBeNull();
+  });
   it.each(['A', 'U'] as const)('PROCESS-ENTER-KEY routes type %s and RETURN-TO-SIGNON-SCREEN clears session', async type => {
     const fetch = mockFetch((method, url) => {
       if (url === '/api/auth/login') return { status: 200, body: { token: 't', userId: 'TEST', userType: type, roles: [type === 'A' ? 'ADMIN' : 'USER'] } };

@@ -1,11 +1,23 @@
-package com.carddemo.trantype.security;
+package com.carddemo.menu;
 
-import static org.mockito.Mockito.*;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Mockito.verifyNoInteractions;
+import static org.mockito.Mockito.when;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.jwt;
 
 import java.util.Optional;
+import java.util.List;
+import java.util.Map;
+import com.carddemo.signon.AuthController;
+import com.carddemo.signon.UserSecurity;
+import com.carddemo.trantype.security.SecurityConfig;
+import com.carddemo.trantype.security.SecurityProperties;
+import org.springframework.dao.DataAccessResourceFailureException;
+import org.springframework.security.oauth2.jwt.Jwt;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -42,7 +54,7 @@ class SignonMenuTest {
         var user = new UserSecurity.User("TEST", "hash", "U");
         when(users.find("TEST")).thenReturn(Optional.of(user));
         login("{\"userId\":\"test\",\"password\":\"x\"}",401,"Wrong Password. Try again ...");
-        when(users.find("TEST")).thenThrow(new org.springframework.dao.DataAccessResourceFailureException("read"));
+        when(users.find("TEST")).thenThrow(new DataAccessResourceFailureException("read"));
         login("{\"userId\":\"test\",\"password\":\"x\"}",500,"Unable to verify the User ...");
     }
 
@@ -52,21 +64,33 @@ class SignonMenuTest {
                 .andExpect(jsonPath("$.tranId").value("CM00")).andExpect(jsonPath("$.program").value("COMEN01C"))
                 .andExpect(jsonPath("$.options.length()").value(11))
                 .andExpect(jsonPath("$.options[0]").value("01. Account View                       "));
-        mvc.perform(get("/api/menus/admin").with(jwt())).andExpect(status().isForbidden());
+        mvc.perform(get("/api/menus/admin").with(jwt().jwt(j -> j.claim("user_type", "U"))
+                .authorities(new SimpleGrantedAuthority("ROLE_USER"))))
+                .andExpect(status().isForbidden())
+                .andExpect(jsonPath("$.message").value("Access restricted to administrators"));
         mvc.perform(get("/api/menus/admin").with(jwt().authorities(new SimpleGrantedAuthority("ROLE_ADMIN"))))
                 .andExpect(jsonPath("$.tranId").value("CA00")).andExpect(jsonPath("$.options.length()").value(6));
     }
 
     @Test void COMEN01C_PROCESS_ENTER_KEY_PGMIDERR_ERR_PARA() throws Exception {
-        for (String option : new String[]{"", "0", "12", "a", "99"})
+        for (String option : new String[]{"", "  ", "0", "12", "x", "99"}) {
             mvc.perform(post("/api/menus/main/select").with(jwt()).contentType(MediaType.APPLICATION_JSON)
                     .content("{\"option\":\"" + option + "\"}"))
-                    .andExpect(status().isBadRequest()).andExpect(jsonPath("$.severity").value("error"));
+                    .andExpect(status().isBadRequest()).andExpect(jsonPath("$.severity").value("error"))
+                    .andExpect(jsonPath("$.message").value("Please enter a valid option number..."));
+        }
+        for (String option : new String[]{" 1", "1 "}) {
+            mvc.perform(post("/api/menus/main/select").with(jwt()).contentType(MediaType.APPLICATION_JSON)
+                    .content("{\"option\":\"" + option + "\"}")).andExpect(status().isOk())
+                    .andExpect(jsonPath("$.message").value("This option is not installed ..."));
+        }
+    }
+
+    @Test
+    void COMEN01C_PROCESS_ENTER_KEY_COPAUS0C() throws Exception {
         mvc.perform(post("/api/menus/main/select").with(jwt()).contentType(MediaType.APPLICATION_JSON)
-                .content("{\"option\":\"1 \"}")).andExpect(status().isOk())
-                .andExpect(jsonPath("$.message").value("This option is not installed ..."));
-        mvc.perform(post("/api/menus/main/select").with(jwt()).contentType(MediaType.APPLICATION_JSON)
-                .content("{\"option\":\"11\"}")).andExpect(jsonPath("$.severity").value("error"))
+                .content("{\"option\":\"11\"}")).andExpect(status().isOk())
+                .andExpect(jsonPath("$.severity").value("error"))
                 .andExpect(jsonPath("$.message").value("This option Pending Authorization View is not installed..."));
     }
 
@@ -77,8 +101,19 @@ class SignonMenuTest {
     }
 
     @Test void COMEN01C_PROCESS_ENTER_KEY_DUMMY_STRING() {
-        org.assertj.core.api.Assertions.assertThat(new MenuController().target(
+        assertThat(new MenuController().target(
                 new MenuController.Option("Future Option", "DUMMY01", "U")).getBody().toString())
                 .contains("This option Futureis coming soon ...");
+    }
+
+    @Test
+    void COMEN01C_PROCESS_ENTER_KEY_ADMIN_ONLY_OPTION() {
+        Jwt user = Jwt.withTokenValue("test").header("alg", "HS256").subject("USER0001")
+                .claim("user_type", "U").claim("roles", List.of("USER")).build();
+        var response = new MenuController().select("main", new MenuController.Selection("1"), user,
+                List.of(new MenuController.Option("Admin only", "COTRTLIC", "A")));
+        assertThat(response.getStatusCode().value()).isEqualTo(403);
+        assertThat(response.getBody()).isEqualTo(Map.of("message", "No access - Admin Only option... ",
+                "severity", "error"));
     }
 }

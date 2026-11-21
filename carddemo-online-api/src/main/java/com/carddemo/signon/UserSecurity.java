@@ -1,5 +1,6 @@
-package com.carddemo.trantype.security;
+package com.carddemo.signon;
 
+import com.carddemo.trantype.security.SecurityProperties;
 import java.util.Locale;
 import java.util.Optional;
 import org.springframework.boot.ApplicationArguments;

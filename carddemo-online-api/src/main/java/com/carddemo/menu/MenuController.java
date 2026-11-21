@@ -1,12 +1,19 @@
-package com.carddemo.trantype.security;
+package com.carddemo.menu;
 
 import java.util.List;
 import java.util.Map;
 import java.util.stream.IntStream;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.oauth2.jwt.Jwt;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.server.ResponseStatusException;
 
 @RestController
 @RequestMapping("/api/menus")
@@ -33,8 +40,9 @@ public class MenuController {
             new Option("Transaction Type Maintenance (Db2)", "COTRTUPC", "A"));
 
     private List<Option> options(String menu) {
-        if (!menu.equals("main") && !menu.equals("admin"))
-            throw new org.springframework.web.server.ResponseStatusException(org.springframework.http.HttpStatus.NOT_FOUND);
+        if (!menu.equals("main") && !menu.equals("admin")) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+        }
         return menu.equals("admin") ? ADMIN : MAIN;
     }
 
@@ -55,26 +63,36 @@ public class MenuController {
     public ResponseEntity<?> select(@PathVariable String menu, @RequestBody Selection selection,
                                     @AuthenticationPrincipal Jwt jwt) {
         var options = options(menu);
+        return select(menu, selection, jwt, options);
+    }
+
+    ResponseEntity<?> select(String menu, Selection selection, Jwt jwt, List<Option> options) {
         String value = selection.option() == null ? "" : selection.option().stripTrailing().replace(' ', '0');
-        if (!value.matches("[0-9]{1,2}") || Integer.parseInt(value) == 0 || Integer.parseInt(value) > options.size())
+        if (!value.matches("[0-9]{1,2}") || Integer.parseInt(value) == 0 || Integer.parseInt(value) > options.size()) {
             return message(400, "Please enter a valid option number...", "error");
+        }
         Option option = options.get(Integer.parseInt(value) - 1);
-        if (menu.equals("main") && "U".equals(jwt.getClaimAsString("user_type")) && option.userType().equals("A"))
+        if (menu.equals("main") && "U".equals(jwt.getClaimAsString("user_type")) && option.userType().equals("A")) {
             return message(403, "No access - Admin Only option... ", "error");
+        }
         return target(option);
     }
 
     ResponseEntity<?> target(Option option) {
-        if (option.program().equals("COPAUS0C"))
+        if (option.program().equals("COPAUS0C")) {
             return message(200, "This option " + option.name() + " is not installed...", "error");
-        if (option.program().startsWith("DUMMY"))
+        }
+        if (option.program().startsWith("DUMMY")) {
             return message(200, "This option " + option.name().split(" ")[0] + "is coming soon ...", "info");
+        }
         String route = switch (option.program()) {
             case "COTRTLIC" -> "/transaction-types";
             case "COTRTUPC" -> "/transaction-types/maintain";
             default -> null;
         };
-        if (route == null) return message(200, "This option is not installed ...", "info");
+        if (route == null) {
+            return message(200, "This option is not installed ...", "info");
+        }
         return ResponseEntity.ok(Map.of("program", option.program(), "tranId",
                 option.program().equals("COTRTLIC") ? "CTLI" : "CTTU", "route", route));
     }

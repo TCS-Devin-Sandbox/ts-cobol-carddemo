@@ -1,9 +1,13 @@
-package com.carddemo.trantype.security;
+package com.carddemo.signon;
 
+import com.carddemo.trantype.security.SecurityConfig;
+import com.carddemo.trantype.security.SecurityProperties;
 import com.carddemo.trantype.web.ErrorResponse;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
+import java.util.Locale;
+import org.springframework.dao.DataAccessException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.oauth2.jose.jws.MacAlgorithm;
 import org.springframework.security.oauth2.jwt.JwsHeader;
@@ -37,17 +41,23 @@ public class AuthController {
 
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody LoginRequest request) {
-        if (request.userId() == null || request.userId().isBlank())
+        if (request.userId() == null || request.userId().isBlank()) {
             return error(400, "Please enter User ID ...");
-        if (request.password() == null || request.password().isBlank())
+        }
+        if (request.password() == null || request.password().isBlank()) {
             return error(400, "Please enter Password ...");
+        }
         UserSecurity.User user;
         try {
-            var found = users.find(request.userId().stripTrailing().toUpperCase(java.util.Locale.ROOT));
-            if (found.isEmpty()) return error(401, "User not found. Try again ...");
+            var found = users.find(request.userId().stripTrailing().toUpperCase(Locale.ROOT));
+            if (found.isEmpty()) {
+                return error(401, "User not found. Try again ...");
+            }
             user = found.get();
-            if (!users.matches(request.password(), user)) return error(401, "Wrong Password. Try again ...");
-        } catch (org.springframework.dao.DataAccessException e) {
+            if (!users.matches(request.password(), user)) {
+                return error(401, "Wrong Password. Try again ...");
+            }
+        } catch (DataAccessException e) {
             return error(500, "Unable to verify the User ...");
         }
         List<String> roles = List.of("A".equals(user.userType()) ? "ADMIN" : "USER");

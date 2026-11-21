@@ -60,15 +60,24 @@ require ADMIN; CM00 requires authentication. F3 is client-side sign-off.
 
 | Program / paragraph | Test |
 |---|---|
-| COSGN00C MAIN-PARA, READ-USER-SEC-FILE (DB, success, claims) | TransactionTypeApiIntegrationTest.COSGN00C_MAIN_PARA_READ_USER_SEC_FILE_JWT_COMMAREA |
+| COSGN00C MAIN-PARA, READ-USER-SEC-FILE (DB, success, claims) | com.carddemo.signon.SignonIntegrationTest.COSGN00C_MAIN_PARA_READ_USER_SEC_FILE_JWT_COMMAREA |
 | COSGN00C PROCESS-ENTER-KEY, SEND-SIGNON-SCREEN | SignonMenuTest.COSGN00C_PROCESS_ENTER_KEY_SEND_SIGNON_SCREEN |
 | COSGN00C READ-USER-SEC-FILE (missing, wrong, error) | SignonMenuTest.COSGN00C_READ_USER_SEC_FILE |
 | COSGN00C SEND-PLAIN-TEXT, invalid AID | App.test.tsx SEND-PLAIN-TEXT |
 | COMEN01C / COADM01C MAIN-PARA, BUILD-MENU-OPTIONS, POPULATE-HEADER-INFO | SignonMenuTest.COMEN01C_COADM01C_MAIN_PARA_BUILD_MENU_OPTIONS_POPULATE_HEADER_INFO |
 | COMEN01C PROCESS-ENTER-KEY, PGMIDERR fallback | SignonMenuTest.COMEN01C_PROCESS_ENTER_KEY_PGMIDERR_ERR_PARA |
+| COMEN01C PROCESS-ENTER-KEY, U user denied type-A option (403, literal trailing space) | SignonMenuTest.COMEN01C_PROCESS_ENTER_KEY_ADMIN_ONLY_OPTION (package-private selection seam, no shipped type-A main option) |
+| COMEN01C PROCESS-ENTER-KEY, COPAUS0C absent (red error) | SignonMenuTest.COMEN01C_PROCESS_ENTER_KEY_COPAUS0C |
 | COMEN01C PROCESS-ENTER-KEY DUMMY | SignonMenuTest.COMEN01C_PROCESS_ENTER_KEY_DUMMY_STRING |
 | COADM01C PROCESS-ENTER-KEY, XCTL | SignonMenuTest.COADM01C_PROCESS_ENTER_KEY_XCTL |
 | COMEN01C / COADM01C RETURN-TO-SIGNON-SCREEN | App.test.tsx PROCESS-ENTER-KEY / RETURN-TO-SIGNON-SCREEN (A and U) |
+| COSGN00C PROCESS-ENTER-KEY, blank-field UI messages | App.test.tsx COSGN00C PROCESS-ENTER-KEY displays blank-field messages in source order |
+
+`SignonMenuTest` lives in `com.carddemo.menu`. Its PGMIDERR test explicitly
+checks ` 1` and `1 ` as option 1, and rejects `0`, `12`, `x`, empty and
+all-space input. Its MAIN-PARA test explicitly checks a ROLE_USER token is
+denied CA00 with HTTP 403. AuthController/UserSecurity live in
+`com.carddemo.signon`; MenuController lives in `com.carddemo.menu`.
 
 UI tests cover sign-on validation surface, both menu routes, select messages,
 function keys and cleared sessions. API tests use MockMvc; the login integration
