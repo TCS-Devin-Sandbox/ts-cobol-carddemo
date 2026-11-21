@@ -62,6 +62,23 @@ Types, nullability, CHECK rules and primary-key membership/order are unchanged.
 
 ## Field mapping
 
+### Online card read projection (E5)
+
+The online API reuses `card`; it does not introduce a second master table.
+The elementary source-field mappings below remain authoritative.
+
+| Online business property | Existing business column / projection |
+|---|---|
+| `cardNumber` | `card.card_number` |
+| `accountId` (list) | `card.account_id`, rendered as 11 digits |
+| `activeStatus` | `card.active_status` |
+| `embossedName` | `card.embossed_name`, trailing padding removed for display |
+| `expirationMonth` / `expirationYear` | `card.expiration_date`, character positions 6–7 / 1–4 |
+
+The detail screen echoes the submitted account ID, not `card.account_id`;
+see the [security-relevant lookup quirk](online/cards.md). The existing
+`card_verification_value` column is retained, but is not returned by list/view.
+
 Every row below is an elementary item in source order. Usage is explicit in the
 mapping even though omitted (DISPLAY default) in the source. FILLER is retained.
 
