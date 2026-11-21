@@ -176,6 +176,9 @@ jobs:
             carddemo-online-api/pom.xml
             java/**/pom.xml
 
+      - name: Build the C2 posting jar (CB00 consistency test)
+        run: mvn -B -f java/pom.xml -pl posting -am -DskipTests package
+
       - name: Transaction-type API tests (Testcontainers PostgreSQL)
         working-directory: carddemo-online-api
         run: mvn -B verify
