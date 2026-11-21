@@ -117,3 +117,14 @@ prepare-trantype-batch:
 endif
 endif
 export CANDIDATE
+
+ifeq ($(CHAIN),read-masters)
+ifeq ($(strip $(CANDIDATE)),)
+parity-java: CANDIDATE = java -jar java/read-masters/target/read-masters.jar
+parity-java: read-masters-candidate
+endif
+endif
+
+.PHONY: read-masters-candidate
+read-masters-candidate:
+	mvn -B -f java/pom.xml -pl read-masters -am -DskipTests package

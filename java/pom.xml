@@ -25,5 +25,6 @@
         <module>common</module>
         <module>posting</module>
         <module>fees</module>
+        <module>read-masters</module>
     </modules>
 </project>
