@@ -51,3 +51,12 @@ lines or missing final LF) is normalized, not retained. Lossless reproduction of
 such non-fixture representations would require persisted provenance, outside
 this fixture transport contract. Writers use the golden
 one-space JSON indentation, no final JSON newline, and Latin-1 SYSOUT text.
+
+## HLASM replacements
+
+`com.carddemo.batch.common.legacy` replaces the two HLASM routines without an
+assembler: `CobDatFt` is `COBDATFT` on its 80-byte `CODATECN-REC`
+(`CodatecnRecord`), byte for byte including the quirks listed in
+`docs/LEGACY-LANGUAGES.md`; `MvsWait` is `MVSWAIT`/`COBSWAIT`, a no-op by
+default because a wait has no functional output. Neither routine runs in a
+parity chain, so their proof is the unit tests against the documented formats.

@@ -26,15 +26,36 @@ analysis-only.
   (`USING COBDATFT,R12`), `LM R14,R12,12(R13)` and `BR R14` on exit.
   `R1` → parameter list, `R2` → the single parameter (`USING COREC,R2`).
 * **Parameter record** (`COREC`, COBOL copy `CODATECN-REC` in `CBACT01C`):
-  `COINTYPE` X(1) input format, `COINPDT` X(10) input date, `COOUTYPE` X(1)
-  output format, `COOUTDT` X(10) output date, `COERMSG` message.
+  `COINTYPE` X(1) input format, `COINPDT` X(20) input date, `COOUTYPE` X(1)
+  output format, `COOUTDT` X(20) output date, `COERMSG` X(38) message (80 bytes;
+  DSECT `COCDATFT` in `app/maclib/COCDATFT.mac`).
 * **Registers used**: R1 (parm list), R2 (record base), R12 (code base), R13
-  (save area), R14/R15 (return / entry).  R15 is not set to a return code; the
+  (save area), R14/R15 (return / entry).  `SR R15,R15` always returns RC 0; the
   caller inspects `COERMSG`.
-* **Local stand-in**: none needed for the chains.  If `CBACT01C` is ported, the
-  routine is a 10-line date formatter; a GnuCOBOL `COBDATFT` with `INSPECT`/
-  `STRING` or a Java `DateTimeFormatter` is equivalent.  Note the `VALIDIN2`
-  branch has its hyphen check commented out, so `2 → 1` accepts any separator.
+* **Formats** (output-type codes follow the copybook 88s: `1` = `YYYY-MM-DD-OP`,
+  `2` = `YYYYMMDD-OP`):
+
+  | `COINTYPE` | `COOUTYPE` | Result in `COOUTDT` / `COERMSG` |
+  |---|---|---|
+  | `1` (`YYYYMMDD`) | anything but `2` | `YYYY-MM-DD` in bytes 1-10 |
+  | `2` (`YYYY-MM-DD`) | anything but `1` | `YYYYMMDD` in bytes 1-8 (CBACT01C uses `2`/`2`) |
+  | `1` / `2` | `2` / `1` | `COERMSG` = `INVALID INPUT`, `COOUTDT` unchanged |
+  | anything else | any | `COERMSG` = `INVALID INPUT`, `COOUTDT` unchanged |
+
+* **Quirks**: characters are moved, never validated as a calendar date.  The
+  `VALIDIN2` hyphen check is commented out, so `2 → 1` accepts any separator.
+  The `VALIDIN1` check `CLC COINPDT+4,=C'-'` has no explicit length, so it
+  compares `L'COINPDT` = 20 bytes against the literal pool and never matches a
+  date, so a hyphenated type-`1` input is not rejected (`2022-07-05` as type `1`
+  gives `2022--0-7-`).  Likewise `MVC COERMSG,=C'INVALID INPUT'` moves 38
+  bytes, so on the host the 25 bytes after the text are whatever follows the
+  literal in the load module.  Bytes of `COOUTDT` it does not write
+  (11-20 for type `1`, 9-20 for type `2`) and a previous `COERMSG` are left as they
+  were.
+* **Java replacement**: `com.carddemo.batch.common.legacy.CobDatFt` in
+  `java/common` reproduces the table and quirks on `CODATECN-REC`
+  (`CodatecnRecord`); the 25 trailing message bytes are spaces.  `CobDatFt.Layout`
+  gives the same two layouts as `java.time` formatters for new code.
 
 ### MVSWAIT - timed wait
 
@@ -45,9 +66,15 @@ analysis-only.
   `BINLBL`, `LM 14,12,12(13)`, `MVI 12(13),X'FF'`, `SR 15,15` (RC 0), `BR 14`.
   No own save area: it never calls anything, so it keeps using the caller's.
 * **Parameter**: one fullword binary (`MVSWAIT-TIME PIC 9(8) COMP`).
+* **Parameter format**: `COBSWAIT` reads the first 8 bytes of its SYSIN card as
+  centiseconds (`WAITSTEP`: `00003600` = 36 seconds) and moves them to
+  `MVSWAIT-TIME`.
 * **Local stand-in**: `CALL 'C$SLEEP'` (GnuCOBOL) or `Thread.sleep`.  The
   off-host stand-in should be a no-op in batch tests - a wait has no
   functional output, and the statement chain is not part of parity.
+* **Java replacement**: `com.carddemo.batch.common.legacy.MvsWait` in
+  `java/common`: RC 0, no-op waiter by default, `MvsWait.SLEEP` for a real
+  delay; `cobswait(card)` accepts only the documented 8-digit PARM.
 
 ## PL/I
 
