@@ -33,7 +33,10 @@ successful JCL setup and wrapper steps, which the Java job does not execute.
   fail, the expiry reason wins.
 - TRANSACT starts empty, as CBTRN02C opens it for OUTPUT, not I-O.
   Rejects preserve the original daily record and get a four-digit reason and
-  its description. New category balances and counters use the legacy SYSOUT text.
+  its description.
+- New category balances inherit the last successfully read category record's
+  filler; COBOL `INITIALIZE` leaves filler unchanged. The create message and
+  counters use the legacy SYSOUT text.
 
 This is a parity runner, not a production scheduler: a rerun starts from clean
 fixture state, and the job does not support restart or cutover.

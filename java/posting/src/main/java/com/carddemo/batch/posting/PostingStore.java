@@ -30,19 +30,20 @@ final class PostingStore {
                 rs.getString("expiration_date")) : null, id);
     }
 
-    boolean addCategoryAmount(long accountId, String type, int category, BigDecimal amount) {
-        int updated = jdbc.update("""
+    String updateCategoryBalance(long accountId, String type, int category, BigDecimal amount) {
+        return jdbc.query("""
                 UPDATE transaction_category_balance SET balance = mod(balance + ?, 1000000000)
                 WHERE account_id = ? AND transaction_type_code = ? AND transaction_category_code = ?
-                """, amount, accountId, type, category);
-        if (updated != 0) return false;
+                RETURNING filler
+                """, rs -> rs.next() ? rs.getString("filler") : null, amount, accountId, type, category);
+    }
 
+    void createCategoryBalance(long accountId, String type, int category, BigDecimal amount, String filler) {
         jdbc.update("""
                 INSERT INTO transaction_category_balance
                     (account_id, transaction_type_code, transaction_category_code, balance, filler)
-                VALUES (?, ?, ?, ?, '')
-                """, accountId, type, category, amount);
-        return true;
+                VALUES (?, ?, ?, ?, ?)
+                """, accountId, type, category, amount, filler);
     }
 
     void addAccountAmount(long accountId, BigDecimal amount) {

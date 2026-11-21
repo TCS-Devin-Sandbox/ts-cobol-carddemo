@@ -46,6 +46,7 @@ final class PostingTasklet implements Tasklet {
         String at = parameters.getString("clock");
         String processedTimestamp = PROCESSING_TIME.format(at == null ? clock.instant() : Instant.parse(at));
         var sysout = new StringBuilder("START OF EXECUTION OF PROGRAM CBTRN02C\n");
+        String categoryFiller = "";
         int rejected = 0;
         store.openTransactionOutput();
         try (var dailyInput = Files.newBufferedReader(input, ISO_8859_1);
@@ -57,8 +58,10 @@ final class PostingTasklet implements Tasklet {
                 }
                 String record = line + " ".repeat(layout.length() - line.length());
                 var daily = codec.decode(record.getBytes(ISO_8859_1));
-                var rejection = post(daily, processedTimestamp, sysout);
+                Long accountId = store.findAccountId((String) daily.get("DALYTRAN-CARD-NUM"));
+                var rejection = accountId == null ? Rejection.INVALID_CARD : validateAccount(accountId, daily);
                 if (rejection == null) {
+                    categoryFiller = post(accountId, daily, processedTimestamp, sysout, categoryFiller);
                     contribution.incrementWriteCount(1);
                 } else {
                     rejected++;
@@ -76,9 +79,7 @@ final class PostingTasklet implements Tasklet {
         return RepeatStatus.FINISHED;
     }
 
-    private Rejection post(Map<String, Object> daily, String processedTimestamp, StringBuilder sysout) {
-        Long accountId = store.findAccountId((String) daily.get("DALYTRAN-CARD-NUM"));
-        if (accountId == null) return Rejection.INVALID_CARD;
+    private Rejection validateAccount(long accountId, Map<String, Object> daily) {
         var account = store.findAccount(accountId);
         if (account == null) return Rejection.MISSING_ACCOUNT;
 
@@ -88,17 +89,25 @@ final class PostingTasklet implements Tasklet {
         if (account.expirationDate().compareTo(originDate) < 0) return Rejection.EXPIRED;
         var cycleBalance = account.cycleCredit().subtract(account.cycleDebit()).add(amount)
                 .remainder(CYCLE_TEST_MODULUS);
-        if (account.creditLimit().compareTo(cycleBalance) < 0) return Rejection.OVERLIMIT;
+        return account.creditLimit().compareTo(cycleBalance) < 0 ? Rejection.OVERLIMIT : null;
+    }
 
+    private String post(long accountId, Map<String, Object> daily, String processedTimestamp,
+            StringBuilder sysout, String previousFiller) {
+        var amount = (BigDecimal) daily.get("DALYTRAN-AMT");
         String type = (String) daily.get("DALYTRAN-TYPE-CD");
         int category = ((BigDecimal) daily.get("DALYTRAN-CAT-CD")).intValueExact();
-        if (store.addCategoryAmount(accountId, type, category, amount)) {
+        String filler = store.updateCategoryBalance(accountId, type, category, amount);
+        if (filler == null) {
+            // INITIALIZE leaves the category record's FILLER from the last successful read.
+            filler = previousFiller;
+            store.createCategoryBalance(accountId, type, category, amount, filler);
             sysout.append(String.format(Locale.ROOT,
                     "TCATBAL record not found for key : %011d%s%04d.. Creating.\n", accountId, type, category));
         }
         store.addAccountAmount(accountId, amount);
         store.writeTransaction(daily, processedTimestamp);
-        return null;
+        return filler;
     }
 
     private enum Rejection {
