@@ -102,15 +102,15 @@ jobs:
           cache: maven
           cache-dependency-path: java/**/pom.xml
 
-      - name: Build the POSTTRAN candidate
-        run: mvn -B -f java/pom.xml -pl posting -am package -DskipTests
+      - name: Build and test the posting candidate
+        run: mvn -B -f java/pom.xml -pl posting -am verify
 
-      - name: Compare POSTTRAN against the legacy goldens
+      - name: Compare POSTTRAN and TRANREPT against the legacy goldens
         run: |
           docker compose up -d --wait postgres
-          make parity-java CHAIN=posting STEPS=POSTTRAN CANDIDATE='java -jar java/posting/target/carddemo-posting.jar'
+          make parity-java CHAIN=posting CANDIDATE='java -jar java/posting/target/carddemo-posting.jar'
 
-      - name: Upload POSTTRAN parity report
+      - name: Upload posting parity report
         if: always()
         uses: actions/upload-artifact@v4
         with:
