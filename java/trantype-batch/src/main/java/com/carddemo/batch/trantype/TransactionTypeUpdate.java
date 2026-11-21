@@ -9,6 +9,7 @@ import java.sql.Connection;
 import java.sql.SQLException;
 import javax.sql.DataSource;
 
+import static com.carddemo.batch.trantype.DsnBatch.line;
 import static java.nio.charset.StandardCharsets.ISO_8859_1;
 
 final class TransactionTypeUpdate {
@@ -22,18 +23,17 @@ final class TransactionTypeUpdate {
     }
 
     int run(Path input, Path sysout) throws IOException, SQLException {
-        Files.createDirectories(sysout.getParent());
-        try (var records = Files.newBufferedReader(input, ISO_8859_1);
-             var output = Files.newBufferedWriter(sysout, ISO_8859_1);
-             var connection = dataSource.getConnection()) {
-            connection.setAutoCommit(false);
+        return DsnBatch.run(dataSource, sysout, "COBTUPDT", (connection, output) -> apply(input, output, connection));
+    }
+
+    static int apply(Path input, Writer output, Connection connection) throws IOException {
+        try (var records = Files.newBufferedReader(input, ISO_8859_1)) {
             return process(records, output, connection);
         }
     }
 
     private static int process(BufferedReader records, Writer output, Connection connection)
-            throws IOException, SQLException {
-        line(output, "DSNRUN: DSN ATTACHED, RUNNING COBTUPDT");
+            throws IOException {
         line(output, "OPEN FILE OK");
         var message = new StringBuilder(" ".repeat(MESSAGE_WIDTH));
         int rc = 0;
@@ -56,9 +56,6 @@ final class TransactionTypeUpdate {
                 rc = 4;
             }
         }
-        // PostgreSQL COMMIT on an aborted transaction rolls back, as it does for DSNEXIT.
-        connection.commit();
-        line(output, "DSNRUN: COMMIT AT END OF TASK");
         return rc;
     }
 
@@ -97,15 +94,9 @@ final class TransactionTypeUpdate {
             // ocesql reports SQLCODE 0 for UPDATE/DELETE even when no row matches.
             statement.executeUpdate();
         } catch (SQLException e) {
-            return "Error accessing: TRANSACTION_TYPE table. SQLCODE: "
-                    + ("23505".equals(e.getSQLState()) ? "-403" : "-400");
+            return "Error accessing: TRANSACTION_TYPE table. SQLCODE: " + DsnBatch.sqlCode(e);
         }
         line(output, "RECORD " + result + " SUCCESSFULLY");
         return null;
-    }
-
-    private static void line(Writer output, String text) throws IOException {
-        output.write(text);
-        output.write('\n');
     }
 }

@@ -20,6 +20,30 @@ jobs:
       - name: FEECALC documented examples and driver tests (no PL/I oracle)
         run: mvn -B -f java/pom.xml -pl fees -am test
 
+  trantype-dynamic-parity:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '21'
+          cache: maven
+          cache-dependency-path: java/**/pom.xml
+
+      - name: MNTTRDYN Java parity
+        run: make parity-java CHAIN=trantype-dynamic
+
+      - name: Upload MNTTRDYN parity report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: trantype-dynamic-parity-report
+          path: work/parity-java/report.md
+          if-no-files-found: ignore
+
   trantype-update-parity:
     runs-on: ubuntu-latest
     timeout-minutes: 15
