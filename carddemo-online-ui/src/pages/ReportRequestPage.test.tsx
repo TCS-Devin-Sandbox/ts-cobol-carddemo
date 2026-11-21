@@ -31,7 +31,7 @@ describe('CR00 CORPT00C', () => {
     await userEvent.type(screen.getByLabelText('Password'), 'password');
     fireEvent.submit(screen.getByText('Sign on').closest('form')!);
     await userEvent.click(await screen.findByRole('button', { name: '09. Transaction Reports' }));
-    expect(screen.getByRole('heading', { name: 'Transaction Reports' })).toBeInTheDocument();
+    expect(await screen.findByRole('heading', { name: 'Transaction Reports' })).toBeInTheDocument();
     expect(screen.getByText('Tran: CR00')).toBeInTheDocument();
     expect(screen.getByText('Prog: CORPT00C')).toBeInTheDocument();
     expect(monthly()).toHaveFocus();
