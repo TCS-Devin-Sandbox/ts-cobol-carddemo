@@ -5,6 +5,7 @@ import java.math.BigDecimal;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Comparator;
+import java.util.List;
 import java.util.Map;
 
 import javax.sql.DataSource;
@@ -14,13 +15,10 @@ import com.carddemo.batch.common.VsamDataset;
 import com.carddemo.batch.common.VsamTransfer;
 import com.carddemo.batch.common.codec.CardDemoLayout;
 import com.carddemo.batch.common.codec.FixedRecordCodec;
-import org.springframework.batch.core.Job;
-import org.springframework.batch.core.job.builder.JobBuilder;
+import org.springframework.batch.core.Step;
 import org.springframework.batch.core.repository.JobRepository;
 import org.springframework.batch.core.step.builder.StepBuilder;
 import org.springframework.batch.repeat.RepeatStatus;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.datasource.DataSourceUtils;
 import org.springframework.transaction.PlatformTransactionManager;
@@ -28,16 +26,14 @@ import org.springframework.transaction.PlatformTransactionManager;
 import static com.carddemo.batch.posting.PostingTasklet.PREFIX;
 import static java.nio.charset.StandardCharsets.ISO_8859_1;
 
-@Configuration(proxyBeanMethods = false)
 class TransactionReportJob {
     private static final String BACKUP = "TRANSACT.BKUP";
     private static final String DAILY = "TRANSACT.DALY";
     private static final DateRange SORT_RANGE = new DateRange("2022-01-01", "2022-07-06");
 
-    @Bean
-    Job tranrept(JobRepository repository, PlatformTransactionManager transactions, DataSource dataSource,
-            JdbcTemplate jdbc) {
-        var repro = new StepBuilder("PRC001", repository).tasklet((contribution, context) -> {
+    static List<Step> steps(JobRepository repository, PlatformTransactionManager transactions, DataSource dataSource,
+                            JdbcTemplate jdbc) {
+        var repro = new StepBuilder("TRANREPT.PRC001", repository).tasklet((contribution, context) -> {
             var out = Path.of(contribution.getStepExecution().getJobParameters().getString("out"));
             var connection = DataSourceUtils.getConnection(dataSource);
             try {
@@ -47,18 +43,18 @@ class TransactionReportJob {
             }
             return RepeatStatus.FINISHED;
         }, transactions).build();
-        var sort = new StepBuilder("STEP05R", repository).tasklet((contribution, context) -> {
+        var sort = new StepBuilder("TRANREPT.STEP05R", repository).tasklet((contribution, context) -> {
             sort(Path.of(contribution.getStepExecution().getJobParameters().getString("out")));
             return RepeatStatus.FINISHED;
         }, transactions).build();
-        var report = new StepBuilder("STEP10R", repository).tasklet((contribution, context) -> {
+        var report = new StepBuilder("TRANREPT.STEP10R", repository).tasklet((contribution, context) -> {
             var step = contribution.getStepExecution();
             var input = Path.of(step.getJobParameters().getString("input"));
             var out = Path.of(step.getJobParameters().getString("out"));
             step.getExecutionContext().putInt("returnCode", writeReport(input, out, jdbc));
             return RepeatStatus.FINISHED;
         }, transactions).build();
-        return new JobBuilder("TRANREPT", repository).preventRestart().start(repro).next(sort).next(report).build();
+        return List.of(repro, sort, report);
     }
 
     static void sort(Path out) throws IOException {

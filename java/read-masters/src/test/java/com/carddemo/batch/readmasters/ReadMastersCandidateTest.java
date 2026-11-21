@@ -148,7 +148,7 @@ class ReadMastersCandidateTest {
             Path out = temp.resolve("out");
             for (var master : ReadMaster.values()) {
                 var parameters = new org.springframework.batch.core.JobParametersBuilder()
-                        .addString("out", out.toString()).addString("missingInput", "false").toJobParameters();
+                        .addString("out", out.toString()).toJobParameters();
                 var step = new org.springframework.batch.core.JobExecution(1L, parameters).createStepExecution("STEP05");
                 new ReadMasterTasklet(master, new ReadMasterStore(jdbc)).execute(step.createStepContribution(), null);
                 String text = Files.readString(out.resolve("sysout/" + master.job + ".STEP05.txt"), StandardCharsets.ISO_8859_1);
