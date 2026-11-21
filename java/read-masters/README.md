@@ -1,6 +1,6 @@
 # Read masters (D3)
 
-Java 21 file-to-file port of READACCT / CBACT01C, READCARD / CBACT02C,
+Java 21 Spring Batch port of READACCT / CBACT01C, READCARD / CBACT02C,
 READXREF / CBACT03C and READCUST / CBCUS01C. Uses `java/common`'s
 `FixedRecordCodec`, copybook layouts, `CobDatFt` and `BatchArtifacts`.
 Like the interest/posting candidates, each invocation creates a fresh owned
