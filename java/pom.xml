@@ -24,5 +24,6 @@
         <module>trantype-batch</module>
         <module>common</module>
         <module>posting</module>
+        <module>fees</module>
     </modules>
 </project>
