@@ -75,7 +75,8 @@ public class ReadMastersCandidate {
                 if (execution.getStatus() != BatchStatus.COMPLETED) {
                     throw new IllegalStateException(master.job + " failed: " + execution.getAllFailureExceptions());
                 }
-                int rc = execution.getStepExecutions().iterator().next().getExecutionContext().getInt("returnCode", 0);
+                int rc = execution.getStepExecutions().stream().filter(step -> step.getStepName().equals("STEP05"))
+                        .findFirst().orElseThrow().getExecutionContext().getInt("returnCode", 0);
                 codes.put(master.job, master == ReadMaster.ACCOUNT ? Map.of("PREDEL", 0, "STEP05", rc)
                         : Map.of("STEP05", rc));
             }

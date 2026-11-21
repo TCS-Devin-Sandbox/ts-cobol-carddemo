@@ -46,7 +46,9 @@ programs do not use the clock). Outputs are `datasets/`, `sysout/`, `rc.json`.
 * The shared B4 loader space-pads trimmed fixture lines. As with other PG ports,
   invalid/oversize records and duplicate primary keys fail loading rather than
   silently truncating or ignoring them.
-* PREDEL returns zero. Missing inputs produce file-status
+* READACCT's PREDEL step deletes its three prior exports before STEP05, including
+  on a missing-input rerun into an existing output directory, and returns zero.
+  Missing inputs produce file-status
   diagnostics and the off-host CEE3ABD U+000000999 message with step RC 12,
   omit the success trailer, and do not prevent later independent jobs running.
   The candidate process returns zero once artifacts are written, leaving the

@@ -89,6 +89,28 @@ class ReadMastersCandidateTest {
                 .endsWith("END OF EXECUTION OF PROGRAM CBCUS01C\n"));
     }
 
+    @Test void predelRemovesStaleAccountExportsBeforeMissingInputAbendOnRerun() throws Exception {
+        Path input = copyInput();
+        Path out = temp.resolve("out");
+        run(input, out);
+        for (String suffix : new String[]{"PSCOMP", "ARRYPS", "VBPS"}) {
+            assertTrue(Files.size(out.resolve("datasets/" + PREFIX + "ACCTDATA." + suffix + ".txt")) > 0);
+        }
+        Path unrelated = out.resolve("datasets/unrelated.txt");
+        Files.writeString(unrelated, "keep");
+        Files.delete(input.resolve(PREFIX + "ACCTDATA.PS.txt"));
+        run(input, out);
+        for (String suffix : new String[]{"PSCOMP", "ARRYPS", "VBPS"}) {
+            assertFalse(Files.exists(out.resolve("datasets/" + PREFIX + "ACCTDATA." + suffix + ".txt")));
+        }
+        assertEquals("keep", Files.readString(unrelated));
+        String sysout = Files.readString(out.resolve("sysout/READACCT.STEP05.txt"));
+        assertTrue(sysout.contains("ERROR OPENING ACCTFILE\nFILE STATUS IS: NNNN0035\nABENDING PROGRAM\n"));
+        String codes = Files.readString(out.resolve("rc.json"));
+        assertTrue(codes.contains("\"PREDEL\": 0"));
+        assertTrue(codes.contains("\"STEP05\": 12"));
+    }
+
     @Test void rejectsOversizeInputThroughSharedLoaderAndDropsOwnedSchema() throws Exception {
         Path input = copyInput();
         Files.writeString(input.resolve(PREFIX + "CARDDATA.PS.txt"), "z".repeat(160) + "\n");
