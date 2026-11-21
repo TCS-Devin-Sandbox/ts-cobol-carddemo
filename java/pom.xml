@@ -21,5 +21,6 @@
 
     <modules>
         <module>common</module>
+        <module>posting</module>
     </modules>
 </project>
