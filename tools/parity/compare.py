@@ -158,8 +158,8 @@ def compare_scoped_rc(expected: dict, actual: Path, steps: list[str]) -> list[di
 
 
 def compare_case(chain: str, case: str, actual: Path, encoding: str = "ascii",
-                 steps: list[str] | None = None) -> tuple[list[dict], dict]:
-    expected = FIXTURES / chain / case / "expected"
+                 steps: list[str] | None = None, expected: Path | None = None) -> tuple[list[dict], dict]:
+    expected = expected if expected is not None else FIXTURES / chain / case / "expected"
     if not expected.exists():
         raise SystemExit(f"no golden files at {expected}; run `make record CHAIN={chain} CASE={case}` first")
     manifest = json.loads((expected / "manifest.json").read_text()) if (expected / "manifest.json").exists() else {}
@@ -235,8 +235,9 @@ def write_report(report: Path, chain: str, case: str, label: str, diffs: list[di
 
 
 def run_comparison(chain: str, case: str, actual: Path, report: Path, label: str,
-                   encoding: str = "ascii", steps: list[str] | None = None) -> int:
-    diffs, checked = compare_case(chain, case, actual, encoding, steps)
+                   encoding: str = "ascii", steps: list[str] | None = None,
+                   expected: Path | None = None) -> int:
+    diffs, checked = compare_case(chain, case, actual, encoding, steps, expected)
     if steps:
         label += f" ({', '.join(steps)})"
     write_report(report, chain, case, label, diffs, checked)
@@ -251,13 +252,14 @@ def main() -> int:
     parser.add_argument("chain")
     parser.add_argument("case")
     parser.add_argument("--actual", required=True, type=Path)
+    parser.add_argument("--expected", type=Path)
     parser.add_argument("--report", type=Path, default=ROOT / "work" / "parity" / "report.md")
     parser.add_argument("--label", default="legacy rerun")
     parser.add_argument("--encoding", default="ascii", choices=["ascii", "ebcdic"])
     parser.add_argument("--steps", nargs="+", metavar="JOB[.STEP]")
     args = parser.parse_args()
     try:
-        return run_comparison(args.chain, args.case, args.actual, args.report, args.label, args.encoding, args.steps)
+        return run_comparison(args.chain, args.case, args.actual, args.report, args.label, args.encoding, args.steps, args.expected)
     except ValueError as exc:
         parser.error(str(exc))
 
