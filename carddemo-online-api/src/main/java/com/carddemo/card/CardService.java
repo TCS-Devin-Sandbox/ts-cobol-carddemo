@@ -82,7 +82,7 @@ public class CardService {
         }
         String message = boundary;
         if (message == null && !bottom && next == null) message = rows.isEmpty() && page == 1 ? EMPTY : "NO MORE RECORDS TO SHOW";
-        return new Page(rows, rows.isEmpty() ? null : rows.get(0).cardNumber(), next, page,
+        return new Page(rows, rows.isEmpty() ? firstKey : rows.get(0).cardNumber(), next, page,
                 bottom || (key.equals("PF8") && next == null), message, rows.isEmpty() ? null : ACTIONS);
     }
 

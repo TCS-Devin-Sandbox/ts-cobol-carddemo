@@ -113,6 +113,40 @@ class CardApiIntegrationTest {
         assertThat(emptyNext).containsEntry("message", "NO MORE RECORDS TO SHOW");
     }
 
+    @Test @DisplayName("CCLI 9000-READ-FORWARD: empty filtered page retains firstKey and PF8 rereads the prior matching page")
+    void emptyForwardPagePreservesBoundaryForPf8Reread() {
+        jdbc.update("UPDATE card SET account_id=10000000001 WHERE card_number BETWEEN '4000000000000009' AND '4000000000000014'");
+        var first = get("/api/cards?accountId=10000000001");
+        var second = get("/api/cards?accountId=10000000001&key=PF8&pageNumber=1&cursor="
+                + first.get("nextCursor") + "&firstKey=" + first.get("firstKey"));
+        assertThat(second).containsEntry("firstKey", "4000000000000008").containsEntry("nextCursor", "4000000000000015");
+        var empty = get("/api/cards?accountId=10000000001&key=PF8&pageNumber=2&cursor="
+                + second.get("nextCursor") + "&firstKey=" + second.get("firstKey"));
+        assertThat(empty).containsEntry("rows", List.of()).containsEntry("firstKey", second.get("firstKey"))
+                .containsEntry("nextCursor", null).containsEntry("lastPageShown", true);
+        var reread = get("/api/cards?accountId=10000000001&key=PF8&pageNumber=3&firstKey="
+                + empty.get("firstKey") + "&lastPageShown=" + empty.get("lastPageShown"));
+        assertThat(reread).containsEntry("firstKey", second.get("firstKey"))
+                .containsEntry("message", "NO MORE PAGES TO DISPLAY").containsEntry("pageNumber", 3);
+        assertThat(reread.get("rows")).isEqualTo(second.get("rows")).isNotEqualTo(first.get("rows"));
+    }
+
+    @Test @DisplayName("CCLI 9100-READ-BACKWARDS: empty page retains firstKey and following PF8 rereads the matching page")
+    void emptyBackwardPagePreservesBoundaryForPf8Reread() {
+        var first = get("/api/cards");
+        var second = get("/api/cards?key=PF8&pageNumber=1&cursor=" + first.get("nextCursor")
+                + "&firstKey=" + first.get("firstKey"));
+        jdbc.update("DELETE FROM card WHERE card_number < '4000000000000008'");
+        var empty = get("/api/cards?key=PF7&pageNumber=2&cursor=" + second.get("firstKey")
+                + "&firstKey=" + second.get("firstKey"));
+        assertThat(empty).containsEntry("rows", List.of()).containsEntry("firstKey", second.get("firstKey"))
+                .containsEntry("nextCursor", second.get("firstKey")).containsEntry("pageNumber", 1);
+        var reread = get("/api/cards?key=PF8&pageNumber=1&cursor=" + empty.get("nextCursor")
+                + "&firstKey=" + empty.get("firstKey"));
+        assertThat(reread.get("rows")).isEqualTo(second.get("rows"));
+        assertThat(reread).containsEntry("firstKey", "4000000000000008").containsEntry("pageNumber", 2);
+    }
+
     @Test @DisplayName("CCLI 2000-RECEIVE-MAP / 2100-RECEIVE-SCREEN / 2200-EDIT-INPUTS / 2210-EDIT-ACCOUNT / 2220-EDIT-CARD")
     void optionalFiltersAndValidationPriority() {
         for (String value : List.of("abc", "123", "123456789012", "-1234567890")) {

@@ -95,6 +95,20 @@ Following MIGRATION-PLAN's default, reproduce and log rather than fix:
    (`1200-SETUP-SCREEN-VARS`, 477–484); CVV/day are not displayed.
    Full-width zero list filters are absent, but required detail zeros are
    missing input (`2210-EDIT-ACCOUNT`, `2220-EDIT-CARD`).
+7. **Empty pages retain their incoming first key and can reread earlier rows.**
+   `9000-READ-FORWARD` (1171–1177) sets `WS-CA-FIRST-CARD-NUM` only when
+   the first matching row is found; no matches leave COMMAREA state intact.
+   `9100-READ-BACKWARDS` likewise assigns it only after filling the prior
+   page (1348–1355), not when no matches are found. Preserve the incoming
+   `firstKey` for either empty result rather than clearing the boundary.
+   After an empty forward page produced by unfiltered lookahead, PF8 with
+   no next page falls through `0000-MAIN` `WHEN OTHER` (572–581), which
+   browses forward again from that retained first key. This redisplays the
+   previous matching page, not the beginning of the filtered file. After an
+   empty backwards browse, the next cursor also retains that boundary and
+   PF8 can reread the matching page. The paragraph-named integration tests
+   `emptyForwardPagePreservesBoundaryForPf8Reread` and
+   `emptyBackwardPagePreservesBoundaryForPf8Reread` cover these cases.
 
 Web adaptations: HTTP authentication replaces CICS session existence, fixed
 fields become accessible labelled controls, red error/message lines replace
