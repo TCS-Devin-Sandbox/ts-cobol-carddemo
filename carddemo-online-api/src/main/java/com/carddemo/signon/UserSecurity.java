@@ -8,6 +8,7 @@ import org.springframework.boot.ApplicationRunner;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class UserSecurity implements ApplicationRunner {
@@ -34,11 +35,16 @@ public class UserSecurity implements ApplicationRunner {
     }
 
     @Override
+    @Transactional
     public void run(ApplicationArguments args) {
         properties.users().forEach(user -> {
             validateWidth("user ID", user.username());
             validateWidth("password", user.password());
         });
+        if (properties.users().isEmpty()
+                || Boolean.TRUE.equals(jdbc.queryForObject("SELECT EXISTS (SELECT 1 FROM user_security)", Boolean.class))) {
+            return;
+        }
         properties.users().forEach(user -> jdbc.update("""
                 INSERT INTO user_security(user_id, first_name, last_name, password_hash, user_type, filler)
                 VALUES (?, '', '', ?, ?, '') ON CONFLICT (user_id) DO NOTHING

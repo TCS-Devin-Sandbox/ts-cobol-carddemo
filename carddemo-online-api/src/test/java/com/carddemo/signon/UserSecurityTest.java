@@ -7,6 +7,8 @@ import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoInteractions;
+import static org.mockito.Mockito.verifyNoMoreInteractions;
+import static org.mockito.Mockito.when;
 
 import com.carddemo.trantype.security.SecurityProperties;
 import java.util.List;
@@ -16,6 +18,8 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 class UserSecurityTest {
+    private static final String HAS_USERS = "SELECT EXISTS (SELECT 1 FROM user_security)";
+
     @Test
     void MAIN_PARA_rejectsOverlengthConfiguredCredentialsBeforeSeeding() {
         for (var user : List.of(
@@ -37,6 +41,7 @@ class UserSecurityTest {
     @Test
     void MAIN_PARA_acceptsEightCharacterCredentialsWithTrailingPaddingAndEmptyConfiguration() {
         JdbcTemplate jdbc = mock(JdbcTemplate.class);
+        when(jdbc.queryForObject(HAS_USERS, Boolean.class)).thenReturn(false);
         var encoder = new BCryptPasswordEncoder();
         var security = new UserSecurity(jdbc, encoder, new SecurityProperties("unused", 60,
                 List.of(new SecurityProperties.User("user0001   ", "password   ", List.of("USER")))));
@@ -51,9 +56,25 @@ class UserSecurityTest {
     }
 
     @Test
+    void MAIN_PARA_doesNotSeedConfiguredUsersWhenTableHasAnyUsers() {
+        JdbcTemplate jdbc = mock(JdbcTemplate.class);
+        when(jdbc.queryForObject(HAS_USERS, Boolean.class)).thenReturn(true);
+        var encoder = mock(BCryptPasswordEncoder.class);
+        var security = new UserSecurity(jdbc, encoder, new SecurityProperties("unused", 60,
+                List.of(new SecurityProperties.User("MISSING", "PASSWORD", List.of("ADMIN")))));
+
+        security.run(null);
+
+        verify(jdbc).queryForObject(HAS_USERS, Boolean.class);
+        verifyNoMoreInteractions(jdbc);
+        verifyNoInteractions(encoder);
+    }
+
+    @Test
     void READ_USER_SEC_FILE_matchesFixedWidthPasswordPadding() {
         for (String seedPassword : List.of("ABC", "ABC   ")) {
             JdbcTemplate jdbc = mock(JdbcTemplate.class);
+            when(jdbc.queryForObject(HAS_USERS, Boolean.class)).thenReturn(false);
             var encoder = new BCryptPasswordEncoder();
             var properties = new SecurityProperties("unused", 60,
                     List.of(new SecurityProperties.User("TEST", seedPassword, List.of("USER"))));

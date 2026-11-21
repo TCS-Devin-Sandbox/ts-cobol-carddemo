@@ -4,6 +4,8 @@ import { AdminMenuPage } from './pages/AdminMenuPage';
 import { LoginPage } from './pages/LoginPage';
 import { TransactionTypeEditPage } from './pages/TransactionTypeEditPage';
 import { TransactionTypeListPage } from './pages/TransactionTypeListPage';
+import { UserListPage } from './pages/UserListPage';
+import { UserMaintenancePage } from './pages/UserMaintenancePage';
 import { getSession } from './api/client';
 
 function SessionMenu() {
@@ -16,6 +18,10 @@ export function App() {
       <Route path="/login" element={<LoginPage />} />
       <Route path="/menu" element={<SessionMenu />} />
       <Route path="/admin" element={<RequireAdmin><AdminMenuPage /></RequireAdmin>} />
+      <Route path="/admin/users" element={<RequireAdmin><UserListPage /></RequireAdmin>} />
+      <Route path="/admin/users/add" element={<RequireAdmin><UserMaintenancePage key="add" mode="add" /></RequireAdmin>} />
+      <Route path="/admin/users/update" element={<RequireAdmin><UserMaintenancePage key="update" mode="update" /></RequireAdmin>} />
+      <Route path="/admin/users/delete" element={<RequireAdmin><UserMaintenancePage key="delete" mode="delete" /></RequireAdmin>} />
       <Route path="/transaction-types" element={<RequireAdmin><TransactionTypeListPage /></RequireAdmin>} />
       <Route path="/transaction-types/maintain" element={<RequireAdmin><TransactionTypeEditPage /></RequireAdmin>} />
       <Route path="*" element={<Navigate to="/admin" replace />} />
