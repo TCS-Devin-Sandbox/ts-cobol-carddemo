@@ -211,9 +211,9 @@ E3-E6 run in parallel after E2; E7-E11 in parallel once their dependencies land.
 
 | PR | Scope | Depends on |
 |---|---|---|
-| F1 | Production data load: EBCDIC VSAM unload -> PG using B2 codecs, with record counts and per-field checksums report — [java/data-load](../java/data-load/README.md) (in review) | B4 |
+| F1 | Production data load: EBCDIC VSAM unload -> PG using B2 codecs, with record counts and per-field checksums report — [java/data-load](../java/data-load/README.md) (merged) | B4 |
 | F2 | Job scheduling and restart: Spring Batch job repository and step checkpoints in [chain order](chain-graph.md). See the [launch and restart runbook](BATCH-RESTART.md). | C1-C3 |
-| F3 | Shadow run: nightly compare of Java vs mainframe outputs on real unloads with `compare.py` | F1, F2 |
+| F3 | [Nightly shadow run](SHADOW-RUN.md): F1 unload load, B4 export, F2 launch and mainframe comparison with drift report (in review; CI uses synthetic drops) | F1, F2 |
 | F4 | Per-table cutover runbook and rollback, decommission of each JCL member | F3, owner sign-off |
 
 ### Batch G: separate modules, after a target decision
@@ -292,9 +292,11 @@ graph LR
 | D5 | D | FEECALC | [#46](https://github.com/TCS-Devin-Sandbox/ts-cobol-carddemo/pull/46) | merged |
 | D6 | D | HLASM date and wait routines | [#47](https://github.com/TCS-Devin-Sandbox/ts-cobol-carddemo/pull/47) | merged |
 | E1 | E | Online API/UI foundation | [#54](https://github.com/TCS-Devin-Sandbox/ts-cobol-carddemo/pull/54) | in review |
-| E2 | E | Sign-on CC00 and menus CM00/CA00 | | in review |
-| E3 | E | User admin [CU00](online/CU00.md)–[CU03](online/CU03.md) | | in review |
+| E2 | E | Sign-on CC00 and menus CM00/CA00 | [#57](https://github.com/TCS-Devin-Sandbox/ts-cobol-carddemo/pull/57) | merged |
+| E3 | E | User admin [CU00](online/CU00.md)–[CU03](online/CU03.md) | [#59](https://github.com/TCS-Devin-Sandbox/ts-cobol-carddemo/pull/59) | in review |
 | E4-E11 | E | Online screens | | not started |
-| F1 | F | [Data load and reconciliation](../java/data-load/README.md) | | in review |
-| F2-F4 | F | Scheduling, shadow run, cutover | | not started |
+| F1 | F | [Data load and reconciliation](../java/data-load/README.md) | [#55](https://github.com/TCS-Devin-Sandbox/ts-cobol-carddemo/pull/55) | merged |
+| F2 | F | [Scheduling and restart](BATCH-RESTART.md) | [#56](https://github.com/TCS-Devin-Sandbox/ts-cobol-carddemo/pull/56) | merged |
+| F3 | F | [Nightly shadow run](SHADOW-RUN.md) | [#58](https://github.com/TCS-Devin-Sandbox/ts-cobol-carddemo/pull/58) | in review |
+| F4 | F | Cutover | | not started |
 | G | G | Authorization, VSAM/MQ | | needs decision |

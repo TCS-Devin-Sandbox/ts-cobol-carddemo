@@ -1,5 +1,7 @@
 # Run and restart the Java batch chains
 
+For nightly unload-driven comparison and drift evidence, see [Shadow run](SHADOW-RUN.md).
+
 Trigger each chain's executable from the scheduler. There is no cross-chain
 ordering or calendar schedule inferred here; the chain definitions and handoffs
 are in [the generated graph](chain-graph.md). The Java order is:
