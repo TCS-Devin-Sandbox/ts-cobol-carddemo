@@ -24,7 +24,6 @@ CHAINS  ?= posting interest trantype-update trantype-dynamic
 CHAIN   ?=
 CASE    ?=
 PY       = python3
-export CANDIDATE
 
 .PHONY: up down build run record parity parity-java parity-naive chain-graph chain-graph-check reset baseline shell
 
@@ -104,3 +103,17 @@ baseline:
 reset:
 	rm -rf datasets loadlib work
 	$(COMPOSE) down -v
+
+# MNTTRDB2 uses its own PostgreSQL fixture databases; custom candidates bypass this setup.
+ifeq ($(CHAIN),trantype-update)
+ifeq ($(origin CANDIDATE),undefined)
+CANDIDATE := bash java/trantype-batch/run-parity-case.sh
+export COMPOSE
+parity-java: prepare-trantype-update
+.PHONY: prepare-trantype-update
+prepare-trantype-update:
+	mvn -B -f java/pom.xml -pl trantype-batch -am -DskipTests package
+	$(COMPOSE) up -d --wait postgres
+endif
+endif
+export CANDIDATE
