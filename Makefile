@@ -7,6 +7,7 @@
 #   make run CHAIN=posting      run one chain on its first fixture case (or CASE=...)
 #   make record [CHAIN=..] [CASE=..]   (re)write golden outputs under fixtures/*/*/expected
 #   make parity [CHAIN=..] [CASE=..]   rerun chains and compare field by field -> work/parity/report.md
+#   make parity-java CHAIN=interest   build and compare the Spring Batch INTCALC candidate
 #   make parity-java CANDIDATE=... [CHAIN=..] [CASE=..] [STEPS="JOB[.STEP] ..."]
 #   make parity-naive CASE=i02-tie-half-cent   half-even Python reference vs golden (fails on the tie)
 #   make chain-graph / chain-graph-check       regenerate / verify docs/chain-graph.md
@@ -68,6 +69,17 @@ parity:
 	  done; \
 	done; \
 	echo "report: work/parity/report.md"; exit $$fail
+
+ifeq ($(CHAIN),interest)
+ifeq ($(strip $(CANDIDATE)),)
+parity-java: CANDIDATE = java -jar java/interest/target/intcalc.jar
+parity-java: interest-candidate
+endif
+endif
+
+.PHONY: interest-candidate
+interest-candidate:
+	mvn -B -f java/pom.xml -pl interest -am -DskipTests package
 
 parity-java:
 	$(PY) tools/parity/run_candidate.py $(if $(CHAIN),--chain "$(CHAIN)") $(if $(CASE),--case "$(CASE)") $(if $(STEPS),--steps $(STEPS))
