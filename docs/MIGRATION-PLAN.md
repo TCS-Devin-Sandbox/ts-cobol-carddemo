@@ -280,13 +280,15 @@ graph LR
 | B1 | B | `java/` skeleton | [#35](https://github.com/TCS-Devin-Sandbox/ts-cobol-carddemo/pull/35) | merged |
 | B2 | B | Fixed-record codec | [#38](https://github.com/TCS-Devin-Sandbox/ts-cobol-carddemo/pull/38) | merged |
 | B3 | B | VSAM master schema | [#37](https://github.com/TCS-Devin-Sandbox/ts-cobol-carddemo/pull/37) (follow-up [#40](https://github.com/TCS-Devin-Sandbox/ts-cobol-carddemo/pull/40) in review) | merged |
-| B4 | B | Loader/exporter | [#41](https://github.com/TCS-Devin-Sandbox/ts-cobol-carddemo/pull/41) | in review |
-| C1 | C | INTCALC | | not started |
-| C2 | C | POSTTRAN | | not started |
-| C3 | C | TRANREPT | | not started |
-| C4 | C | MNTTRDB2 | | not started |
-| C5 | C | MNTTRDYN | | not started |
-| D1-D6 | D | Oracle extension + remaining batch | | not started |
+| B4 | B | Loader/exporter | [#41](https://github.com/TCS-Devin-Sandbox/ts-cobol-carddemo/pull/41) | merged |
+| C1 | C | INTCALC | [#43](https://github.com/TCS-Devin-Sandbox/ts-cobol-carddemo/pull/43) | merged |
+| C2 | C | POSTTRAN | [#42](https://github.com/TCS-Devin-Sandbox/ts-cobol-carddemo/pull/42) | merged |
+| C3 | C | TRANREPT | [#45](https://github.com/TCS-Devin-Sandbox/ts-cobol-carddemo/pull/45) | in review |
+| C4 | C | MNTTRDB2 | [#44](https://github.com/TCS-Devin-Sandbox/ts-cobol-carddemo/pull/44) | merged |
+| C5 | C | MNTTRDYN | [#48](https://github.com/TCS-Devin-Sandbox/ts-cobol-carddemo/pull/48) | in review |
+| D1-D4 | D | Oracle extension + remaining batch | | not started |
+| D5 | D | FEECALC | [#46](https://github.com/TCS-Devin-Sandbox/ts-cobol-carddemo/pull/46) | in review |
+| D6 | D | HLASM date and wait routines | [#47](https://github.com/TCS-Devin-Sandbox/ts-cobol-carddemo/pull/47) | in review |
 | E1-E11 | E | Online screens | | not started |
 | F1-F4 | F | Data load, scheduling, shadow run, cutover | | not started |
 | G | G | Authorization, VSAM/MQ | | needs decision |
