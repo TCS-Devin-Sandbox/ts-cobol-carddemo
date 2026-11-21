@@ -88,13 +88,20 @@ public class MenuController {
         String route = switch (option.program()) {
             case "COTRTLIC" -> "/transaction-types";
             case "COTRTUPC" -> "/transaction-types/maintain";
+            case "COCRDLIC" -> "/cards";
+            case "COCRDSLC" -> "/cards/view";
             default -> null;
         };
         if (route == null) {
             return message(200, "This option is not installed ...", "info");
         }
         return ResponseEntity.ok(Map.of("program", option.program(), "tranId",
-                option.program().equals("COTRTLIC") ? "CTLI" : "CTTU", "route", route));
+                switch (option.program()) {
+                    case "COCRDLIC" -> "CCLI";
+                    case "COCRDSLC" -> "CCDL";
+                    case "COTRTLIC" -> "CTLI";
+                    default -> "CTTU";
+                }, "route", route));
     }
 
     private ResponseEntity<?> message(int status, String text, String severity) {

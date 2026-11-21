@@ -23,6 +23,7 @@ curl -s -H "Authorization: Bearer $TOKEN" 'localhost:8080/api/transaction-types?
 
 ## Test
 Sign-on and menus: [E2 contract and traceability](../docs/online/signon-menus.md).
+Card list/view: [E5 contract, security-relevant legacy quirks and paragraph traceability](../docs/online/cards.md).
 Dev also seeds ADMIN001/PASSWORD and USER0001/PASSWORD. IDs and passwords are case-insensitive.
 Configured users are inserted only if absent; changing an environment password does not overwrite an existing user.
 
