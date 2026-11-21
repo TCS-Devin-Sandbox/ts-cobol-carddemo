@@ -2,6 +2,7 @@
   "posting": {
     "description": "Daily transaction posting: POSTTRAN (CBTRN02C) then TRANREPT (REPRO, SORT, CBTRN03C)",
     "clock": "2022-07-05 10:00:00.00",
+    "include_setup_steps_in_rc": true,
     "inputs": {
       "AWS.M2.CARDDEMO.ACCTDATA.PS": 300,
       "AWS.M2.CARDDEMO.CARDXREF.PS": 50,
@@ -40,9 +41,43 @@
       "TRANREPT/STEP10R"
     ]
   },
+  "read-masters": {
+    "description": "Master file reads: READACCT, READCARD, READXREF and READCUST",
+    "clock": "2022-07-05 10:00:00.00",
+    "inputs": {
+      "AWS.M2.CARDDEMO.ACCTDATA.PS": 300,
+      "AWS.M2.CARDDEMO.CARDDATA.PS": 150,
+      "AWS.M2.CARDDEMO.CARDXREF.PS": 50,
+      "AWS.M2.CARDDEMO.CUSTDATA.PS": 500
+    },
+    "setup": [
+      "ACCTFILE",
+      "CARDFILE",
+      "XREFFILE",
+      "CUSTFILE"
+    ],
+    "jobs": [
+      "READACCT",
+      "READCARD",
+      "READXREF",
+      "READCUST"
+    ],
+    "outputs": {
+      "AWS.M2.CARDDEMO.ACCTDATA.PSCOMP": {"layout": "READACCT-OUT", "serialization": "hex"},
+      "AWS.M2.CARDDEMO.ACCTDATA.ARRYPS": {"layout": "READACCT-ARRAY", "serialization": "hex"},
+      "AWS.M2.CARDDEMO.ACCTDATA.VBPS": "text"
+    },
+    "sysout": [
+      "READACCT/STEP05",
+      "READCARD/STEP05",
+      "READXREF/STEP05",
+      "READCUST/STEP05"
+    ]
+  },
   "interest": {
     "description": "Monthly interest calculation: INTCALC (CBACT04C)",
     "clock": "2022-07-05 10:00:00.00",
+    "include_setup_steps_in_rc": true,
     "inputs": {
       "AWS.M2.CARDDEMO.ACCTDATA.PS": 300,
       "AWS.M2.CARDDEMO.CARDXREF.PS": 50,

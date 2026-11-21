@@ -7,7 +7,7 @@ analysis-only.
 
 | Artefact | Language | Callers | Run status |
 |---|---|---|---|
-| `app/asm/COBDATFT.asm` | HLASM | `CBACT01C` (`CALL 'COBDATFT' USING CODATECN-REC`) | analysis-only (no assembler); `CBACT01C` is not in a chain |
+| `app/asm/COBDATFT.asm` | HLASM | `CBACT01C` (`CALL 'COBDATFT' USING CODATECN-REC`) | HLASM analysis-only; `read-masters` uses a local COBOL stand-in |
 | `app/asm/MVSWAIT.asm` | HLASM (uses `ASMWAIT`/STIMER macro) | `COBSWAIT` (`CALL 'MVSWAIT' USING MVSWAIT-TIME`), itself run from `CBSTM03A/B` JCL | analysis-only |
 | `app/pli/CBFEECAL.pli` | PL/I | `CBFEEDRV` (`app/cbl/CBFEEDRV.cbl`), job `app/jcl/FEECALC.jcl` | analysis-only (no license-clean PL/I compiler) |
 | `app/cbl/CBFEEDRV.cbl` | COBOL | `FEECALC.jcl` STEP05 | compiles; cannot run (CBFEECAL unresolved) |
@@ -56,6 +56,9 @@ analysis-only.
   `java/common` reproduces the table and quirks on `CODATECN-REC`
   (`CodatecnRecord`); the 25 trailing message bytes are spaces.  `CobDatFt.Layout`
   gives the same two layouts as `java.time` formatters for new code.
+* **Off-host stand-in**: `tools/stubs/COBDATFT.cbl` implements the same
+  byte moves, with spaces after `INVALID INPUT`. The read-masters goldens
+  exercise the `2` / `2` path, not the original HLASM module.
 
 ### MVSWAIT - timed wait
 

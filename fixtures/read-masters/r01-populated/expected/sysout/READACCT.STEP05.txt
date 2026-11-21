@@ -1,0 +1,36 @@
+START OF EXECUTION OF PROGRAM CBACT01C
+ACCT-ID                 :00000001001
+ACCT-ACTIVE-STATUS      :Y
+ACCT-CURR-BAL           :000000050000+
+ACCT-CREDIT-LIMIT       :000000500000+
+ACCT-CASH-CREDIT-LIMIT  :000000250000+
+ACCT-OPEN-DATE          :2019-03-15
+ACCT-EXPIRAION-DATE     :2026-12-31
+ACCT-REISSUE-DATE       :2026-12-31
+ACCT-CURR-CYC-CREDIT    :000000000000+
+ACCT-CURR-CYC-DEBIT     :000000000000+
+ACCT-GROUP-ID           :GOLD      
+-------------------------------------------------
+VBRC-REC1:00000001001Y
+VBRC-REC2:0000000100100000005000{00000050000{2026
+00000001001Y00000005000{00000050000{00000025000{2019-03-152026-12-312026-12-3100000000000{00000000000{10115     GOLD                                                                                                                                                                                        
+ACCT-ID                 :00000001002
+ACCT-ACTIVE-STATUS      :Y
+ACCT-CURR-BAL           :000000120050+
+ACCT-CREDIT-LIMIT       :000000300000+
+ACCT-CASH-CREDIT-LIMIT  :000000150000+
+ACCT-OPEN-DATE          :2019-03-15
+ACCT-EXPIRAION-DATE     :2026-12-31
+ACCT-REISSUE-DATE       :2026-12-31
+ACCT-CURR-CYC-CREDIT    :000000000000+
+ACCT-CURR-CYC-DEBIT     :000000000000+
+ACCT-GROUP-ID           :STANDARD  
+-------------------------------------------------
+VBRC-REC1:00000001002Y
+VBRC-REC2:0000000100200000012005{00000030000{2026
+00000001002Y00000012005{00000030000{00000015000{2019-03-152026-12-312026-12-3100000000000{00000000000{10115     STANDARD                                                                                                                                                                                    
+END OF EXECUTION OF PROGRAM CBACT01C
+
+libcob: warning: implicit CLOSE of VBRC-FILE ('VBRCFILE')
+libcob: warning: implicit CLOSE of ARRY-FILE ('ARRYFILE')
+libcob: warning: implicit CLOSE of OUT-FILE ('OUTFILE')

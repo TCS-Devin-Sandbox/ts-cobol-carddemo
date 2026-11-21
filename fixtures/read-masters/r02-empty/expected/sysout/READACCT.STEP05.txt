@@ -1,0 +1,6 @@
+START OF EXECUTION OF PROGRAM CBACT01C
+END OF EXECUTION OF PROGRAM CBACT01C
+
+libcob: warning: implicit CLOSE of VBRC-FILE ('VBRCFILE')
+libcob: warning: implicit CLOSE of ARRY-FILE ('ARRYFILE')
+libcob: warning: implicit CLOSE of OUT-FILE ('OUTFILE')

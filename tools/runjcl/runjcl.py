@@ -527,6 +527,7 @@ class Runner:
     def base_env(self) -> dict[str, str]:
         env = dict(os.environ)
         env["COB_LIBRARY_PATH"] = f"{LOADLIB}:/usr/local/lib"
+        env["COB_VARSEQ_FORMAT"] = "0"  # big-endian payload length and two reserved bytes
         if Path("/usr/local/lib/libocesql.so").exists():
             # ocesql-generated code CALLs the runtime (OCESQLConnect...) dynamically
             env["COB_PRE_LOAD"] = "libocesql"
@@ -612,6 +613,8 @@ class Runner:
             entry = self.catalog.set(dsn, type="flat")
             if lrecl:
                 entry["lrecl"] = lrecl
+            if parse_operands(dcb.strip("()")).get("RECFM") == "VB":
+                entry["recfm"] = "VB"
             self.outputs.append({"dsn": dsn, "step": step.name, "dd": dd.name, "lrecl": lrecl})
         elif status == "MOD" and lrecl:
             self.catalog.set(dsn, type="flat", lrecl=lrecl)

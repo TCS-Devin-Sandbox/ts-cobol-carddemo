@@ -1,0 +1,19 @@
+{
+ "AWS.M2.CARDDEMO.ACCTDATA.ARRYPS": {
+  "layout": "READACCT-ARRAY",
+  "lrecl": 110,
+  "records": 2,
+  "serialization": "hex"
+ },
+ "AWS.M2.CARDDEMO.ACCTDATA.PSCOMP": {
+  "layout": "READACCT-OUT",
+  "lrecl": 107,
+  "records": 2,
+  "serialization": "hex"
+ },
+ "AWS.M2.CARDDEMO.ACCTDATA.VBPS": {
+  "layout": "text",
+  "lrecl": 84,
+  "records": 4
+ }
+}

@@ -1,0 +1,4 @@
+START OF EXECUTION OF PROGRAM CBACT02C
+400000000000100100000001001000TEST CUSTOMER 1001                                2026-12-31Y                                                           
+400000000000100200000001002000TEST CUSTOMER 1002                                2026-12-31Y                                                           
+END OF EXECUTION OF PROGRAM CBACT02C

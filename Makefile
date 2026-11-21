@@ -20,7 +20,7 @@ export GID := $(shell id -g)
 
 COMPOSE ?= docker compose
 EXEC     = $(COMPOSE) exec -T estate
-CHAINS  ?= posting interest trantype-update trantype-dynamic
+CHAINS  ?= posting interest trantype-update trantype-dynamic read-masters
 CHAIN   ?=
 CASE    ?=
 PY       = python3
@@ -50,7 +50,7 @@ define for_each_case
 endef
 
 run:
-	@test -n "$(CHAIN)" || { echo "usage: make run CHAIN=<posting|interest|trantype-update> [CASE=<case>]"; exit 2; }
+	@test -n "$(CHAIN)" || { echo "usage: make run CHAIN=<chain> [CASE=<case>]"; exit 2; }
 	@case="$(if $(CASE),$(CASE),$$(ls fixtures/$(CHAIN) | head -1))"; \
 	$(EXEC) $(PY) tools/parity/record.py $(CHAIN) $$case --out work/run/$(CHAIN)/$$case -v
 

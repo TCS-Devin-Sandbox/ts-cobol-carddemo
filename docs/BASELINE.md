@@ -13,11 +13,11 @@ the mainframe `{ A-I } J-R` convention).
 
 | Program | Compiles | Runs in a chain | Notes |
 |---|---|---|---|
-| CBACT01C | yes | no (not in a demo chain) | account file print |
-| CBACT02C | yes | no | card file print |
-| CBACT03C | yes | no | cross-reference file print |
+| CBACT01C | yes | **read-masters** (`READACCT.jcl`) | account print plus packed, array and variable outputs; calls local COBDATFT stand-in |
+| CBACT02C | yes | **read-masters** (`READCARD.jcl`) | card file print |
+| CBACT03C | yes | **read-masters** (`READXREF.jcl`) | cross-reference file print |
 | CBACT04C | yes | **interest** (`INTCALC.jcl`) | truncating interest arithmetic, see below |
-| CBCUS01C | yes | no | customer file print |
+| CBCUS01C | yes | **read-masters** (`READCUST.jcl`) | customer file print |
 | CBSTM03A / CBSTM03B | yes | no | statement generation; needs `COBSWAIT` |
 | CBTRN01C | yes | no | daily transaction pre-validation |
 | CBTRN02C | yes | **posting** (`POSTTRAN.jcl`) | rejects -> RC 4 |

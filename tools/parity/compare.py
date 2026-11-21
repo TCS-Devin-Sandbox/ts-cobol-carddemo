@@ -45,6 +45,11 @@ OUTPUT_OWNERS = {
         "AWS.M2.CARDDEMO.ACCTDATA.VSAM.KSDS": "INTCALC.STEP15",
         "AWS.M2.CARDDEMO.SYSTRAN": "INTCALC.STEP15",
     },
+    "read-masters": {
+        "AWS.M2.CARDDEMO.ACCTDATA.PSCOMP": "READACCT.STEP05",
+        "AWS.M2.CARDDEMO.ACCTDATA.ARRYPS": "READACCT.STEP05",
+        "AWS.M2.CARDDEMO.ACCTDATA.VBPS": "READACCT.STEP05",
+    },
     "trantype-update": {
         "carddemo.transaction_type": "MNTTRDB2.STEP1",
         "carddemo.transaction_type_categor": "MNTTRDB2.STEP1",
@@ -60,7 +65,8 @@ def read_lines(path: Path) -> list[str]:
     return path.read_text(encoding="latin-1").splitlines()
 
 
-def compare_dataset(name: str, layout: str, lrecl: int, expected: Path, actual: Path, encoding: str) -> list[dict]:
+def compare_dataset(name: str, meta: dict, expected: Path, actual: Path, encoding: str) -> list[dict]:
+    layout, lrecl = meta["layout"], meta["lrecl"]
     diffs: list[dict] = []
     if not actual.is_file():
         return [{"where": name, "field": "(file)", "expected": "present", "actual": "missing"}]
@@ -76,8 +82,21 @@ def compare_dataset(name: str, layout: str, lrecl: int, expected: Path, actual: 
     if len(exp) != len(act):
         diffs.append({"where": name, "field": "(record count)", "expected": str(len(exp)), "actual": str(len(act))})
     for i, (e, a) in enumerate(zip(exp, act)):
-        erec = decode_record(layout, e.ljust(lrecl).encode("latin-1"), encoding)
-        arec = decode_record(layout, a.ljust(lrecl).encode("latin-1"), encoding)
+        if meta.get("serialization") == "hex":
+            try:
+                araw = bytes.fromhex(a)
+            except ValueError:
+                araw = b""
+            if len(araw) != lrecl:
+                diffs.append({"where": f"{name} rec {i + 1}", "field": "(record length)",
+                              "expected": f"{lrecl} hex-encoded bytes", "actual": f"{len(araw)} bytes"})
+                continue
+            eraw = bytes.fromhex(e)
+        else:
+            eraw = e.ljust(lrecl).encode("latin-1")
+            araw = a.ljust(lrecl).encode("latin-1")
+        erec = decode_record(layout, eraw, encoding)
+        arec = decode_record(layout, araw, encoding)
         key = erec.get(keyfield, i + 1)
         for field, ev in erec.items():
             av = arec.get(field)
@@ -165,8 +184,8 @@ def compare_case(chain: str, case: str, actual: Path, encoding: str = "ascii",
         checked["records"] += meta["records"]
         if meta["layout"] != "text":
             checked["fields"] += meta["records"] * len([f for f in parse_copybook(meta["layout"]) if not f.is_filler])
-        diffs += compare_dataset(dsn, meta["layout"], meta["lrecl"],
-                                 expected / "datasets" / f"{dsn}.txt", actual / "datasets" / f"{dsn}.txt", encoding)
+        diffs += compare_dataset(dsn, meta, expected / "datasets" / f"{dsn}.txt",
+                                 actual / "datasets" / f"{dsn}.txt", encoding)
     for path in sorted((expected / "sysout").glob("*.txt")):
         if not selected_step(path.stem):
             continue
