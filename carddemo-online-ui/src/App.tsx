@@ -8,6 +8,7 @@ import { TransactionTypeListPage } from './pages/TransactionTypeListPage';
 import { UserListPage } from './pages/UserListPage';
 import { UserMaintenancePage } from './pages/UserMaintenancePage';
 import { getSession } from './api/client';
+import { TransactionListPage, TransactionViewPage } from './pages/TransactionPages';
 
 function SessionMenu() {
   return getSession() ? <AdminMenuPage main /> : <Navigate to="/login" replace />;
@@ -23,6 +24,8 @@ export function App() {
       <Route path="/login" element={<LoginPage />} />
       <Route path="/menu" element={<SessionMenu />} />
       <Route path="/accounts/view" element={<SessionAccountView />} />
+      <Route path="/transactions" element={<TransactionListPage />} />
+      <Route path="/transactions/view" element={<TransactionViewPage />} />
       <Route path="/admin" element={<RequireAdmin><AdminMenuPage /></RequireAdmin>} />
       <Route path="/admin/users" element={<RequireAdmin><UserListPage /></RequireAdmin>} />
       <Route path="/admin/users/add" element={<RequireAdmin><UserMaintenancePage key="add" mode="add" /></RequireAdmin>} />

@@ -93,6 +93,8 @@ public class MenuController {
             case "COUSR01C" -> "/admin/users/add";
             case "COUSR02C" -> "/admin/users/update";
             case "COUSR03C" -> "/admin/users/delete";
+            case "COTRN00C" -> "/transactions";
+            case "COTRN01C" -> "/transactions/view";
             case "COTRTLIC" -> "/transaction-types";
             case "COTRTUPC" -> "/transaction-types/maintain";
             default -> null;
@@ -105,6 +107,8 @@ public class MenuController {
             case "COUSR01C" -> "CU01";
             case "COUSR02C" -> "CU02";
             case "COUSR03C" -> "CU03";
+            case "COTRN00C" -> "CT00";
+            case "COTRN01C" -> "CT01";
             case "COTRTLIC" -> "CTLI";
             default -> "CTTU";
         };
