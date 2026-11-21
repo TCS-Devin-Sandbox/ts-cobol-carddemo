@@ -9,6 +9,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import com.carddemo.signon.UserSecurity;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
@@ -47,6 +48,7 @@ class UserAdminIntegrationTest {
 
     @Autowired MockMvc mvc;
     @Autowired JdbcTemplate jdbc;
+    @Autowired UserSecurity signonUsers;
 
     @ParameterizedTest
     @CsvSource({"1,CU00,COUSR00C,/admin/users", "2,CU01,COUSR01C,/admin/users/add",
@@ -167,6 +169,17 @@ class UserAdminIntegrationTest {
                 .andExpect(status().isOk()).andExpect(jsonPath("$.message").value("User TEST01 has been deleted ..."));
         mvc.perform(delete(RECORD).with(ADMIN).param("userId", "TEST01"))
                 .andExpect(status().isNotFound()).andExpect(jsonPath("$.message").value("User ID NOT found..."));
+    }
+
+    @Test
+    void CU03_DELETE_USER_SEC_FILE_doesNotReseedDeletedConfiguredAdmin() throws Exception {
+        mvc.perform(delete(RECORD).with(ADMIN).param("userId", "ADMIN001"))
+                .andExpect(status().isOk()).andExpect(jsonPath("$.message").value("User ADMIN001 has been deleted ..."));
+
+        signonUsers.run(null);
+
+        assertThat(signonUsers.find("ADMIN001")).isEmpty();
+        assertThat(signonUsers.find("USER0001")).isPresent();
     }
 
     private void add() throws Exception {
