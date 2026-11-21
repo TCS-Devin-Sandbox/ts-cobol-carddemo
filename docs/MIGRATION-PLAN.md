@@ -293,7 +293,8 @@ graph LR
 | D6 | D | HLASM date and wait routines | [#47](https://github.com/TCS-Devin-Sandbox/ts-cobol-carddemo/pull/47) | merged |
 | E1 | E | Online API/UI foundation | [#54](https://github.com/TCS-Devin-Sandbox/ts-cobol-carddemo/pull/54) | in review |
 | E2 | E | Sign-on CC00 and menus CM00/CA00 | [#57](https://github.com/TCS-Devin-Sandbox/ts-cobol-carddemo/pull/57) | merged |
-| E3-E11 | E | Online screens | | not started |
+| E3 | E | User admin [CU00](online/CU00.md)–[CU03](online/CU03.md) | [#59](https://github.com/TCS-Devin-Sandbox/ts-cobol-carddemo/pull/59) | in review |
+| E4-E11 | E | Online screens | | not started |
 | F1 | F | [Data load and reconciliation](../java/data-load/README.md) | [#55](https://github.com/TCS-Devin-Sandbox/ts-cobol-carddemo/pull/55) | merged |
 | F2 | F | [Scheduling and restart](BATCH-RESTART.md) | [#56](https://github.com/TCS-Devin-Sandbox/ts-cobol-carddemo/pull/56) | merged |
 | F3 | F | [Nightly shadow run](SHADOW-RUN.md) | [#58](https://github.com/TCS-Devin-Sandbox/ts-cobol-carddemo/pull/58) | in review |

@@ -79,6 +79,9 @@ public class MenuController {
     }
 
     ResponseEntity<?> target(Option option) {
+        if (option.program().equals("COACTVWC")) {
+            return ResponseEntity.ok(Map.of("program", option.program(), "tranId", "CAVW", "route", "/accounts/view"));
+        }
         if (option.program().equals("COPAUS0C")) {
             return message(200, "This option " + option.name() + " is not installed...", "error");
         }
@@ -86,6 +89,10 @@ public class MenuController {
             return message(200, "This option " + option.name().split(" ")[0] + "is coming soon ...", "info");
         }
         String route = switch (option.program()) {
+            case "COUSR00C" -> "/admin/users";
+            case "COUSR01C" -> "/admin/users/add";
+            case "COUSR02C" -> "/admin/users/update";
+            case "COUSR03C" -> "/admin/users/delete";
             case "COTRTLIC" -> "/transaction-types";
             case "COTRTUPC" -> "/transaction-types/maintain";
             case "COCRDLIC" -> "/cards";
@@ -95,13 +102,17 @@ public class MenuController {
         if (route == null) {
             return message(200, "This option is not installed ...", "info");
         }
-        return ResponseEntity.ok(Map.of("program", option.program(), "tranId",
-                switch (option.program()) {
-                    case "COCRDLIC" -> "CCLI";
-                    case "COCRDSLC" -> "CCDL";
-                    case "COTRTLIC" -> "CTLI";
-                    default -> "CTTU";
-                }, "route", route));
+        String tranId = switch (option.program()) {
+            case "COUSR00C" -> "CU00";
+            case "COUSR01C" -> "CU01";
+            case "COUSR02C" -> "CU02";
+            case "COUSR03C" -> "CU03";
+            case "COCRDLIC" -> "CCLI";
+            case "COCRDSLC" -> "CCDL";
+            case "COTRTLIC" -> "CTLI";
+            default -> "CTTU";
+        };
+        return ResponseEntity.ok(Map.of("program", option.program(), "tranId", tranId, "route", route));
     }
 
     private ResponseEntity<?> message(int status, String text, String severity) {

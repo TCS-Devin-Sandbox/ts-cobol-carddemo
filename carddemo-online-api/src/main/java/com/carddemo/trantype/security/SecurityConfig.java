@@ -41,6 +41,7 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(HttpMethod.POST, "/api/auth/login").permitAll()
                         .requestMatchers("/actuator/health", "/actuator/health/**").permitAll()
+                        .requestMatchers("/api/admin/users", "/api/admin/users/**").hasRole("ADMIN")
                         .requestMatchers("/api/menus/admin/**", "/api/menus/admin", "/api/transaction-types/**", "/api/transaction-types").hasRole("ADMIN")
                         .anyRequest().authenticated())
                 .oauth2ResourceServer(rs -> rs

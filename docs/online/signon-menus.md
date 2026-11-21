@@ -17,7 +17,8 @@ Online Flyway V3 creates `user_security` (independent of shared VSAM V1).
 | user_type | SEC-USR-TYPE | CHAR(1), A or U |
 | filler | SEC-USR-FILLER | CHAR(23), not null |
 
-Startup inserts configured users if absent, uppercasing IDs/passwords, mapping
+Startup seeds configured users only when the user security table is empty,
+uppercasing IDs/passwords and mapping
 ADMIN to A and USER to U. Names and filler default to blank. Existing records
 are never overwritten, including passwords. JWT_SECRET, ADMIN_PASSWORD and
 USER_PASSWORD retain their environment configuration; dev additionally supplies
@@ -45,7 +46,7 @@ GET `/api/menus/main` or `/api/menus/admin` returns tranId/program,
 title01/title02 and numbered options (two-digit PIC 9(02), names PIC X(35)).
 POST the same path plus `/select` with `{option}` returns a migrated route
 or a literal message and severity error/info (DFHRED/DFHGREEN).
-Only COTRTLIC and COTRTUPC have routes. CA00 and transaction-type routes
+E2 installs the COTRTLIC and COTRTUPC routes. CA00 and transaction-type routes
 require ADMIN; CM00 requires authentication. F3 is client-side sign-off.
 
 ## Deviations and preserved quirks
