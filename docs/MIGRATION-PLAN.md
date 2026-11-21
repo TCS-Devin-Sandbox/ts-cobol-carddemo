@@ -291,12 +291,16 @@ graph LR
 | D3-D4 | D | Remaining Java batch ports | | not started |
 | D5 | D | FEECALC | [#46](https://github.com/TCS-Devin-Sandbox/ts-cobol-carddemo/pull/46) | merged |
 | D6 | D | HLASM date and wait routines | [#47](https://github.com/TCS-Devin-Sandbox/ts-cobol-carddemo/pull/47) | merged |
-| E1 | E | Online API/UI foundation | [#54](https://github.com/TCS-Devin-Sandbox/ts-cobol-carddemo/pull/54) | in review |
+| E1 | E | Online API/UI foundation | [#54](https://github.com/TCS-Devin-Sandbox/ts-cobol-carddemo/pull/54) | merged |
 | E2 | E | Sign-on CC00 and menus CM00/CA00 | [#57](https://github.com/TCS-Devin-Sandbox/ts-cobol-carddemo/pull/57) | merged |
-| E3 | E | User admin [CU00](online/CU00.md)–[CU03](online/CU03.md) | [#59](https://github.com/TCS-Devin-Sandbox/ts-cobol-carddemo/pull/59) | in review |
-| E4-E11 | E | Online screens | | not started |
+| E3 | E | User admin [CU00](online/CU00.md)–[CU03](online/CU03.md) | [#59](https://github.com/TCS-Devin-Sandbox/ts-cobol-carddemo/pull/59) | merged |
+| E4 | E | Account view [CAVW](online/CAVW.md) | [#60](https://github.com/TCS-Devin-Sandbox/ts-cobol-carddemo/pull/60) | merged |
+| E5 | E | [Card list/view CCLI, CCDL](online/cards.md) | [#63](https://github.com/TCS-Devin-Sandbox/ts-cobol-carddemo/pull/63) | merged |
+| E6 | E | [Transaction list/view CT00, CT01](online/CT00-CT01.md) | [#61](https://github.com/TCS-Devin-Sandbox/ts-cobol-carddemo/pull/61) | merged |
+| E7-E10 | E | Account update CAUP, card update CCUP, transaction add CT02, bill pay CB00 | | in progress |
+| E11 | E | Report request [CR00](online/CR00.md) | [#62](https://github.com/TCS-Devin-Sandbox/ts-cobol-carddemo/pull/62) | merged |
 | F1 | F | [Data load and reconciliation](../java/data-load/README.md) | [#55](https://github.com/TCS-Devin-Sandbox/ts-cobol-carddemo/pull/55) | merged |
 | F2 | F | [Scheduling and restart](BATCH-RESTART.md) | [#56](https://github.com/TCS-Devin-Sandbox/ts-cobol-carddemo/pull/56) | merged |
-| F3 | F | [Nightly shadow run](SHADOW-RUN.md) | [#58](https://github.com/TCS-Devin-Sandbox/ts-cobol-carddemo/pull/58) | in review |
+| F3 | F | [Nightly shadow run](SHADOW-RUN.md) | [#58](https://github.com/TCS-Devin-Sandbox/ts-cobol-carddemo/pull/58) | merged |
 | F4 | F | Cutover | | not started |
 | G | G | Authorization, VSAM/MQ | | needs decision |
