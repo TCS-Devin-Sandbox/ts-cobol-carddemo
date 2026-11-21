@@ -211,7 +211,7 @@ E3-E6 run in parallel after E2; E7-E11 in parallel once their dependencies land.
 
 | PR | Scope | Depends on |
 |---|---|---|
-| F1 | Production data load: EBCDIC VSAM unload -> PG using B2 codecs, with record counts and per-field checksums report | B4 |
+| F1 | Production data load: EBCDIC VSAM unload -> PG using B2 codecs, with record counts and per-field checksums report — [java/data-load](../java/data-load/README.md) (in review) | B4 |
 | F2 | Job scheduling and restart: Spring Batch job repository, chain ordering from `docs/chain-graph.md`, checkpoint/restart (learn from reverted PR #23 and `demo/05-g2-logic`) | C1-C3 |
 | F3 | Shadow run: nightly compare of Java vs mainframe outputs on real unloads with `compare.py` | F1, F2 |
 | F4 | Per-table cutover runbook and rollback, decommission of each JCL member | F3, owner sign-off |
@@ -293,5 +293,6 @@ graph LR
 | D6 | D | HLASM date and wait routines | [#47](https://github.com/TCS-Devin-Sandbox/ts-cobol-carddemo/pull/47) | merged |
 | E1 | E | Online API/UI foundation | [#54](https://github.com/TCS-Devin-Sandbox/ts-cobol-carddemo/pull/54) | in review |
 | E2-E11 | E | Online screens | | not started |
-| F1-F4 | F | Data load, scheduling, shadow run, cutover | | not started |
+| F1 | F | [Data load and reconciliation](../java/data-load/README.md) | | in review |
+| F2-F4 | F | Scheduling, shadow run, cutover | | not started |
 | G | G | Authorization, VSAM/MQ | | needs decision |

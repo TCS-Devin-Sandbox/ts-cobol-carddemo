@@ -27,5 +27,6 @@
         <module>fees</module>
         <module>read-masters</module>
         <module>statements</module>
+        <module>data-load</module>
     </modules>
 </project>

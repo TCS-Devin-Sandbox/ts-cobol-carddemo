@@ -180,9 +180,17 @@ jobs:
         working-directory: carddemo-online-api
         run: mvn -B verify
 
-      - name: Spring Batch skeleton verification
+      - name: Java reactor verification (including F1 fixture reconciliation)
         working-directory: java
         run: mvn -B verify
+
+      - name: Upload F1 fixture reconciliation reports
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: data-load-reconciliation
+          path: java/data-load/target/fixture-reports/
+          if-no-files-found: ignore
 
       - name: Set up Node.js with npm cache
         uses: actions/setup-node@v4
