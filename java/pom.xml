@@ -23,5 +23,6 @@
         <module>interest</module>
         <module>common</module>
         <module>posting</module>
+        <module>fees</module>
     </modules>
 </project>
