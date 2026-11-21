@@ -9,6 +9,13 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
+import org.springframework.batch.core.BatchStatus;
+import org.springframework.batch.core.Job;
+import org.springframework.batch.core.JobParametersBuilder;
+import org.springframework.batch.core.launch.JobLauncher;
+import org.springframework.boot.WebApplicationType;
+import org.springframework.boot.builder.SpringApplicationBuilder;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
@@ -72,6 +79,31 @@ class TransactionTypeUpdateTest {
         assertThat(Files.readAllLines(sysout)).containsSubsequence(
                 "RECORD UPDATED SUCCESSFULLY", "ERROR: TYPE NOT VALID" + " ".repeat(59),
                 "RECORD UPDATED SUCCESSFULLY", "RECORD INSERTED SUCCESSFULLY");
+    }
+
+    @Test
+    void batchFailureAfterSqlDoesNotCommitAndTheSameInstanceCanRetry() throws Exception {
+        Path input = Files.writeString(directory.resolve("input"), "A07New type\n");
+        Path blocker = Files.createDirectory(directory.resolve("rc.json"));
+        new ResourceDatabasePopulator(new ClassPathResource("org/springframework/batch/core/schema-postgresql.sql"))
+                .execute(dataSource);
+        try (var context = new SpringApplicationBuilder(TrantypeBatchApplication.class).web(WebApplicationType.NONE)
+                .initializers(ctx -> ctx.getBeanFactory().registerSingleton("dataSource", dataSource))
+                .run("--spring.batch.job.enabled=false", "--spring.batch.jdbc.initialize-schema=never")) {
+            var launcher = context.getBean(JobLauncher.class);
+            var job = context.getBean("mnttrdb2", Job.class);
+            var parameters = new JobParametersBuilder().addString("input", input.toString())
+                    .addString("out", directory.toString()).addString("run.id", "restart").toJobParameters();
+            var failed = launcher.run(job, parameters);
+            assertThat(failed.getStatus()).isEqualTo(BatchStatus.FAILED);
+            assertThat(db.queryForList("SELECT tr_type FROM carddemo.transaction_type", String.class)).containsExactly("01");
+            Files.delete(blocker);
+            var restarted = launcher.run(job, parameters);
+            assertThat(restarted.getStatus()).isEqualTo(BatchStatus.COMPLETED);
+            assertThat(restarted.getJobInstance().getId()).isEqualTo(failed.getJobInstance().getId());
+            assertThat(db.queryForList("SELECT tr_type FROM carddemo.transaction_type ORDER BY tr_type", String.class))
+                    .containsExactly("01", "07");
+        }
     }
 
     @Test
