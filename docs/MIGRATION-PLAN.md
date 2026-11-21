@@ -291,6 +291,7 @@ graph LR
 | D3-D4 | D | Remaining Java batch ports | | not started |
 | D5 | D | FEECALC | [#46](https://github.com/TCS-Devin-Sandbox/ts-cobol-carddemo/pull/46) | merged |
 | D6 | D | HLASM date and wait routines | [#47](https://github.com/TCS-Devin-Sandbox/ts-cobol-carddemo/pull/47) | merged |
-| E1-E11 | E | Online screens | | not started |
+| E1 | E | Online API/UI foundation | [#54](https://github.com/TCS-Devin-Sandbox/ts-cobol-carddemo/pull/54) | in review |
+| E2-E11 | E | Online screens | | not started |
 | F1-F4 | F | Data load, scheduling, shadow run, cutover | | not started |
 | G | G | Authorization, VSAM/MQ | | needs decision |
