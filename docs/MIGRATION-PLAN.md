@@ -174,10 +174,10 @@ approval; nothing else waits on it.
 
 | PR | Scope | Touches | Proves itself by | Depends on |
 |---|---|---|---|---|
-| D1 | `read-masters` chain: READACCT, READCARD, READXREF, READCUST with fixtures (reuse posting inputs) | `tools/runjcl/chains.json`, `fixtures/read-masters/**`, `tools/fixtures/gen_fixtures.py` | `make parity CHAIN=read-masters` green after approved `make record` | owner approval |
-| D2 | `statements` chain: CREASTMT (SORT/REPRO, CBSTM03A/B) | same files, `fixtures/statements/**` | `make parity CHAIN=statements` | owner approval |
-| D3 | Java port of the read utilities | `java/read-masters/**` | `make parity-java CHAIN=read-masters` | D1, B4 |
-| D4 | Java port of statements (text + HTML) | `java/statements/**` | `make parity-java CHAIN=statements` | D2, B4 |
+| D1 | `read-masters` chain: READACCT, READCARD, READXREF, READCUST with fixtures (reuse posting inputs) — [#50](https://github.com/TCS-Devin-Sandbox/ts-cobol-carddemo/pull/50) (merged) | `tools/runjcl/chains.json`, `fixtures/read-masters/**`, `tools/fixtures/gen_fixtures.py` | `make parity CHAIN=read-masters` green after approved `make record` | owner approval |
+| D2 | `statements` chain: CREASTMT (SORT/REPRO, CBSTM03A/B) — [#51](https://github.com/TCS-Devin-Sandbox/ts-cobol-carddemo/pull/51) (merged) | same files, `fixtures/statements/**` | `make parity CHAIN=statements` | owner approval |
+| D3 | Java port of the read utilities — [#52](https://github.com/TCS-Devin-Sandbox/ts-cobol-carddemo/pull/52) (merged) | `java/read-masters/**` | `make parity-java CHAIN=read-masters` | D1, B4 |
+| D4 | Java port of statements (text + HTML) — [#53](https://github.com/TCS-Devin-Sandbox/ts-cobol-carddemo/pull/53) (merged) | `java/statements/**` | `make parity-java CHAIN=statements` | D2, B4 |
 | D5 | FEECALC: Java port of CBFEEDRV + CBFEECAL using the worked examples in `docs/LEGACY-LANGUAGES.md` as unit tests (no off-host oracle for PL/I) | `java/fees/**` | Unit tests on every documented example; flagged as weaker proof | B4 |
 | D6 | Replace HLASM `COBDATFT` (date format) and `MVSWAIT` with `java.time` / no-op step, per `docs/LEGACY-LANGUAGES.md` | `java/common/**` | Unit tests against the documented formats | B1 |
 
@@ -199,10 +199,10 @@ parity: CICS cannot run off-host.
 | E4 | Account view CAVW | online api/ui | Tests | E2 |
 | E5 | Card list/view CCLI, CCDL | online api/ui | Tests | E2 |
 | E6 | Transaction list/view CT00, CT01 | online api/ui | Tests | E2 |
-| E7 | Account update CAUP (optimistic lock replaces READ UPDATE) | online api/ui | Tests incl. concurrent update | E4 |
-| E8 | Card update CCUP | online api/ui | Tests | E5 |
-| E9 | Transaction add CT02 ([trace](online/CT02.md)) | online api/ui | Implemented; paragraph tests and opt-in API→CVTRA06Y→C2 posting acceptance | E6, C2 |
-| E10 | Bill pay CB00 | online api/ui | Tests; balance consistent with C2 | E4, C2 |
+| E7 | Account update CAUP (optimistic lock replaces READ UPDATE) — [#68](https://github.com/TCS-Devin-Sandbox/ts-cobol-carddemo/pull/68) (merged) | online api/ui | Tests incl. concurrent update | E4 |
+| E8 | Card update CCUP — [#66](https://github.com/TCS-Devin-Sandbox/ts-cobol-carddemo/pull/66) (merged) | online api/ui | Tests | E5 |
+| E9 | Transaction add CT02 ([trace](online/CT02.md)) — [#65](https://github.com/TCS-Devin-Sandbox/ts-cobol-carddemo/pull/65) (merged) | online api/ui | Paragraph tests and opt-in API→CVTRA06Y→C2 posting acceptance | E6, C2 |
+| E10 | Bill pay CB00 — [#67](https://github.com/TCS-Devin-Sandbox/ts-cobol-carddemo/pull/67) (merged) | online api/ui | Tests; balance consistent with C2 | E4, C2 |
 | E11 | Report request CR00 launching the C3 job (replaces JOBS TD queue) | online api/ui, `java/posting` launcher | Tests; launched job passes posting parity | E2, C3 |
 
 E3-E6 run in parallel after E2; E7-E11 in parallel once their dependencies land.
@@ -213,7 +213,7 @@ E3-E6 run in parallel after E2; E7-E11 in parallel once their dependencies land.
 |---|---|---|
 | F1 | Production data load: EBCDIC VSAM unload -> PG using B2 codecs, with record counts and per-field checksums report — [java/data-load](../java/data-load/README.md) (merged) | B4 |
 | F2 | Job scheduling and restart: Spring Batch job repository and step checkpoints in [chain order](chain-graph.md). See the [launch and restart runbook](BATCH-RESTART.md). | C1-C3 |
-| F3 | [Nightly shadow run](SHADOW-RUN.md): F1 unload load, B4 export, F2 launch and mainframe comparison with drift report (in review; CI uses synthetic drops) | F1, F2 |
+| F3 | [Nightly shadow run](SHADOW-RUN.md): F1 unload load, B4 export, F2 launch and mainframe comparison with drift report ([#58](https://github.com/TCS-Devin-Sandbox/ts-cobol-carddemo/pull/58) merged; CI uses synthetic drops) | F1, F2 |
 | F4 | Per-table cutover runbook and rollback, decommission of each JCL member | F3, owner sign-off |
 
 ### Batch G: separate modules, after a target decision
@@ -279,16 +279,17 @@ graph LR
 | A5 | A | BASELINE inventory corrections | [#31](https://github.com/TCS-Devin-Sandbox/ts-cobol-carddemo/pull/31) | merged |
 | B1 | B | `java/` skeleton | [#35](https://github.com/TCS-Devin-Sandbox/ts-cobol-carddemo/pull/35) | merged |
 | B2 | B | Fixed-record codec | [#38](https://github.com/TCS-Devin-Sandbox/ts-cobol-carddemo/pull/38) | merged |
-| B3 | B | VSAM master schema | [#37](https://github.com/TCS-Devin-Sandbox/ts-cobol-carddemo/pull/37) (follow-up [#40](https://github.com/TCS-Devin-Sandbox/ts-cobol-carddemo/pull/40) in review) | merged |
+| B3 | B | VSAM master schema | [#37](https://github.com/TCS-Devin-Sandbox/ts-cobol-carddemo/pull/37) (follow-up [#40](https://github.com/TCS-Devin-Sandbox/ts-cobol-carddemo/pull/40) merged) | merged |
 | B4 | B | Loader/exporter | [#41](https://github.com/TCS-Devin-Sandbox/ts-cobol-carddemo/pull/41) | merged |
 | C1 | C | INTCALC | [#43](https://github.com/TCS-Devin-Sandbox/ts-cobol-carddemo/pull/43) | merged |
 | C2 | C | POSTTRAN | [#42](https://github.com/TCS-Devin-Sandbox/ts-cobol-carddemo/pull/42) | merged |
 | C3 | C | TRANREPT | [#45](https://github.com/TCS-Devin-Sandbox/ts-cobol-carddemo/pull/45) | merged |
 | C4 | C | MNTTRDB2 | [#44](https://github.com/TCS-Devin-Sandbox/ts-cobol-carddemo/pull/44) | merged |
 | C5 | C | MNTTRDYN | [#48](https://github.com/TCS-Devin-Sandbox/ts-cobol-carddemo/pull/48) | merged |
-| D1 | D | Read-masters oracle | [#50](https://github.com/TCS-Devin-Sandbox/ts-cobol-carddemo/pull/50) | in review |
-| D2 | D | Statements oracle (scratch-only TIOT adaptation) | | implemented; owner-approved goldens recorded |
-| D3-D4 | D | Remaining Java batch ports | | not started |
+| D1 | D | Read-masters oracle | [#50](https://github.com/TCS-Devin-Sandbox/ts-cobol-carddemo/pull/50) | merged |
+| D2 | D | Statements oracle (scratch-only TIOT adaptation) | [#51](https://github.com/TCS-Devin-Sandbox/ts-cobol-carddemo/pull/51) | merged |
+| D3 | D | Java read-masters utilities | [#52](https://github.com/TCS-Devin-Sandbox/ts-cobol-carddemo/pull/52) | merged |
+| D4 | D | Java statements (text + HTML) | [#53](https://github.com/TCS-Devin-Sandbox/ts-cobol-carddemo/pull/53) | merged |
 | D5 | D | FEECALC | [#46](https://github.com/TCS-Devin-Sandbox/ts-cobol-carddemo/pull/46) | merged |
 | D6 | D | HLASM date and wait routines | [#47](https://github.com/TCS-Devin-Sandbox/ts-cobol-carddemo/pull/47) | merged |
 | E1 | E | Online API/UI foundation | [#54](https://github.com/TCS-Devin-Sandbox/ts-cobol-carddemo/pull/54) | merged |
@@ -297,7 +298,10 @@ graph LR
 | E4 | E | Account view [CAVW](online/CAVW.md) | [#60](https://github.com/TCS-Devin-Sandbox/ts-cobol-carddemo/pull/60) | merged |
 | E5 | E | [Card list/view CCLI, CCDL](online/cards.md) | [#63](https://github.com/TCS-Devin-Sandbox/ts-cobol-carddemo/pull/63) | merged |
 | E6 | E | [Transaction list/view CT00, CT01](online/CT00-CT01.md) | [#61](https://github.com/TCS-Devin-Sandbox/ts-cobol-carddemo/pull/61) | merged |
-| E7-E10 | E | Account update CAUP, card update CCUP, transaction add CT02, bill pay CB00 | | in progress |
+| E7 | E | Account update CAUP | [#68](https://github.com/TCS-Devin-Sandbox/ts-cobol-carddemo/pull/68) | merged |
+| E8 | E | Card update CCUP | [#66](https://github.com/TCS-Devin-Sandbox/ts-cobol-carddemo/pull/66) | merged |
+| E9 | E | Transaction add CT02 | [#65](https://github.com/TCS-Devin-Sandbox/ts-cobol-carddemo/pull/65) | merged |
+| E10 | E | Bill pay CB00 | [#67](https://github.com/TCS-Devin-Sandbox/ts-cobol-carddemo/pull/67) | merged |
 | E11 | E | Report request [CR00](online/CR00.md) | [#62](https://github.com/TCS-Devin-Sandbox/ts-cobol-carddemo/pull/62) | merged |
 | F1 | F | [Data load and reconciliation](../java/data-load/README.md) | [#55](https://github.com/TCS-Devin-Sandbox/ts-cobol-carddemo/pull/55) | merged |
 | F2 | F | [Scheduling and restart](BATCH-RESTART.md) | [#56](https://github.com/TCS-Devin-Sandbox/ts-cobol-carddemo/pull/56) | merged |
