@@ -220,7 +220,9 @@ E3-E6 run in parallel after E2; E7-E11 in parallel once their dependencies land.
 
 Authorization (IMS DB + Db2 + MQ: CP00, CPVS, CPVD, CBPAUP0C, IMS loaders) and
 VSAM/MQ (CDRA, CDRD) need decisions on the IMS hierarchical data model and the MQ
-replacement before any PR can be scoped.
+replacement before any port PR starts. [Batch G scope](batch-g/scope.md) proposes
+both targets and splits the batch into PRs G1-G11; the cited source map is
+[batch-g/inventory.md](batch-g/inventory.md).
 
 ## 5. Dependency graph
 
