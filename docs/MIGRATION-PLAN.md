@@ -311,3 +311,4 @@ graph LR
 | F4 | F | Cutover | | not started |
 | G | G | Authorization, VSAM/MQ | | needs decision |
 | G2 | G | [Pending authorization schema](schema-mapping-auth.md) | [#74](https://github.com/TCS-Devin-Sandbox/ts-cobol-carddemo/pull/74) | in review |
+| G10 | G | System date/time [CDRD](online/CDRD.md) as REST | [#71](https://github.com/TCS-Devin-Sandbox/ts-cobol-carddemo/pull/71) | in review |
