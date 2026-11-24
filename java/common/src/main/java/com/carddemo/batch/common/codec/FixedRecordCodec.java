@@ -12,16 +12,25 @@ import com.carddemo.batch.common.codec.RecordLayout.Field;
 
 /** Binary fields are raw bytes, not hexadecimal text, even in fixture .txt files. */
 public final class FixedRecordCodec {
+    /** Uninitialized numeric field filled with spaces, not a numeric zero. */
+    public enum BlankNumeric { SPACES }
+
     private static final String POSITIVE = "{ABCDEFGHI";
     private static final String NEGATIVE = "}JKLMNOPQR";
     private final RecordLayout layout;
     private final String characters;
+    private final boolean allowBlankNumerics;
+    private final byte space;
 
     public FixedRecordCodec(RecordLayout layout) {
         this(layout, StandardCharsets.ISO_8859_1);
     }
 
     public FixedRecordCodec(RecordLayout layout, Charset charset) {
+        this(layout, charset, false);
+    }
+
+    FixedRecordCodec(RecordLayout layout, Charset charset, boolean allowBlankNumerics) {
         if (!charset.equals(StandardCharsets.ISO_8859_1) && !charset.equals(Charset.forName("IBM037"))) {
             throw new IllegalArgumentException("Use Latin-1 (off-host) or IBM037 (EBCDIC)");
         }
@@ -32,16 +41,19 @@ public final class FixedRecordCodec {
         // IBM037 aliases NEL to LF; keep EBCDIC 0x15 distinct from 0x25.
         if (charset.equals(Charset.forName("IBM037"))) table.setCharAt(0x15, '\u0085');
         this.characters = table.toString();
+        this.allowBlankNumerics = allowBlankNumerics;
+        this.space = (byte) characters.indexOf(' ');
     }
 
-    /** Strings retain trailing spaces and filler; every numeric has its declared scale. */
+    /** Strings retain padding and filler; initialized numerics have their declared scale. */
     public Map<String, Object> decode(byte[] record) {
         if (record.length != layout.length()) throw new IllegalArgumentException("Wrong record length");
         var values = new LinkedHashMap<String, Object>();
         int offset = 0;
         for (Field field : layout.fields()) {
             byte[] raw = Arrays.copyOfRange(record, offset, offset + field.length());
-            Object value = switch (field.kind()) {
+            Object value = field.kind() != RecordLayout.Kind.TEXT && allowBlankNumerics && allSpaces(raw)
+                    ? BlankNumeric.SPACES : switch (field.kind()) {
                 case TEXT -> decodeText(raw);
                 case DISPLAY -> decodeDisplay(raw, field);
                 case COMP3 -> decodePacked(raw, field);
@@ -51,6 +63,11 @@ public final class FixedRecordCodec {
             offset += field.length();
         }
         return values;
+    }
+
+    private boolean allSpaces(byte[] raw) {
+        for (byte b : raw) if (b != space) return false;
+        return true;
     }
 
     /** No rounding, overflow truncation, implicit defaults, or text truncation. */
@@ -65,6 +82,9 @@ public final class FixedRecordCodec {
                     throw new IllegalArgumentException("Invalid text: " + field.name());
                 }
                 raw = encodeText(text + " ".repeat(field.length() - text.length()));
+            } else if (allowBlankNumerics && value == BlankNumeric.SPACES) {
+                raw = new byte[field.length()];
+                Arrays.fill(raw, space);
             } else {
                 if (!(value instanceof BigDecimal decimal)) throw new IllegalArgumentException("Expected BigDecimal: " + field.name());
                 BigInteger units = decimal.setScale(field.scale()).unscaledValue();
