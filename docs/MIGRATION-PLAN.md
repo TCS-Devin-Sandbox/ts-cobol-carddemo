@@ -310,6 +310,6 @@ graph LR
 | F3 | F | [Nightly shadow run](SHADOW-RUN.md) | [#58](https://github.com/TCS-Devin-Sandbox/ts-cobol-carddemo/pull/58) | merged |
 | F4 | F | Cutover | | not started |
 | G | G | Authorization, VSAM/MQ | | needs decision |
-| G1 | G | [IMS segment codecs and unload reader/writer](../java/common/README.md#ims-unload-proof) | | in review |
+| G1 | G | [IMS segment codecs and unload reader/writer](../java/common/README.md#ims-unload-proof) | [#72](https://github.com/TCS-Devin-Sandbox/ts-cobol-carddemo/pull/72) | merged |
 | G2 | G | [Pending authorization schema](schema-mapping-auth.md) | [#74](https://github.com/TCS-Devin-Sandbox/ts-cobol-carddemo/pull/74) | in review |
 | G10 | G | System date/time [CDRD](online/CDRD.md) as REST | [#71](https://github.com/TCS-Devin-Sandbox/ts-cobol-carddemo/pull/71) | in review |
