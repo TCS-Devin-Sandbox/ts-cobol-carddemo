@@ -6,6 +6,7 @@ import com.carddemo.trantype.web.ErrorResponse;
 import java.io.IOException;
 import java.io.UncheckedIOException;
 import java.math.BigDecimal;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.List;
@@ -99,6 +100,18 @@ class AccountInquiryIntegrationTest {
     }
 
     @Test
+    void accountTextOutsideAsciiStaysOneBytePerCharacter(@Autowired JdbcTemplate jdbc) {
+        jdbc.update("INSERT INTO account VALUES (77, 'Y', 0, 0, 0, '2020-01-01', '2030-01-01', '2030-01-01', 0, 0,"
+                + " ' ', 'GRÜPPE', ' ')");
+        var response = rest.exchange("/api/accounts/00000000077/inquiry", HttpMethod.GET, new HttpEntity<>(headers),
+                byte[].class);
+        assertThat(response.getHeaders().getContentType().getCharset()).isEqualTo(StandardCharsets.ISO_8859_1);
+        assertThat(response.getBody()).hasSize(1000);
+        assertThat(new String(response.getBody(), StandardCharsets.ISO_8859_1).substring(0, 252))
+                .endsWith("GROUP ID : GRÜPPE    ");
+    }
+
+    @Test
     void missingAccountRepliesNotFoundWithTheKey() {
         String expected = pad("INVALID REQUEST PARAMETERS ACCT ID : 00000009999");
         assertReply(get("00000009999"), "NOT_FOUND", expected);
@@ -175,7 +188,7 @@ class AccountInquiryIntegrationTest {
 
     private static void assertReply(ResponseEntity<String> response, String outcome, String expected) {
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
-        assertThat(response.getHeaders().getContentType().isCompatibleWith(AccountInquiryController.TEXT_ASCII))
+        assertThat(response.getHeaders().getContentType().isCompatibleWith(AccountInquiryController.TEXT_LATIN1))
                 .isTrue();
         assertThat(response.getHeaders().getCacheControl()).contains("no-store");
         assertThat(response.getHeaders().getFirst(AccountInquiryController.OUTCOME_HEADER)).isEqualTo(outcome);

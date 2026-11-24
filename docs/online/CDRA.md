@@ -9,11 +9,13 @@ replaced by a synchronous REST call; the reply body is the same 1000 bytes.
 ## HTTP contract
 
 Both endpoints require an authenticated JWT (USER or ADMIN), are read-only and
-return `text/plain;charset=US-ASCII`, `Cache-Control: no-store`.
+return `text/plain;charset=ISO-8859-1`, `Cache-Control: no-store`. Like the
+record codecs (ISO-8859-1 or IBM037), the reply is one byte per character, so
+account text outside ASCII is kept and the body stays 1000 bytes.
 
 | Request | Meaning |
 |---|---|
-| `POST /api/accounts/inquiry` with a `text/plain` body | The MQ request message as-is: `WS-FUNC` X(4), `WS-KEY` 9(11), filler. At most 1000 printable ASCII characters; shorter messages are space-padded to 1000 as the MQ buffer would be. |
+| `POST /api/accounts/inquiry` with a `text/plain` body | The MQ request message as-is: `WS-FUNC` X(4), `WS-KEY` 9(11), filler. At most 1000 printable ASCII bytes (at most 1001 are read); shorter messages are space-padded to 1000 as the MQ buffer would be. |
 | `GET /api/accounts/{accountId}/inquiry` | Shorthand for `INQA` + an 11-digit key. A path that is not 11 digits returns 400 `INVALID_ACCOUNT_ID`. |
 
 Every legacy reply, including not-found and invalid-request, is HTTP 200
@@ -59,5 +61,5 @@ CICS and MQ do not run off-host, so the proof is unit and API tests, not
   loads every ACCTDATA record from `fixtures/posting/*/input` into PostgreSQL
   and checks each reply byte for byte against labels plus the raw CVACT01Y
   field bytes of the fixture record; also NOTFND, bad function, zero key,
-  400s, 401 and a lock-timeout 503. Runs in the `trantype-tests` CI job
+  400s, 401, non-ASCII account text and a lock-timeout 503. Runs in the `trantype-tests` CI job
   (`mvn -B verify` in `carddemo-online-api`).
