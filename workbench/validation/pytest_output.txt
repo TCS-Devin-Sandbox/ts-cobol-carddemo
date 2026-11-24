@@ -1,0 +1,137 @@
+.........................                                                [100%]
+=============================== warnings summary ===============================
+../../../../envs/py/lib/python3.12/site-packages/pytest_bdd/plugin.py:137
+  ~/envs/py/lib/python3.12/site-packages/pytest_bdd/plugin.py:137: PytestUnknownMarkWarning: Unknown pytest.mark.positive - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html
+    mark = getattr(pytest.mark, tag)
+
+../../../../envs/py/lib/python3.12/site-packages/pytest_bdd/plugin.py:137
+  ~/envs/py/lib/python3.12/site-packages/pytest_bdd/plugin.py:137: PytestUnknownMarkWarning: Unknown pytest.mark.BR-001 - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html
+    mark = getattr(pytest.mark, tag)
+
+../../../../envs/py/lib/python3.12/site-packages/pytest_bdd/plugin.py:137
+  ~/envs/py/lib/python3.12/site-packages/pytest_bdd/plugin.py:137: PytestUnknownMarkWarning: Unknown pytest.mark.TS-01 - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html
+    mark = getattr(pytest.mark, tag)
+
+../../../../envs/py/lib/python3.12/site-packages/pytest_bdd/plugin.py:137
+  ~/envs/py/lib/python3.12/site-packages/pytest_bdd/plugin.py:137: PytestUnknownMarkWarning: Unknown pytest.mark.parity - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html
+    mark = getattr(pytest.mark, tag)
+
+../../../../envs/py/lib/python3.12/site-packages/pytest_bdd/plugin.py:137
+  ~/envs/py/lib/python3.12/site-packages/pytest_bdd/plugin.py:137: PytestUnknownMarkWarning: Unknown pytest.mark.boundary - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html
+    mark = getattr(pytest.mark, tag)
+
+../../../../envs/py/lib/python3.12/site-packages/pytest_bdd/plugin.py:137
+  ~/envs/py/lib/python3.12/site-packages/pytest_bdd/plugin.py:137: PytestUnknownMarkWarning: Unknown pytest.mark.volume - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html
+    mark = getattr(pytest.mark, tag)
+
+../../../../envs/py/lib/python3.12/site-packages/pytest_bdd/plugin.py:137
+  ~/envs/py/lib/python3.12/site-packages/pytest_bdd/plugin.py:137: PytestUnknownMarkWarning: Unknown pytest.mark.TS-03 - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html
+    mark = getattr(pytest.mark, tag)
+
+../../../../envs/py/lib/python3.12/site-packages/pytest_bdd/plugin.py:137
+  ~/envs/py/lib/python3.12/site-packages/pytest_bdd/plugin.py:137: PytestUnknownMarkWarning: Unknown pytest.mark.BR-002 - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html
+    mark = getattr(pytest.mark, tag)
+
+../../../../envs/py/lib/python3.12/site-packages/pytest_bdd/plugin.py:137
+  ~/envs/py/lib/python3.12/site-packages/pytest_bdd/plugin.py:137: PytestUnknownMarkWarning: Unknown pytest.mark.VR-12 - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html
+    mark = getattr(pytest.mark, tag)
+
+../../../../envs/py/lib/python3.12/site-packages/pytest_bdd/plugin.py:137
+  ~/envs/py/lib/python3.12/site-packages/pytest_bdd/plugin.py:137: PytestUnknownMarkWarning: Unknown pytest.mark.BR-003 - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html
+    mark = getattr(pytest.mark, tag)
+
+../../../../envs/py/lib/python3.12/site-packages/pytest_bdd/plugin.py:137
+  ~/envs/py/lib/python3.12/site-packages/pytest_bdd/plugin.py:137: PytestUnknownMarkWarning: Unknown pytest.mark.TS-04 - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html
+    mark = getattr(pytest.mark, tag)
+
+../../../../envs/py/lib/python3.12/site-packages/pytest_bdd/plugin.py:137
+  ~/envs/py/lib/python3.12/site-packages/pytest_bdd/plugin.py:137: PytestUnknownMarkWarning: Unknown pytest.mark.TS-08 - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html
+    mark = getattr(pytest.mark, tag)
+
+../../../../envs/py/lib/python3.12/site-packages/pytest_bdd/plugin.py:137
+  ~/envs/py/lib/python3.12/site-packages/pytest_bdd/plugin.py:137: PytestUnknownMarkWarning: Unknown pytest.mark.BR-004 - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html
+    mark = getattr(pytest.mark, tag)
+
+../../../../envs/py/lib/python3.12/site-packages/pytest_bdd/plugin.py:137
+  ~/envs/py/lib/python3.12/site-packages/pytest_bdd/plugin.py:137: PytestUnknownMarkWarning: Unknown pytest.mark.BR-005 - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html
+    mark = getattr(pytest.mark, tag)
+
+../../../../envs/py/lib/python3.12/site-packages/pytest_bdd/plugin.py:137
+  ~/envs/py/lib/python3.12/site-packages/pytest_bdd/plugin.py:137: PytestUnknownMarkWarning: Unknown pytest.mark.TS-02 - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html
+    mark = getattr(pytest.mark, tag)
+
+../../../../envs/py/lib/python3.12/site-packages/pytest_bdd/plugin.py:137
+  ~/envs/py/lib/python3.12/site-packages/pytest_bdd/plugin.py:137: PytestUnknownMarkWarning: Unknown pytest.mark.BR-006 - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html
+    mark = getattr(pytest.mark, tag)
+
+../../../../envs/py/lib/python3.12/site-packages/pytest_bdd/plugin.py:137
+  ~/envs/py/lib/python3.12/site-packages/pytest_bdd/plugin.py:137: PytestUnknownMarkWarning: Unknown pytest.mark.negative - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html
+    mark = getattr(pytest.mark, tag)
+
+../../../../envs/py/lib/python3.12/site-packages/pytest_bdd/plugin.py:137
+  ~/envs/py/lib/python3.12/site-packages/pytest_bdd/plugin.py:137: PytestUnknownMarkWarning: Unknown pytest.mark.TR-002 - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html
+    mark = getattr(pytest.mark, tag)
+
+../../../../envs/py/lib/python3.12/site-packages/pytest_bdd/plugin.py:137
+  ~/envs/py/lib/python3.12/site-packages/pytest_bdd/plugin.py:137: PytestUnknownMarkWarning: Unknown pytest.mark.TR-004 - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html
+    mark = getattr(pytest.mark, tag)
+
+../../../../envs/py/lib/python3.12/site-packages/pytest_bdd/plugin.py:137
+  ~/envs/py/lib/python3.12/site-packages/pytest_bdd/plugin.py:137: PytestUnknownMarkWarning: Unknown pytest.mark.TS-05 - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html
+    mark = getattr(pytest.mark, tag)
+
+../../../../envs/py/lib/python3.12/site-packages/pytest_bdd/plugin.py:137
+  ~/envs/py/lib/python3.12/site-packages/pytest_bdd/plugin.py:137: PytestUnknownMarkWarning: Unknown pytest.mark.V-01 - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html
+    mark = getattr(pytest.mark, tag)
+
+../../../../envs/py/lib/python3.12/site-packages/pytest_bdd/plugin.py:137
+  ~/envs/py/lib/python3.12/site-packages/pytest_bdd/plugin.py:137: PytestUnknownMarkWarning: Unknown pytest.mark.TS-06 - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html
+    mark = getattr(pytest.mark, tag)
+
+../../../../envs/py/lib/python3.12/site-packages/pytest_bdd/plugin.py:137
+  ~/envs/py/lib/python3.12/site-packages/pytest_bdd/plugin.py:137: PytestUnknownMarkWarning: Unknown pytest.mark.TS-07 - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html
+    mark = getattr(pytest.mark, tag)
+
+../../../../envs/py/lib/python3.12/site-packages/pytest_bdd/plugin.py:137
+  ~/envs/py/lib/python3.12/site-packages/pytest_bdd/plugin.py:137: PytestUnknownMarkWarning: Unknown pytest.mark.V-02 - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html
+    mark = getattr(pytest.mark, tag)
+
+../../../../envs/py/lib/python3.12/site-packages/pytest_bdd/plugin.py:137
+  ~/envs/py/lib/python3.12/site-packages/pytest_bdd/plugin.py:137: PytestUnknownMarkWarning: Unknown pytest.mark.TR-003 - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html
+    mark = getattr(pytest.mark, tag)
+
+../../../../envs/py/lib/python3.12/site-packages/pytest_bdd/plugin.py:137
+  ~/envs/py/lib/python3.12/site-packages/pytest_bdd/plugin.py:137: PytestUnknownMarkWarning: Unknown pytest.mark.TR-001 - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html
+    mark = getattr(pytest.mark, tag)
+
+../../../../envs/py/lib/python3.12/site-packages/pytest_bdd/plugin.py:137
+  ~/envs/py/lib/python3.12/site-packages/pytest_bdd/plugin.py:137: PytestUnknownMarkWarning: Unknown pytest.mark.VR-09 - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html
+    mark = getattr(pytest.mark, tag)
+
+../../../../envs/py/lib/python3.12/site-packages/pytest_bdd/plugin.py:137
+  ~/envs/py/lib/python3.12/site-packages/pytest_bdd/plugin.py:137: PytestUnknownMarkWarning: Unknown pytest.mark.TR-005 - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html
+    mark = getattr(pytest.mark, tag)
+
+../../../../envs/py/lib/python3.12/site-packages/pytest_bdd/plugin.py:137
+  ~/envs/py/lib/python3.12/site-packages/pytest_bdd/plugin.py:137: PytestUnknownMarkWarning: Unknown pytest.mark.VR-10 - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html
+    mark = getattr(pytest.mark, tag)
+
+../../../../envs/py/lib/python3.12/site-packages/pytest_bdd/plugin.py:137
+  ~/envs/py/lib/python3.12/site-packages/pytest_bdd/plugin.py:137: PytestUnknownMarkWarning: Unknown pytest.mark.TR-006 - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html
+    mark = getattr(pytest.mark, tag)
+
+../../../../envs/py/lib/python3.12/site-packages/pytest_bdd/plugin.py:137
+  ~/envs/py/lib/python3.12/site-packages/pytest_bdd/plugin.py:137: PytestUnknownMarkWarning: Unknown pytest.mark.VR-11 - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html
+    mark = getattr(pytest.mark, tag)
+
+../../../../envs/py/lib/python3.12/site-packages/pytest_bdd/plugin.py:137
+  ~/envs/py/lib/python3.12/site-packages/pytest_bdd/plugin.py:137: PytestUnknownMarkWarning: Unknown pytest.mark.reconciliation - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html
+    mark = getattr(pytest.mark, tag)
+
+../../../../envs/py/lib/python3.12/site-packages/pytest_bdd/plugin.py:137
+  ~/envs/py/lib/python3.12/site-packages/pytest_bdd/plugin.py:137: PytestUnknownMarkWarning: Unknown pytest.mark.OQ-04 - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html
+    mark = getattr(pytest.mark, tag)
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+- generated xml file: ~/repos/ts-cobol-carddemo/workbench/validation/junit_results.xml -
+25 passed, 33 warnings in 17.25s
