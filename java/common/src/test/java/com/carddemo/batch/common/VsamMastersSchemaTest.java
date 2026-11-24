@@ -39,6 +39,7 @@ class VsamMastersSchemaTest {
     void migratesAndPreservesEveryPicBoundary() throws Exception {
         var flyway = Flyway.configure()
                 .dataSource(POSTGRES.getJdbcUrl(), POSTGRES.getUsername(), POSTGRES.getPassword())
+                .target("1")
                 .load();
         assertThat(flyway.migrate().migrationsExecuted).isEqualTo(1);
         assertThat(flyway.migrate().migrationsExecuted).isZero();

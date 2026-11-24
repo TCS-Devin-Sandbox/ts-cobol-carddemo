@@ -20,6 +20,23 @@ jobs:
       - name: FEECALC documented examples and driver tests (no PL/I oracle)
         run: mvn -B -f java/pom.xml -pl fees -am test
 
+  auth-schema-tests:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '21'
+          cache: maven
+          cache-dependency-path: java/**/pom.xml
+      - name: G2 pending authorization schema (Testcontainers PostgreSQL 15)
+        run: >-
+          mvn -B -f java/pom.xml -pl common -am test
+          -Dtest=PendingAuthorizationSchemaTest,VsamMastersSchemaTest
+          -Dsurefire.failIfNoSpecifiedTests=false
+
   trantype-dynamic-parity:
     runs-on: ubuntu-latest
     timeout-minutes: 15

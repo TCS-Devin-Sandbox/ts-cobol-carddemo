@@ -310,3 +310,4 @@ graph LR
 | F3 | F | [Nightly shadow run](SHADOW-RUN.md) | [#58](https://github.com/TCS-Devin-Sandbox/ts-cobol-carddemo/pull/58) | merged |
 | F4 | F | Cutover | | not started |
 | G | G | Authorization, VSAM/MQ | | needs decision |
+| G2 | G | [Pending authorization schema](schema-mapping-auth.md) | PR_LINK | in review |
