@@ -14,7 +14,7 @@ no input; query parameters are ignored, as CODATE01 ignored the request fields.
 | `Accept` | Body |
 |---|---|
 | `application/json` (default) | `{"tranId":"CDRD","program":"CODATE01","date":"MM-DD-YYYY","time":"HH:MM:SS","reply":"<1000 chars>"}` |
-| `text/plain` | The 1000-byte reply buffer as sent to MQ |
+| `text/plain` | The 1000-byte reply buffer as sent to MQ, always US-ASCII whatever charset is requested |
 
 The reply is `SYSTEM DATE : ` + `MM-DD-YYYY` + `SYSTEM TIME : ` + `HH:MM:SS`
 (46 characters, no separator between the date and the second label) followed by

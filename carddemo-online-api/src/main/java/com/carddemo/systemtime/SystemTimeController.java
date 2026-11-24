@@ -1,6 +1,8 @@
 package com.carddemo.systemtime;
 
+import java.nio.charset.StandardCharsets;
 import java.util.Map;
+import org.springframework.http.ResponseEntity;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -24,7 +26,9 @@ public class SystemTimeController {
     }
 
     @GetMapping(produces = MediaType.TEXT_PLAIN_VALUE)
-    public String reply() {
-        return service.now().reply();
+    public ResponseEntity<byte[]> reply() {
+        return ResponseEntity.ok()
+                .contentType(new MediaType(MediaType.TEXT_PLAIN, StandardCharsets.US_ASCII))
+                .body(service.now().reply().getBytes(StandardCharsets.US_ASCII));
     }
 }

@@ -86,4 +86,13 @@ class SystemTimeTest {
         assertThat(body).hasSize(1000);
         assertThat(new String(body, StandardCharsets.US_ASCII)).isEqualTo(FROZEN_REPLY);
     }
+
+    @Test void CODATE01_4100_PUT_REPLY_stays_1000_bytes_whatever_charset_is_requested() throws Exception {
+        var response = mvc.perform(get("/api/system-time").with(jwt())
+                        .accept(new MediaType(MediaType.TEXT_PLAIN, StandardCharsets.UTF_16)))
+                .andExpect(status().isOk())
+                .andReturn().getResponse();
+        assertThat(response.getContentType()).isEqualTo("text/plain;charset=US-ASCII");
+        assertThat(response.getContentAsByteArray()).hasSize(1000);
+    }
 }
