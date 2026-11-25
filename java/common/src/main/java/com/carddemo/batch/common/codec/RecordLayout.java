@@ -32,7 +32,7 @@ public record RecordLayout(List<Field> fields) {
         return fields.stream().mapToInt(Field::length).sum();
     }
 
-    /** Parses the elementary PIC subset used by the eleven B2 copybooks. */
+    /** Parses the elementary PIC subset used by the packaged COBOL layouts. */
     public static RecordLayout fromCopybook(Path path) throws IOException {
         try (var reader = Files.newBufferedReader(path)) {
             return fromCopybook(reader);
@@ -48,12 +48,15 @@ public record RecordLayout(List<Field> fields) {
             if (line.length() <= 6 || line.charAt(6) == '*' || line.charAt(6) == '/') continue;
             source.append(line.substring(6, Math.min(72, line.length())).trim()).append(' ');
         }
-        var item = Pattern.compile("(?i)^(\\d{2})\\s+([A-Z0-9-]+)\\s+PIC(?:TURE)?\\s+(?:IS\\s+)?([SX9V()0-9]+)(?:\\s+(?:USAGE\\s+(?:IS\\s+)?)?(COMP-3|COMP|DISPLAY))?$");
+        var item = Pattern.compile("(?i)^(\\d{2})\\s+([A-Z0-9-]+)\\s+PIC(?:TURE)?\\s+(?:IS\\s+)?([SX9V()0-9]+)"
+                + "(?:\\s+(?:USAGE\\s+(?:IS\\s+)?)?(COMP-3|COMP|DISPLAY))?(?:\\s+OCCURS\\s+([1-9][0-9]*)\\s+TIMES)?$");
         var fields = new ArrayList<Field>();
         int offset = 0;
-        for (String statement : source.toString().split("\\.")) {
+        String declarations = source.toString().replaceFirst(
+                "(?i)^\\s*EXEC SQL DECLARE [A-Z0-9_-]+\\.[A-Z0-9_-]+ TABLE\\s*\\(.*?\\)\\s+END-EXEC\\s*\\.", "");
+        for (String statement : declarations.split("\\.")) {
             statement = statement.trim();
-            if (statement.isEmpty()) continue;
+            if (statement.isEmpty() || statement.matches("(?i)88\\s+[A-Z0-9-]+\\s+VALUE\\s+.+")) continue;
             var match = item.matcher(statement);
             if (!match.matches()) {
                 if (!statement.matches("(?i)\\d{2}\\s+[A-Z0-9-]+")) {
@@ -77,9 +80,14 @@ public record RecordLayout(List<Field> fields) {
                 default -> digits;
             };
             String name = match.group(2).toUpperCase();
-            fields.add(new Field(name.equals("FILLER") ? "FILLER@" + offset : name,
-                    kind, length, digits, scale, signed));
-            offset += length;
+            String occurs = match.group(5);
+            int count = occurs == null ? 1 : Integer.parseInt(occurs);
+            for (int i = 0; i < count; i++) {
+                String fieldName = name.equals("FILLER") ? "FILLER@" + offset
+                        : occurs == null ? name : name + "[" + (i + 1) + "]";
+                fields.add(new Field(fieldName, kind, length, digits, scale, signed));
+                offset += length;
+            }
         }
         if (fields.isEmpty()) throw new IllegalArgumentException("No fields in copybook");
         return new RecordLayout(fields);

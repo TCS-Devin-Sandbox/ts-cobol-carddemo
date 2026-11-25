@@ -137,10 +137,15 @@ class FixtureRoundTripTest {
     }
 
     @Test
-    void allElevenClasspathCopybooksMatchEstateAndHaveContractLengths() throws Exception {
+    void classpathLayoutsMatchEstateAndHaveContractLengths() throws Exception {
         for (var layout : CardDemoLayout.values()) {
-            Path directory = ROOT.resolve(layout == CardDemoLayout.REJTRAN ? "tools/parity/layouts" : "app/cpy");
-            assertEquals(RecordLayout.fromCopybook(directory.resolve(layout.name() + ".cpy")), layout.load());
+            String source = switch (layout) {
+                case CIPAUSMY, CIPAUDTY -> "app/app-authorization-ims-db2-mq/cpy/" + layout + ".cpy";
+                case AUTHFRDS -> "app/app-authorization-ims-db2-mq/dcl/AUTHFRDS.dcl";
+                case REJTRAN -> "tools/parity/layouts/REJTRAN.cpy";
+                default -> "app/cpy/" + layout + ".cpy";
+            };
+            assertEquals(RecordLayout.fromCopybook(ROOT.resolve(source)), layout.load());
         }
     }
 

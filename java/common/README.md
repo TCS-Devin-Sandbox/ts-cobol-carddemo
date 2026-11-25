@@ -60,3 +60,29 @@ assembler: `CobDatFt` is `COBDATFT` on its 80-byte `CODATECN-REC`
 `docs/LEGACY-LANGUAGES.md`; `MvsWait` is `MVSWAIT`/`COBSWAIT`, a no-op by
 default because a wait has no functional output. Neither routine runs in a
 parity chain, so their proof is the unit tests against the documented formats.
+
+## IMS unload proof
+
+`Dfsurgu0Unload` streams the supplied DBPAUTP0 format, one frame at a time,
+preserving the header/footer bodies, segment prefixes, and suffix bytes.
+The IBM037 payload starts at byte offset 39 from the start of each segment
+record (including the RDW), and ends one byte before the record ends.
+`CardDemoLayout.ebcdicCodec()` also exposes the standalone 100-byte CIPAUSMY,
+200-byte CIPAUDTY and 204-byte AUTHFRDS COBOL host layouts. Summary status
+occurrences are named `PA-ACCOUNT-STATUS[1]` through `PA-ACCOUNT-STATUS[5]`.
+AUTHFRDS exposes the VARCHAR length and text separately; it is a host layout,
+not a Db2 unload.
+
+```sh
+mvn -B -f java/pom.xml -pl common -Dtest=Dfsurgu0UnloadTest,AuthRecordCodecTest test
+```
+
+The supplied asset decodes to 22 roots, 202 details, and 2 metadata frames;
+encoding those frames must produce the same 51,736 bytes. One root has a
+space-filled packed account key and space-filled numeric fields, represented
+by `BlankNumeric.SPACES` rather than numeric zero. Preserve that root for
+export without treating it as a keyed account.
+
+This proves the shipped extract and the host field layout off-host. Other
+numeric encodings, such as alternate packed-decimal sign nibbles, may be
+canonicalized on write. This is not COBOL execution or an IMS reload test.

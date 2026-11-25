@@ -33,6 +33,21 @@
                 </includes>
             </resource>
             <resource>
+                <directory>../../app/app-authorization-ims-db2-mq/cpy</directory>
+                <targetPath>copybooks</targetPath>
+                <includes>
+                    <include>CIPAUSMY.cpy</include>
+                    <include>CIPAUDTY.cpy</include>
+                </includes>
+            </resource>
+            <resource>
+                <directory>../../app/app-authorization-ims-db2-mq/dcl</directory>
+                <targetPath>copybooks</targetPath>
+                <includes>
+                    <include>AUTHFRDS.dcl</include>
+                </includes>
+            </resource>
+            <resource>
                 <directory>../../tools/parity/layouts</directory>
                 <targetPath>copybooks</targetPath>
                 <filtering>false</filtering>
