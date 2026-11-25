@@ -70,6 +70,7 @@ class PendingAuthorizationSchemaTest {
     static void migrateTwice() {
         var flyway = Flyway.configure()
                 .dataSource(POSTGRES.getJdbcUrl(), POSTGRES.getUsername(), POSTGRES.getPassword())
+                .target("2")
                 .load();
         assertThat(flyway.migrate().migrationsExecuted).isEqualTo(2);
         assertThat(flyway.migrate().migrationsExecuted).isZero();
@@ -164,7 +165,7 @@ class PendingAuthorizationSchemaTest {
         }
         assertThat(offset).isEqualTo(unload.length);
         assertThat(roots).isEqualTo(22);
-        assertThat(blankKeyRoots).as("childless root keyed by spaces: no NUMERIC account_id; G3 rejects it")
+        assertThat(blankKeyRoots).as("childless root keyed by spaces: no NUMERIC account_id; G3 keeps it unkeyed")
                 .containsExactly("404040404040");
         assertThat(gnpOrder).hasSize(202);
         assertThat(lowValueStatusRoots).as("X'00' statuses need codec handling: PostgreSQL text has no NUL")

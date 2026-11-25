@@ -56,15 +56,16 @@ the value only (as in V1). The unload uses C throughout.
 ## What the supplied unload holds
 
 `AWS.M2.CARDDEMO.IMSDATA.DBPAUTP0.dat` has 22 roots and 202 children (its
-trailer counts 22 and 202). Two root shapes cannot be loaded byte-for-byte and
-are left to the G1 codec / G3 loader, not hidden by the schema:
+trailer counts 22 and 202). Two root shapes need special handling by the
+[G3 loader](../java/auth-data/README.md):
 
 * The last root is blank-filled: its `PA-ACCT-ID` is X'404040404040', not a
-  packed number, and it has no children. `account_id NUMERIC(11,0)` cannot hold
-  it; G3 must report it as a reject (IMS kept it because the key is just bytes).
+  packed number, and it has no children. G3 stores it as an unkeyed frame in
+  `pending_auth_unload_frame`, not as a summary row or an account-zero key.
 * Accounts 7, 13 and 18 have X'00' (LOW-VALUES) in `PA-AUTH-STATUS` and
-  `PA-ACCOUNT-STATUS`. PostgreSQL text cannot store NUL (SQLSTATE 22021), so the
-  codec must define how low-values map to `CHAR` before G3 loads them.
+  `PA-ACCOUNT-STATUS`. PostgreSQL text cannot store NUL (SQLSTATE 22021).
+  G3 stores it as U+2400 (`␀`), outside the IBM037 repertoire, so it fits
+  the same `CHAR(n)` without conflating low-values and blanks; exports restore X'00'.
 
 ## Db2 `AUTHFRDS` -> `auth_fraud`
 
