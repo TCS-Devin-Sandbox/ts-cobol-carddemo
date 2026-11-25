@@ -201,7 +201,13 @@ final class AuthTransfer {
 
     private void clear() throws SQLException {
         try (var statement = db.createStatement()) {
-            statement.execute("TRUNCATE pending_auth_unload_frame, pending_auth_detail, pending_auth_summary");
+            statement.execute("""
+                    LOCK TABLE pending_auth_summary, pending_auth_detail, pending_auth_unload_frame
+                    IN SHARE ROW EXCLUSIVE MODE
+                    """);
+            statement.executeUpdate("DELETE FROM pending_auth_unload_frame");
+            statement.executeUpdate("DELETE FROM pending_auth_detail");
+            statement.executeUpdate("DELETE FROM pending_auth_summary");
         }
     }
 

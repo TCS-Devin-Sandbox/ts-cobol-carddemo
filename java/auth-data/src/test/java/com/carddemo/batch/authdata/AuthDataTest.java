@@ -9,10 +9,12 @@ import org.testcontainers.junit.jupiter.Container;
 import org.testcontainers.junit.jupiter.Testcontainers;
 
 import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.math.BigDecimal;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.security.MessageDigest;
+import java.sql.Connection;
 import java.sql.DriverManager;
 import java.util.Arrays;
 import java.util.HexFormat;
@@ -111,6 +113,28 @@ class AuthDataTest {
         assertInstanceOf(Dfsurgu0Unload.Metadata.class, codec.readRecord(in));
         var first = assertInstanceOf(Dfsurgu0Unload.Segment.class, codec.readRecord(in));
         assertEquals(new BigDecimal("345.67"), first.fields().get("PA-CREDIT-LIMIT"));
+    }
+
+    @Test
+    void exportKeepsItsSnapshotAcrossACommittedReplacement() throws Exception {
+        run(0, "load-unload", UNLOAD);
+        try (var db = DriverManager.getConnection(POSTGRES.getJdbcUrl(), POSTGRES.getUsername(), POSTGRES.getPassword());
+             var statement = db.createStatement()) {
+            db.setTransactionIsolation(Connection.TRANSACTION_REPEATABLE_READ);
+            db.setAutoCommit(false);
+            // Take a snapshot before reading or locking either of the target tables.
+            try (var rows = statement.executeQuery("SELECT count(*) FROM auth_fraud")) {
+                assertTrue(rows.next());
+            }
+            run(0, "load-flat", Files.createFile(work.resolve("empty.root")), Files.createFile(work.resolve("empty.child")));
+            assertEquals(0, count("pending_auth_summary", "true"));
+            var roots = new ByteArrayOutputStream();
+            var children = new ByteArrayOutputStream();
+            new AuthTransfer(db).exportFlat(roots, children, false);
+            assertEquals(21 * 100, roots.size());
+            assertEquals(202 * 206, children.size());
+            db.rollback();
+        }
     }
 
     private static int count(String table, String where) throws Exception {
