@@ -312,5 +312,6 @@ graph LR
 | G | G | Authorization, VSAM/MQ | | needs decision |
 | G1 | G | [IMS segment codecs and unload reader/writer](../java/common/README.md#ims-unload-proof) | [#72](https://github.com/TCS-Devin-Sandbox/ts-cobol-carddemo/pull/72) | merged |
 | G2 | G | [Pending authorization schema](schema-mapping-auth.md) | [#74](https://github.com/TCS-Devin-Sandbox/ts-cobol-carddemo/pull/74) | in review |
+| G5 | G | [CP00 authorization decision core](../java/auth-core/README.md) | [#78](https://github.com/TCS-Devin-Sandbox/ts-cobol-carddemo/pull/78) | in review |
 | G9 | G | [CDRA account inquiry over REST](online/CDRA.md) | [#73](https://github.com/TCS-Devin-Sandbox/ts-cobol-carddemo/pull/73) | merged |
 | G10 | G | System date/time [CDRD](online/CDRD.md) as REST | [#71](https://github.com/TCS-Devin-Sandbox/ts-cobol-carddemo/pull/71) | in review |
