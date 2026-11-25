@@ -119,9 +119,9 @@ describe('COPAUS0C / COPAU0A', () => {
   });
 
   it('PROCESS-ENTER-KEY: S selection sends the row and reports the CPVD transfer', async () => {
-    const replies = [first, { ...first, rows: null, transfer: {
+    const replies = [first, { ...first, rows: null, state: state(0, true), transfer: {
       program: 'COPAUS1C', tranId: 'CPVD', accountId: '00000000042', authorizationKey: '73999999890002',
-    } }];
+    } }, { ...first, rows: null, message: 'You are already at the top of the page...' }];
     const fetch = mockFetch(() => ({ status: 200, body: replies.shift() }));
     open();
     await userEvent.type(field(), '00000000042');
@@ -131,6 +131,9 @@ describe('COPAUS0C / COPAU0A', () => {
     key('Enter');
     expect(await screen.findByRole('alert')).toHaveTextContent('CPVD (COPAUS1C) is not installed yet...');
     expect(JSON.parse(String(fetch.mock.calls[1][1]?.body)).selections).toEqual(['', '', 's', '', '']);
+    key('F7');
+    await screen.findByText('TXN000000000000');
+    expect(JSON.parse(String(fetch.mock.calls[2][1]?.body)).state).toEqual(state(1, true));
   });
 
   it('MAIN-PARA: re-entry with an account id gathers details at once; F3 returns; other keys are invalid', async () => {

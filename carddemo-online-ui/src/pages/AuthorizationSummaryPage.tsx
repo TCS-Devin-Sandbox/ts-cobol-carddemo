@@ -97,13 +97,14 @@ export function AuthorizationSummaryPage() {
       const screen = await request<CpvsScreen>('POST', '/api/authorizations/summary', {
         action, accountId: id, selections, state: state.current,
       });
-      state.current = screen.state;
-      setMessage(screen.message);
-      setInvalid(screen.accountIdInvalid);
       if (screen.transfer) {
+        setInvalid(false);
         setMessage(`${screen.transfer.tranId} (${screen.transfer.program}) is not installed yet...`);
         return;
       }
+      state.current = screen.state;
+      setMessage(screen.message);
+      setInvalid(screen.accountIdInvalid);
       if (action === 'ENTER') {
         setAccount(screen.account);
         setSummary(screen.summary);
