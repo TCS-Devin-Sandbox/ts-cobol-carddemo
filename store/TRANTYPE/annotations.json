@@ -1,0 +1,188 @@
+{
+ "meta": {
+  "module": "TRANTYPE",
+  "skill": "dynamic-call-resolution",
+  "updated_at": "2026-11-19T09:00:00Z"
+ },
+ "dynamic_calls": [
+  {
+   "site": "app/app-transaction-type-db2/cbl/CBTRNDYN.cbl:62",
+   "program": "CBTRNDYN",
+   "construct": "CALL",
+   "variable": "WS-PGM-NAME",
+   "status": "partial",
+   "targets": [
+    {
+     "name": "COBTUPDT",
+     "basis": "derived",
+     "in_inventory": true,
+     "reached_from": [
+      "MNTTRDYN"
+     ],
+     "evidence": [
+      "app/app-transaction-type-db2/jcl/MNTTRDYN.jcl:23",
+      "app/app-transaction-type-db2/jcl/MNTTRDYN.jcl:33",
+      "app/app-transaction-type-db2/cbl/CBTRNDYN.cbl:59-62",
+      "app/app-transaction-type-db2/cbl/CBTRNDYN.cbl:53-56"
+     ],
+     "reasoning": "MNTTRDYN STEP1 runs IKJEFT01 and its in-stream SYSTSIN card is RUN PROGRAM(CBTRNDYN) PLAN(CARDDEMO) PARMS('COBTUPDT'); CBTRNDYN moves PARM-VALUE(1:PARM-LENGTH) to WS-PGM-NAME and CALLs it. Candidate only: the tracer saw no PARM= on the EXEC card and whether the DSN RUN PARMS string reaches PARM-AREA unchanged is not proven by the sources."
+    }
+   ],
+   "traversal": [
+    "CBTRNDYN.cbl:62 CALL WS-PGM-NAME",
+    "CBTRNDYN.cbl:60 MOVE PARM-VALUE(1:PARM-LENGTH) TO WS-PGM-NAME, only when PARM-LENGTH > 0 (line 59)",
+    "CBTRNDYN.cbl:46 01 WS-PGM-NAME PIC X(08) VALUE SPACES - no other writer",
+    "CBTRNDYN.cbl:53-56 PARM-AREA (PARM-LENGTH S9(4) COMP, PARM-VALUE X(08)) is the PROCEDURE DIVISION USING operand",
+    "MNTTRDYN.jcl:23 STEP1 EXEC PGM=IKJEFT01 - no PARM= on the EXEC card",
+    "MNTTRDYN.jcl:33 SYSTSIN in-stream: RUN PROGRAM(CBTRNDYN) PLAN(CARDDEMO) PARMS('COBTUPDT')"
+   ],
+   "open_ends": [
+    {
+     "kind": "parm-missing",
+     "class": "EVR",
+     "request": "Confirm what job MNTTRDYN step STEP1 passes to CBTRNDYN: the EXEC card has no PARM= (MNTTRDYN.jcl:23) and the only value in the scanned sources is the DSN RUN card PARMS('COBTUPDT') (MNTTRDYN.jcl:33). Confirm that this string reaches PARM-VALUE unchanged (LE run-time option/program argument split for the site) and that no other job or caller runs CBTRNDYN with a different value."
+    }
+   ]
+  },
+  {
+   "site": "app/app-transaction-type-db2/cbl/COTRTLIC.cbl:620",
+   "program": "COTRTLIC",
+   "construct": "CICS-XCTL",
+   "variable": "CDEMO-TO-PROGRAM",
+   "status": "partial",
+   "targets": [
+    {
+     "name": "COADM01C",
+     "basis": "deterministic",
+     "in_inventory": false,
+     "reasoning": "PF3 with CDEMO-FROM-PROGRAM low-values, spaces or COTRTLIC moves LIT-ADMINPGM (VALUE 'COADM01C') to CDEMO-TO-PROGRAM. COADM01C is not in the TRANTYPE scan. Cites: app/app-transaction-type-db2/cbl/COTRTLIC.cbl:600-603, app/app-transaction-type-db2/cbl/COTRTLIC.cbl:47."
+    },
+    {
+     "name": "COTRTUPC",
+     "basis": "deterministic",
+     "in_inventory": true,
+     "evidence": [
+      "app/app-transaction-type-db2/cbl/COTRTLIC.cbl:50",
+      "app/app-transaction-type-db2/cbl/COTRTLIC.cbl:638"
+     ],
+     "reasoning": "tracer candidate kept unchanged (VALUE of LIT-ADDTPGM, moved at line 638). Line 638 is after the XCTL at 620 in the same task, so this value reaches 620 only through a later COMMAREA round trip; not excluded because callers outside the scan are unknown."
+    }
+   ],
+   "traversal": [
+    "COTRTLIC.cbl:620-623 EXEC CICS XCTL PROGRAM(CDEMO-TO-PROGRAM) COMMAREA(CARDDEMO-COMMAREA), under IF CCARD-AID-PFK03 (line 591)",
+    "COTRTLIC.cbl:600-603 FROM-PROGRAM low-values/spaces/LIT-THISPGM -> MOVE LIT-ADMINPGM ('COADM01C', line 47)",
+    "COTRTLIC.cbl:604-605 otherwise MOVE CDEMO-FROM-PROGRAM TO CDEMO-TO-PROGRAM",
+    "COTRTLIC.cbl:515-519 EIBCALEN = 0: CDEMO-FROM-PROGRAM = LIT-THISPGM",
+    "COTRTLIC.cbl:527-528 EIBCALEN > 0: MOVE DFHCOMMAREA(1:LENGTH OF CARDDEMO-COMMAREA) TO CARDDEMO-COMMAREA - CDEMO-FROM-PROGRAM is whatever the previous task or the transferring program left in bytes 5-12 (app/cpy/COCOM01Y.cpy:22)",
+    "COTRTLIC.cbl:899-914 its own pseudo-conversational RETURN always carries CDEMO-FROM-PROGRAM = LIT-THISPGM"
+   ],
+   "excluded_candidates": {
+    "names": [
+     "COTRTLIC"
+    ],
+    "evidence": [
+     "app/app-transaction-type-db2/cbl/COTRTLIC.cbl:600-603",
+     "app/app-transaction-type-db2/cbl/COTRTLIC.cbl:43"
+    ],
+    "reasoning": "the tracer reached 'COTRTLIC' through CDEMO-FROM-PROGRAM (LIT-THISPGM), but line 602 routes exactly that value to LIT-ADMINPGM, so line 605 can never move 'COTRTLIC' into CDEMO-TO-PROGRAM."
+   },
+   "open_ends": [
+    {
+     "kind": "caller-args",
+     "class": "EVR",
+     "request": "Provide the source of every program that transfers control to COTRTLIC (transaction CTLI) with a COMMAREA - COADM01C is the one the program names (COTRTLIC.cbl:47) and it is outside the TRANTYPE scan - so the CDEMO-FROM-PROGRAM values it can receive at COTRTLIC.cbl:527 can be enumerated. The tracer did not follow this writer: it placed CDEMO-TO-PROGRAM in DCLTRANSACTION-TYPE instead of CARDDEMO-COMMAREA (toolbox issue, reported)."
+    }
+   ]
+  },
+  {
+   "site": "app/app-transaction-type-db2/cbl/COTRTLIC.cbl:648",
+   "program": "COTRTLIC",
+   "construct": "CICS-XCTL",
+   "variable": "LIT-ADDTPGM",
+   "status": "resolved",
+   "targets": [
+    {
+     "name": "COTRTUPC",
+     "basis": "deterministic",
+     "in_inventory": true,
+     "evidence": [
+      "app/app-transaction-type-db2/cbl/COTRTLIC.cbl:50"
+     ],
+     "reasoning": "05 LIT-ADDTPGM PIC X(8) VALUE 'COTRTUPC' in WS-CONSTANTS; no statement writes it."
+    }
+   ],
+   "traversal": [
+    "COTRTLIC.cbl:648-651 EXEC CICS XCTL PROGRAM(LIT-ADDTPGM) COMMAREA(CARDDEMO-COMMAREA)",
+    "COTRTLIC.cbl:50 LIT-ADDTPGM VALUE 'COTRTUPC'"
+   ]
+  },
+  {
+   "site": "app/app-transaction-type-db2/cbl/COTRTUPC.cbl:457",
+   "program": "COTRTUPC",
+   "construct": "CICS-XCTL",
+   "variable": "CDEMO-TO-PROGRAM",
+   "status": "partial",
+   "targets": [
+    {
+     "name": "COADM01C",
+     "basis": "deterministic",
+     "in_inventory": false,
+     "reasoning": "PF3 with CDEMO-FROM-PROGRAM low-values or spaces moves LIT-ADMINPGM (VALUE 'COADM01C'). COADM01C is not in the TRANTYPE scan. Cites: app/app-transaction-type-db2/cbl/COTRTUPC.cbl:438-440, app/app-transaction-type-db2/cbl/COTRTUPC.cbl:209-210."
+    },
+    {
+     "name": "COTRTLIC",
+     "basis": "derived",
+     "in_inventory": true,
+     "evidence": [
+      "app/app-transaction-type-db2/cbl/COTRTLIC.cbl:630-651",
+      "app/app-transaction-type-db2/cbl/COTRTUPC.cbl:376-377",
+      "app/app-transaction-type-db2/cbl/COTRTUPC.cbl:441-442",
+      "app/cpy/COCOM01Y.cpy:22"
+     ],
+     "reasoning": "COTRTLIC moves LIT-THISPGM ('COTRTLIC') to CDEMO-FROM-PROGRAM (line 633) and XCTLs to COTRTUPC with COMMAREA(CARDDEMO-COMMAREA) (648-651); COTRTUPC copies DFHCOMMAREA(1:LENGTH OF CARDDEMO-COMMAREA) into CARDDEMO-COMMAREA (376-377), same copybook layout on both sides, and on PF3 moves CDEMO-FROM-PROGRAM to CDEMO-TO-PROGRAM (442). COTRTUPC writes CDEMO-FROM-PROGRAM only at 446, after that move."
+    },
+    {
+     "name": "COTRTUPC",
+     "basis": "deterministic",
+     "in_inventory": true,
+     "evidence": [
+      "app/app-transaction-type-db2/cbl/COTRTUPC.cbl:201-202",
+      "app/app-transaction-type-db2/cbl/COTRTUPC.cbl:446"
+     ],
+     "reasoning": "tracer candidate kept unchanged (LIT-THISPGM moved to CDEMO-FROM-PROGRAM at 446). Line 446 runs after the move at 442, so it reaches a later XCTL only if another program hands the COMMAREA back; not excluded because callers outside the scan are unknown."
+    }
+   ],
+   "traversal": [
+    "COTRTUPC.cbl:457-460 EXEC CICS XCTL PROGRAM(CDEMO-TO-PROGRAM) COMMAREA(CARDDEMO-COMMAREA), under WHEN CCARD-AID-PFK03 (line 429)",
+    "COTRTUPC.cbl:438-440 FROM-PROGRAM low-values/spaces -> MOVE LIT-ADMINPGM ('COADM01C', 209-210)",
+    "COTRTUPC.cbl:441-442 otherwise MOVE CDEMO-FROM-PROGRAM TO CDEMO-TO-PROGRAM",
+    "COTRTUPC.cbl:376-377 MOVE DFHCOMMAREA(1:LENGTH OF CARDDEMO-COMMAREA) TO CARDDEMO-COMMAREA; DFHCOMMAREA is an OCCURS DEPENDING ON EIBCALEN byte array (340-342), so bytes 5-12 are CDEMO-FROM-PROGRAM as the sender laid it out (app/cpy/COCOM01Y.cpy:22)",
+    "COTRTLIC.cbl:633 + 648-651 in-scan sender: FROM-PROGRAM = 'COTRTLIC', XCTL PROGRAM(LIT-ADDTPGM = 'COTRTUPC')",
+    "COTRTUPC.cbl:559-570 its own RETURN TRANSID(CTTU) carries CARDDEMO-COMMAREA back unchanged in this field"
+   ],
+   "closed_by_reasoning": [
+    {
+     "kinds": [
+      "layout-mismatch"
+     ],
+     "tracer_open_end": "layout-mismatch CDEMO-TO-PROGRAM / CDEMO-FROM-PROGRAM vs DFHCOMMAREA (COTRTUPC.cbl:340)",
+     "evidence": [
+      "app/app-transaction-type-db2/cbl/COTRTUPC.cbl:340-342",
+      "app/app-transaction-type-db2/cbl/COTRTUPC.cbl:376-377",
+      "app/cpy/COCOM01Y.cpy:19-24",
+      "app/app-transaction-type-db2/cbl/COTRTLIC.cbl:648-651"
+     ],
+     "reasoning": "DFHCOMMAREA is declared as a variable-length array of X(1) (340-342) and is copied by reference modification onto CARDDEMO-COMMAREA (376-377), so bytes 5-12 map to CDEMO-FROM-PROGRAM and 17-24 to CDEMO-TO-PROGRAM by the COCOM01Y layout (19-24), which the in-scan sender COTRTLIC also uses for its COMMAREA (648-651).",
+     "residual": "the byte mapping is settled; which values senders outside the scan put in bytes 5-12 is the caller-args ask below"
+    }
+   ],
+   "open_ends": [
+    {
+     "kind": "caller-args",
+     "class": "EVR",
+     "request": "Provide the source of every program outside the TRANTYPE scan that transfers control to COTRTUPC (transaction CTTU) with a COMMAREA - COADM01C is the one the program names (COTRTUPC.cbl:209-210, 466) - so the CDEMO-FROM-PROGRAM values received at COTRTUPC.cbl:376 can be enumerated."
+    }
+   ]
+  }
+ ]
+}

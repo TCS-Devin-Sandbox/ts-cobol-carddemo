@@ -1,0 +1,1629 @@
+{
+ "baseline_sha": "922b1c23fb361b768d03f2b2c4d1e429e2fbbef0",
+ "checked_at": "2026-11-19T09:08:09.349Z",
+ "pages": [
+  {
+   "page": "modernization/legacy/architecture-as-is.html",
+   "screenshot": "modernization/legacy/page-check/architecture-as-is.png",
+   "result": {
+    "tabs work": "PASS",
+    "filters work": "PASS",
+    "collapsibles work": "PASS",
+    "diagrams render": "PASS",
+    "counts equal data": "PASS",
+    "baseline SHA shown": "PASS",
+    "links work": "PASS",
+    "no console errors": "PASS",
+    "no missing assets": "PASS"
+   },
+   "note": {
+    "tabs work": "9 tab clicks",
+    "filters work": "3 text filters typed, 3 selects keyed, 0 toggles clicked",
+    "collapsibles work": "32 collapsibles toggled",
+    "diagrams render": "4 diagrams, each measured in its own tab - estate: 15 boxes, 29 arrows; online: 14 boxes, 21 arrows; batch: 19 boxes, 24 arrows; data: 14 boxes, 17 arrows",
+    "counts equal data": "13 of 13 counts equal",
+    "baseline SHA shown": "922b1c23fb361b768d03f2b2c4d1e429e2fbbef0",
+    "links work": "6 distinct links",
+    "no console errors": "0 errors after all interactions",
+    "no missing assets": "self-contained: 0 failed requests, 0 external requests"
+   },
+   "counts": [
+    {
+     "label": "card modules",
+     "shown": "4",
+     "want": "4",
+     "ok": true
+    },
+    {
+     "label": "card programs",
+     "shown": "46",
+     "want": "46",
+     "ok": true
+    },
+    {
+     "label": "card cics",
+     "shown": "25",
+     "want": "25",
+     "ok": true
+    },
+    {
+     "label": "card batchp",
+     "shown": "21",
+     "want": "21",
+     "ok": true
+    },
+    {
+     "label": "card tx",
+     "shown": "25",
+     "want": "25",
+     "ok": true
+    },
+    {
+     "label": "card jobs",
+     "shown": "48",
+     "want": "48",
+     "ok": true
+    },
+    {
+     "label": "card unsched",
+     "shown": "27",
+     "want": "27",
+     "ok": true
+    },
+    {
+     "label": "card stores",
+     "shown": "124",
+     "want": "124",
+     "ok": true
+    },
+    {
+     "label": "card leaves",
+     "shown": "5",
+     "want": "5",
+     "ok": true
+    },
+    {
+     "label": "transactions rows",
+     "shown": "25",
+     "want": "25",
+     "ok": true
+    },
+    {
+     "label": "stores rows",
+     "shown": "124",
+     "want": "124",
+     "ok": true
+    },
+    {
+     "label": "shared stores rows = card",
+     "shown": "9",
+     "want": "9",
+     "ok": true
+    },
+    {
+     "label": "unknown rows = card",
+     "shown": "8",
+     "want": "8",
+     "ok": true
+    }
+   ]
+  },
+  {
+   "page": "modernization/legacy/call-graph.html",
+   "screenshot": "modernization/legacy/page-check/call-graph.png",
+   "result": {
+    "tabs work": "PASS",
+    "filters work": "PASS",
+    "collapsibles work": "PASS",
+    "diagrams render": "PASS",
+    "counts equal data": "PASS",
+    "baseline SHA shown": "PASS",
+    "links work": "PASS",
+    "no console errors": "PASS",
+    "no missing assets": "PASS"
+   },
+   "note": {
+    "tabs work": "12 tab clicks",
+    "filters work": "11 text filters typed, 9 selects keyed, 12 toggles clicked",
+    "collapsibles work": "30 collapsibles toggled",
+    "diagrams render": "1 SVG rendered with non-zero size; program diagram 14 nodes, 8 edges; node click listed \"COSGN00C: 2 PROVEN edges\", Escape cleared it",
+    "counts equal data": "27 of 27 counts equal",
+    "baseline SHA shown": "922b1c23fb361b768d03f2b2c4d1e429e2fbbef0",
+    "links work": "3 distinct links",
+    "no console errors": "0 errors after all interactions",
+    "no missing assets": "self-contained: 0 failed requests, 0 external requests"
+   },
+   "counts": [
+    {
+     "label": "card programs",
+     "shown": "46",
+     "want": "46",
+     "ok": true
+    },
+    {
+     "label": "card leaves",
+     "shown": "3",
+     "want": "3",
+     "ok": true
+    },
+    {
+     "label": "card jobs",
+     "shown": "48",
+     "want": "48",
+     "ok": true
+    },
+    {
+     "label": "card pp",
+     "shown": "65",
+     "want": "65",
+     "ok": true
+    },
+    {
+     "label": "card pc",
+     "shown": "84",
+     "want": "84",
+     "ok": true
+    },
+    {
+     "label": "card cross",
+     "shown": "244",
+     "want": "244",
+     "ok": true
+    },
+    {
+     "label": "card asks",
+     "shown": "31",
+     "want": "31",
+     "ok": true
+    },
+    {
+     "label": "card uncalled",
+     "shown": "4",
+     "want": "4",
+     "ok": true
+    },
+    {
+     "label": "card unref",
+     "shown": "7",
+     "want": "7",
+     "ok": true
+    },
+    {
+     "label": "card unsched",
+     "shown": "27",
+     "want": "27",
+     "ok": true
+    },
+    {
+     "label": "card dis",
+     "shown": "26",
+     "want": "26",
+     "ok": true
+    },
+    {
+     "label": "program PROVEN rows",
+     "shown": "65",
+     "want": "65",
+     "ok": true
+    },
+    {
+     "label": "program CANDIDATE rows",
+     "shown": "84",
+     "want": "84",
+     "ok": true
+    },
+    {
+     "label": "job PROVEN rows",
+     "shown": "121",
+     "want": "121",
+     "ok": true
+    },
+    {
+     "label": "job CANDIDATE rows",
+     "shown": "1",
+     "want": "1",
+     "ok": true
+    },
+    {
+     "label": "data PROVEN rows",
+     "shown": "178",
+     "want": "178",
+     "ok": true
+    },
+    {
+     "label": "data CANDIDATE rows",
+     "shown": "9",
+     "want": "9",
+     "ok": true
+    },
+    {
+     "label": "transaction PROVEN rows",
+     "shown": "25",
+     "want": "25",
+     "ok": true
+    },
+    {
+     "label": "transaction CANDIDATE rows",
+     "shown": "0",
+     "want": "0",
+     "ok": true
+    },
+    {
+     "label": "schedule PROVEN rows",
+     "shown": "67",
+     "want": "67",
+     "ok": true
+    },
+    {
+     "label": "schedule CANDIDATE rows",
+     "shown": "2",
+     "want": "2",
+     "ok": true
+    },
+    {
+     "label": "copybook rows",
+     "shown": "30",
+     "want": "30",
+     "ok": true
+    },
+    {
+     "label": "unsched rows",
+     "shown": "27",
+     "want": "27",
+     "ok": true
+    },
+    {
+     "label": "asks rows",
+     "shown": "31",
+     "want": "31",
+     "ok": true
+    },
+    {
+     "label": "uncalled rows",
+     "shown": "4",
+     "want": "4",
+     "ok": true
+    },
+    {
+     "label": "unref rows",
+     "shown": "7",
+     "want": "7",
+     "ok": true
+    },
+    {
+     "label": "dis rows",
+     "shown": "26",
+     "want": "26",
+     "ok": true
+    }
+   ]
+  },
+  {
+   "page": "store/reports/estate.html",
+   "screenshot": "modernization/legacy/page-check/estate.png",
+   "result": {
+    "tabs work": "PASS",
+    "filters work": "PASS",
+    "collapsibles work": "PASS",
+    "diagrams render": "PASS",
+    "counts equal data": "PASS",
+    "baseline SHA shown": "FAIL",
+    "links work": "PASS",
+    "no console errors": "PASS",
+    "no missing assets": "PASS"
+   },
+   "note": {
+    "tabs work": "page has no tabs",
+    "filters work": "0 text filters typed, 0 selects keyed, 0 toggles clicked",
+    "collapsibles work": "4 collapsibles toggled",
+    "diagrams render": "2 SVG rendered with non-zero size",
+    "counts equal data": "6 of 6 counts equal",
+    "baseline SHA shown": "the page does not print the baseline SHA (generated by mftb, which has no such field; not hand-edited)",
+    "links work": "4 distinct links",
+    "no console errors": "0 errors after all interactions",
+    "no missing assets": "self-contained: 0 failed requests, 0 external requests"
+   },
+   "counts": [
+    {
+     "label": "Files",
+     "shown": "245",
+     "want": "245",
+     "ok": true
+    },
+    {
+     "label": "Artifacts",
+     "shown": "208",
+     "want": "208",
+     "ok": true
+    },
+    {
+     "label": "Modules",
+     "shown": "4",
+     "want": "4",
+     "ok": true
+    },
+    {
+     "label": "Shared",
+     "shown": "8",
+     "want": "8",
+     "ok": true
+    },
+    {
+     "label": "Unplaced",
+     "shown": "0",
+     "want": "0",
+     "ok": true
+    },
+    {
+     "label": "Unclassified",
+     "shown": "9",
+     "want": "9",
+     "ok": true
+    }
+   ]
+  },
+  {
+   "page": "store/reports/AUTH/AUTH-report.html",
+   "screenshot": "modernization/legacy/page-check/AUTH__AUTH-report.png",
+   "result": {
+    "tabs work": "PASS",
+    "filters work": "PASS",
+    "collapsibles work": "PASS",
+    "diagrams render": "PASS",
+    "counts equal data": "PASS",
+    "baseline SHA shown": "FAIL",
+    "links work": "FAIL",
+    "no console errors": "FAIL",
+    "no missing assets": "PASS"
+   },
+   "note": {
+    "tabs work": "17 tab clicks",
+    "filters work": "20 text filters typed, 83 selects keyed, 0 toggles clicked",
+    "collapsibles work": "44 collapsibles toggled",
+    "diagrams render": "1 of 1 SVG seen rendered with non-zero size while their tab or section was showing",
+    "counts equal data": "3 of 3 counts equal",
+    "baseline SHA shown": "the page does not print the baseline SHA (generated by mftb, which has no such field; not hand-edited)",
+    "hidden": 3,
+    "links work": "25 distinct links, 3 in-page anchors target-checked only (hidden in the current view); failed: #p-dbms (no target) | #p-db2 (no target) | #p-datasets (no target) | #p-datasets?kind=COBOL%20file%20without%20DSN (no target) | #p-cics (no target)",
+    "no console errors": "TypeError: Cannot set properties of undefined (setting 'page') [after: select in t-external [Sort by module / Sort by what it is]] | TypeError: Cannot set properties of undefined (setting 'page') [after: select in t-external [Sort by module / Sort by what it is]]",
+    "no missing assets": "self-contained: 0 failed requests, 0 external requests"
+   },
+   "counts": [
+    {
+     "label": "Programs tab",
+     "shown": "8",
+     "want": "8",
+     "ok": true
+    },
+    {
+     "label": "Copybooks tab",
+     "shown": "42",
+     "want": "42",
+     "ok": true
+    },
+    {
+     "label": "Jobs tab",
+     "shown": "5",
+     "want": "5",
+     "ok": true
+    }
+   ]
+  },
+  {
+   "page": "store/reports/AUTH/online/online-CP00.html",
+   "screenshot": "modernization/legacy/page-check/AUTH__online__online-CP00.png",
+   "result": {
+    "tabs work": "PASS",
+    "filters work": "PASS",
+    "collapsibles work": "PASS",
+    "diagrams render": "PASS",
+    "counts equal data": "PASS",
+    "baseline SHA shown": "FAIL",
+    "links work": "FAIL",
+    "no console errors": "FAIL",
+    "no missing assets": "PASS"
+   },
+   "note": {
+    "tabs work": "17 tab clicks",
+    "filters work": "20 text filters typed, 49 selects keyed, 0 toggles clicked",
+    "collapsibles work": "23 collapsibles toggled",
+    "diagrams render": "1 of 1 SVG seen rendered with non-zero size while their tab or section was showing",
+    "counts equal data": "1 of 1 counts equal",
+    "baseline SHA shown": "the page does not print the baseline SHA (generated by mftb, which has no such field; not hand-edited)",
+    "links work": "14 distinct links; failed: #p-dbms (no target) | #p-datasets (no target) | #p-datasets?kind=COBOL%20file%20without%20DSN (no target) | #p-cics (no target) | #p-runtime (no target)",
+    "no console errors": "TypeError: Cannot set properties of undefined (setting 'page') [after: select in t-db2 [Sort by name / Sort by kind]] | TypeError: Cannot set properties of undefined (setting 'page') [after: select in t-db2 [Sort by name / Sort by kind]] | TypeError: Cannot set properties of undefined (setting 'page') [after: select in t-datasets [Sort by DSN / Sort by type]]",
+    "no missing assets": "self-contained: 0 failed requests, 0 external requests"
+   },
+   "counts": [
+    {
+     "label": "Programs tab = programs the transaction reaches (in inventory)",
+     "shown": "1",
+     "want": "1",
+     "ok": true
+    }
+   ]
+  },
+  {
+   "page": "store/reports/AUTH/online/online-CPVD.html",
+   "screenshot": "modernization/legacy/page-check/AUTH__online__online-CPVD.png",
+   "result": {
+    "tabs work": "PASS",
+    "filters work": "PASS",
+    "collapsibles work": "PASS",
+    "diagrams render": "PASS",
+    "counts equal data": "PASS",
+    "baseline SHA shown": "FAIL",
+    "links work": "FAIL",
+    "no console errors": "FAIL",
+    "no missing assets": "PASS"
+   },
+   "note": {
+    "tabs work": "17 tab clicks",
+    "filters work": "20 text filters typed, 67 selects keyed, 0 toggles clicked",
+    "collapsibles work": "29 collapsibles toggled",
+    "diagrams render": "1 of 1 SVG seen rendered with non-zero size while their tab or section was showing",
+    "counts equal data": "1 of 1 counts equal",
+    "baseline SHA shown": "the page does not print the baseline SHA (generated by mftb, which has no such field; not hand-edited)",
+    "hidden": 3,
+    "links work": "18 distinct links, 3 in-page anchors target-checked only (hidden in the current view); failed: #p-dbms (no target) | #p-db2 (no target) | #p-datasets (no target) | #p-datasets?kind=COBOL%20file%20without%20DSN (no target) | #p-cics (no target)",
+    "no console errors": "TypeError: Cannot set properties of undefined (setting 'page') [after: select in t-datasets [Sort by DSN / Sort by type]] | TypeError: Cannot set properties of undefined (setting 'page') [after: select in t-datasets [Sort by DSN / Sort by type]] | TypeError: Cannot set properties of undefined (setting 'page') [after: select in t-external [Sort by module / Sort by what it is]]",
+    "no missing assets": "self-contained: 0 failed requests, 0 external requests"
+   },
+   "counts": [
+    {
+     "label": "Programs tab = programs the transaction reaches (in inventory)",
+     "shown": "3",
+     "want": "3",
+     "ok": true
+    }
+   ]
+  },
+  {
+   "page": "store/reports/AUTH/online/online-CPVS.html",
+   "screenshot": "modernization/legacy/page-check/AUTH__online__online-CPVS.png",
+   "result": {
+    "tabs work": "PASS",
+    "filters work": "PASS",
+    "collapsibles work": "PASS",
+    "diagrams render": "PASS",
+    "counts equal data": "PASS",
+    "baseline SHA shown": "FAIL",
+    "links work": "FAIL",
+    "no console errors": "FAIL",
+    "no missing assets": "PASS"
+   },
+   "note": {
+    "tabs work": "17 tab clicks",
+    "filters work": "20 text filters typed, 67 selects keyed, 0 toggles clicked",
+    "collapsibles work": "29 collapsibles toggled",
+    "diagrams render": "1 of 1 SVG seen rendered with non-zero size while their tab or section was showing",
+    "counts equal data": "1 of 1 counts equal",
+    "baseline SHA shown": "the page does not print the baseline SHA (generated by mftb, which has no such field; not hand-edited)",
+    "hidden": 3,
+    "links work": "18 distinct links, 3 in-page anchors target-checked only (hidden in the current view); failed: #p-dbms (no target) | #p-db2 (no target) | #p-datasets (no target) | #p-datasets?kind=COBOL%20file%20without%20DSN (no target) | #p-cics (no target)",
+    "no console errors": "TypeError: Cannot set properties of undefined (setting 'page') [after: select in t-datasets [Sort by DSN / Sort by type]] | TypeError: Cannot set properties of undefined (setting 'page') [after: select in t-datasets [Sort by DSN / Sort by type]] | TypeError: Cannot set properties of undefined (setting 'page') [after: select in t-external [Sort by module / Sort by what it is]]",
+    "no missing assets": "self-contained: 0 failed requests, 0 external requests"
+   },
+   "counts": [
+    {
+     "label": "Programs tab = programs the transaction reaches (in inventory)",
+     "shown": "3",
+     "want": "3",
+     "ok": true
+    }
+   ]
+  },
+  {
+   "page": "store/reports/CARDDEMO/CARDDEMO-report.html",
+   "screenshot": "modernization/legacy/page-check/CARDDEMO__CARDDEMO-report.png",
+   "result": {
+    "tabs work": "PASS",
+    "filters work": "PASS",
+    "collapsibles work": "PASS",
+    "diagrams render": "PASS",
+    "counts equal data": "PASS",
+    "baseline SHA shown": "FAIL",
+    "links work": "FAIL",
+    "no console errors": "FAIL",
+    "no missing assets": "PASS"
+   },
+   "note": {
+    "tabs work": "17 tab clicks",
+    "filters work": "21 text filters typed, 99 selects keyed, 0 toggles clicked",
+    "collapsibles work": "72 collapsibles toggled",
+    "diagrams render": "1 SVG rendered with non-zero size",
+    "counts equal data": "3 of 3 counts equal",
+    "baseline SHA shown": "the page does not print the baseline SHA (generated by mftb, which has no such field; not hand-edited)",
+    "hidden": 39,
+    "links work": "100 distinct links, 39 in-page anchors target-checked only (hidden in the current view); failed: #p-dbms (no target) | #p-datasets (no target) | #p-datasets?kind=COBOL%20file%20without%20DSN (no target) | #p-cics (no target) | #p-external (no target)",
+    "no console errors": "TypeError: Cannot set properties of undefined (setting 'page') [after: select in t-db2 [Sort by name / Sort by kind]] | TypeError: Cannot set properties of undefined (setting 'page') [after: select in t-db2 [Sort by name / Sort by kind]] | TypeError: Cannot set properties of undefined (setting 'page') [after: select in t-external [Sort by module / Sort by what it is]]",
+    "no missing assets": "self-contained: 0 failed requests, 0 external requests"
+   },
+   "counts": [
+    {
+     "label": "Programs tab",
+     "shown": "32",
+     "want": "32",
+     "ok": true
+    },
+    {
+     "label": "Copybooks tab",
+     "shown": "48",
+     "want": "48",
+     "ok": true
+    },
+    {
+     "label": "Jobs tab",
+     "shown": "39",
+     "want": "39",
+     "ok": true
+    }
+   ]
+  },
+  {
+   "page": "store/reports/CARDDEMO/chains/chain-CARDDEMO.html",
+   "screenshot": "modernization/legacy/page-check/CARDDEMO__chains__chain-CARDDEMO.png",
+   "result": {
+    "tabs work": "PASS",
+    "filters work": "PASS",
+    "collapsibles work": "PASS",
+    "diagrams render": "PASS",
+    "counts equal data": "PASS",
+    "baseline SHA shown": "FAIL",
+    "links work": "FAIL",
+    "no console errors": "FAIL",
+    "no missing assets": "PASS"
+   },
+   "note": {
+    "tabs work": "17 tab clicks",
+    "filters work": "20 text filters typed, 85 selects keyed, 0 toggles clicked",
+    "collapsibles work": "47 collapsibles toggled",
+    "diagrams render": "2 of 2 SVG seen rendered with non-zero size while their tab or section was showing",
+    "counts equal data": "1 of 1 counts equal",
+    "baseline SHA shown": "the page does not print the baseline SHA (generated by mftb, which has no such field; not hand-edited)",
+    "hidden": 1,
+    "links work": "25 distinct links, 1 in-page anchors target-checked only (hidden in the current view); failed: #p-dbms (no target) | #p-datasets (no target) | #p-datasets?kind=COBOL%20file%20without%20DSN (no target) | #p-cics (no target) | #p-external (no target)",
+    "no console errors": "TypeError: Cannot set properties of undefined (setting 'page') [after: select in t-db2 [Sort by name / Sort by kind]] | TypeError: Cannot set properties of undefined (setting 'page') [after: select in t-db2 [Sort by name / Sort by kind]] | TypeError: Cannot set properties of undefined (setting 'page') [after: select in t-external [Sort by module / Sort by what it is]]",
+    "no missing assets": "self-contained: 0 failed requests, 0 external requests"
+   },
+   "counts": [
+    {
+     "label": "Schedules tab = jobs of the scheduler table",
+     "shown": "17",
+     "want": "17",
+     "ok": true
+    }
+   ]
+  },
+  {
+   "page": "store/reports/CARDDEMO/chains/chain-DAILY-TransactionBackup.html",
+   "screenshot": "modernization/legacy/page-check/CARDDEMO__chains__chain-DAILY-TransactionBackup.png",
+   "result": {
+    "tabs work": "PASS",
+    "filters work": "PASS",
+    "collapsibles work": "PASS",
+    "diagrams render": "PASS",
+    "counts equal data": "PASS",
+    "baseline SHA shown": "FAIL",
+    "links work": "FAIL",
+    "no console errors": "FAIL",
+    "no missing assets": "PASS"
+   },
+   "note": {
+    "tabs work": "17 tab clicks",
+    "filters work": "20 text filters typed, 79 selects keyed, 0 toggles clicked",
+    "collapsibles work": "30 collapsibles toggled",
+    "diagrams render": "2 of 2 SVG seen rendered with non-zero size while their tab or section was showing",
+    "counts equal data": "1 of 1 counts equal",
+    "baseline SHA shown": "the page does not print the baseline SHA (generated by mftb, which has no such field; not hand-edited)",
+    "links work": "21 distinct links; failed: #p-dbms (no target) | #p-datasets (no target) | #p-datasets?kind=COBOL%20file%20without%20DSN (no target) | #p-cics (no target) | #p-external (no target)",
+    "no console errors": "TypeError: Cannot set properties of undefined (setting 'page') [after: select in t-db2 [Sort by name / Sort by kind]] | TypeError: Cannot set properties of undefined (setting 'page') [after: select in t-db2 [Sort by name / Sort by kind]] | TypeError: Cannot set properties of undefined (setting 'page') [after: select in t-external [Sort by module / Sort by what it is]]",
+    "no missing assets": "self-contained: 0 failed requests, 0 external requests"
+   },
+   "counts": [
+    {
+     "label": "Schedules tab = jobs of the scheduler table",
+     "shown": "4",
+     "want": "4",
+     "ok": true
+    }
+   ]
+  },
+  {
+   "page": "store/reports/CARDDEMO/chains/chain-DisclosureGroupsRefresh.html",
+   "screenshot": "modernization/legacy/page-check/CARDDEMO__chains__chain-DisclosureGroupsRefresh.png",
+   "result": {
+    "tabs work": "PASS",
+    "filters work": "PASS",
+    "collapsibles work": "PASS",
+    "diagrams render": "PASS",
+    "counts equal data": "PASS",
+    "baseline SHA shown": "FAIL",
+    "links work": "FAIL",
+    "no console errors": "FAIL",
+    "no missing assets": "PASS"
+   },
+   "note": {
+    "tabs work": "17 tab clicks",
+    "filters work": "20 text filters typed, 76 selects keyed, 0 toggles clicked",
+    "collapsibles work": "28 collapsibles toggled",
+    "diagrams render": "2 of 2 SVG seen rendered with non-zero size while their tab or section was showing",
+    "counts equal data": "1 of 1 counts equal",
+    "baseline SHA shown": "the page does not print the baseline SHA (generated by mftb, which has no such field; not hand-edited)",
+    "links work": "19 distinct links; failed: #p-dbms (no target) | #p-datasets (no target) | #p-datasets?kind=COBOL%20file%20without%20DSN (no target) | #p-cics (no target) | #p-external (no target)",
+    "no console errors": "TypeError: Cannot set properties of undefined (setting 'page') [after: select in t-db2 [Sort by name / Sort by kind]] | TypeError: Cannot set properties of undefined (setting 'page') [after: select in t-db2 [Sort by name / Sort by kind]] | TypeError: Cannot set properties of undefined (setting 'page') [after: select in t-external [Sort by module / Sort by what it is]]",
+    "no missing assets": "self-contained: 0 failed requests, 0 external requests"
+   },
+   "counts": [
+    {
+     "label": "Schedules tab = jobs of the scheduler table",
+     "shown": "4",
+     "want": "4",
+     "ok": true
+    }
+   ]
+  },
+  {
+   "page": "store/reports/CARDDEMO/chains/chain-MONTHLY-InterestCalculation.html",
+   "screenshot": "modernization/legacy/page-check/CARDDEMO__chains__chain-MONTHLY-InterestCalculation.png",
+   "result": {
+    "tabs work": "PASS",
+    "filters work": "PASS",
+    "collapsibles work": "PASS",
+    "diagrams render": "PASS",
+    "counts equal data": "PASS",
+    "baseline SHA shown": "FAIL",
+    "links work": "FAIL",
+    "no console errors": "FAIL",
+    "no missing assets": "PASS"
+   },
+   "note": {
+    "tabs work": "17 tab clicks",
+    "filters work": "20 text filters typed, 79 selects keyed, 0 toggles clicked",
+    "collapsibles work": "36 collapsibles toggled",
+    "diagrams render": "2 of 2 SVG seen rendered with non-zero size while their tab or section was showing",
+    "counts equal data": "1 of 1 counts equal",
+    "baseline SHA shown": "the page does not print the baseline SHA (generated by mftb, which has no such field; not hand-edited)",
+    "links work": "19 distinct links; failed: #p-dbms (no target) | #p-datasets (no target) | #p-datasets?kind=COBOL%20file%20without%20DSN (no target) | #p-cics (no target) | #p-external (no target)",
+    "no console errors": "TypeError: Cannot set properties of undefined (setting 'page') [after: select in t-db2 [Sort by name / Sort by kind]] | TypeError: Cannot set properties of undefined (setting 'page') [after: select in t-db2 [Sort by name / Sort by kind]] | TypeError: Cannot set properties of undefined (setting 'page') [after: select in t-external [Sort by module / Sort by what it is]]",
+    "no missing assets": "self-contained: 0 failed requests, 0 external requests"
+   },
+   "counts": [
+    {
+     "label": "Schedules tab = jobs of the scheduler table",
+     "shown": "5",
+     "want": "5",
+     "ok": true
+    }
+   ]
+  },
+  {
+   "page": "store/reports/CARDDEMO/chains/chain-TransactionTypesDBRefresh.html",
+   "screenshot": "modernization/legacy/page-check/CARDDEMO__chains__chain-TransactionTypesDBRefresh.png",
+   "result": {
+    "tabs work": "PASS",
+    "filters work": "PASS",
+    "collapsibles work": "PASS",
+    "diagrams render": "PASS",
+    "counts equal data": "FAIL",
+    "baseline SHA shown": "FAIL",
+    "links work": "FAIL",
+    "no console errors": "FAIL",
+    "no missing assets": "PASS"
+   },
+   "note": {
+    "tabs work": "17 tab clicks",
+    "filters work": "20 text filters typed, 38 selects keyed, 0 toggles clicked",
+    "collapsibles work": "20 collapsibles toggled",
+    "diagrams render": "2 of 2 SVG seen rendered with non-zero size while their tab or section was showing",
+    "counts equal data": "0 of 1 counts equal; differ: Schedules tab = jobs of the scheduler table shows 0, data 1",
+    "baseline SHA shown": "the page does not print the baseline SHA (generated by mftb, which has no such field; not hand-edited)",
+    "links work": "14 distinct links; failed: #p-dbms (no target) | #p-datasets (no target) | #p-datasets?kind=COBOL%20file%20without%20DSN (no target) | #p-cics (no target) | #p-external (no target)",
+    "no console errors": "TypeError: Cannot set properties of undefined (setting 'page') [after: select in t-db2 [Sort by name / Sort by kind]] | TypeError: Cannot set properties of undefined (setting 'page') [after: select in t-db2 [Sort by name / Sort by kind]] | TypeError: Cannot set properties of undefined (setting 'page') [after: select in t-datasets [Sort by DSN / Sort by type]]",
+    "no missing assets": "self-contained: 0 failed requests, 0 external requests"
+   },
+   "counts": [
+    {
+     "label": "Schedules tab = jobs of the scheduler table",
+     "shown": "0",
+     "want": "1",
+     "ok": false
+    }
+   ]
+  },
+  {
+   "page": "store/reports/CARDDEMO/chains/chain-WEEKLY-TransactionTypesDBRefresh.html",
+   "screenshot": "modernization/legacy/page-check/CARDDEMO__chains__chain-WEEKLY-TransactionTypesDBRefresh.png",
+   "result": {
+    "tabs work": "PASS",
+    "filters work": "PASS",
+    "collapsibles work": "PASS",
+    "diagrams render": "PASS",
+    "counts equal data": "FAIL",
+    "baseline SHA shown": "FAIL",
+    "links work": "FAIL",
+    "no console errors": "FAIL",
+    "no missing assets": "PASS"
+   },
+   "note": {
+    "tabs work": "17 tab clicks",
+    "filters work": "20 text filters typed, 38 selects keyed, 0 toggles clicked",
+    "collapsibles work": "20 collapsibles toggled",
+    "diagrams render": "2 of 2 SVG seen rendered with non-zero size while their tab or section was showing",
+    "counts equal data": "0 of 1 counts equal; differ: Schedules tab = jobs of the scheduler table shows 0, data 1",
+    "baseline SHA shown": "the page does not print the baseline SHA (generated by mftb, which has no such field; not hand-edited)",
+    "links work": "14 distinct links; failed: #p-dbms (no target) | #p-datasets (no target) | #p-datasets?kind=COBOL%20file%20without%20DSN (no target) | #p-cics (no target) | #p-external (no target)",
+    "no console errors": "TypeError: Cannot set properties of undefined (setting 'page') [after: select in t-db2 [Sort by name / Sort by kind]] | TypeError: Cannot set properties of undefined (setting 'page') [after: select in t-db2 [Sort by name / Sort by kind]] | TypeError: Cannot set properties of undefined (setting 'page') [after: select in t-datasets [Sort by DSN / Sort by type]]",
+    "no missing assets": "self-contained: 0 failed requests, 0 external requests"
+   },
+   "counts": [
+    {
+     "label": "Schedules tab = jobs of the scheduler table",
+     "shown": "0",
+     "want": "1",
+     "ok": false
+    }
+   ]
+  },
+  {
+   "page": "store/reports/CARDDEMO/online/online-CA00.html",
+   "screenshot": "modernization/legacy/page-check/CARDDEMO__online__online-CA00.png",
+   "result": {
+    "tabs work": "PASS",
+    "filters work": "PASS",
+    "collapsibles work": "PASS",
+    "diagrams render": "PASS",
+    "counts equal data": "PASS",
+    "baseline SHA shown": "FAIL",
+    "links work": "FAIL",
+    "no console errors": "FAIL",
+    "no missing assets": "PASS"
+   },
+   "note": {
+    "tabs work": "17 tab clicks",
+    "filters work": "20 text filters typed, 66 selects keyed, 0 toggles clicked",
+    "collapsibles work": "42 collapsibles toggled",
+    "diagrams render": "1 SVG rendered with non-zero size",
+    "counts equal data": "1 of 1 counts equal",
+    "baseline SHA shown": "the page does not print the baseline SHA (generated by mftb, which has no such field; not hand-edited)",
+    "hidden": 19,
+    "links work": "32 distinct links, 19 in-page anchors target-checked only (hidden in the current view); failed: #p-dbms (no target) | #p-datasets (no target) | #p-datasets?kind=COBOL%20file%20without%20DSN (no target) | #p-cics (no target) | #p-external (no target)",
+    "no console errors": "TypeError: Cannot set properties of undefined (setting 'page') [after: select in t-db2 [Sort by name / Sort by kind]] | TypeError: Cannot set properties of undefined (setting 'page') [after: select in t-db2 [Sort by name / Sort by kind]] | TypeError: Cannot set properties of undefined (setting 'page') [after: select in t-external [Sort by module / Sort by what it is]]",
+    "no missing assets": "self-contained: 0 failed requests, 0 external requests"
+   },
+   "counts": [
+    {
+     "label": "Programs tab = programs the transaction reaches (in inventory)",
+     "shown": "17",
+     "want": "17",
+     "ok": true
+    }
+   ]
+  },
+  {
+   "page": "store/reports/CARDDEMO/online/online-CAUP.html",
+   "screenshot": "modernization/legacy/page-check/CARDDEMO__online__online-CAUP.png",
+   "result": {
+    "tabs work": "PASS",
+    "filters work": "PASS",
+    "collapsibles work": "PASS",
+    "diagrams render": "PASS",
+    "counts equal data": "PASS",
+    "baseline SHA shown": "FAIL",
+    "links work": "FAIL",
+    "no console errors": "FAIL",
+    "no missing assets": "PASS"
+   },
+   "note": {
+    "tabs work": "17 tab clicks",
+    "filters work": "20 text filters typed, 66 selects keyed, 0 toggles clicked",
+    "collapsibles work": "42 collapsibles toggled",
+    "diagrams render": "1 SVG rendered with non-zero size",
+    "counts equal data": "1 of 1 counts equal",
+    "baseline SHA shown": "the page does not print the baseline SHA (generated by mftb, which has no such field; not hand-edited)",
+    "hidden": 19,
+    "links work": "32 distinct links, 19 in-page anchors target-checked only (hidden in the current view); failed: #p-dbms (no target) | #p-datasets (no target) | #p-datasets?kind=COBOL%20file%20without%20DSN (no target) | #p-cics (no target) | #p-external (no target)",
+    "no console errors": "TypeError: Cannot set properties of undefined (setting 'page') [after: select in t-db2 [Sort by name / Sort by kind]] | TypeError: Cannot set properties of undefined (setting 'page') [after: select in t-db2 [Sort by name / Sort by kind]] | TypeError: Cannot set properties of undefined (setting 'page') [after: select in t-external [Sort by module / Sort by what it is]]",
+    "no missing assets": "self-contained: 0 failed requests, 0 external requests"
+   },
+   "counts": [
+    {
+     "label": "Programs tab = programs the transaction reaches (in inventory)",
+     "shown": "17",
+     "want": "17",
+     "ok": true
+    }
+   ]
+  },
+  {
+   "page": "store/reports/CARDDEMO/online/online-CAVW.html",
+   "screenshot": "modernization/legacy/page-check/CARDDEMO__online__online-CAVW.png",
+   "result": {
+    "tabs work": "PASS",
+    "filters work": "PASS",
+    "collapsibles work": "PASS",
+    "diagrams render": "PASS",
+    "counts equal data": "PASS",
+    "baseline SHA shown": "FAIL",
+    "links work": "FAIL",
+    "no console errors": "FAIL",
+    "no missing assets": "PASS"
+   },
+   "note": {
+    "tabs work": "17 tab clicks",
+    "filters work": "20 text filters typed, 66 selects keyed, 0 toggles clicked",
+    "collapsibles work": "42 collapsibles toggled",
+    "diagrams render": "1 SVG rendered with non-zero size",
+    "counts equal data": "1 of 1 counts equal",
+    "baseline SHA shown": "the page does not print the baseline SHA (generated by mftb, which has no such field; not hand-edited)",
+    "hidden": 19,
+    "links work": "32 distinct links, 19 in-page anchors target-checked only (hidden in the current view); failed: #p-dbms (no target) | #p-datasets (no target) | #p-datasets?kind=COBOL%20file%20without%20DSN (no target) | #p-cics (no target) | #p-external (no target)",
+    "no console errors": "TypeError: Cannot set properties of undefined (setting 'page') [after: select in t-db2 [Sort by name / Sort by kind]] | TypeError: Cannot set properties of undefined (setting 'page') [after: select in t-db2 [Sort by name / Sort by kind]] | TypeError: Cannot set properties of undefined (setting 'page') [after: select in t-external [Sort by module / Sort by what it is]]",
+    "no missing assets": "self-contained: 0 failed requests, 0 external requests"
+   },
+   "counts": [
+    {
+     "label": "Programs tab = programs the transaction reaches (in inventory)",
+     "shown": "17",
+     "want": "17",
+     "ok": true
+    }
+   ]
+  },
+  {
+   "page": "store/reports/CARDDEMO/online/online-CB00.html",
+   "screenshot": "modernization/legacy/page-check/CARDDEMO__online__online-CB00.png",
+   "result": {
+    "tabs work": "PASS",
+    "filters work": "PASS",
+    "collapsibles work": "PASS",
+    "diagrams render": "PASS",
+    "counts equal data": "PASS",
+    "baseline SHA shown": "FAIL",
+    "links work": "FAIL",
+    "no console errors": "FAIL",
+    "no missing assets": "PASS"
+   },
+   "note": {
+    "tabs work": "17 tab clicks",
+    "filters work": "20 text filters typed, 66 selects keyed, 0 toggles clicked",
+    "collapsibles work": "42 collapsibles toggled",
+    "diagrams render": "1 SVG rendered with non-zero size",
+    "counts equal data": "1 of 1 counts equal",
+    "baseline SHA shown": "the page does not print the baseline SHA (generated by mftb, which has no such field; not hand-edited)",
+    "hidden": 19,
+    "links work": "32 distinct links, 19 in-page anchors target-checked only (hidden in the current view); failed: #p-dbms (no target) | #p-datasets (no target) | #p-datasets?kind=COBOL%20file%20without%20DSN (no target) | #p-cics (no target) | #p-external (no target)",
+    "no console errors": "TypeError: Cannot set properties of undefined (setting 'page') [after: select in t-db2 [Sort by name / Sort by kind]] | TypeError: Cannot set properties of undefined (setting 'page') [after: select in t-db2 [Sort by name / Sort by kind]] | TypeError: Cannot set properties of undefined (setting 'page') [after: select in t-external [Sort by module / Sort by what it is]]",
+    "no missing assets": "self-contained: 0 failed requests, 0 external requests"
+   },
+   "counts": [
+    {
+     "label": "Programs tab = programs the transaction reaches (in inventory)",
+     "shown": "17",
+     "want": "17",
+     "ok": true
+    }
+   ]
+  },
+  {
+   "page": "store/reports/CARDDEMO/online/online-CC00.html",
+   "screenshot": "modernization/legacy/page-check/CARDDEMO__online__online-CC00.png",
+   "result": {
+    "tabs work": "PASS",
+    "filters work": "PASS",
+    "collapsibles work": "PASS",
+    "diagrams render": "PASS",
+    "counts equal data": "PASS",
+    "baseline SHA shown": "FAIL",
+    "links work": "FAIL",
+    "no console errors": "FAIL",
+    "no missing assets": "PASS"
+   },
+   "note": {
+    "tabs work": "17 tab clicks",
+    "filters work": "20 text filters typed, 66 selects keyed, 0 toggles clicked",
+    "collapsibles work": "42 collapsibles toggled",
+    "diagrams render": "1 SVG rendered with non-zero size",
+    "counts equal data": "1 of 1 counts equal",
+    "baseline SHA shown": "the page does not print the baseline SHA (generated by mftb, which has no such field; not hand-edited)",
+    "hidden": 19,
+    "links work": "32 distinct links, 19 in-page anchors target-checked only (hidden in the current view); failed: #p-dbms (no target) | #p-datasets (no target) | #p-datasets?kind=COBOL%20file%20without%20DSN (no target) | #p-cics (no target) | #p-external (no target)",
+    "no console errors": "TypeError: Cannot set properties of undefined (setting 'page') [after: select in t-db2 [Sort by name / Sort by kind]] | TypeError: Cannot set properties of undefined (setting 'page') [after: select in t-db2 [Sort by name / Sort by kind]] | TypeError: Cannot set properties of undefined (setting 'page') [after: select in t-external [Sort by module / Sort by what it is]]",
+    "no missing assets": "self-contained: 0 failed requests, 0 external requests"
+   },
+   "counts": [
+    {
+     "label": "Programs tab = programs the transaction reaches (in inventory)",
+     "shown": "17",
+     "want": "17",
+     "ok": true
+    }
+   ]
+  },
+  {
+   "page": "store/reports/CARDDEMO/online/online-CCDL.html",
+   "screenshot": "modernization/legacy/page-check/CARDDEMO__online__online-CCDL.png",
+   "result": {
+    "tabs work": "PASS",
+    "filters work": "PASS",
+    "collapsibles work": "PASS",
+    "diagrams render": "PASS",
+    "counts equal data": "PASS",
+    "baseline SHA shown": "FAIL",
+    "links work": "FAIL",
+    "no console errors": "FAIL",
+    "no missing assets": "PASS"
+   },
+   "note": {
+    "tabs work": "17 tab clicks",
+    "filters work": "20 text filters typed, 66 selects keyed, 0 toggles clicked",
+    "collapsibles work": "42 collapsibles toggled",
+    "diagrams render": "1 SVG rendered with non-zero size",
+    "counts equal data": "1 of 1 counts equal",
+    "baseline SHA shown": "the page does not print the baseline SHA (generated by mftb, which has no such field; not hand-edited)",
+    "hidden": 19,
+    "links work": "32 distinct links, 19 in-page anchors target-checked only (hidden in the current view); failed: #p-dbms (no target) | #p-datasets (no target) | #p-datasets?kind=COBOL%20file%20without%20DSN (no target) | #p-cics (no target) | #p-external (no target)",
+    "no console errors": "TypeError: Cannot set properties of undefined (setting 'page') [after: select in t-db2 [Sort by name / Sort by kind]] | TypeError: Cannot set properties of undefined (setting 'page') [after: select in t-db2 [Sort by name / Sort by kind]] | TypeError: Cannot set properties of undefined (setting 'page') [after: select in t-external [Sort by module / Sort by what it is]]",
+    "no missing assets": "self-contained: 0 failed requests, 0 external requests"
+   },
+   "counts": [
+    {
+     "label": "Programs tab = programs the transaction reaches (in inventory)",
+     "shown": "17",
+     "want": "17",
+     "ok": true
+    }
+   ]
+  },
+  {
+   "page": "store/reports/CARDDEMO/online/online-CCLI.html",
+   "screenshot": "modernization/legacy/page-check/CARDDEMO__online__online-CCLI.png",
+   "result": {
+    "tabs work": "PASS",
+    "filters work": "PASS",
+    "collapsibles work": "PASS",
+    "diagrams render": "PASS",
+    "counts equal data": "PASS",
+    "baseline SHA shown": "FAIL",
+    "links work": "FAIL",
+    "no console errors": "FAIL",
+    "no missing assets": "PASS"
+   },
+   "note": {
+    "tabs work": "17 tab clicks",
+    "filters work": "20 text filters typed, 66 selects keyed, 0 toggles clicked",
+    "collapsibles work": "41 collapsibles toggled",
+    "diagrams render": "1 SVG rendered with non-zero size",
+    "counts equal data": "1 of 1 counts equal",
+    "baseline SHA shown": "the page does not print the baseline SHA (generated by mftb, which has no such field; not hand-edited)",
+    "hidden": 19,
+    "links work": "32 distinct links, 19 in-page anchors target-checked only (hidden in the current view); failed: #p-dbms (no target) | #p-datasets (no target) | #p-datasets?kind=COBOL%20file%20without%20DSN (no target) | #p-cics (no target) | #p-external (no target)",
+    "no console errors": "TypeError: Cannot set properties of undefined (setting 'page') [after: select in t-db2 [Sort by name / Sort by kind]] | TypeError: Cannot set properties of undefined (setting 'page') [after: select in t-db2 [Sort by name / Sort by kind]] | TypeError: Cannot set properties of undefined (setting 'page') [after: select in t-external [Sort by module / Sort by what it is]]",
+    "no missing assets": "self-contained: 0 failed requests, 0 external requests"
+   },
+   "counts": [
+    {
+     "label": "Programs tab = programs the transaction reaches (in inventory)",
+     "shown": "17",
+     "want": "17",
+     "ok": true
+    }
+   ]
+  },
+  {
+   "page": "store/reports/CARDDEMO/online/online-CCUP.html",
+   "screenshot": "modernization/legacy/page-check/CARDDEMO__online__online-CCUP.png",
+   "result": {
+    "tabs work": "PASS",
+    "filters work": "PASS",
+    "collapsibles work": "PASS",
+    "diagrams render": "PASS",
+    "counts equal data": "PASS",
+    "baseline SHA shown": "FAIL",
+    "links work": "FAIL",
+    "no console errors": "FAIL",
+    "no missing assets": "PASS"
+   },
+   "note": {
+    "tabs work": "17 tab clicks",
+    "filters work": "20 text filters typed, 66 selects keyed, 0 toggles clicked",
+    "collapsibles work": "42 collapsibles toggled",
+    "diagrams render": "1 SVG rendered with non-zero size",
+    "counts equal data": "1 of 1 counts equal",
+    "baseline SHA shown": "the page does not print the baseline SHA (generated by mftb, which has no such field; not hand-edited)",
+    "hidden": 19,
+    "links work": "32 distinct links, 19 in-page anchors target-checked only (hidden in the current view); failed: #p-dbms (no target) | #p-datasets (no target) | #p-datasets?kind=COBOL%20file%20without%20DSN (no target) | #p-cics (no target) | #p-external (no target)",
+    "no console errors": "TypeError: Cannot set properties of undefined (setting 'page') [after: select in t-db2 [Sort by name / Sort by kind]] | TypeError: Cannot set properties of undefined (setting 'page') [after: select in t-db2 [Sort by name / Sort by kind]] | TypeError: Cannot set properties of undefined (setting 'page') [after: select in t-external [Sort by module / Sort by what it is]]",
+    "no missing assets": "self-contained: 0 failed requests, 0 external requests"
+   },
+   "counts": [
+    {
+     "label": "Programs tab = programs the transaction reaches (in inventory)",
+     "shown": "17",
+     "want": "17",
+     "ok": true
+    }
+   ]
+  },
+  {
+   "page": "store/reports/CARDDEMO/online/online-CDV1.html",
+   "screenshot": "modernization/legacy/page-check/CARDDEMO__online__online-CDV1.png",
+   "result": {
+    "tabs work": "PASS",
+    "filters work": "PASS",
+    "collapsibles work": "PASS",
+    "diagrams render": "PASS",
+    "counts equal data": "PASS",
+    "baseline SHA shown": "FAIL",
+    "links work": "FAIL",
+    "no console errors": "FAIL",
+    "no missing assets": "PASS"
+   },
+   "note": {
+    "tabs work": "17 tab clicks",
+    "filters work": "20 text filters typed, 30 selects keyed, 0 toggles clicked",
+    "collapsibles work": "21 collapsibles toggled",
+    "diagrams render": "1 SVG rendered with non-zero size",
+    "counts equal data": "1 of 1 counts equal",
+    "baseline SHA shown": "the page does not print the baseline SHA (generated by mftb, which has no such field; not hand-edited)",
+    "links work": "12 distinct links; failed: #p-dbms (no target) | #p-datasets (no target) | #p-datasets?kind=COBOL%20file%20without%20DSN (no target) | #p-cics (no target) | #p-external (no target)",
+    "no console errors": "TypeError: Cannot set properties of undefined (setting 'page') [after: select in t-db2 [Sort by name / Sort by kind]] | TypeError: Cannot set properties of undefined (setting 'page') [after: select in t-db2 [Sort by name / Sort by kind]] | TypeError: Cannot set properties of undefined (setting 'page') [after: select in t-datasets [Sort by DSN / Sort by type]]",
+    "no missing assets": "self-contained: 0 failed requests, 0 external requests"
+   },
+   "counts": [
+    {
+     "label": "Programs tab = programs the transaction reaches (in inventory)",
+     "shown": "0",
+     "want": "0",
+     "ok": true
+    }
+   ]
+  },
+  {
+   "page": "store/reports/CARDDEMO/online/online-CM00.html",
+   "screenshot": "modernization/legacy/page-check/CARDDEMO__online__online-CM00.png",
+   "result": {
+    "tabs work": "PASS",
+    "filters work": "PASS",
+    "collapsibles work": "PASS",
+    "diagrams render": "PASS",
+    "counts equal data": "PASS",
+    "baseline SHA shown": "FAIL",
+    "links work": "FAIL",
+    "no console errors": "FAIL",
+    "no missing assets": "PASS"
+   },
+   "note": {
+    "tabs work": "17 tab clicks",
+    "filters work": "20 text filters typed, 66 selects keyed, 0 toggles clicked",
+    "collapsibles work": "41 collapsibles toggled",
+    "diagrams render": "1 SVG rendered with non-zero size",
+    "counts equal data": "1 of 1 counts equal",
+    "baseline SHA shown": "the page does not print the baseline SHA (generated by mftb, which has no such field; not hand-edited)",
+    "hidden": 19,
+    "links work": "32 distinct links, 19 in-page anchors target-checked only (hidden in the current view); failed: #p-dbms (no target) | #p-datasets (no target) | #p-datasets?kind=COBOL%20file%20without%20DSN (no target) | #p-cics (no target) | #p-external (no target)",
+    "no console errors": "TypeError: Cannot set properties of undefined (setting 'page') [after: select in t-db2 [Sort by name / Sort by kind]] | TypeError: Cannot set properties of undefined (setting 'page') [after: select in t-db2 [Sort by name / Sort by kind]] | TypeError: Cannot set properties of undefined (setting 'page') [after: select in t-external [Sort by module / Sort by what it is]]",
+    "no missing assets": "self-contained: 0 failed requests, 0 external requests"
+   },
+   "counts": [
+    {
+     "label": "Programs tab = programs the transaction reaches (in inventory)",
+     "shown": "17",
+     "want": "17",
+     "ok": true
+    }
+   ]
+  },
+  {
+   "page": "store/reports/CARDDEMO/online/online-CR00.html",
+   "screenshot": "modernization/legacy/page-check/CARDDEMO__online__online-CR00.png",
+   "result": {
+    "tabs work": "PASS",
+    "filters work": "PASS",
+    "collapsibles work": "PASS",
+    "diagrams render": "PASS",
+    "counts equal data": "PASS",
+    "baseline SHA shown": "FAIL",
+    "links work": "FAIL",
+    "no console errors": "FAIL",
+    "no missing assets": "PASS"
+   },
+   "note": {
+    "tabs work": "17 tab clicks",
+    "filters work": "20 text filters typed, 66 selects keyed, 0 toggles clicked",
+    "collapsibles work": "42 collapsibles toggled",
+    "diagrams render": "1 SVG rendered with non-zero size",
+    "counts equal data": "1 of 1 counts equal",
+    "baseline SHA shown": "the page does not print the baseline SHA (generated by mftb, which has no such field; not hand-edited)",
+    "hidden": 19,
+    "links work": "32 distinct links, 19 in-page anchors target-checked only (hidden in the current view); failed: #p-dbms (no target) | #p-datasets (no target) | #p-datasets?kind=COBOL%20file%20without%20DSN (no target) | #p-cics (no target) | #p-external (no target)",
+    "no console errors": "TypeError: Cannot set properties of undefined (setting 'page') [after: select in t-db2 [Sort by name / Sort by kind]] | TypeError: Cannot set properties of undefined (setting 'page') [after: select in t-db2 [Sort by name / Sort by kind]] | TypeError: Cannot set properties of undefined (setting 'page') [after: select in t-external [Sort by module / Sort by what it is]]",
+    "no missing assets": "self-contained: 0 failed requests, 0 external requests"
+   },
+   "counts": [
+    {
+     "label": "Programs tab = programs the transaction reaches (in inventory)",
+     "shown": "17",
+     "want": "17",
+     "ok": true
+    }
+   ]
+  },
+  {
+   "page": "store/reports/CARDDEMO/online/online-CT00.html",
+   "screenshot": "modernization/legacy/page-check/CARDDEMO__online__online-CT00.png",
+   "result": {
+    "tabs work": "PASS",
+    "filters work": "PASS",
+    "collapsibles work": "PASS",
+    "diagrams render": "PASS",
+    "counts equal data": "PASS",
+    "baseline SHA shown": "FAIL",
+    "links work": "FAIL",
+    "no console errors": "FAIL",
+    "no missing assets": "PASS"
+   },
+   "note": {
+    "tabs work": "17 tab clicks",
+    "filters work": "20 text filters typed, 66 selects keyed, 0 toggles clicked",
+    "collapsibles work": "42 collapsibles toggled",
+    "diagrams render": "1 SVG rendered with non-zero size",
+    "counts equal data": "1 of 1 counts equal",
+    "baseline SHA shown": "the page does not print the baseline SHA (generated by mftb, which has no such field; not hand-edited)",
+    "hidden": 19,
+    "links work": "32 distinct links, 19 in-page anchors target-checked only (hidden in the current view); failed: #p-dbms (no target) | #p-datasets (no target) | #p-datasets?kind=COBOL%20file%20without%20DSN (no target) | #p-cics (no target) | #p-external (no target)",
+    "no console errors": "TypeError: Cannot set properties of undefined (setting 'page') [after: select in t-db2 [Sort by name / Sort by kind]] | TypeError: Cannot set properties of undefined (setting 'page') [after: select in t-db2 [Sort by name / Sort by kind]] | TypeError: Cannot set properties of undefined (setting 'page') [after: select in t-external [Sort by module / Sort by what it is]]",
+    "no missing assets": "self-contained: 0 failed requests, 0 external requests"
+   },
+   "counts": [
+    {
+     "label": "Programs tab = programs the transaction reaches (in inventory)",
+     "shown": "17",
+     "want": "17",
+     "ok": true
+    }
+   ]
+  },
+  {
+   "page": "store/reports/CARDDEMO/online/online-CT01.html",
+   "screenshot": "modernization/legacy/page-check/CARDDEMO__online__online-CT01.png",
+   "result": {
+    "tabs work": "PASS",
+    "filters work": "PASS",
+    "collapsibles work": "PASS",
+    "diagrams render": "PASS",
+    "counts equal data": "PASS",
+    "baseline SHA shown": "FAIL",
+    "links work": "FAIL",
+    "no console errors": "FAIL",
+    "no missing assets": "PASS"
+   },
+   "note": {
+    "tabs work": "17 tab clicks",
+    "filters work": "20 text filters typed, 66 selects keyed, 0 toggles clicked",
+    "collapsibles work": "42 collapsibles toggled",
+    "diagrams render": "1 SVG rendered with non-zero size",
+    "counts equal data": "1 of 1 counts equal",
+    "baseline SHA shown": "the page does not print the baseline SHA (generated by mftb, which has no such field; not hand-edited)",
+    "hidden": 19,
+    "links work": "32 distinct links, 19 in-page anchors target-checked only (hidden in the current view); failed: #p-dbms (no target) | #p-datasets (no target) | #p-datasets?kind=COBOL%20file%20without%20DSN (no target) | #p-cics (no target) | #p-external (no target)",
+    "no console errors": "TypeError: Cannot set properties of undefined (setting 'page') [after: select in t-db2 [Sort by name / Sort by kind]] | TypeError: Cannot set properties of undefined (setting 'page') [after: select in t-db2 [Sort by name / Sort by kind]] | TypeError: Cannot set properties of undefined (setting 'page') [after: select in t-external [Sort by module / Sort by what it is]]",
+    "no missing assets": "self-contained: 0 failed requests, 0 external requests"
+   },
+   "counts": [
+    {
+     "label": "Programs tab = programs the transaction reaches (in inventory)",
+     "shown": "17",
+     "want": "17",
+     "ok": true
+    }
+   ]
+  },
+  {
+   "page": "store/reports/CARDDEMO/online/online-CT02.html",
+   "screenshot": "modernization/legacy/page-check/CARDDEMO__online__online-CT02.png",
+   "result": {
+    "tabs work": "PASS",
+    "filters work": "PASS",
+    "collapsibles work": "PASS",
+    "diagrams render": "PASS",
+    "counts equal data": "PASS",
+    "baseline SHA shown": "FAIL",
+    "links work": "FAIL",
+    "no console errors": "FAIL",
+    "no missing assets": "PASS"
+   },
+   "note": {
+    "tabs work": "17 tab clicks",
+    "filters work": "20 text filters typed, 66 selects keyed, 0 toggles clicked",
+    "collapsibles work": "42 collapsibles toggled",
+    "diagrams render": "1 SVG rendered with non-zero size",
+    "counts equal data": "1 of 1 counts equal",
+    "baseline SHA shown": "the page does not print the baseline SHA (generated by mftb, which has no such field; not hand-edited)",
+    "hidden": 19,
+    "links work": "32 distinct links, 19 in-page anchors target-checked only (hidden in the current view); failed: #p-dbms (no target) | #p-datasets (no target) | #p-datasets?kind=COBOL%20file%20without%20DSN (no target) | #p-cics (no target) | #p-external (no target)",
+    "no console errors": "TypeError: Cannot set properties of undefined (setting 'page') [after: select in t-db2 [Sort by name / Sort by kind]] | TypeError: Cannot set properties of undefined (setting 'page') [after: select in t-db2 [Sort by name / Sort by kind]] | TypeError: Cannot set properties of undefined (setting 'page') [after: select in t-external [Sort by module / Sort by what it is]]",
+    "no missing assets": "self-contained: 0 failed requests, 0 external requests"
+   },
+   "counts": [
+    {
+     "label": "Programs tab = programs the transaction reaches (in inventory)",
+     "shown": "17",
+     "want": "17",
+     "ok": true
+    }
+   ]
+  },
+  {
+   "page": "store/reports/CARDDEMO/online/online-CU00.html",
+   "screenshot": "modernization/legacy/page-check/CARDDEMO__online__online-CU00.png",
+   "result": {
+    "tabs work": "PASS",
+    "filters work": "PASS",
+    "collapsibles work": "PASS",
+    "diagrams render": "PASS",
+    "counts equal data": "PASS",
+    "baseline SHA shown": "FAIL",
+    "links work": "FAIL",
+    "no console errors": "FAIL",
+    "no missing assets": "PASS"
+   },
+   "note": {
+    "tabs work": "17 tab clicks",
+    "filters work": "20 text filters typed, 66 selects keyed, 0 toggles clicked",
+    "collapsibles work": "42 collapsibles toggled",
+    "diagrams render": "1 SVG rendered with non-zero size",
+    "counts equal data": "1 of 1 counts equal",
+    "baseline SHA shown": "the page does not print the baseline SHA (generated by mftb, which has no such field; not hand-edited)",
+    "hidden": 19,
+    "links work": "32 distinct links, 19 in-page anchors target-checked only (hidden in the current view); failed: #p-dbms (no target) | #p-datasets (no target) | #p-datasets?kind=COBOL%20file%20without%20DSN (no target) | #p-cics (no target) | #p-external (no target)",
+    "no console errors": "TypeError: Cannot set properties of undefined (setting 'page') [after: select in t-db2 [Sort by name / Sort by kind]] | TypeError: Cannot set properties of undefined (setting 'page') [after: select in t-db2 [Sort by name / Sort by kind]] | TypeError: Cannot set properties of undefined (setting 'page') [after: select in t-external [Sort by module / Sort by what it is]]",
+    "no missing assets": "self-contained: 0 failed requests, 0 external requests"
+   },
+   "counts": [
+    {
+     "label": "Programs tab = programs the transaction reaches (in inventory)",
+     "shown": "17",
+     "want": "17",
+     "ok": true
+    }
+   ]
+  },
+  {
+   "page": "store/reports/CARDDEMO/online/online-CU01.html",
+   "screenshot": "modernization/legacy/page-check/CARDDEMO__online__online-CU01.png",
+   "result": {
+    "tabs work": "PASS",
+    "filters work": "PASS",
+    "collapsibles work": "PASS",
+    "diagrams render": "PASS",
+    "counts equal data": "PASS",
+    "baseline SHA shown": "FAIL",
+    "links work": "FAIL",
+    "no console errors": "FAIL",
+    "no missing assets": "PASS"
+   },
+   "note": {
+    "tabs work": "17 tab clicks",
+    "filters work": "20 text filters typed, 66 selects keyed, 0 toggles clicked",
+    "collapsibles work": "42 collapsibles toggled",
+    "diagrams render": "1 SVG rendered with non-zero size",
+    "counts equal data": "1 of 1 counts equal",
+    "baseline SHA shown": "the page does not print the baseline SHA (generated by mftb, which has no such field; not hand-edited)",
+    "hidden": 19,
+    "links work": "32 distinct links, 19 in-page anchors target-checked only (hidden in the current view); failed: #p-dbms (no target) | #p-datasets (no target) | #p-datasets?kind=COBOL%20file%20without%20DSN (no target) | #p-cics (no target) | #p-external (no target)",
+    "no console errors": "TypeError: Cannot set properties of undefined (setting 'page') [after: select in t-db2 [Sort by name / Sort by kind]] | TypeError: Cannot set properties of undefined (setting 'page') [after: select in t-db2 [Sort by name / Sort by kind]] | TypeError: Cannot set properties of undefined (setting 'page') [after: select in t-external [Sort by module / Sort by what it is]]",
+    "no missing assets": "self-contained: 0 failed requests, 0 external requests"
+   },
+   "counts": [
+    {
+     "label": "Programs tab = programs the transaction reaches (in inventory)",
+     "shown": "17",
+     "want": "17",
+     "ok": true
+    }
+   ]
+  },
+  {
+   "page": "store/reports/CARDDEMO/online/online-CU02.html",
+   "screenshot": "modernization/legacy/page-check/CARDDEMO__online__online-CU02.png",
+   "result": {
+    "tabs work": "PASS",
+    "filters work": "PASS",
+    "collapsibles work": "PASS",
+    "diagrams render": "PASS",
+    "counts equal data": "PASS",
+    "baseline SHA shown": "FAIL",
+    "links work": "FAIL",
+    "no console errors": "FAIL",
+    "no missing assets": "PASS"
+   },
+   "note": {
+    "tabs work": "17 tab clicks",
+    "filters work": "20 text filters typed, 66 selects keyed, 0 toggles clicked",
+    "collapsibles work": "42 collapsibles toggled",
+    "diagrams render": "1 SVG rendered with non-zero size",
+    "counts equal data": "1 of 1 counts equal",
+    "baseline SHA shown": "the page does not print the baseline SHA (generated by mftb, which has no such field; not hand-edited)",
+    "hidden": 19,
+    "links work": "32 distinct links, 19 in-page anchors target-checked only (hidden in the current view); failed: #p-dbms (no target) | #p-datasets (no target) | #p-datasets?kind=COBOL%20file%20without%20DSN (no target) | #p-cics (no target) | #p-external (no target)",
+    "no console errors": "TypeError: Cannot set properties of undefined (setting 'page') [after: select in t-db2 [Sort by name / Sort by kind]] | TypeError: Cannot set properties of undefined (setting 'page') [after: select in t-db2 [Sort by name / Sort by kind]] | TypeError: Cannot set properties of undefined (setting 'page') [after: select in t-external [Sort by module / Sort by what it is]]",
+    "no missing assets": "self-contained: 0 failed requests, 0 external requests"
+   },
+   "counts": [
+    {
+     "label": "Programs tab = programs the transaction reaches (in inventory)",
+     "shown": "17",
+     "want": "17",
+     "ok": true
+    }
+   ]
+  },
+  {
+   "page": "store/reports/CARDDEMO/online/online-CU03.html",
+   "screenshot": "modernization/legacy/page-check/CARDDEMO__online__online-CU03.png",
+   "result": {
+    "tabs work": "PASS",
+    "filters work": "PASS",
+    "collapsibles work": "PASS",
+    "diagrams render": "PASS",
+    "counts equal data": "PASS",
+    "baseline SHA shown": "FAIL",
+    "links work": "FAIL",
+    "no console errors": "FAIL",
+    "no missing assets": "PASS"
+   },
+   "note": {
+    "tabs work": "17 tab clicks",
+    "filters work": "20 text filters typed, 66 selects keyed, 0 toggles clicked",
+    "collapsibles work": "42 collapsibles toggled",
+    "diagrams render": "1 SVG rendered with non-zero size",
+    "counts equal data": "1 of 1 counts equal",
+    "baseline SHA shown": "the page does not print the baseline SHA (generated by mftb, which has no such field; not hand-edited)",
+    "hidden": 19,
+    "links work": "32 distinct links, 19 in-page anchors target-checked only (hidden in the current view); failed: #p-dbms (no target) | #p-datasets (no target) | #p-datasets?kind=COBOL%20file%20without%20DSN (no target) | #p-cics (no target) | #p-external (no target)",
+    "no console errors": "TypeError: Cannot set properties of undefined (setting 'page') [after: select in t-db2 [Sort by name / Sort by kind]] | TypeError: Cannot set properties of undefined (setting 'page') [after: select in t-db2 [Sort by name / Sort by kind]] | TypeError: Cannot set properties of undefined (setting 'page') [after: select in t-external [Sort by module / Sort by what it is]]",
+    "no missing assets": "self-contained: 0 failed requests, 0 external requests"
+   },
+   "counts": [
+    {
+     "label": "Programs tab = programs the transaction reaches (in inventory)",
+     "shown": "17",
+     "want": "17",
+     "ok": true
+    }
+   ]
+  },
+  {
+   "page": "store/reports/TRANTYPE/TRANTYPE-report.html",
+   "screenshot": "modernization/legacy/page-check/TRANTYPE__TRANTYPE-report.png",
+   "result": {
+    "tabs work": "PASS",
+    "filters work": "PASS",
+    "collapsibles work": "PASS",
+    "diagrams render": "PASS",
+    "counts equal data": "PASS",
+    "baseline SHA shown": "FAIL",
+    "links work": "FAIL",
+    "no console errors": "FAIL",
+    "no missing assets": "PASS"
+   },
+   "note": {
+    "tabs work": "17 tab clicks",
+    "filters work": "20 text filters typed, 79 selects keyed, 0 toggles clicked",
+    "collapsibles work": "43 collapsibles toggled",
+    "diagrams render": "1 SVG rendered with non-zero size",
+    "counts equal data": "3 of 3 counts equal",
+    "baseline SHA shown": "the page does not print the baseline SHA (generated by mftb, which has no such field; not hand-edited)",
+    "hidden": 4,
+    "links work": "23 distinct links, 4 in-page anchors target-checked only (hidden in the current view); failed: #p-dbms (no target) | #p-db2 (no target) | #p-datasets (no target) | #p-datasets?kind=COBOL%20file%20without%20DSN (no target) | #p-cics (no target)",
+    "no console errors": "TypeError: Cannot set properties of undefined (setting 'page') [after: select in t-external [Sort by module / Sort by what it is]] | TypeError: Cannot set properties of undefined (setting 'page') [after: select in t-external [Sort by module / Sort by what it is]]",
+    "no missing assets": "self-contained: 0 failed requests, 0 external requests"
+   },
+   "counts": [
+    {
+     "label": "Programs tab",
+     "shown": "4",
+     "want": "4",
+     "ok": true
+    },
+    {
+     "label": "Copybooks tab",
+     "shown": "36",
+     "want": "36",
+     "ok": true
+    },
+    {
+     "label": "Jobs tab",
+     "shown": "4",
+     "want": "4",
+     "ok": true
+    }
+   ]
+  },
+  {
+   "page": "store/reports/TRANTYPE/online/online-CTLI.html",
+   "screenshot": "modernization/legacy/page-check/TRANTYPE__online__online-CTLI.png",
+   "result": {
+    "tabs work": "PASS",
+    "filters work": "PASS",
+    "collapsibles work": "PASS",
+    "diagrams render": "PASS",
+    "counts equal data": "PASS",
+    "baseline SHA shown": "FAIL",
+    "links work": "FAIL",
+    "no console errors": "FAIL",
+    "no missing assets": "PASS"
+   },
+   "note": {
+    "tabs work": "17 tab clicks",
+    "filters work": "20 text filters typed, 64 selects keyed, 0 toggles clicked",
+    "collapsibles work": "29 collapsibles toggled",
+    "diagrams render": "1 SVG rendered with non-zero size",
+    "counts equal data": "1 of 1 counts equal",
+    "baseline SHA shown": "the page does not print the baseline SHA (generated by mftb, which has no such field; not hand-edited)",
+    "hidden": 3,
+    "links work": "17 distinct links, 3 in-page anchors target-checked only (hidden in the current view); failed: #p-dbms (no target) | #p-db2 (no target) | #p-datasets (no target) | #p-datasets?kind=COBOL%20file%20without%20DSN (no target) | #p-cics (no target)",
+    "no console errors": "TypeError: Cannot set properties of undefined (setting 'page') [after: select in t-datasets [Sort by DSN / Sort by type]] | TypeError: Cannot set properties of undefined (setting 'page') [after: select in t-datasets [Sort by DSN / Sort by type]] | TypeError: Cannot set properties of undefined (setting 'page') [after: select in t-external [Sort by module / Sort by what it is]]",
+    "no missing assets": "self-contained: 0 failed requests, 0 external requests"
+   },
+   "counts": [
+    {
+     "label": "Programs tab = programs the transaction reaches (in inventory)",
+     "shown": "2",
+     "want": "2",
+     "ok": true
+    }
+   ]
+  },
+  {
+   "page": "store/reports/TRANTYPE/online/online-CTTU.html",
+   "screenshot": "modernization/legacy/page-check/TRANTYPE__online__online-CTTU.png",
+   "result": {
+    "tabs work": "PASS",
+    "filters work": "PASS",
+    "collapsibles work": "PASS",
+    "diagrams render": "PASS",
+    "counts equal data": "PASS",
+    "baseline SHA shown": "FAIL",
+    "links work": "FAIL",
+    "no console errors": "FAIL",
+    "no missing assets": "PASS"
+   },
+   "note": {
+    "tabs work": "17 tab clicks",
+    "filters work": "20 text filters typed, 64 selects keyed, 0 toggles clicked",
+    "collapsibles work": "28 collapsibles toggled",
+    "diagrams render": "1 SVG rendered with non-zero size",
+    "counts equal data": "1 of 1 counts equal",
+    "baseline SHA shown": "the page does not print the baseline SHA (generated by mftb, which has no such field; not hand-edited)",
+    "hidden": 1,
+    "links work": "15 distinct links, 1 in-page anchors target-checked only (hidden in the current view); failed: #p-dbms (no target) | #p-db2 (no target) | #p-datasets (no target) | #p-datasets?kind=COBOL%20file%20without%20DSN (no target) | #p-cics (no target)",
+    "no console errors": "TypeError: Cannot set properties of undefined (setting 'page') [after: select in t-datasets [Sort by DSN / Sort by type]] | TypeError: Cannot set properties of undefined (setting 'page') [after: select in t-datasets [Sort by DSN / Sort by type]] | TypeError: Cannot set properties of undefined (setting 'page') [after: select in t-external [Sort by module / Sort by what it is]]",
+    "no missing assets": "self-contained: 0 failed requests, 0 external requests"
+   },
+   "counts": [
+    {
+     "label": "Programs tab = programs the transaction reaches (in inventory)",
+     "shown": "1",
+     "want": "1",
+     "ok": true
+    }
+   ]
+  },
+  {
+   "page": "store/reports/VSAMMQ/VSAMMQ-report.html",
+   "screenshot": "modernization/legacy/page-check/VSAMMQ__VSAMMQ-report.png",
+   "result": {
+    "tabs work": "PASS",
+    "filters work": "PASS",
+    "collapsibles work": "PASS",
+    "diagrams render": "PASS",
+    "counts equal data": "PASS",
+    "baseline SHA shown": "FAIL",
+    "links work": "FAIL",
+    "no console errors": "FAIL",
+    "no missing assets": "PASS"
+   },
+   "note": {
+    "tabs work": "17 tab clicks",
+    "filters work": "20 text filters typed, 46 selects keyed, 0 toggles clicked",
+    "collapsibles work": "25 collapsibles toggled",
+    "diagrams render": "1 SVG rendered with non-zero size",
+    "counts equal data": "3 of 3 counts equal",
+    "baseline SHA shown": "the page does not print the baseline SHA (generated by mftb, which has no such field; not hand-edited)",
+    "links work": "18 distinct links; failed: #p-dbms (no target) | #p-datasets (no target) | #p-datasets?kind=COBOL%20file%20without%20DSN (no target) | #p-cics (no target) | #p-runtime (no target)",
+    "no console errors": "TypeError: Cannot set properties of undefined (setting 'page') [after: select in t-db2 [Sort by name / Sort by kind]] | TypeError: Cannot set properties of undefined (setting 'page') [after: select in t-db2 [Sort by name / Sort by kind]] | TypeError: Cannot set properties of undefined (setting 'page') [after: select in t-datasets [Sort by DSN / Sort by type]]",
+    "no missing assets": "self-contained: 0 failed requests, 0 external requests"
+   },
+   "counts": [
+    {
+     "label": "Programs tab",
+     "shown": "2",
+     "want": "2",
+     "ok": true
+    },
+    {
+     "label": "Copybooks tab",
+     "shown": "30",
+     "want": "30",
+     "ok": true
+    },
+    {
+     "label": "Jobs tab",
+     "shown": "0",
+     "want": "0",
+     "ok": true
+    }
+   ]
+  },
+  {
+   "page": "store/reports/VSAMMQ/online/online-CDRA.html",
+   "screenshot": "modernization/legacy/page-check/VSAMMQ__online__online-CDRA.png",
+   "result": {
+    "tabs work": "PASS",
+    "filters work": "PASS",
+    "collapsibles work": "PASS",
+    "diagrams render": "PASS",
+    "counts equal data": "PASS",
+    "baseline SHA shown": "FAIL",
+    "links work": "FAIL",
+    "no console errors": "FAIL",
+    "no missing assets": "PASS"
+   },
+   "note": {
+    "tabs work": "17 tab clicks",
+    "filters work": "20 text filters typed, 46 selects keyed, 0 toggles clicked",
+    "collapsibles work": "22 collapsibles toggled",
+    "diagrams render": "1 SVG rendered with non-zero size",
+    "counts equal data": "1 of 1 counts equal",
+    "baseline SHA shown": "the page does not print the baseline SHA (generated by mftb, which has no such field; not hand-edited)",
+    "links work": "14 distinct links; failed: #p-dbms (no target) | #p-datasets (no target) | #p-datasets?kind=COBOL%20file%20without%20DSN (no target) | #p-cics (no target) | #p-runtime (no target)",
+    "no console errors": "TypeError: Cannot set properties of undefined (setting 'page') [after: select in t-db2 [Sort by name / Sort by kind]] | TypeError: Cannot set properties of undefined (setting 'page') [after: select in t-db2 [Sort by name / Sort by kind]] | TypeError: Cannot set properties of undefined (setting 'page') [after: select in t-datasets [Sort by DSN / Sort by type]]",
+    "no missing assets": "self-contained: 0 failed requests, 0 external requests"
+   },
+   "counts": [
+    {
+     "label": "Programs tab = programs the transaction reaches (in inventory)",
+     "shown": "1",
+     "want": "1",
+     "ok": true
+    }
+   ]
+  },
+  {
+   "page": "store/reports/VSAMMQ/online/online-CDRD.html",
+   "screenshot": "modernization/legacy/page-check/VSAMMQ__online__online-CDRD.png",
+   "result": {
+    "tabs work": "PASS",
+    "filters work": "PASS",
+    "collapsibles work": "PASS",
+    "diagrams render": "PASS",
+    "counts equal data": "PASS",
+    "baseline SHA shown": "FAIL",
+    "links work": "FAIL",
+    "no console errors": "FAIL",
+    "no missing assets": "PASS"
+   },
+   "note": {
+    "tabs work": "17 tab clicks",
+    "filters work": "20 text filters typed, 41 selects keyed, 0 toggles clicked",
+    "collapsibles work": "21 collapsibles toggled",
+    "diagrams render": "1 SVG rendered with non-zero size",
+    "counts equal data": "1 of 1 counts equal",
+    "baseline SHA shown": "the page does not print the baseline SHA (generated by mftb, which has no such field; not hand-edited)",
+    "links work": "14 distinct links; failed: #p-dbms (no target) | #p-datasets (no target) | #p-datasets?kind=COBOL%20file%20without%20DSN (no target) | #p-cics (no target) | #p-runtime (no target)",
+    "no console errors": "TypeError: Cannot set properties of undefined (setting 'page') [after: select in t-db2 [Sort by name / Sort by kind]] | TypeError: Cannot set properties of undefined (setting 'page') [after: select in t-db2 [Sort by name / Sort by kind]] | TypeError: Cannot set properties of undefined (setting 'page') [after: select in t-datasets [Sort by DSN / Sort by type]]",
+    "no missing assets": "self-contained: 0 failed requests, 0 external requests"
+   },
+   "counts": [
+    {
+     "label": "Programs tab = programs the transaction reaches (in inventory)",
+     "shown": "1",
+     "want": "1",
+     "ok": true
+    }
+   ]
+  }
+ ]
+}
