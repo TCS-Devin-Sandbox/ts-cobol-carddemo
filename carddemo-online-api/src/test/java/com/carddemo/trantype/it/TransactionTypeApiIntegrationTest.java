@@ -106,7 +106,8 @@ class TransactionTypeApiIntegrationTest {
                     ('flyway_schema_history', 'flyway_vsam_schema_history', 'transaction_type',
                      'transaction_type_category', 'user_security')
                 """, String.class)).containsExactlyInAnyOrder("account", "card", "customer", "card_xref",
-                "transaction_category_balance", "disclosure_group", "transaction", "tran_type", "tran_category");
+                "transaction_category_balance", "disclosure_group", "transaction", "tran_type", "tran_category",
+                "pending_auth_summary", "pending_auth_detail", "auth_fraud");
         assertThat(jdbc.queryForObject("""
                 SELECT tr_description FROM online_upgrade.transaction_type WHERE tr_type = '01'
                 """, String.class)).isEqualTo("EXISTING");
