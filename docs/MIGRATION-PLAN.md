@@ -216,13 +216,14 @@ E3-E6 run in parallel after E2; E7-E11 in parallel once their dependencies land.
 | F3 | [Nightly shadow run](SHADOW-RUN.md): F1 unload load, B4 export, F2 launch and mainframe comparison with drift report ([#58](https://github.com/TCS-Devin-Sandbox/ts-cobol-carddemo/pull/58) merged; CI uses synthetic drops) | F1, F2 |
 | F4 | Per-table cutover runbook and rollback, decommission of each JCL member | F3, owner sign-off |
 
-### Batch G: separate modules, after a target decision
+### Batch G: authorization and VSAM/MQ
 
-Authorization (IMS DB + Db2 + MQ: CP00, CPVS, CPVD, CBPAUP0C, IMS loaders) and
-VSAM/MQ (CDRA, CDRD) need decisions on the IMS hierarchical data model and the MQ
-replacement before any port PR starts. [Batch G scope](batch-g/scope.md) proposes
-both targets and splits the batch into PRs G1-G11; the cited source map is
-[batch-g/inventory.md](batch-g/inventory.md).
+The owner approved the Batch G targets in
+[#70](https://github.com/TCS-Devin-Sandbox/ts-cobol-carddemo/pull/70):
+relational PostgreSQL tables for the IMS authorization hierarchy and Db2 fraud
+data, IBM MQ via JMS for CP00, and REST for CDRA/CDRD. The
+[Batch G scope](batch-g/scope.md) splits the work into PRs G1-G11; the
+[inventory](batch-g/inventory.md) maps the legacy sources.
 
 ## 5. Dependency graph
 
@@ -265,9 +266,7 @@ graph LR
 3. **CBEXPORT/CBIMPORT:** they do not compile on main. Retire, or specify the
    intended behaviour so Java can implement it without an oracle?
 4. **CBTRN01C:** no JCL runs it. Retire?
-5. **Authorization and VSAM/MQ modules (Batch G):** in scope, and if so the IMS
-   and MQ targets.
-6. **Reuse of branch code:** the CBACT04C/CBTRN02C Java ports and data layer are
+5. **Reuse of branch code:** the CBACT04C/CBTRN02C Java ports and data layer are
    used as starting points (default), never merged as-is.
 
 ## 7. Tracker
@@ -309,8 +308,8 @@ graph LR
 | F2 | F | [Scheduling and restart](BATCH-RESTART.md) | [#56](https://github.com/TCS-Devin-Sandbox/ts-cobol-carddemo/pull/56) | merged |
 | F3 | F | [Nightly shadow run](SHADOW-RUN.md) | [#58](https://github.com/TCS-Devin-Sandbox/ts-cobol-carddemo/pull/58) | merged |
 | F4 | F | Cutover | | not started |
-| G | G | Authorization, VSAM/MQ | | needs decision |
+| G | G | Authorization, VSAM/MQ | [#70](https://github.com/TCS-Devin-Sandbox/ts-cobol-carddemo/pull/70) | in progress |
 | G1 | G | [IMS segment codecs and unload reader/writer](../java/common/README.md#ims-unload-proof) | [#72](https://github.com/TCS-Devin-Sandbox/ts-cobol-carddemo/pull/72) | merged |
-| G2 | G | [Pending authorization schema](schema-mapping-auth.md) | [#74](https://github.com/TCS-Devin-Sandbox/ts-cobol-carddemo/pull/74) | in review |
+| G2 | G | [Pending authorization schema](schema-mapping-auth.md) | [#74](https://github.com/TCS-Devin-Sandbox/ts-cobol-carddemo/pull/74) | merged |
 | G9 | G | [CDRA account inquiry over REST](online/CDRA.md) | [#73](https://github.com/TCS-Devin-Sandbox/ts-cobol-carddemo/pull/73) | merged |
-| G10 | G | System date/time [CDRD](online/CDRD.md) as REST | [#71](https://github.com/TCS-Devin-Sandbox/ts-cobol-carddemo/pull/71) | in review |
+| G10 | G | System date/time [CDRD](online/CDRD.md) as REST | [#71](https://github.com/TCS-Devin-Sandbox/ts-cobol-carddemo/pull/71) | merged |
