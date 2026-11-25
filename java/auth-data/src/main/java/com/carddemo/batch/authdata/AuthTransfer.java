@@ -14,7 +14,11 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.math.BigDecimal;
+import java.nio.ByteBuffer;
+import java.nio.channels.Channels;
 import java.nio.charset.Charset;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.Arrays;
@@ -28,6 +32,8 @@ import static com.carddemo.batch.common.ims.Dfsurgu0Unload.SegmentType.PAUTSUM0;
 
 final class AuthTransfer {
     private static final String ACCOUNT_KEY = "PA-ACCT-ID";
+    private static final int TRAILER_ROOT_COUNT = 16;
+    private static final int TRAILER_DETAIL_COUNT = 28;
     private final Connection db;
     private final Dfsurgu0Unload unload = new Dfsurgu0Unload();
     private final FixedRecordCodec summary = CardDemoLayout.CIPAUSMY.ebcdicCodec();
@@ -43,54 +49,83 @@ final class AuthTransfer {
         keyLength = field.length();
     }
 
-    void loadUnload(InputStream input) throws IOException, SQLException {
+    void loadUnload(Path path) throws IOException, SQLException {
+        try (var channel = Files.newByteChannel(path)) {
+            var input = Channels.newInputStream(channel);
+            scanUnload(input, (number, record, account) -> {});
+            channel.position(0);
+            replaceUnload(input);
+        }
+    }
+
+    private void replaceUnload(InputStream input) throws IOException, SQLException {
         clear();
         try (var root = SUMMARY.insert(db); var child = DETAIL.insert(db);
              var frame = db.prepareStatement("INSERT INTO pending_auth_unload_frame VALUES (?, ?, ?, ?, ?)")) {
-            BigDecimal parent = null;
-            long number = 0;
-            boolean ended = false;
-            for (var record = unload.readRecord(input); record != null; record = unload.readRecord(input)) {
-                if (ended || (number == 0 && !(record instanceof Metadata))) {
-                    throw new IOException("Expected DBPAUTP0 header, segments, then trailer");
-                }
-                BigDecimal account = null, date = null, time = null;
+            scanUnload(input, (number, record, account) -> {
+                BigDecimal date = null, time = null;
                 byte[] framing;
-                if (record instanceof Metadata metadata) {
-                    ended = metadata.body()[1] == (byte) 0x98;
-                    if (ended == (number == 0)) throw new IOException("Unexpected DBPAUTP0 metadata");
-                    framing = encodeFrame(metadata);
+                if (account == null) {
+                    framing = encodeFrame(record);
                 } else {
                     var segment = (Segment) record;
-                    if (segment.type() == PAUTSUM0 && segment.fields().get(ACCOUNT_KEY) == BlankNumeric.SPACES) {
-                        parent = null;
-                        framing = encodeFrame(segment);
+                    framing = segment.prefix();
+                    framing = Arrays.copyOf(framing, framing.length + 1);
+                    framing[framing.length - 1] = segment.suffix();
+                    if (segment.type() == PAUTSUM0) {
+                        SUMMARY.write(root, account, segment.fields());
                     } else {
-                        framing = segment.prefix();
-                        framing = Arrays.copyOf(framing, framing.length + 1);
-                        framing[framing.length - 1] = segment.suffix();
-                        if (segment.type() == PAUTSUM0) {
-                            parent = (BigDecimal) segment.fields().get(ACCOUNT_KEY);
-                            account = parent;
-                            SUMMARY.write(root, parent, segment.fields());
-                        } else {
-                            if (parent == null) throw new IOException("Detail has no keyed root");
-                            account = parent;
-                            date = (BigDecimal) segment.fields().get("PA-AUTH-DATE-9C");
-                            time = (BigDecimal) segment.fields().get("PA-AUTH-TIME-9C");
-                            DETAIL.write(child, parent, segment.fields());
-                        }
+                        date = (BigDecimal) segment.fields().get("PA-AUTH-DATE-9C");
+                        time = (BigDecimal) segment.fields().get("PA-AUTH-TIME-9C");
+                        DETAIL.write(child, account, segment.fields());
                     }
                 }
-                frame.setLong(1, ++number);
+                frame.setLong(1, number);
                 frame.setBigDecimal(2, account);
                 frame.setBigDecimal(3, date);
                 frame.setBigDecimal(4, time);
                 frame.setBytes(5, framing);
                 frame.executeUpdate();
-            }
-            if (!ended) throw new EOFException("Missing DBPAUTP0 trailer");
+            });
         }
+    }
+
+    @FunctionalInterface
+    private interface FrameSink {
+        void accept(long number, Dfsurgu0Unload.Frame record, BigDecimal account) throws IOException, SQLException;
+    }
+
+    private void scanUnload(InputStream input, FrameSink sink) throws IOException, SQLException {
+        BigDecimal parent = null;
+        long number = 0, roots = 0, details = 0;
+        boolean ended = false;
+        for (var record = unload.readRecord(input); record != null; record = unload.readRecord(input)) {
+            if (ended || (number == 0 && !(record instanceof Metadata))) {
+                throw new IOException("Expected DBPAUTP0 header, segments, then trailer");
+            }
+            if (record instanceof Metadata metadata) {
+                var body = ByteBuffer.wrap(metadata.body());
+                ended = body.get(1) == (byte) 0x98;
+                if (ended == (number == 0)) throw new IOException("Unexpected DBPAUTP0 metadata");
+                if (ended && (roots != Integer.toUnsignedLong(body.getInt(TRAILER_ROOT_COUNT))
+                        || details != Integer.toUnsignedLong(body.getInt(TRAILER_DETAIL_COUNT)))) {
+                    throw new IOException("DBPAUTP0 trailer counts do not match the segment counts");
+                }
+                sink.accept(++number, record, null);
+            } else {
+                var segment = (Segment) record;
+                if (segment.type() == PAUTSUM0) {
+                    roots++;
+                    var account = segment.fields().get(ACCOUNT_KEY);
+                    parent = account == BlankNumeric.SPACES ? null : (BigDecimal) account;
+                } else {
+                    details++;
+                    if (parent == null) throw new IOException("Detail has no keyed root");
+                }
+                sink.accept(++number, record, parent);
+            }
+        }
+        if (!ended) throw new EOFException("Missing DBPAUTP0 trailer");
     }
 
     void exportUnload(OutputStream output) throws IOException, SQLException {

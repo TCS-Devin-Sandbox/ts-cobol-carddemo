@@ -20,8 +20,10 @@ duplicate key or foreign key failures roll back the load. Exports read a
 consistent snapshot, create new files only and may leave partial files if they
 fail; discard those files. Exit 0 is success, 2 is an error.
 
-* **DFSURGU0:** G1 reads the payload at byte +39 including the RDW. V3 keeps the
-  ordinal position, prefix and suffix for each keyed segment, and the opaque
+* **DFSURGU0:** G1 reads the payload at byte +39 including the RDW. Before
+  replacing rows, the loader checks the trailer's root and detail counts
+  (unsigned 32-bit big-endian at record offsets +20 and +32, including the RDW).
+  V3 keeps the ordinal position, prefix and suffix for each keyed segment, and the opaque
   metadata and blank-key root as unkeyed `BYTEA` frames. No account-zero
   substitute is inserted. Export rebuilds keyed payloads from the G2 rows, not
   an archived copy of the source file. The imported framing is required for

@@ -88,6 +88,15 @@ class AuthDataTest {
         byte[] original = Files.readAllBytes(UNLOAD);
         Path broken = Files.write(work.resolve("truncated.dat"), Arrays.copyOf(original, original.length - 1));
         run(2, "load-unload", broken);
+        byte[] missingDetail = new byte[original.length - 240];
+        System.arraycopy(original, 0, missingDetail, 0, 228);
+        System.arraycopy(original, 468, missingDetail, 228, original.length - 468);
+        run(2, "load-unload", Files.write(work.resolve("missing-detail.dat"), missingDetail));
+        byte[] missingRoot = new byte[original.length - 140];
+        int blankRoot = original.length - 88 - 140;
+        System.arraycopy(original, 0, missingRoot, 0, blankRoot);
+        System.arraycopy(original, blankRoot + 140, missingRoot, blankRoot, 88);
+        run(2, "load-unload", Files.write(work.resolve("missing-root.dat"), missingRoot));
         run(0, "export-unload", work.resolve("before.dat"));
         assertArrayEquals(original, Files.readAllBytes(work.resolve("before.dat")));
         try (var db = DriverManager.getConnection(POSTGRES.getJdbcUrl(), POSTGRES.getUsername(), POSTGRES.getPassword());

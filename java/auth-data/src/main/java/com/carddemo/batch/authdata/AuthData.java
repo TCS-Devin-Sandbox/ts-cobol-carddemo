@@ -61,9 +61,7 @@ public final class AuthData {
     private static void execute(AuthTransfer tool, String[] args) throws SQLException, IOException {
         Path first = Path.of(args[1]);
         switch (args[0]) {
-            case "load-unload" -> {
-                try (var in = Files.newInputStream(first)) { tool.loadUnload(in); }
-            }
+            case "load-unload" -> tool.loadUnload(first);
             case "export-unload" -> {
                 try (var out = Files.newOutputStream(first, WRITE, CREATE_NEW)) { tool.exportUnload(out); }
             }
