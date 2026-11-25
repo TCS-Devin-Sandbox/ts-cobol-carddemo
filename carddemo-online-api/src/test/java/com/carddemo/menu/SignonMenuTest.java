@@ -102,8 +102,8 @@ class SignonMenuTest {
     void COMEN01C_PROCESS_ENTER_KEY_COPAUS0C() throws Exception {
         mvc.perform(post("/api/menus/main/select").with(jwt()).contentType(MediaType.APPLICATION_JSON)
                 .content("{\"option\":\"11\"}")).andExpect(status().isOk())
-                .andExpect(jsonPath("$.severity").value("error"))
-                .andExpect(jsonPath("$.message").value("This option Pending Authorization View is not installed..."));
+                .andExpect(jsonPath("$.tranId").value("CPVS"))
+                .andExpect(jsonPath("$.route").value("/authorizations"));
     }
 
     @Test void COADM01C_PROCESS_ENTER_KEY_XCTL() throws Exception {

@@ -2,6 +2,7 @@ import { Navigate, Route, Routes } from 'react-router-dom';
 import { RequireAdmin } from './components/RequireAdmin';
 import { AccountViewPage } from './pages/AccountViewPage';
 import { AccountUpdatePage } from './pages/AccountUpdatePage';
+import { AuthorizationSummaryPage } from './pages/AuthorizationSummaryPage';
 import { AdminMenuPage } from './pages/AdminMenuPage';
 import { BillPayPage } from './pages/BillPayPage';
 import { LoginPage } from './pages/LoginPage';
@@ -28,6 +29,10 @@ function SessionAccountUpdate() {
   return getSession() ? <AccountUpdatePage /> : <Navigate to="/login" replace />;
 }
 
+function SessionAuthorizations() {
+  return getSession() ? <AuthorizationSummaryPage /> : <Navigate to="/login" replace />;
+}
+
 function SessionBillPay() {
   return getSession() ? <BillPayPage /> : <Navigate to="/login" replace />;
 }
@@ -50,6 +55,7 @@ export function App() {
       <Route path="/transactions/view" element={<TransactionViewPage />} />
       <Route path="/transactions/add" element={<TransactionAddPage />} />
       <Route path="/reports" element={<SessionReports />} />
+      <Route path="/authorizations" element={<SessionAuthorizations />} />
       <Route path="/bill-pay" element={<SessionBillPay />} />
       <Route path="/admin" element={<RequireAdmin><AdminMenuPage /></RequireAdmin>} />
       <Route path="/admin/users" element={<RequireAdmin><UserListPage /></RequireAdmin>} />
