@@ -28,5 +28,6 @@
         <module>read-masters</module>
         <module>statements</module>
         <module>data-load</module>
+        <module>auth-data</module>
     </modules>
 </project>

@@ -51,6 +51,24 @@ jobs:
           -Dtest=PendingAuthorizationSchemaTest,VsamMastersSchemaTest
           -Dsurefire.failIfNoSpecifiedTests=false
 
+  auth-data-proof:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '21'
+          cache: maven
+          cache-dependency-path: java/**/pom.xml
+      - name: G3 PostgreSQL 15 data transfer and byte round-trips
+        run: mvn -B -f java/pom.xml -pl auth-data -am verify -Dtest=AuthDataTest -Dsurefire.failIfNoSpecifiedTests=false
+      - uses: actions/upload-artifact@v4
+        with:
+          name: auth-data-reconciliation
+          path: java/auth-data/target/fixture-reports/
+
   trantype-dynamic-parity:
     runs-on: ubuntu-latest
     timeout-minutes: 15

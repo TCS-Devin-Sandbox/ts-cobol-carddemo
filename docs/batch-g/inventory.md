@@ -309,6 +309,10 @@ EBCDIC cp037 bytes8..15 decode **PAUTSUM0**; bytes48..55 decode **PAUTDTL1**. Fi
 
 Walking `offset += int.from_bytes(data[offset:offset+2], 'big')`, requiring length>=4, bytes2:4 zero, and end<=filesize, consumes **all51,736 bytes**, yielding **226 framed records: 2×88 metadata/header/trailer, 22×140 summary records, 202×240 detail records**. Thus **224 data segments =22 roots +202 children**. Not226 authorization transactions; authorization details number202. Counts of raw EBCDIC segment-name occurrences (24 root,204 child) include the two metadata records and would overcount actual segments. Format identification is inferred from framing, JCL and segment/payload agreement, not an IMS utility manual or restore test.
 
+The segment offset is +39 **from the start of the record, including the four-byte RDW**
+(+35 from the body). For a root the payload is bytes +39 through +138; byte
++139 is the suffix, not part of the payload.
+
 Reproduction (read-only; no dataset materialization):
 
 ```python
