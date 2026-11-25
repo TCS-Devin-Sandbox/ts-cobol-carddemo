@@ -63,7 +63,8 @@ require ADMIN; CM00 requires authentication. F3 is client-side sign-off.
 * Preserved quirk: distinct missing-user/wrong-password messages disclose user
   existence. This is intentional legacy equivalence, not a recommended policy.
 * Preserved quirks: DUMMY STRING stops at the first space and concatenates
-  `is coming soon ...` without adding a space; COPAUS0C absence is red.
+  `is coming soon ...` without adding a space. COPAUS0C is installed
+  since [CPVS](CPVS.md) (G7), so option 11 routes to `/authorizations`.
   Main option 8 remains type U as shipped, not the commented admin-only name.
 
 ## Paragraph traceability
@@ -77,7 +78,7 @@ require ADMIN; CM00 requires authentication. F3 is client-side sign-off.
 | COMEN01C / COADM01C MAIN-PARA, BUILD-MENU-OPTIONS, POPULATE-HEADER-INFO | SignonMenuTest.COMEN01C_COADM01C_MAIN_PARA_BUILD_MENU_OPTIONS_POPULATE_HEADER_INFO |
 | COMEN01C PROCESS-ENTER-KEY, PGMIDERR fallback | SignonMenuTest.COMEN01C_PROCESS_ENTER_KEY_PGMIDERR_ERR_PARA |
 | COMEN01C PROCESS-ENTER-KEY, U user denied type-A option (403, literal trailing space) | SignonMenuTest.COMEN01C_PROCESS_ENTER_KEY_ADMIN_ONLY_OPTION (package-private selection seam, no shipped type-A main option) |
-| COMEN01C PROCESS-ENTER-KEY, COPAUS0C absent (red error) | SignonMenuTest.COMEN01C_PROCESS_ENTER_KEY_COPAUS0C |
+| COMEN01C PROCESS-ENTER-KEY, COPAUS0C installed (XCTL to CPVS) | SignonMenuTest.COMEN01C_PROCESS_ENTER_KEY_COPAUS0C |
 | COMEN01C PROCESS-ENTER-KEY DUMMY | SignonMenuTest.COMEN01C_PROCESS_ENTER_KEY_DUMMY_STRING |
 | COADM01C PROCESS-ENTER-KEY, XCTL | SignonMenuTest.COADM01C_PROCESS_ENTER_KEY_XCTL |
 | COMEN01C / COADM01C RETURN-TO-SIGNON-SCREEN | App.test.tsx PROCESS-ENTER-KEY / RETURN-TO-SIGNON-SCREEN (A and U) |

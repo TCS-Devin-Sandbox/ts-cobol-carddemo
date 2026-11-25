@@ -86,7 +86,7 @@ public class MenuController {
             return ResponseEntity.ok(Map.of("program", option.program(), "tranId", "CAVW", "route", "/accounts/view"));
         }
         if (option.program().equals("COPAUS0C")) {
-            return message(200, "This option " + option.name() + " is not installed...", "error");
+            return ResponseEntity.ok(Map.of("program", option.program(), "tranId", "CPVS", "route", "/authorizations"));
         }
         if (option.program().startsWith("DUMMY")) {
             return message(200, "This option " + option.name().split(" ")[0] + "is coming soon ...", "info");
