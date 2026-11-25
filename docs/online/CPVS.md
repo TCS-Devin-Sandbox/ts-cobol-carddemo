@@ -45,6 +45,8 @@ and the new `state`. Read failures return 503 `AUTHORIZATION_SUMMARY_UNAVAILABLE
 * PF8 at page 20 with a next page returns `Only 20 pages can be browsed. Press
   Enter to start again...` instead of overrunning the 20-entry key table
   (scope Q9).
+  The bound is on the slot counter, which the PF7 quirk leaves one ahead of
+  the page shown, so after a PF7 the last reachable page is 19.
 * `nextPage` is recomputed on every list fill; COPAUS0C keeps a stale flag
   when a fill ends early, which leads PF8 to an empty page or a GNP without
   a scheduled PSB.
