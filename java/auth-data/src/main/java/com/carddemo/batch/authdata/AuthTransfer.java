@@ -15,12 +15,10 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.math.BigDecimal;
 import java.nio.ByteBuffer;
-import java.nio.channels.Channels;
 import java.nio.charset.Charset;
-import java.nio.file.Files;
-import java.nio.file.Path;
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
@@ -49,20 +47,15 @@ final class AuthTransfer {
         keyLength = field.length();
     }
 
-    void loadUnload(Path path) throws IOException, SQLException {
-        try (var channel = Files.newByteChannel(path)) {
-            var input = Channels.newInputStream(channel);
-            scanUnload(input, (number, record, account) -> {});
-            channel.position(0);
-            replaceUnload(input);
-        }
-    }
-
-    private void replaceUnload(InputStream input) throws IOException, SQLException {
+    void loadUnload(InputStream input) throws IOException, SQLException {
+        var frames = readUnload(input);
         clear();
         try (var root = SUMMARY.insert(db); var child = DETAIL.insert(db);
              var frame = db.prepareStatement("INSERT INTO pending_auth_unload_frame VALUES (?, ?, ?, ?, ?)")) {
-            scanUnload(input, (number, record, account) -> {
+            long number = 0;
+            for (var entry : frames) {
+                var record = entry.record();
+                var account = entry.account();
                 BigDecimal date = null, time = null;
                 byte[] framing;
                 if (account == null) {
@@ -80,38 +73,36 @@ final class AuthTransfer {
                         DETAIL.write(child, account, segment.fields());
                     }
                 }
-                frame.setLong(1, number);
+                frame.setLong(1, ++number);
                 frame.setBigDecimal(2, account);
                 frame.setBigDecimal(3, date);
                 frame.setBigDecimal(4, time);
                 frame.setBytes(5, framing);
                 frame.executeUpdate();
-            });
+            }
         }
     }
 
-    @FunctionalInterface
-    private interface FrameSink {
-        void accept(long number, Dfsurgu0Unload.Frame record, BigDecimal account) throws IOException, SQLException;
-    }
+    private record UnloadFrame(Dfsurgu0Unload.Frame record, BigDecimal account) {}
 
-    private void scanUnload(InputStream input, FrameSink sink) throws IOException, SQLException {
+    private List<UnloadFrame> readUnload(InputStream input) throws IOException {
+        var frames = new ArrayList<UnloadFrame>();
         BigDecimal parent = null;
-        long number = 0, roots = 0, details = 0;
+        long roots = 0, details = 0;
         boolean ended = false;
         for (var record = unload.readRecord(input); record != null; record = unload.readRecord(input)) {
-            if (ended || (number == 0 && !(record instanceof Metadata))) {
+            if (ended || (frames.isEmpty() && !(record instanceof Metadata))) {
                 throw new IOException("Expected DBPAUTP0 header, segments, then trailer");
             }
             if (record instanceof Metadata metadata) {
                 var body = ByteBuffer.wrap(metadata.body());
                 ended = body.get(1) == (byte) 0x98;
-                if (ended == (number == 0)) throw new IOException("Unexpected DBPAUTP0 metadata");
+                if (ended == frames.isEmpty()) throw new IOException("Unexpected DBPAUTP0 metadata");
                 if (ended && (roots != Integer.toUnsignedLong(body.getInt(TRAILER_ROOT_COUNT))
                         || details != Integer.toUnsignedLong(body.getInt(TRAILER_DETAIL_COUNT)))) {
                     throw new IOException("DBPAUTP0 trailer counts do not match the segment counts");
                 }
-                sink.accept(++number, record, null);
+                frames.add(new UnloadFrame(record, null));
             } else {
                 var segment = (Segment) record;
                 if (segment.type() == PAUTSUM0) {
@@ -122,10 +113,11 @@ final class AuthTransfer {
                     details++;
                     if (parent == null) throw new IOException("Detail has no keyed root");
                 }
-                sink.accept(++number, record, parent);
+                frames.add(new UnloadFrame(record, parent));
             }
         }
         if (!ended) throw new EOFException("Missing DBPAUTP0 trailer");
+        return frames;
     }
 
     void exportUnload(OutputStream output) throws IOException, SQLException {

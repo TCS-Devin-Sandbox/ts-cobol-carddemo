@@ -21,7 +21,8 @@ consistent snapshot, create new files only and may leave partial files if they
 fail; discard those files. Exit 0 is success, 2 is an error.
 
 * **DFSURGU0:** G1 reads the payload at byte +39 including the RDW. Before
-  replacing rows, the loader checks the trailer's root and detail counts
+  replacing rows, the loader buffers parsed frames from one read (including
+  from a pipe such as `/dev/stdin`) and checks the trailer's root and detail counts
   (unsigned 32-bit big-endian at record offsets +20 and +32, including the RDW).
   V3 keeps the ordinal position, prefix and suffix for each keyed segment, and the opaque
   metadata and blank-key root as unkeyed `BYTEA` frames. No account-zero

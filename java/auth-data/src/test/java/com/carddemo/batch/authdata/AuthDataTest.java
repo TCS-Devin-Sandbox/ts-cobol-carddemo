@@ -3,6 +3,8 @@ package com.carddemo.batch.authdata;
 import com.carddemo.batch.common.ims.Dfsurgu0Unload;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.condition.EnabledOnOs;
+import org.junit.jupiter.api.condition.OS;
 import org.junit.jupiter.api.io.TempDir;
 import org.testcontainers.containers.PostgreSQLContainer;
 import org.testcontainers.junit.jupiter.Container;
@@ -20,6 +22,7 @@ import java.util.Arrays;
 import java.util.HexFormat;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 import java.util.stream.Stream;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -137,6 +140,30 @@ class AuthDataTest {
         }
     }
 
+    @Test
+    @EnabledOnOs(OS.LINUX)
+    void loadsFromPipedStdin() throws Exception {
+        byte[] original = Files.readAllBytes(UNLOAD);
+        var log = work.resolve("stdin-command.log");
+        var cli = new ProcessBuilder(Path.of(System.getProperty("java.home"), "bin", "java").toString(),
+                "-cp", System.getProperty("surefire.test.class.path", System.getProperty("java.class.path")),
+                AuthData.class.getName(), "load-unload", "/dev/stdin").redirectErrorStream(true)
+                .redirectOutput(log.toFile());
+        cli.environment().putAll(environment());
+        cli.environment().put("JDBC_SCHEMA", "public");
+        var process = cli.start();
+        try {
+            try (var pipe = process.getOutputStream()) { pipe.write(original); }
+            assertTrue(process.waitFor(30, TimeUnit.SECONDS), "load from stdin timed out");
+            assertEquals(0, process.exitValue(), Files.readString(log));
+        } finally {
+            process.destroyForcibly();
+        }
+        var export = work.resolve("stdin-export.dat");
+        run(0, "export-unload", export);
+        assertArrayEquals(original, Files.readAllBytes(export));
+    }
+
     private static int count(String table, String where) throws Exception {
         try (var db = DriverManager.getConnection(POSTGRES.getJdbcUrl(), POSTGRES.getUsername(), POSTGRES.getPassword());
              var stmt = db.createStatement(); var result = stmt.executeQuery("SELECT count(*) FROM " + table + " WHERE " + where)) {
@@ -147,8 +174,12 @@ class AuthDataTest {
 
     private static void run(int expected, String command, Path... paths) {
         String[] args = Stream.concat(Stream.of(command), Arrays.stream(paths).map(Path::toString)).toArray(String[]::new);
-        assertEquals(expected, AuthData.run(args, Map.of("JDBC_URL", POSTGRES.getJdbcUrl(), "JDBC_USER",
-                POSTGRES.getUsername(), "JDBC_PASSWORD", POSTGRES.getPassword())), command);
+        assertEquals(expected, AuthData.run(args, environment()), command);
+    }
+
+    private static Map<String, String> environment() {
+        return Map.of("JDBC_URL", POSTGRES.getJdbcUrl(), "JDBC_USER",
+                POSTGRES.getUsername(), "JDBC_PASSWORD", POSTGRES.getPassword());
     }
 
     record Proof(String dataset, int records, int bytes, String sourceSha256, String exportSha256) {}

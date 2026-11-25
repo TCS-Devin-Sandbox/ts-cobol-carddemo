@@ -2,6 +2,8 @@ package com.carddemo.batch.authdata;
 
 import org.flywaydb.core.Flyway;
 
+import java.io.BufferedInputStream;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -61,7 +63,9 @@ public final class AuthData {
     private static void execute(AuthTransfer tool, String[] args) throws SQLException, IOException {
         Path first = Path.of(args[1]);
         switch (args[0]) {
-            case "load-unload" -> tool.loadUnload(first);
+            case "load-unload" -> {
+                try (var in = new BufferedInputStream(new FileInputStream(first.toFile()))) { tool.loadUnload(in); }
+            }
             case "export-unload" -> {
                 try (var out = Files.newOutputStream(first, WRITE, CREATE_NEW)) { tool.exportUnload(out); }
             }
