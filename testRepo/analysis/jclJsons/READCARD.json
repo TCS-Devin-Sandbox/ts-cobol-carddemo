@@ -1,0 +1,298 @@
+{
+  "job_name": "READCARD",
+  "app_name": null,
+  "inventory_summary": {
+    "total_steps": 1,
+    "total_dd_statements_used": 4,
+    "unique_datasets": 2,
+    "vsam_used": true,
+    "vsam_dataset_count": 1,
+    "tape_dataset_count": 0,
+    "temporary_dataset_count": 0,
+    "gdg_plus1_used": false,
+    "unique_gdg_plus1_count": 0,
+    "business_context_classified": true,
+    "db2_used": false,
+    "ims_used": false,
+    "cics_used": false,
+    "external_interface_used": false,
+    "external_interface_count": 0,
+    "upstream_interface_count": 0,
+    "downstream_interface_count": 0,
+    "restartable_steps": 0,
+    "entry_program_count": 1,
+    "utility_step_count": 0,
+    "unique_utility_program_count": 0,
+    "runtime_program_count": 0,
+    "application_program_count": 1,
+    "system_program_count": 0,
+    "proc_used": false,
+    "symbolics_used": true,
+    "unresolved_reference_count": 0,
+    "niche_program_count": 0,
+    "niche_technology_used": false,
+    "niche_technology_types": [],
+    "niche_technology_detection_count": 0,
+    "niche_technology_risk_indicator": "NONE",
+    "missing_component_detected": false,
+    "missing_component_count": 0,
+    "components_found": 1,
+    "components_not_found": 0,
+    "external_components": 0,
+    "system_components": 0,
+    "repository_completeness_percentage": 100,
+    "jcl_complexity_score": 11,
+    "jcl_complexity_rating": "LOW"
+  },
+  "repository_validation": {
+    "repository_validation_performed": true,
+    "total_components_referenced": 1,
+    "components_found": 1,
+    "components_not_found": 0,
+    "external_components": 0,
+    "system_components": 0,
+    "repository_completeness_percentage": 100
+  },
+  "complexity_assessment": {
+    "jcl_complexity_score": 11,
+    "complexity_rating": "LOW",
+    "complexity_drivers": [
+      "EXEC Step x1 = 2",
+      "Dataset x2 (AWS.M2.CARDDEMO.LOADLIB, AWS.M2.CARDDEMO.CARDDATA.VSAM.KSDS) = 2",
+      "VSAM Dataset x1 (AWS.M2.CARDDEMO.CARDDATA.VSAM.KSDS) = 2",
+      "Entry Program x1 (CBACT02C) = 4",
+      "Symbolic Variable x1 (&SYSUID) = 1"
+    ],
+    "complexity_breakdown": {
+      "structural_complexity": 2,
+      "dataset_complexity": 4,
+      "processing_complexity": 4,
+      "integration_complexity": 0,
+      "operational_complexity": 1
+    }
+  },
+  "business_context": {
+    "business_capability": null,
+    "business_process": null,
+    "business_function": "Run the program that reads the card master VSAM file",
+    "classification_confidence": "LOW",
+    "classification_evidence": [
+      "app/jcl/READCARD.jcl:20 //* RUN THE PROGRAM THAT READS THE CARD MASTER VSAM FILE"
+    ]
+  },
+  "gdg_plus1_inventory": [],
+  "interface_inventory": [],
+  "niche_program_calls": [],
+  "entry_programs": [
+    {
+      "program_name": "CBACT02C",
+      "step_name": "STEP05",
+      "invocation_type": "EXEC PGM",
+      "component_classification": "APPLICATION_PROGRAM",
+      "entry_program": true,
+      "source_found": true,
+      "reference_location": "app/jcl/READCARD.jcl:22",
+      "component_status": "FOUND"
+    }
+  ],
+  "component_not_found": [],
+  "unresolved_references": [],
+  "symbolics": {
+    "set_variables": [],
+    "referenced_variables": [
+      {
+        "ref_name": "&SYSUID",
+        "resolved_value": null,
+        "reference_count": 1,
+        "reference_locations": [
+          "app/jcl/READCARD.jcl:2"
+        ]
+      }
+    ]
+  },
+  "steps": [
+    {
+      "step_name": "STEP05",
+      "program": "CBACT02C",
+      "proc": null,
+      "conditions": null,
+      "entry_program": true,
+      "niche_technology": {
+        "niche_detected": false,
+        "technology_type": null,
+        "detection_source": null
+      },
+      "component_references": [
+        {
+          "component_name": "CBACT02C",
+          "component_type": "COBOL_PROGRAM",
+          "component_classification": "APPLICATION_PROGRAM",
+          "reference_type": "EXEC PGM",
+          "reference_location": "app/jcl/READCARD.jcl:22",
+          "source_found": true,
+          "component_status": "FOUND"
+        }
+      ],
+      "external_interfaces": [],
+      "datasets": [
+        {
+          "dd_used": true,
+          "dd_used_reason": "DSN present",
+          "ddname": "STEPLIB",
+          "dataset_name_original": "AWS.M2.CARDDEMO.LOADLIB",
+          "dataset_name": "AWS.M2.CARDDEMO.LOADLIB",
+          "gdg_plus1": false,
+          "gdg_name": null,
+          "symbolic_resolution": {},
+          "type": "LOAD_LIBRARY",
+          "role_io": "INPUT",
+          "temp_flag": false,
+          "rpt_ctl": null,
+          "disposition": "SHR",
+          "dcb": {
+            "recfm": null,
+            "lrecl": null,
+            "blksize": null
+          },
+          "sms": {
+            "storclas": null,
+            "mgmtclas": null,
+            "dataclas": null
+          },
+          "space": null,
+          "unit": null,
+          "volume": null
+        },
+        {
+          "dd_used": true,
+          "dd_used_reason": "DSN present",
+          "ddname": "CARDFILE",
+          "dataset_name_original": "AWS.M2.CARDDEMO.CARDDATA.VSAM.KSDS",
+          "dataset_name": "AWS.M2.CARDDEMO.CARDDATA.VSAM.KSDS",
+          "gdg_plus1": false,
+          "gdg_name": null,
+          "symbolic_resolution": {},
+          "type": "VSAM_KSDS",
+          "role_io": "INPUT",
+          "temp_flag": false,
+          "rpt_ctl": null,
+          "disposition": "SHR",
+          "dcb": {
+            "recfm": null,
+            "lrecl": null,
+            "blksize": null
+          },
+          "sms": {
+            "storclas": null,
+            "mgmtclas": null,
+            "dataclas": null
+          },
+          "space": null,
+          "unit": null,
+          "volume": null
+        },
+        {
+          "dd_used": true,
+          "dd_used_reason": "SYSOUT present",
+          "ddname": "SYSOUT",
+          "dataset_name_original": null,
+          "dataset_name": null,
+          "gdg_plus1": false,
+          "gdg_name": null,
+          "symbolic_resolution": {},
+          "type": "SYSOUT",
+          "role_io": "OUTPUT",
+          "temp_flag": false,
+          "rpt_ctl": "RPT",
+          "disposition": null,
+          "dcb": {
+            "recfm": null,
+            "lrecl": null,
+            "blksize": null
+          },
+          "sms": {
+            "storclas": null,
+            "mgmtclas": null,
+            "dataclas": null
+          },
+          "space": null,
+          "unit": null,
+          "volume": null
+        },
+        {
+          "dd_used": true,
+          "dd_used_reason": "SYSOUT present",
+          "ddname": "SYSPRINT",
+          "dataset_name_original": null,
+          "dataset_name": null,
+          "gdg_plus1": false,
+          "gdg_name": null,
+          "symbolic_resolution": {},
+          "type": "SYSOUT",
+          "role_io": "OUTPUT",
+          "temp_flag": false,
+          "rpt_ctl": "RPT",
+          "disposition": null,
+          "dcb": {
+            "recfm": null,
+            "lrecl": null,
+            "blksize": null
+          },
+          "sms": {
+            "storclas": null,
+            "mgmtclas": null,
+            "dataclas": null
+          },
+          "space": null,
+          "unit": null,
+          "volume": null
+        }
+      ],
+      "db2": {
+        "db2_used": false,
+        "program": null,
+        "plan": null,
+        "package": null,
+        "subsystem": null,
+        "libraries": [],
+        "utility_type": null,
+        "sql_statements": null
+      },
+      "ims": {
+        "ims_used": false,
+        "program": null,
+        "psb": null,
+        "region_type": null,
+        "dbd_names": [],
+        "pcb_names": [],
+        "libraries": {
+          "psblib": null,
+          "dbdlib": null,
+          "acblib": null,
+          "reslib": null
+        },
+        "datasets": [],
+        "control_statements": []
+      },
+      "cics": {
+        "cics_used": false,
+        "cics_resources": [],
+        "cics_evidence": []
+      },
+      "restart_checkpoint": {
+        "restartable": false,
+        "checkpoint_used": false,
+        "checkpoint_reference": null,
+        "restart_parameter": null,
+        "restart_evidence": []
+      },
+      "utility": {
+        "utility_used": false,
+        "utility_name": null,
+        "utility_category": null,
+        "utility_subcategory": null,
+        "sysin_content": null
+      }
+    }
+  ]
+}

@@ -1,0 +1,164 @@
+{
+  "business_summary": {
+    "program_name": "CBACT02C",
+    "program_description": "Read and print card data file.",
+    "business_objective": "Read the card master file and print each card record.",
+    "business_outcome": "Every card record on the card master file is written to SYSOUT, in record-key order, between a start and end banner.",
+    "confidence_level": "MEDIUM",
+    "evidence": [
+      "app/cbl/CBACT02C.cbl:4 * Function    : Read and print card data file.",
+      "app/jcl/READCARD.jcl:20 //* RUN THE PROGRAM THAT READS THE CARD MASTER VSAM FILE",
+      "app/cpy/CVACT02Y.cpy:2 *    Data-structure for card entity (RECLN 150)"
+    ]
+  },
+  "business_process_summary": [
+    {
+      "step": 1,
+      "description": "Read card record",
+      "source_reference": "app/cbl/CBACT02C.cbl:93"
+    },
+    {
+      "step": 2,
+      "description": "Print card record",
+      "source_reference": "app/cbl/CBACT02C.cbl:78"
+    },
+    {
+      "step": 3,
+      "description": "Repeat until the end of the card data file",
+      "source_reference": "app/cbl/CBACT02C.cbl:74"
+    }
+  ],
+  "business_entities": [
+    {
+      "entity_name": "Card",
+      "source_structure": "CARD-RECORD",
+      "record_length": 150,
+      "source_reference": "app/cpy/CVACT02Y.cpy:2-4",
+      "source_snippet": "Data-structure for card entity (RECLN 150) / 01  CARD-RECORD."
+    }
+  ],
+  "business_data_elements": [
+    {
+      "element_name": "CARD-NUM",
+      "picture": "X(16)",
+      "usage_in_rule": "Record key; defines the order in which card records are read and printed (FD-CARD-NUM)",
+      "rule_ids": [
+        "CBACT02C-BR-001"
+      ],
+      "source_reference": "app/cpy/CVACT02Y.cpy:5; app/cbl/CBACT02C.cbl:32"
+    },
+    {
+      "element_name": "CARD-RECORD",
+      "picture": "group (150 bytes)",
+      "usage_in_rule": "Printed in full for each card",
+      "rule_ids": [
+        "CBACT02C-BR-001"
+      ],
+      "source_reference": "app/cpy/CVACT02Y.cpy:4-11; app/cbl/CBACT02C.cbl:78"
+    }
+  ],
+  "business_rules": [
+    {
+      "rule_id": "CBACT02C-BR-001",
+      "rule_name": "Print every card record",
+      "rule_category": "Reporting Rule",
+      "business_description": "Each card record read from the card data file is printed in full (150 bytes), in record-key order; the read that reaches end of file prints nothing.",
+      "condition": "END-OF-FILE = 'N' after 1000-CARDFILE-GET-NEXT",
+      "action": "DISPLAY CARD-RECORD",
+      "outcome": "One SYSOUT line per card record",
+      "acceptance_criteria": {
+        "given": "the card data file holds N card records",
+        "when": "READCARD runs",
+        "then": "SYSOUT contains exactly N card lines, each equal to the 150-byte card record, in ascending CARD-NUM order"
+      },
+      "decision_table": [
+        {
+          "condition": "END-OF-FILE = 'N' after read",
+          "action": "DISPLAY CARD-RECORD",
+          "source_reference": "app/cbl/CBACT02C.cbl:77-78"
+        },
+        {
+          "condition": "END-OF-FILE = 'Y' after read",
+          "action": "No display; leave loop",
+          "source_reference": "app/cbl/CBACT02C.cbl:74,77"
+        }
+      ],
+      "source_reference": "app/cbl/CBACT02C.cbl:74-81",
+      "source_snippet": "PERFORM UNTIL END-OF-FILE = 'Y' IF END-OF-FILE = 'N' PERFORM 1000-CARDFILE-GET-NEXT IF END-OF-FILE = 'N' DISPLAY CARD-RECORD END-IF END-IF END-PERFORM.",
+      "confidence_level": "HIGH"
+    },
+    {
+      "rule_id": "CBACT02C-BR-002",
+      "rule_name": "Unreadable card record stops the run",
+      "rule_category": "Exception Rule",
+      "business_description": "A card read that neither succeeds (status '00') nor reaches end of file (status '10') ends the run with an error message and abend code 999; no further cards are printed.",
+      "condition": "CARDFILE-STATUS not '00' and not '10'",
+      "action": "DISPLAY 'ERROR READING CARDFILE'; display file status; PERFORM 9999-ABEND-PROGRAM",
+      "outcome": "Card listing is incomplete and the job ends abnormally (abend 999)",
+      "acceptance_criteria": {
+        "given": "a card record cannot be read (file status other than '00' or '10')",
+        "when": "READCARD runs",
+        "then": "'ERROR READING CARDFILE' and 'ABENDING PROGRAM' are printed, no later card is printed and the step ends with abend code 999"
+      },
+      "decision_table": [
+        {
+          "condition": "CARDFILE-STATUS = '00'",
+          "APPL-RESULT": 0,
+          "action": "Record accepted; DISPLAY CARD-RECORD",
+          "source_reference": "app/cbl/CBACT02C.cbl:94-95"
+        },
+        {
+          "condition": "CARDFILE-STATUS = '10'",
+          "APPL-RESULT": 16,
+          "action": "END-OF-FILE = 'Y'; stop reading; record not displayed",
+          "source_reference": "app/cbl/CBACT02C.cbl:98-99,107-108"
+        },
+        {
+          "condition": "CARDFILE-STATUS other than '00' and '10'",
+          "APPL-RESULT": 12,
+          "action": "DISPLAY 'ERROR READING CARDFILE'; display file status; abend 999",
+          "source_reference": "app/cbl/CBACT02C.cbl:100-113"
+        }
+      ],
+      "source_reference": "app/cbl/CBACT02C.cbl:92-116",
+      "source_snippet": "IF CARDFILE-STATUS = '00' MOVE 0 TO APPL-RESULT ELSE IF CARDFILE-STATUS = '10' MOVE 16 TO APPL-RESULT ELSE MOVE 12 TO APPL-RESULT ... DISPLAY 'ERROR READING CARDFILE' ... PERFORM 9999-ABEND-PROGRAM",
+      "confidence_level": "HIGH"
+    },
+    {
+      "rule_id": "CBACT02C-BR-003",
+      "rule_name": "Listing start and end banners",
+      "rule_category": "Reporting Rule",
+      "business_description": "The listing starts with 'START OF EXECUTION OF PROGRAM CBACT02C' and, on normal completion, ends with 'END OF EXECUTION OF PROGRAM CBACT02C'.",
+      "condition": null,
+      "action": "DISPLAY start banner before reading; DISPLAY end banner after close",
+      "outcome": "Listing is bracketed by fixed banner lines",
+      "acceptance_criteria": null,
+      "decision_table": [],
+      "source_reference": "app/cbl/CBACT02C.cbl:71,85",
+      "source_snippet": "DISPLAY 'START OF EXECUTION OF PROGRAM CBACT02C'. ... DISPLAY 'END OF EXECUTION OF PROGRAM CBACT02C'.",
+      "confidence_level": "HIGH"
+    }
+  ],
+  "business_capability_mapping": [],
+  "processing_inputs": [
+    {
+      "name": "CARDFILE",
+      "dataset": "AWS.M2.CARDDEMO.CARDDATA.VSAM.KSDS",
+      "record_layout": "CVACT02Y CARD-RECORD",
+      "source_reference": "app/jcl/READCARD.jcl:25-26; app/cbl/CBACT02C.cbl:29-33"
+    }
+  ],
+  "processing_outputs": [
+    {
+      "name": "SYSOUT",
+      "dataset": null,
+      "content": "Start banner, one line per card record, end banner",
+      "source_reference": "app/jcl/READCARD.jcl:27; app/cbl/CBACT02C.cbl:71,78,85"
+    }
+  ],
+  "traceability_summary": {
+    "total_business_rules": 3,
+    "rules_with_source_evidence": 3,
+    "rules_without_source_evidence": 0
+  }
+}

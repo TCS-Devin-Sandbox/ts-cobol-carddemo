@@ -1,0 +1,746 @@
+{
+  "technical_documentation": {
+    "document_metadata": {
+      "document_type": "Technical Detailed Documentation",
+      "source_analyzers": [
+        "testRepo/analysis/jclJsons/READCARD.json",
+        "testRepo/analysis/cblJsons/CBACT02C.json"
+      ],
+      "generation_scope": "JCL and Program Technical Documentation",
+      "business_rules_excluded": true,
+      "anti_hallucination_enforced": true
+    },
+    "inventory_identification": {
+      "application_name": null,
+      "application_description": null,
+      "job_name": "READCARD",
+      "proc_name": null,
+      "program_name": "CBACT02C",
+      "component_name": "READCARD",
+      "component_type": "JCL_JOB",
+      "language": "JCL / COBOL",
+      "source_file": "app/jcl/READCARD.jcl",
+      "repository_path": "app/",
+      "analyzer_source": "00_discovery_agent (JCL Analyzer + Program Analyzer)",
+      "analysis_timestamp": null,
+      "confidence_level": "HIGH",
+      "evidence": [
+        "app/jcl/READCARD.jcl:1",
+        "app/cbl/CBACT02C.cbl:23"
+      ]
+    },
+    "jcl_technical_summary": {
+      "jcl_present": true,
+      "job_card": {
+        "job_name": "READCARD",
+        "accounting_information": "'READCARD'",
+        "programmer_name": null,
+        "class": "A",
+        "msgclass": "0",
+        "msglevel": null,
+        "notify": "&SYSUID",
+        "restart": null,
+        "source_reference": "app/jcl/READCARD.jcl:1-2"
+      },
+      "job_steps": [
+        {
+          "step_sequence": 1,
+          "step_name": "STEP05",
+          "exec_type": "PGM",
+          "program": "CBACT02C",
+          "proc": null,
+          "parm": null,
+          "cond": null,
+          "entry_program": true,
+          "dd_statements": [
+            {
+              "dd_name": "STEPLIB",
+              "dataset_name": "AWS.M2.CARDDEMO.LOADLIB",
+              "disposition": "SHR",
+              "sysout": null,
+              "source_reference": "app/jcl/READCARD.jcl:23-24"
+            },
+            {
+              "dd_name": "CARDFILE",
+              "dataset_name": "AWS.M2.CARDDEMO.CARDDATA.VSAM.KSDS",
+              "disposition": "SHR",
+              "sysout": null,
+              "source_reference": "app/jcl/READCARD.jcl:25-26"
+            },
+            {
+              "dd_name": "SYSOUT",
+              "dataset_name": null,
+              "disposition": null,
+              "sysout": "*",
+              "source_reference": "app/jcl/READCARD.jcl:27"
+            },
+            {
+              "dd_name": "SYSPRINT",
+              "dataset_name": null,
+              "disposition": null,
+              "sysout": "*",
+              "source_reference": "app/jcl/READCARD.jcl:28"
+            }
+          ],
+          "source_reference": "app/jcl/READCARD.jcl:22",
+          "source_snippet": "//STEP05 EXEC PGM=CBACT02C"
+        }
+      ],
+      "utilities_used": [],
+      "symbolic_parameters": [
+        {
+          "parameter_name": "&SYSUID",
+          "resolved_value": null,
+          "source_reference": "app/jcl/READCARD.jcl:2",
+          "source_snippet": "// NOTIFY=&SYSUID"
+        }
+      ],
+      "sort_control_statements": [],
+      "instream_data": [],
+      "unresolved_jcl_components": [],
+      "confidence_level": "HIGH"
+    },
+    "program_technical_summary": {
+      "program_present": true,
+      "program_name": "CBACT02C",
+      "language": "COBOL",
+      "program_type": "BATCH",
+      "identification_division": {
+        "program_id": "CBACT02C",
+        "author": "AWS.",
+        "source_reference": "app/cbl/CBACT02C.cbl:22-24"
+      },
+      "environment_division": {
+        "input_output_section": true,
+        "file_control_count": 1,
+        "source_reference": "app/cbl/CBACT02C.cbl:26-33"
+      },
+      "data_division": {
+        "file_section_present": true,
+        "working_storage_present": true,
+        "linkage_section_present": false
+      },
+      "procedure_division": {
+        "entry_paragraph": "PROCEDURE DIVISION (main)",
+        "paragraphs": [
+          {
+            "paragraph_name": "PROCEDURE DIVISION (main)",
+            "source_reference": "app/cbl/CBACT02C.cbl:69-87"
+          },
+          {
+            "paragraph_name": "1000-CARDFILE-GET-NEXT",
+            "source_reference": "app/cbl/CBACT02C.cbl:92-116"
+          },
+          {
+            "paragraph_name": "0000-CARDFILE-OPEN",
+            "source_reference": "app/cbl/CBACT02C.cbl:118-134"
+          },
+          {
+            "paragraph_name": "9000-CARDFILE-CLOSE",
+            "source_reference": "app/cbl/CBACT02C.cbl:136-152"
+          },
+          {
+            "paragraph_name": "9999-ABEND-PROGRAM",
+            "source_reference": "app/cbl/CBACT02C.cbl:154-158"
+          },
+          {
+            "paragraph_name": "9910-DISPLAY-IO-STATUS",
+            "source_reference": "app/cbl/CBACT02C.cbl:161-174"
+          }
+        ],
+        "sections": [],
+        "main_control_flow": [
+          {
+            "sequence": 1,
+            "statement": "DISPLAY 'START OF EXECUTION OF PROGRAM CBACT02C'",
+            "source_reference": "app/cbl/CBACT02C.cbl:71"
+          },
+          {
+            "sequence": 2,
+            "statement": "PERFORM 0000-CARDFILE-OPEN",
+            "source_reference": "app/cbl/CBACT02C.cbl:72"
+          },
+          {
+            "sequence": 3,
+            "statement": "PERFORM UNTIL END-OF-FILE = 'Y' -> PERFORM 1000-CARDFILE-GET-NEXT; IF END-OF-FILE = 'N' DISPLAY CARD-RECORD",
+            "source_reference": "app/cbl/CBACT02C.cbl:74-81"
+          },
+          {
+            "sequence": 4,
+            "statement": "PERFORM 9000-CARDFILE-CLOSE",
+            "source_reference": "app/cbl/CBACT02C.cbl:83"
+          },
+          {
+            "sequence": 5,
+            "statement": "DISPLAY 'END OF EXECUTION OF PROGRAM CBACT02C'",
+            "source_reference": "app/cbl/CBACT02C.cbl:85"
+          },
+          {
+            "sequence": 6,
+            "statement": "GOBACK",
+            "source_reference": "app/cbl/CBACT02C.cbl:87"
+          }
+        ]
+      },
+      "copybooks": [
+        {
+          "copybook_name": "CVACT02Y",
+          "usage_section": "WORKING-STORAGE SECTION",
+          "source_reference": "app/cbl/CBACT02C.cbl:45"
+        }
+      ],
+      "called_programs": [
+        {
+          "program_name": "CEE3ABD",
+          "call_type": "STATIC",
+          "parameters": [
+            "ABCODE",
+            "TIMING"
+          ],
+          "source_reference": "app/cbl/CBACT02C.cbl:158"
+        }
+      ],
+      "file_control_entries": [
+        {
+          "select_name": "CARDFILE-FILE",
+          "assign_to": "CARDFILE",
+          "organization": "INDEXED",
+          "access_mode": "SEQUENTIAL",
+          "record_key": "FD-CARD-NUM",
+          "file_status": "CARDFILE-STATUS",
+          "source_reference": "app/cbl/CBACT02C.cbl:29-33"
+        }
+      ],
+      "fd_entries": [
+        {
+          "fd_name": "CARDFILE-FILE",
+          "record_name": "FD-CARDFILE-REC",
+          "record_length": 150,
+          "fields": [
+            {
+              "name": "FD-CARD-NUM",
+              "picture": "X(16)",
+              "offset": 0,
+              "length": 16
+            },
+            {
+              "name": "FD-CARD-DATA",
+              "picture": "X(134)",
+              "offset": 16,
+              "length": 134
+            }
+          ],
+          "source_reference": "app/cbl/CBACT02C.cbl:37-40"
+        }
+      ],
+      "working_storage_items": [
+        {
+          "name": "CARD-RECORD",
+          "definition": "COPY CVACT02Y (150 bytes)",
+          "source_reference": "app/cpy/CVACT02Y.cpy:4-11"
+        },
+        {
+          "name": "CARDFILE-STATUS",
+          "definition": "CARDFILE-STAT1 X, CARDFILE-STAT2 X",
+          "source_reference": "app/cbl/CBACT02C.cbl:46-48"
+        },
+        {
+          "name": "IO-STATUS",
+          "definition": "IO-STAT1 X, IO-STAT2 X",
+          "source_reference": "app/cbl/CBACT02C.cbl:50-52"
+        },
+        {
+          "name": "TWO-BYTES-BINARY",
+          "definition": "PIC 9(4) BINARY; REDEFINED BY TWO-BYTES-ALPHA",
+          "source_reference": "app/cbl/CBACT02C.cbl:53-56"
+        },
+        {
+          "name": "IO-STATUS-04",
+          "definition": "IO-STATUS-0401 9 VALUE 0, IO-STATUS-0403 999 VALUE 0",
+          "source_reference": "app/cbl/CBACT02C.cbl:57-59"
+        },
+        {
+          "name": "APPL-RESULT",
+          "definition": "PIC S9(9) COMP; 88 APPL-AOK VALUE 0; 88 APPL-EOF VALUE 16",
+          "source_reference": "app/cbl/CBACT02C.cbl:61-63"
+        },
+        {
+          "name": "END-OF-FILE",
+          "definition": "PIC X(01) VALUE 'N'",
+          "source_reference": "app/cbl/CBACT02C.cbl:65"
+        },
+        {
+          "name": "ABCODE",
+          "definition": "PIC S9(9) BINARY",
+          "source_reference": "app/cbl/CBACT02C.cbl:66"
+        },
+        {
+          "name": "TIMING",
+          "definition": "PIC S9(9) BINARY",
+          "source_reference": "app/cbl/CBACT02C.cbl:67"
+        }
+      ],
+      "linkage_items": [],
+      "unresolved_program_components": [],
+      "confidence_level": "HIGH",
+      "evidence": [
+        "testRepo/analysis/cblJsons/CBACT02C.json"
+      ]
+    },
+    "entry_program_analysis": {
+      "entry_program": true,
+      "entry_program_name": "CBACT02C",
+      "entry_source": "JCL EXEC PGM",
+      "entry_evidence": "app/jcl/READCARD.jcl:22 //STEP05 EXEC PGM=CBACT02C",
+      "excluded_ibm_utilities": [],
+      "confidence_level": "HIGH"
+    },
+    "dependency_analysis": [
+      {
+        "dependency_name": "CBACT02C",
+        "dependency_type": "program",
+        "reference_type": "EXEC PGM",
+        "repository_status": "FOUND",
+        "component_status": "FOUND",
+        "source_reference": "app/jcl/READCARD.jcl:22",
+        "source_snippet": "//STEP05 EXEC PGM=CBACT02C"
+      },
+      {
+        "dependency_name": "AWS.M2.CARDDEMO.LOADLIB",
+        "dependency_type": "dataset",
+        "reference_type": "STEPLIB DD",
+        "repository_status": null,
+        "component_status": null,
+        "source_reference": "app/jcl/READCARD.jcl:23-24",
+        "source_snippet": "//STEPLIB  DD DISP=SHR, DSN=AWS.M2.CARDDEMO.LOADLIB"
+      },
+      {
+        "dependency_name": "AWS.M2.CARDDEMO.CARDDATA.VSAM.KSDS",
+        "dependency_type": "VSAM file",
+        "reference_type": "CARDFILE DD",
+        "repository_status": null,
+        "component_status": null,
+        "source_reference": "app/jcl/READCARD.jcl:25-26",
+        "source_snippet": "//CARDFILE DD DISP=SHR, DSN=AWS.M2.CARDDEMO.CARDDATA.VSAM.KSDS"
+      },
+      {
+        "dependency_name": "CVACT02Y",
+        "dependency_type": "copybook",
+        "reference_type": "COPY",
+        "repository_status": "FOUND",
+        "component_status": null,
+        "source_reference": "app/cbl/CBACT02C.cbl:45",
+        "source_snippet": "COPY CVACT02Y."
+      },
+      {
+        "dependency_name": "CEE3ABD",
+        "dependency_type": "external subroutine",
+        "reference_type": "CALL",
+        "repository_status": null,
+        "component_status": null,
+        "source_reference": "app/cbl/CBACT02C.cbl:158",
+        "source_snippet": "CALL 'CEE3ABD' USING ABCODE, TIMING."
+      }
+    ],
+    "file_and_dataset_usage": [
+      {
+        "logical_name": "CARDFILE-FILE",
+        "dd_name": "CARDFILE",
+        "dataset_name": "AWS.M2.CARDDEMO.CARDDATA.VSAM.KSDS",
+        "dataset_type": "VSAM_KSDS",
+        "disposition": "SHR",
+        "access_mode": "SEQUENTIAL",
+        "open_mode": "INPUT",
+        "operations": [
+          "OPEN INPUT",
+          "READ INTO CARD-RECORD",
+          "CLOSE"
+        ],
+        "referenced_by": [
+          "READCARD.STEP05",
+          "CBACT02C"
+        ],
+        "source_reference": [
+          "app/jcl/READCARD.jcl:25-26",
+          "app/cbl/CBACT02C.cbl:29-33",
+          "app/cbl/CBACT02C.cbl:120",
+          "app/cbl/CBACT02C.cbl:93",
+          "app/cbl/CBACT02C.cbl:138"
+        ],
+        "source_snippet": "SELECT CARDFILE-FILE ASSIGN TO CARDFILE ORGANIZATION IS INDEXED ACCESS MODE IS SEQUENTIAL",
+        "linkage_evidence": "JCL DD CARDFILE matches ASSIGN TO CARDFILE"
+      },
+      {
+        "logical_name": null,
+        "dd_name": "SYSOUT",
+        "dataset_name": null,
+        "dataset_type": "SYSOUT",
+        "disposition": null,
+        "access_mode": null,
+        "open_mode": null,
+        "operations": [
+          "DISPLAY"
+        ],
+        "referenced_by": [
+          "READCARD.STEP05"
+        ],
+        "source_reference": [
+          "app/jcl/READCARD.jcl:27"
+        ],
+        "source_snippet": "//SYSOUT   DD SYSOUT=*",
+        "linkage_evidence": null
+      },
+      {
+        "logical_name": null,
+        "dd_name": "SYSPRINT",
+        "dataset_name": null,
+        "dataset_type": "SYSOUT",
+        "disposition": null,
+        "access_mode": null,
+        "open_mode": null,
+        "operations": [],
+        "referenced_by": [
+          "READCARD.STEP05"
+        ],
+        "source_reference": [
+          "app/jcl/READCARD.jcl:28"
+        ],
+        "source_snippet": "//SYSPRINT DD SYSOUT=*",
+        "linkage_evidence": null
+      },
+      {
+        "logical_name": null,
+        "dd_name": "STEPLIB",
+        "dataset_name": "AWS.M2.CARDDEMO.LOADLIB",
+        "dataset_type": "LOAD_LIBRARY",
+        "disposition": "SHR",
+        "access_mode": null,
+        "open_mode": null,
+        "operations": [],
+        "referenced_by": [
+          "READCARD.STEP05"
+        ],
+        "source_reference": [
+          "app/jcl/READCARD.jcl:23-24"
+        ],
+        "source_snippet": "//STEPLIB  DD DISP=SHR,",
+        "linkage_evidence": null
+      }
+    ],
+    "gdg_usage": [],
+    "copybook_dependency_analysis": [
+      {
+        "copybook_name": "CVACT02Y",
+        "copybook_type": "RECORD_LAYOUT",
+        "repository_status": "FOUND",
+        "component_status": null,
+        "referenced_by_program": "CBACT02C",
+        "reference_location": "app/cbl/CBACT02C.cbl:45",
+        "source_reference": "app/cpy/CVACT02Y.cpy",
+        "source_snippet": "01 CARD-RECORD. 05 CARD-NUM PIC X(16). 05 CARD-ACCT-ID PIC 9(11). 05 CARD-CVV-CD PIC 9(03). 05 CARD-EMBOSSED-NAME PIC X(50). 05 CARD-EXPIRAION-DATE PIC X(10). 05 CARD-ACTIVE-STATUS PIC X(01). 05 FILLER PIC X(59)."
+      }
+    ],
+    "database_and_data_access_analysis": {
+      "db2": {
+        "db2_used": false,
+        "sql_operations": []
+      },
+      "ims": {
+        "ims_used": false,
+        "psb_dbd_relationships": []
+      },
+      "vsam": {
+        "vsam_used": true,
+        "vsam_files": [
+          {
+            "file_name": "CARDFILE-FILE",
+            "access_type": "SEQUENTIAL",
+            "operation": "READ",
+            "key_field": "FD-CARD-NUM",
+            "source_reference": "app/cbl/CBACT02C.cbl:29-33",
+            "source_snippet": "RECORD KEY IS FD-CARD-NUM"
+          }
+        ]
+      },
+      "other_data_access": []
+    },
+    "integration_and_interface_analysis": [
+      {
+        "interface_name": "CEE3ABD",
+        "interface_type": "subprogram interface",
+        "caller_component": "CBACT02C",
+        "target_component": "CEE3ABD",
+        "invocation_type": "STATIC CALL",
+        "parameters_passed": [
+          "ABCODE",
+          "TIMING"
+        ],
+        "source_reference": "app/cbl/CBACT02C.cbl:158",
+        "source_snippet": "CALL 'CEE3ABD' USING ABCODE, TIMING."
+      }
+    ],
+    "control_flow_analysis": [
+      {
+        "construct_type": "PERFORM",
+        "paragraph_or_step": "PROCEDURE DIVISION (main)",
+        "condition": null,
+        "target_paragraph": "0000-CARDFILE-OPEN",
+        "loop_condition": null,
+        "source_reference": "app/cbl/CBACT02C.cbl:72",
+        "source_snippet": "PERFORM 0000-CARDFILE-OPEN."
+      },
+      {
+        "construct_type": "PERFORM UNTIL",
+        "paragraph_or_step": "PROCEDURE DIVISION (main)",
+        "condition": null,
+        "target_paragraph": "1000-CARDFILE-GET-NEXT",
+        "loop_condition": "END-OF-FILE = 'Y'",
+        "source_reference": "app/cbl/CBACT02C.cbl:74-81",
+        "source_snippet": "PERFORM UNTIL END-OF-FILE = 'Y'"
+      },
+      {
+        "construct_type": "IF",
+        "paragraph_or_step": "PROCEDURE DIVISION (main)",
+        "condition": "END-OF-FILE = 'N'",
+        "target_paragraph": "1000-CARDFILE-GET-NEXT",
+        "loop_condition": null,
+        "source_reference": "app/cbl/CBACT02C.cbl:75",
+        "source_snippet": "IF  END-OF-FILE = 'N'"
+      },
+      {
+        "construct_type": "IF",
+        "paragraph_or_step": "PROCEDURE DIVISION (main)",
+        "condition": "END-OF-FILE = 'N'",
+        "target_paragraph": null,
+        "loop_condition": null,
+        "source_reference": "app/cbl/CBACT02C.cbl:77-78",
+        "source_snippet": "IF  END-OF-FILE = 'N' DISPLAY CARD-RECORD"
+      },
+      {
+        "construct_type": "PERFORM",
+        "paragraph_or_step": "PROCEDURE DIVISION (main)",
+        "condition": null,
+        "target_paragraph": "9000-CARDFILE-CLOSE",
+        "loop_condition": null,
+        "source_reference": "app/cbl/CBACT02C.cbl:83",
+        "source_snippet": "PERFORM 9000-CARDFILE-CLOSE."
+      },
+      {
+        "construct_type": "IF",
+        "paragraph_or_step": "1000-CARDFILE-GET-NEXT",
+        "condition": "CARDFILE-STATUS = '00'",
+        "target_paragraph": null,
+        "loop_condition": null,
+        "source_reference": "app/cbl/CBACT02C.cbl:94",
+        "source_snippet": "IF  CARDFILE-STATUS = '00' MOVE 0 TO APPL-RESULT"
+      },
+      {
+        "construct_type": "IF",
+        "paragraph_or_step": "1000-CARDFILE-GET-NEXT",
+        "condition": "CARDFILE-STATUS = '10'",
+        "target_paragraph": null,
+        "loop_condition": null,
+        "source_reference": "app/cbl/CBACT02C.cbl:98",
+        "source_snippet": "IF  CARDFILE-STATUS = '10' MOVE 16 TO APPL-RESULT ELSE MOVE 12 TO APPL-RESULT"
+      },
+      {
+        "construct_type": "IF",
+        "paragraph_or_step": "1000-CARDFILE-GET-NEXT",
+        "condition": "APPL-AOK",
+        "target_paragraph": null,
+        "loop_condition": null,
+        "source_reference": "app/cbl/CBACT02C.cbl:104",
+        "source_snippet": "IF  APPL-AOK CONTINUE"
+      },
+      {
+        "construct_type": "IF",
+        "paragraph_or_step": "1000-CARDFILE-GET-NEXT",
+        "condition": "APPL-EOF",
+        "target_paragraph": null,
+        "loop_condition": null,
+        "source_reference": "app/cbl/CBACT02C.cbl:107",
+        "source_snippet": "IF  APPL-EOF MOVE 'Y' TO END-OF-FILE"
+      },
+      {
+        "construct_type": "IF",
+        "paragraph_or_step": "0000-CARDFILE-OPEN",
+        "condition": "CARDFILE-STATUS = '00'",
+        "target_paragraph": null,
+        "loop_condition": null,
+        "source_reference": "app/cbl/CBACT02C.cbl:121",
+        "source_snippet": "IF  CARDFILE-STATUS = '00'"
+      },
+      {
+        "construct_type": "IF",
+        "paragraph_or_step": "0000-CARDFILE-OPEN",
+        "condition": "APPL-AOK",
+        "target_paragraph": null,
+        "loop_condition": null,
+        "source_reference": "app/cbl/CBACT02C.cbl:126",
+        "source_snippet": "IF  APPL-AOK"
+      },
+      {
+        "construct_type": "IF",
+        "paragraph_or_step": "9000-CARDFILE-CLOSE",
+        "condition": "CARDFILE-STATUS = '00'",
+        "target_paragraph": null,
+        "loop_condition": null,
+        "source_reference": "app/cbl/CBACT02C.cbl:139",
+        "source_snippet": "IF  CARDFILE-STATUS = '00'"
+      },
+      {
+        "construct_type": "IF",
+        "paragraph_or_step": "9000-CARDFILE-CLOSE",
+        "condition": "APPL-AOK",
+        "target_paragraph": null,
+        "loop_condition": null,
+        "source_reference": "app/cbl/CBACT02C.cbl:144",
+        "source_snippet": "IF  APPL-AOK"
+      },
+      {
+        "construct_type": "IF",
+        "paragraph_or_step": "9910-DISPLAY-IO-STATUS",
+        "condition": "IO-STATUS NOT NUMERIC OR IO-STAT1 = '9'",
+        "target_paragraph": null,
+        "loop_condition": null,
+        "source_reference": "app/cbl/CBACT02C.cbl:162-163",
+        "source_snippet": "IF  IO-STATUS NOT NUMERIC OR  IO-STAT1 = '9'"
+      },
+      {
+        "construct_type": "GOBACK",
+        "paragraph_or_step": "PROCEDURE DIVISION (main)",
+        "condition": null,
+        "target_paragraph": null,
+        "loop_condition": null,
+        "source_reference": "app/cbl/CBACT02C.cbl:87",
+        "source_snippet": "GOBACK."
+      }
+    ],
+    "error_and_exception_handling": [
+      {
+        "error_context": "OPEN CARDFILE-FILE",
+        "checked_condition": "CARDFILE-STATUS NOT = '00'",
+        "error_action": "DISPLAY 'ERROR OPENING CARDFILE'; PERFORM 9910-DISPLAY-IO-STATUS; PERFORM 9999-ABEND-PROGRAM",
+        "abend_indicator": true,
+        "source_reference": "app/cbl/CBACT02C.cbl:118-134",
+        "source_snippet": "DISPLAY 'ERROR OPENING CARDFILE'"
+      },
+      {
+        "error_context": "READ CARDFILE-FILE",
+        "checked_condition": "CARDFILE-STATUS NOT = '00' AND NOT = '10'",
+        "error_action": "DISPLAY 'ERROR READING CARDFILE'; PERFORM 9910-DISPLAY-IO-STATUS; PERFORM 9999-ABEND-PROGRAM",
+        "abend_indicator": true,
+        "source_reference": "app/cbl/CBACT02C.cbl:92-116",
+        "source_snippet": "DISPLAY 'ERROR READING CARDFILE'"
+      },
+      {
+        "error_context": "CLOSE CARDFILE-FILE",
+        "checked_condition": "CARDFILE-STATUS NOT = '00'",
+        "error_action": "DISPLAY 'ERROR CLOSING CARDFILE'; PERFORM 9910-DISPLAY-IO-STATUS; PERFORM 9999-ABEND-PROGRAM",
+        "abend_indicator": true,
+        "source_reference": "app/cbl/CBACT02C.cbl:136-152",
+        "source_snippet": "DISPLAY 'ERROR CLOSING CARDFILE'"
+      },
+      {
+        "error_context": "9999-ABEND-PROGRAM",
+        "checked_condition": "PERFORMed from error branches",
+        "error_action": "DISPLAY 'ABENDING PROGRAM'; MOVE 0 TO TIMING; MOVE 999 TO ABCODE; CALL 'CEE3ABD'",
+        "abend_indicator": true,
+        "source_reference": "app/cbl/CBACT02C.cbl:154-158",
+        "source_snippet": "CALL 'CEE3ABD' USING ABCODE, TIMING."
+      },
+      {
+        "error_context": "9910-DISPLAY-IO-STATUS",
+        "checked_condition": "IO-STATUS NOT NUMERIC OR IO-STAT1 = '9'",
+        "error_action": "DISPLAY 'FILE STATUS IS: NNNN' IO-STATUS-04 (binary second byte rendered as 3 digits) else 4-digit status",
+        "abend_indicator": false,
+        "source_reference": "app/cbl/CBACT02C.cbl:161-174",
+        "source_snippet": "DISPLAY 'FILE STATUS IS: NNNN' IO-STATUS-04"
+      }
+    ],
+    "parameters_and_runtime_configuration": [
+      {
+        "parameter_name": "CARDFILE",
+        "parameter_type": "DD name",
+        "value": "AWS.M2.CARDDEMO.CARDDATA.VSAM.KSDS",
+        "default_value": null,
+        "used_by": "CBACT02C",
+        "source_reference": "app/jcl/READCARD.jcl:25-26",
+        "source_snippet": "//CARDFILE DD DISP=SHR,"
+      },
+      {
+        "parameter_name": "STEPLIB",
+        "parameter_type": "DD name",
+        "value": "AWS.M2.CARDDEMO.LOADLIB",
+        "default_value": null,
+        "used_by": "READCARD.STEP05",
+        "source_reference": "app/jcl/READCARD.jcl:23-24",
+        "source_snippet": "//STEPLIB  DD DISP=SHR,"
+      },
+      {
+        "parameter_name": "SYSOUT",
+        "parameter_type": "DD name",
+        "value": "SYSOUT=*",
+        "default_value": null,
+        "used_by": "CBACT02C",
+        "source_reference": "app/jcl/READCARD.jcl:27",
+        "source_snippet": "//SYSOUT   DD SYSOUT=*"
+      },
+      {
+        "parameter_name": "SYSPRINT",
+        "parameter_type": "DD name",
+        "value": "SYSOUT=*",
+        "default_value": null,
+        "used_by": "READCARD.STEP05",
+        "source_reference": "app/jcl/READCARD.jcl:28",
+        "source_snippet": "//SYSPRINT DD SYSOUT=*"
+      },
+      {
+        "parameter_name": "&SYSUID",
+        "parameter_type": "symbolic parameter",
+        "value": null,
+        "default_value": null,
+        "used_by": "JOB card NOTIFY",
+        "source_reference": "app/jcl/READCARD.jcl:2",
+        "source_snippet": "// NOTIFY=&SYSUID"
+      }
+    ],
+    "niche_dependencies": {
+      "niche_technology_used": false,
+      "technologies": []
+    },
+    "complexity_indicators": {
+      "cyclomatic_complexity": 14,
+      "number_of_conditions": 11,
+      "number_of_loops": 1,
+      "number_of_performs": 10,
+      "number_of_gotos": 0,
+      "number_of_alters": 0,
+      "number_of_calls": 1,
+      "number_of_copybooks": 1,
+      "number_of_files": 1,
+      "number_of_db_operations": 0,
+      "number_of_interfaces": 1,
+      "nested_logic_depth": 3,
+      "complexity_rating": "LOW",
+      "calculation_basis": "Program Analyzer: cyclomatic = 11 IF + 1 PERFORM UNTIL + 1 OR + 1 = 14; weighted program score 28 (LOW); JCL Analyzer score 11 (LOW)",
+      "source_reference": "testRepo/analysis/cblJsons/CBACT02C.json#complexity_assessment; testRepo/analysis/jclJsons/READCARD.json#complexity_assessment"
+    },
+    "repository_completeness": {
+      "total_components_referenced": 2,
+      "components_found": 2,
+      "components_missing": 0,
+      "repository_completeness_percentage": 100.0,
+      "unresolved_components": [],
+      "calculation_basis": "JCL: CBACT02C found (1/1); program: CVACT02Y found (1/1); CEE3ABD counted as system component (LE runtime), excluded",
+      "confidence_level": "HIGH"
+    },
+    "conflict_details": [],
+    "traceability_summary": {
+      "total_sections_populated": 17,
+      "total_items_with_source_evidence": 72,
+      "total_items_without_source_evidence": 0,
+      "evidence_coverage_percentage": 100.0
+    }
+  }
+}

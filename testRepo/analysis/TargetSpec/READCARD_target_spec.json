@@ -1,0 +1,551 @@
+{
+  "target_specification": {
+    "document_metadata": {
+      "document_type": "Target State Specification",
+      "target_platform": "PySpark",
+      "generation_scope": "Mainframe to PySpark Modernization",
+      "code_generation_excluded": true,
+      "anti_hallucination_enforced": true
+    },
+    "migration_context": {
+      "application_name": null,
+      "migration_project": null,
+      "source_platform": "z/OS batch (JCL, Enterprise COBOL, VSAM)",
+      "target_platform": "PySpark",
+      "target_runtime": "Apache Spark (spark-submit) with Cobrix spark-cobol for EBCDIC input",
+      "migration_wave": null,
+      "analysis_timestamp": null,
+      "source_reference": "rules/workbench-orchestration.md (Phase 3 key mappings)"
+    },
+    "application_scope": {
+      "jobs_in_scope": [
+        "READCARD"
+      ],
+      "programs_in_scope": [
+        "CBACT02C"
+      ],
+      "datasets_in_scope": [
+        "AWS.M2.CARDDEMO.CARDDATA.VSAM.KSDS"
+      ],
+      "tables_in_scope": [],
+      "interfaces_in_scope": [
+        "CEE3ABD"
+      ],
+      "dependencies_in_scope": [
+        "CVACT02Y",
+        "AWS.M2.CARDDEMO.LOADLIB"
+      ],
+      "source_reference": "testRepo/analysis/TechSummary/technical_summary.json"
+    },
+    "dataset_migration_specification": [
+      {
+        "source_dataset": "AWS.M2.CARDDEMO.CARDDATA.VSAM.KSDS",
+        "source_ddname": "CARDFILE",
+        "source_type": "VSAM KSDS (INDEXED, ACCESS SEQUENTIAL, RECORD KEY FD-CARD-NUM, 150 bytes)",
+        "target_object": "cardfile_df",
+        "target_type": "DataFrame (schema from copybook CVACT02Y; primary key CARD_NUM)",
+        "migration_pattern": "EBCDIC fixed-length 150-byte unload read with spark.read.format('cobol') (Cobrix) using copybook CVACT02Y; record key order restored with orderBy(CARD_NUM)",
+        "retention_requirements": null,
+        "partition_strategy": null,
+        "source_reference": [
+          "app/jcl/READCARD.jcl:25-26",
+          "app/cbl/CBACT02C.cbl:29-33",
+          "app/cpy/CVACT02Y.cpy:4-11"
+        ]
+      },
+      {
+        "source_dataset": "SYSOUT",
+        "source_ddname": "SYSOUT",
+        "source_type": "SYSOUT=*",
+        "target_object": "<output_dir>/sysout/READCARD.STEP05.txt and driver stdout",
+        "target_type": "Text file + print()",
+        "migration_pattern": "DISPLAY -> print() and ordered text write",
+        "retention_requirements": null,
+        "partition_strategy": null,
+        "source_reference": [
+          "app/jcl/READCARD.jcl:27",
+          "app/cbl/CBACT02C.cbl:71,78,85"
+        ]
+      },
+      {
+        "source_dataset": "SYSOUT",
+        "source_ddname": "SYSPRINT",
+        "source_type": "SYSOUT=*",
+        "target_object": null,
+        "target_type": null,
+        "migration_pattern": "No program writes to SYSPRINT; no target object",
+        "retention_requirements": null,
+        "partition_strategy": null,
+        "source_reference": [
+          "app/jcl/READCARD.jcl:28"
+        ]
+      },
+      {
+        "source_dataset": "AWS.M2.CARDDEMO.LOADLIB",
+        "source_ddname": "STEPLIB",
+        "source_type": "Load library",
+        "target_object": null,
+        "target_type": null,
+        "migration_pattern": "Comment block only; replaced by the Python module path",
+        "retention_requirements": null,
+        "partition_strategy": null,
+        "source_reference": [
+          "app/jcl/READCARD.jcl:23-24"
+        ]
+      }
+    ],
+    "data_transformation_specification": [
+      {
+        "transformation_id": "T-001",
+        "source_component": "CVACT02Y CARD-RECORD",
+        "source_fields": [
+          "CARD-NUM",
+          "CARD-ACCT-ID",
+          "CARD-CVV-CD",
+          "CARD-EMBOSSED-NAME",
+          "CARD-EXPIRAION-DATE",
+          "CARD-ACTIVE-STATUS",
+          "FILLER"
+        ],
+        "target_fields": [
+          "CARD_NUM",
+          "CARD_ACCT_ID",
+          "CARD_CVV_CD",
+          "CARD_EMBOSSED_NAME",
+          "CARD_EXPIRAION_DATE",
+          "CARD_ACTIVE_STATUS",
+          "FILLER"
+        ],
+        "transformation_type": "COBOL record layout -> StructType schema",
+        "field_mappings": [
+          {
+            "source_field": "CARD-NUM",
+            "picture": "X(16)",
+            "offset": 0,
+            "length": 16,
+            "target_field": "CARD_NUM",
+            "target_type": "StringType"
+          },
+          {
+            "source_field": "CARD-ACCT-ID",
+            "picture": "9(11)",
+            "offset": 16,
+            "length": 11,
+            "target_field": "CARD_ACCT_ID",
+            "target_type": "LongType"
+          },
+          {
+            "source_field": "CARD-CVV-CD",
+            "picture": "9(03)",
+            "offset": 27,
+            "length": 3,
+            "target_field": "CARD_CVV_CD",
+            "target_type": "IntegerType"
+          },
+          {
+            "source_field": "CARD-EMBOSSED-NAME",
+            "picture": "X(50)",
+            "offset": 30,
+            "length": 50,
+            "target_field": "CARD_EMBOSSED_NAME",
+            "target_type": "StringType"
+          },
+          {
+            "source_field": "CARD-EXPIRAION-DATE",
+            "picture": "X(10)",
+            "offset": 80,
+            "length": 10,
+            "target_field": "CARD_EXPIRAION_DATE",
+            "target_type": "StringType"
+          },
+          {
+            "source_field": "CARD-ACTIVE-STATUS",
+            "picture": "X(01)",
+            "offset": 90,
+            "length": 1,
+            "target_field": "CARD_ACTIVE_STATUS",
+            "target_type": "StringType"
+          },
+          {
+            "source_field": "FILLER",
+            "picture": "X(59)",
+            "offset": 91,
+            "length": 59,
+            "target_field": "FILLER",
+            "target_type": "StringType"
+          }
+        ],
+        "transformation_rule_reference": null,
+        "source_reference": "app/cpy/CVACT02Y.cpy:4-11"
+      },
+      {
+        "transformation_id": "T-002",
+        "source_component": "CBACT02C 1000-CARDFILE-GET-NEXT (READ CARDFILE-FILE INTO CARD-RECORD, ACCESS SEQUENTIAL by FD-CARD-NUM)",
+        "source_fields": [
+          "FD-CARD-NUM"
+        ],
+        "target_fields": [
+          "CARD_NUM"
+        ],
+        "transformation_type": "READ FILE -> spark.read(); KSDS key sequence -> orderBy(CARD_NUM)",
+        "transformation_rule_reference": "CBACT02C-BR-001",
+        "source_reference": "app/cbl/CBACT02C.cbl:29-33,93"
+      },
+      {
+        "transformation_id": "T-003",
+        "source_component": "CBACT02C main loop DISPLAY CARD-RECORD",
+        "source_fields": [
+          "CARD-RECORD"
+        ],
+        "target_fields": [
+          "display_line"
+        ],
+        "transformation_type": "DISPLAY -> print(); group item rendered as its 150 raw bytes (EBCDIC decoded cp037)",
+        "transformation_rule_reference": "CBACT02C-BR-001",
+        "source_reference": "app/cbl/CBACT02C.cbl:74-81"
+      },
+      {
+        "transformation_id": "T-004",
+        "source_component": "CBACT02C DISPLAY banners",
+        "source_fields": [],
+        "target_fields": [
+          "display_line"
+        ],
+        "transformation_type": "DISPLAY literal -> print()",
+        "transformation_rule_reference": "CBACT02C-BR-003",
+        "source_reference": "app/cbl/CBACT02C.cbl:71,85"
+      },
+      {
+        "transformation_id": "T-005",
+        "source_component": "CBACT02C 9910-DISPLAY-IO-STATUS / 9999-ABEND-PROGRAM",
+        "source_fields": [
+          "CARDFILE-STATUS",
+          "ABCODE"
+        ],
+        "target_fields": [
+          "sysout error lines",
+          "rc"
+        ],
+        "transformation_type": "Error branch -> DISPLAY messages + job failure with abend code 999 (CEE3ABD)",
+        "transformation_rule_reference": "CBACT02C-BR-002",
+        "source_reference": "app/cbl/CBACT02C.cbl:92-174"
+      }
+    ],
+    "business_rule_mapping": [
+      {
+        "rule_id": "CBACT02C-BR-001",
+        "source_program": "CBACT02C",
+        "source_location": "app/cbl/CBACT02C.cbl:74-81",
+        "source_logic": "PERFORM UNTIL END-OF-FILE = 'Y' ... IF END-OF-FILE = 'N' DISPLAY CARD-RECORD",
+        "pyspark_logic": "cardfile_df.orderBy('CARD_NUM') -> select(display_line) -> print() each row (PERFORM UNTIL -> DataFrame iteration)",
+        "target_processing_component": "READCARD.py: step05_cbact02c / display_card_records",
+        "traceability_reference": "testRepo/analysis/BRE/CBACT02C.json",
+        "source_reference": "app/cbl/CBACT02C.cbl:74-81"
+      },
+      {
+        "rule_id": "CBACT02C-BR-002",
+        "source_program": "CBACT02C",
+        "source_location": "app/cbl/CBACT02C.cbl:92-116",
+        "source_logic": "IF CARDFILE-STATUS = '00' ... ELSE IF '10' (EOF) ELSE DISPLAY 'ERROR READING CARDFILE' / abend 999",
+        "pyspark_logic": "when()/otherwise() not required: record read failures (Cobrix/IO exception or malformed record length) raise CardFileError -> DISPLAY 'ERROR READING CARDFILE', 'ABENDING PROGRAM', step rc ABEND U0999",
+        "target_processing_component": "READCARD.py: CardFileError / abend_program",
+        "traceability_reference": "testRepo/analysis/BRE/CBACT02C.json",
+        "source_reference": "app/cbl/CBACT02C.cbl:92-116,154-158"
+      },
+      {
+        "rule_id": "CBACT02C-BR-003",
+        "source_program": "CBACT02C",
+        "source_location": "app/cbl/CBACT02C.cbl:71,85",
+        "source_logic": "DISPLAY 'START OF EXECUTION OF PROGRAM CBACT02C' / 'END OF EXECUTION OF PROGRAM CBACT02C'",
+        "pyspark_logic": "print() start banner before read, end banner after successful completion",
+        "target_processing_component": "READCARD.py: step05_cbact02c",
+        "traceability_reference": "testRepo/analysis/BRE/CBACT02C.json",
+        "source_reference": "app/cbl/CBACT02C.cbl:71,85"
+      }
+    ],
+    "processing_architecture": {
+      "ingestion_layer": {
+        "source_component": "CARDFILE (AWS.M2.CARDDEMO.CARDDATA.VSAM.KSDS)",
+        "target_component": "spark.read.format('cobol') with copybook CVACT02Y",
+        "processing_pattern": "Fixed-length EBCDIC read",
+        "source_reference": "app/jcl/READCARD.jcl:25-26"
+      },
+      "transformation_layer": {
+        "source_component": "CBACT02C PROCEDURE DIVISION",
+        "target_component": "orderBy(CARD_NUM) + display line projection",
+        "processing_pattern": "Sequential key-ordered listing",
+        "source_reference": "app/cbl/CBACT02C.cbl:69-87"
+      },
+      "validation_layer": {
+        "source_component": "CBACT02C file status checks",
+        "target_component": "Record length / read exception check -> abend 999",
+        "processing_pattern": "Fail-fast",
+        "source_reference": "app/cbl/CBACT02C.cbl:92-158"
+      },
+      "output_layer": {
+        "source_component": "SYSOUT DD",
+        "target_component": "print() + sysout/READCARD.STEP05.txt + rc.json",
+        "processing_pattern": "Ordered text output",
+        "source_reference": "app/jcl/READCARD.jcl:27"
+      },
+      "orchestration_layer": {
+        "source_component": "JCL READCARD STEP05; CA-7 trigger READACCT -> READCARD -> READCUST",
+        "target_component": "Prefect flow task READCARD",
+        "processing_pattern": "One PySpark stage per JCL step",
+        "source_reference": [
+          "app/jcl/READCARD.jcl:22",
+          "app/scheduler/CardDemo.ca7:341,367"
+        ]
+      }
+    },
+    "dependency_mapping": [
+      {
+        "dependency_name": "READCARD -> CBACT02C",
+        "dependency_type": "job_to_program",
+        "migration_strategy": "STEP05 -> function step05_cbact02c",
+        "traceability_reference": "app/jcl/READCARD.jcl:22"
+      },
+      {
+        "dependency_name": "CBACT02C -> CARDFILE",
+        "dependency_type": "program_to_dataset",
+        "migration_strategy": "Input DataFrame cardfile_df",
+        "traceability_reference": "app/cbl/CBACT02C.cbl:29-33"
+      },
+      {
+        "dependency_name": "CBACT02C -> CVACT02Y",
+        "dependency_type": "program_to_dataset",
+        "migration_strategy": "Copybook used as Cobrix copybook and StructType schema",
+        "traceability_reference": "app/cbl/CBACT02C.cbl:45"
+      },
+      {
+        "dependency_name": "CBACT02C -> CEE3ABD",
+        "dependency_type": "program_to_program",
+        "migration_strategy": "Replaced by abend_program() raising job failure with code 999",
+        "traceability_reference": "app/cbl/CBACT02C.cbl:158"
+      },
+      {
+        "dependency_name": "READACCT -> READCARD",
+        "dependency_type": "interface_dependencies",
+        "migration_strategy": "Prefect upstream dependency",
+        "traceability_reference": "app/scheduler/CardDemo.ca7:341-367"
+      },
+      {
+        "dependency_name": "READCARD -> READCUST",
+        "dependency_type": "interface_dependencies",
+        "migration_strategy": "Prefect downstream dependency",
+        "traceability_reference": "app/scheduler/CardDemo.ca7:367-394"
+      }
+    ],
+    "interface_migration_specification": [
+      {
+        "interface_name": "CEE3ABD",
+        "interface_type": "subprogram interface (LE callable service)",
+        "source_component": "CBACT02C",
+        "target_component": "READCARD.py abend_program()",
+        "migration_pattern": "Explicit failure: print 'ABENDING PROGRAM', record rc ABEND U0999, exit non-zero",
+        "source_reference": "app/cbl/CBACT02C.cbl:154-158"
+      }
+    ],
+    "runtime_configuration_specification": [
+      {
+        "parameter": "CARDFILE",
+        "original_value": "AWS.M2.CARDDEMO.CARDDATA.VSAM.KSDS",
+        "target_parameter": "--cardfile <path>",
+        "source_reference": "app/jcl/READCARD.jcl:25-26"
+      },
+      {
+        "parameter": "CARDFILE record format",
+        "original_value": "EBCDIC fixed 150 (VSAM unload); ASCII line form used by fixtures/read-masters inputs",
+        "target_parameter": "--cardfile-format ebcdic|text (default ebcdic)",
+        "source_reference": [
+          "app/cpy/CVACT02Y.cpy:2",
+          "tools/runjcl/chains.json:47-52"
+        ]
+      },
+      {
+        "parameter": "copybook",
+        "original_value": "CVACT02Y",
+        "target_parameter": "--copybook <path> (default app/cpy/CVACT02Y.cpy)",
+        "source_reference": "app/cbl/CBACT02C.cbl:45"
+      },
+      {
+        "parameter": "SYSOUT",
+        "original_value": "SYSOUT=*",
+        "target_parameter": "--output-dir <dir> (sysout/READCARD.STEP05.txt, rc.json)",
+        "source_reference": "app/jcl/READCARD.jcl:27"
+      }
+    ],
+    "validation_specification": [
+      {
+        "validation_type": "Record Count Validation",
+        "validation_scope": "CARDFILE records vs SYSOUT card lines",
+        "source_system": "CBACT02C SYSOUT",
+        "target_system": "READCARD.py sysout",
+        "success_criteria": "Equal counts",
+        "source_reference": "fixtures/read-masters/*/expected/sysout/READCARD.STEP05.txt"
+      },
+      {
+        "validation_type": "Reconciliation Validation",
+        "validation_scope": "SYSOUT byte-for-byte",
+        "source_system": "Golden fixtures read-masters r01-populated, r02-empty",
+        "target_system": "READCARD.py sysout",
+        "success_criteria": "Identical lines and RC 0 (fixtures/read-masters/*/expected/rc.json READCARD.STEP05 = 0)",
+        "source_reference": "fixtures/read-masters/"
+      },
+      {
+        "validation_type": "Schema Validation",
+        "validation_scope": "CVACT02Y -> StructType",
+        "source_system": "CVACT02Y",
+        "target_system": "cardfile_df schema",
+        "success_criteria": "Field names, order and lengths sum to 150",
+        "source_reference": "app/cpy/CVACT02Y.cpy:4-11"
+      },
+      {
+        "validation_type": "Business Rule Validation",
+        "validation_scope": "CBACT02C-BR-001..003",
+        "source_system": "testRepo/analysis/BRE/CBACT02C.json",
+        "target_system": "READCARD.py",
+        "success_criteria": "Each rule has at least one passing test",
+        "source_reference": "testRepo/analysis/BRE/CBACT02C.json"
+      }
+    ],
+    "testing_specification": [
+      {
+        "test_category": "Unit Testing",
+        "test_scope": "schema, display line reconstruction, ordering, abend path",
+        "dependent_artifacts": [
+          "testRepo/analysis/BRE/CBACT02C.json",
+          "testRepo/pyspark/code/READCARD/READCARD.py"
+        ],
+        "traceability_reference": "CBACT02C-BR-001..003"
+      },
+      {
+        "test_category": "Reconciliation Testing",
+        "test_scope": "read-masters fixtures r01-populated and r02-empty; EBCDIC app/data/EBCDIC/AWS.M2.CARDDEMO.CARDDATA.PS vs cp037 decode",
+        "dependent_artifacts": [
+          "fixtures/read-masters/",
+          "app/data/EBCDIC/AWS.M2.CARDDEMO.CARDDATA.PS"
+        ],
+        "traceability_reference": "validation_specification"
+      }
+    ],
+    "non_functional_requirements": {
+      "performance_requirements": [],
+      "availability_requirements": [],
+      "recovery_requirements": [],
+      "scheduling_requirements": [
+        {
+          "requirement": "READCARD triggered by READACCT completion; READCARD triggers READCUST (CA-7 SCHID=030)",
+          "source_reference": "app/scheduler/CardDemo.ca7:341,367,394"
+        }
+      ],
+      "operational_requirements": []
+    },
+    "deployment_specification": {
+      "deployment_units": [
+        "testRepo/pyspark/code/READCARD/READCARD.py"
+      ],
+      "execution_sequence": [
+        "READCARD.STEP05 (CBACT02C)"
+      ],
+      "environment_dependencies": [
+        "Apache Spark 3.5.x / PySpark",
+        "Cobrix spark-cobol_2.12 (EBCDIC input)",
+        "Java 17"
+      ],
+      "configuration_dependencies": [
+        "app/cpy/CVACT02Y.cpy"
+      ]
+    },
+    "traceability_matrix": [
+      {
+        "source_artifact": "READCARD.jcl",
+        "source_type": "JCL",
+        "target_artifact": "testRepo/pyspark/code/READCARD/READCARD.py",
+        "target_type": "PySpark module",
+        "mapping_type": "JOB -> module",
+        "reference": "app/jcl/READCARD.jcl:1"
+      },
+      {
+        "source_artifact": "READCARD.STEP05",
+        "source_type": "JCL STEP",
+        "target_artifact": "step05_cbact02c()",
+        "target_type": "PySpark processing stage",
+        "mapping_type": "STEP -> stage",
+        "reference": "app/jcl/READCARD.jcl:22"
+      },
+      {
+        "source_artifact": "CBACT02C.cbl",
+        "source_type": "COBOL",
+        "target_artifact": "step05_cbact02c()",
+        "target_type": "Python function",
+        "mapping_type": "PROGRAM -> function",
+        "reference": "app/cbl/CBACT02C.cbl"
+      },
+      {
+        "source_artifact": "CVACT02Y.cpy",
+        "source_type": "Copybook",
+        "target_artifact": "CARD_RECORD_SCHEMA",
+        "target_type": "StructType",
+        "mapping_type": "Copybook -> schema",
+        "reference": "app/cpy/CVACT02Y.cpy"
+      },
+      {
+        "source_artifact": "AWS.M2.CARDDEMO.CARDDATA.VSAM.KSDS",
+        "source_type": "VSAM KSDS",
+        "target_artifact": "cardfile_df",
+        "target_type": "DataFrame",
+        "mapping_type": "VSAM KSDS -> DataFrame",
+        "reference": "app/jcl/READCARD.jcl:25-26"
+      },
+      {
+        "source_artifact": "SYSOUT",
+        "source_type": "SYSOUT",
+        "target_artifact": "sysout/READCARD.STEP05.txt",
+        "target_type": "Text file",
+        "mapping_type": "DISPLAY -> print()",
+        "reference": "app/jcl/READCARD.jcl:27"
+      }
+    ],
+    "migration_constraints": {
+      "unresolved_dependencies": [],
+      "unsupported_components": [
+        {
+          "component": "CEE3ABD",
+          "reason": "LE callable service; replaced by explicit failure",
+          "source_reference": "app/cbl/CBACT02C.cbl:158"
+        },
+        {
+          "component": "STEPLIB DD",
+          "reason": "Load library has no PySpark equivalent; comment block only",
+          "source_reference": "app/jcl/READCARD.jcl:23-24"
+        }
+      ],
+      "migration_risks": [
+        {
+          "risk": "VSAM file status codes (e.g. '35', '23') have no Spark equivalent; read/open failures map to generic abend 999 without the original status digits",
+          "source_reference": "app/cbl/CBACT02C.cbl:161-174"
+        }
+      ],
+      "implementation_constraints": [
+        {
+          "constraint": "Copybooks are tab-indented; expand tabs before passing to Cobrix",
+          "source_reference": "AGENTS.md (Gotchas)"
+        },
+        {
+          "constraint": "DISPLAY of a group item prints the raw 150 bytes; target must reproduce FILLER and zero-padded numerics exactly",
+          "source_reference": "app/cbl/CBACT02C.cbl:78"
+        }
+      ]
+    },
+    "complexity_summary": {
+      "complexity_rating": "LOW",
+      "dependency_complexity": "LOW",
+      "integration_complexity": null,
+      "transformation_complexity": "LOW",
+      "source_reference": "testRepo/analysis/TechSummary/technical_summary.json"
+    },
+    "conflict_details": [],
+    "confidence_level": "HIGH"
+  }
+}
