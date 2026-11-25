@@ -68,13 +68,7 @@ class AuthorizationPostgresTest {
 
     @Test
     void paragraphs5500To8500PreserveInvocationStateAndWriteReplyBeforeAnyChanges() {
-        AtomicLong millis = new AtomicLong();
-        Clock clock = new Clock() {
-            @Override public ZoneId getZone() { return ZoneOffset.UTC; }
-            @Override public Clock withZone(ZoneId zone) { return Clock.fixed(instant(), zone); }
-            @Override public Instant instant() { return NOW.plusMillis(millis.getAndIncrement()); }
-        };
-        var service = new AuthorizationService(source, clock);
+        var service = new AuthorizationService(source, advancingClock());
         var invocation = service.newInvocation();
         invocation.process(requests.getFirst(), bytes -> {
             assertArrayEquals("9680294154603697,960b9b5480d045a,041252,00,0000,          1.24, ".getBytes(ISO_8859_1), bytes);
@@ -112,6 +106,25 @@ class AuthorizationPostgresTest {
     }
 
     @Test
+    void paragraphs5200And8400UseLastAccountRecordWhenTheMasterReadReturnsNotFound() {
+        var service = new AuthorizationService(source, advancingClock());
+        var invocation = service.newInvocation();
+        invocation.process(requests.getFirst(), bytes -> {});
+        jdbc.update("UPDATE pending_auth_summary SET credit_limit = 10.00, cash_limit = 5.00");
+        jdbc.update("DELETE FROM account WHERE account_id = 1");
+
+        invocation.process(requests.getLast(), bytes -> assertArrayEquals(
+                "9680294154603697,c55b7da992ce4ee,030910,00,0000,          1.99, ".getBytes(ISO_8859_1), bytes));
+        assertEquals(new BigDecimal("2.00"), summaryAmount("credit_limit"));
+        assertEquals(new BigDecimal("0.50"), summaryAmount("cash_limit"));
+
+        service.newInvocation().process(requests.getLast(), bytes -> assertArrayEquals(
+                "9680294154603697,c55b7da992ce4ee,030910,05,3100,          0.00, ".getBytes(ISO_8859_1), bytes));
+        assertEquals(AuthRequest.ZERO, summaryAmount("credit_limit"));
+        assertEquals(AuthRequest.ZERO, summaryAmount("cash_limit"));
+    }
+
+    @Test
     void paragraphs7100And8000DoNotWriteOnSendFailureAndRollBackWritesOnDetailFailure() {
         var service = new AuthorizationService(source, Clock.fixed(NOW, ZoneOffset.UTC));
         assertThrows(IllegalStateException.class, () -> service.newInvocation().process(requests.getFirst(), bytes -> {
@@ -136,6 +149,15 @@ class AuthorizationPostgresTest {
 
     private BigDecimal summaryAmount(String column) {
         return jdbc.queryForObject("SELECT " + column + " FROM pending_auth_summary", BigDecimal.class);
+    }
+
+    private static Clock advancingClock() {
+        AtomicLong millis = new AtomicLong();
+        return new Clock() {
+            @Override public ZoneId getZone() { return ZoneOffset.UTC; }
+            @Override public Clock withZone(ZoneId zone) { return Clock.fixed(instant(), zone); }
+            @Override public Instant instant() { return NOW.plusMillis(millis.getAndIncrement()); }
+        };
     }
 
     private static String csv(Map<String, Object> fields) {

@@ -13,8 +13,10 @@ final class AuthorizationStore {
         jdbc = new JdbcTemplate(source);
     }
 
-    record Master(long accountId, long customerId, BigDecimal creditLimit, BigDecimal cashLimit,
-                  BigDecimal currentBalance, boolean customerFound) {
+    record Account(BigDecimal creditLimit, BigDecimal cashLimit, BigDecimal currentBalance) {
+    }
+
+    record Master(long accountId, long customerId, Account account, boolean customerFound) {
     }
 
     record Summary(BigDecimal creditLimit, BigDecimal creditBalance) {
@@ -31,13 +33,11 @@ final class AuthorizationStore {
                     var account = jdbc.query("""
                             SELECT credit_limit, cash_credit_limit, current_balance FROM account
                             WHERE account_id = ? FOR UPDATE
-                            """, (rs, row) -> new BigDecimal[]{rs.getBigDecimal(1), rs.getBigDecimal(2),
-                            rs.getBigDecimal(3)}, ids[0]).stream().findFirst().orElse(null);
+                            """, (rs, row) -> new Account(rs.getBigDecimal(1), rs.getBigDecimal(2),
+                            rs.getBigDecimal(3)), ids[0]).stream().findFirst().orElse(null);
                     boolean customer = Boolean.TRUE.equals(jdbc.queryForObject(
                             "SELECT EXISTS (SELECT 1 FROM customer WHERE customer_id = ?)", Boolean.class, ids[1]));
-                    return new Master(ids[0], ids[1], account == null ? AuthRequest.ZERO : account[0],
-                            account == null ? AuthRequest.ZERO : account[1], account == null ? null : account[2],
-                            customer);
+                    return new Master(ids[0], ids[1], account, customer);
                 }).orElse(null);
     }
 
@@ -48,7 +48,7 @@ final class AuthorizationStore {
                 .stream().findFirst().orElse(null);
     }
 
-    BigDecimal writeSummary(Master master, Summary summary, AuthorizationService.Decision decision,
+    BigDecimal writeSummary(Master master, Account accountWorkArea, Summary summary, AuthorizationService.Decision decision,
                             BigDecimal previousDetailAmount) {
         int approvedCount = decision.approved() ? 1 : 0;
         int declinedCount = 1 - approvedCount;
@@ -62,7 +62,7 @@ final class AuthorizationStore {
                       cash_limit, credit_balance, cash_balance, approved_auth_count, declined_auth_count,
                       approved_auth_amount, declined_auth_amount, filler)
                     VALUES (?, ?, ' ', ' ', ' ', ' ', ' ', ' ', ?, ?, ?, 0, ?, ?, ?, ?, ' ')
-                    """, master.accountId(), master.customerId(), master.creditLimit(), master.cashLimit(),
+                    """, master.accountId(), master.customerId(), accountWorkArea.creditLimit(), accountWorkArea.cashLimit(),
                     balance, approvedCount, declinedCount, approved, declined);
         } else {
             jdbc.update("""
@@ -71,10 +71,10 @@ final class AuthorizationStore {
                       approved_auth_count = approved_auth_count + ?, declined_auth_count = declined_auth_count + ?,
                       approved_auth_amount = approved_auth_amount + ?, declined_auth_amount = declined_auth_amount + ?
                     WHERE account_id = ?
-                    """, master.creditLimit(), master.cashLimit(), balance, decision.approved(), approvedCount,
+                    """, accountWorkArea.creditLimit(), accountWorkArea.cashLimit(), balance, decision.approved(), approvedCount,
                     declinedCount, approved, declined, master.accountId());
         }
-        return master.creditLimit().subtract(balance);
+        return accountWorkArea.creditLimit().subtract(balance);
     }
 
     void insertDetail(long accountId, AuthRequest r, AuthorizationService.Decision decision, LocalDateTime now) {

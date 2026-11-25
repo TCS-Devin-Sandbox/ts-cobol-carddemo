@@ -23,7 +23,7 @@ class AuthorizationDecisionTest {
     @Test
     void paragraph6000KeepsFirstReplyWidthWithoutAccumulatingAndFormatsNegativeAmounts() {
         var request = request("1.2-");
-        byte[] expected = "1234567890123456,T1             ,1234  ,00,0000,         -1.20, ".getBytes(ISO_8859_1);
+        byte[] expected = "1234567890123456,T1             ,1234  ,00,0000,-         1.20, ".getBytes(ISO_8859_1);
         assertArrayEquals(expected, request.reply("00", "0000", request.amount()));
         assertArrayEquals(expected, request.reply("00", "0000", request.amount()));
     }
@@ -31,10 +31,9 @@ class AuthorizationDecisionTest {
     @Test
     void paragraph6000UsesSummaryBeforeMasterAndMissingFlagsOnlyAffectDeclines() {
         var amount = new BigDecimal("1.20");
-        var master = new AuthorizationStore.Master(1, 2, new BigDecimal("3.20"), AuthRequest.ZERO,
-                new BigDecimal("2.00"), true);
-        var missingCustomer = new AuthorizationStore.Master(1, 2, master.creditLimit(), master.cashLimit(),
-                master.currentBalance(), false);
+        var account = new AuthorizationStore.Account(new BigDecimal("3.20"), AuthRequest.ZERO, new BigDecimal("2.00"));
+        var master = new AuthorizationStore.Master(1, 2, account, true);
+        var missingCustomer = new AuthorizationStore.Master(1, 2, account, false);
         assertEquals("00", decide(amount, null, master).code());
         assertEquals("4100", decide(amount, new BigDecimal("1.19"), master).reason());
         assertEquals("3100", decide(amount, null, null).reason());

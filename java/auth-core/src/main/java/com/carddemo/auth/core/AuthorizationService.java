@@ -7,6 +7,7 @@ import java.util.Objects;
 import java.util.function.Consumer;
 import javax.sql.DataSource;
 
+import com.carddemo.auth.core.AuthorizationStore.Account;
 import org.springframework.jdbc.support.JdbcTransactionManager;
 import org.springframework.transaction.TransactionDefinition;
 import org.springframework.transaction.support.AbstractPlatformTransactionManager;
@@ -36,6 +37,7 @@ public final class AuthorizationService {
     public final class Invocation {
         private BigDecimal availableFromSummary;
         private BigDecimal previousDetailAmount = AuthRequest.ZERO;
+        private Account accountWorkArea = new Account(AuthRequest.ZERO, AuthRequest.ZERO, AuthRequest.ZERO);
 
         private Invocation() {
         }
@@ -55,18 +57,20 @@ public final class AuthorizationService {
                 noSyncpoint.executeWithoutResult(ignored ->
                         sendReply.accept(request.reply(decision.code(), decision.reason(), decision.approvedAmount())));
                 if (master == null) {
-                    return new State(available, previousDetailAmount);
+                    return new State(available, previousDetailAmount, accountWorkArea);
                 }
-                BigDecimal nextAvailable = store.writeSummary(master, summary, decision, previousDetailAmount);
+                Account nextAccount = master.account() == null ? accountWorkArea : master.account();
+                BigDecimal nextAvailable = store.writeSummary(master, nextAccount, summary, decision, previousDetailAmount);
                 store.insertDetail(master.accountId(), request, decision, LocalDateTime.now(clock));
-                return new State(summary == null ? null : nextAvailable, request.amount());
+                return new State(summary == null ? null : nextAvailable, request.amount(), nextAccount);
             });
             availableFromSummary = next.available();
             previousDetailAmount = next.detailAmount();
+            accountWorkArea = next.account();
         }
     }
 
-    private record State(BigDecimal available, BigDecimal detailAmount) {
+    private record State(BigDecimal available, BigDecimal detailAmount, Account account) {
     }
 
     record Decision(boolean approved, String reason, BigDecimal approvedAmount) {
@@ -76,9 +80,10 @@ public final class AuthorizationService {
     }
 
     static Decision decide(BigDecimal amount, BigDecimal summaryAvailable, AuthorizationStore.Master master) {
-        boolean accountFound = master != null && master.currentBalance() != null;
+        Account account = master == null ? null : master.account();
+        boolean accountFound = account != null;
         BigDecimal available = summaryAvailable != null ? summaryAvailable
-                : accountFound ? master.creditLimit().subtract(master.currentBalance()) : null;
+                : accountFound ? account.creditLimit().subtract(account.currentBalance()) : null;
         if (available != null && amount.compareTo(available) <= 0) {
             return new Decision(true, "0000", amount);
         }

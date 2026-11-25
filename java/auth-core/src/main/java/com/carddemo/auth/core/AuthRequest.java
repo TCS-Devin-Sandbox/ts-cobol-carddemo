@@ -23,7 +23,8 @@ record AuthRequest(String date, String time, String card, String type, String ex
     }
 
     byte[] reply(String code, String reason, BigDecimal approved) {
-        String amountDisplay = String.format(Locale.ROOT, "%14s", approved.toPlainString());
+        String amountDisplay = (approved.signum() < 0 ? "-" : " ")
+                + String.format(Locale.ROOT, "%13s", approved.abs().toPlainString());
         return String.join(",", card, transactionId, time, code, reason, amountDisplay, " ")
                 .getBytes(StandardCharsets.ISO_8859_1);
     }
