@@ -1,0 +1,36 @@
+=== spark-submit r01-populated ===
+2026-11-25 08:23:39,262 INFO readcard job start READCARD/STEP05 input=fixtures/read-masters/r01-populated/input/AWS.M2.CARDDEMO.CARDDATA.PS.txt
+2026-11-25 08:23:42,118 INFO readcard records read=2
+2026-11-25 08:23:43,023 INFO readcard records processed=2
+2026-11-25 08:23:43,024 INFO readcard job end rc=0 records=2 rejected=0
+2026-11-25 08:23:43,984 INFO py4j.clientserver Closing down clientserver connection
+exit=0
+SYSOUT identical to golden
+{
+ "READCARD": {
+  "maxrc": 0,
+  "steps": {
+   "STEP05": 0
+  }
+ }
+}
+
+{'READACCT': {'maxrc': 0, 'steps': {'PREDEL': 0, 'STEP05': 0}}, 'READCARD': {'maxrc': 0, 'steps': {'STEP05': 0}}, 'READCUST': {'maxrc': 0, 'steps': {'STEP05': 0}}, 'READXREF': {'maxrc': 0, 'steps': {'STEP05': 0}}}
+=== spark-submit r02-empty ===
+2026-11-25 08:23:46,301 INFO readcard job start READCARD/STEP05 input=fixtures/read-masters/r02-empty/input/AWS.M2.CARDDEMO.CARDDATA.PS.txt
+2026-11-25 08:23:48,223 INFO readcard records read=0
+2026-11-25 08:23:48,764 INFO readcard records processed=0
+2026-11-25 08:23:48,764 INFO readcard job end rc=0 records=0 rejected=0
+2026-11-25 08:23:49,235 INFO py4j.clientserver Closing down clientserver connection
+exit=0
+SYSOUT identical to golden
+{
+ "READCARD": {
+  "maxrc": 0,
+  "steps": {
+   "STEP05": 0
+  }
+ }
+}
+
+{'READACCT': {'maxrc': 0, 'steps': {'PREDEL': 0, 'STEP05': 0}}, 'READCARD': {'maxrc': 0, 'steps': {'STEP05': 0}}, 'READCUST': {'maxrc': 0, 'steps': {'STEP05': 0}}, 'READXREF': {'maxrc': 0, 'steps': {'STEP05': 0}}}

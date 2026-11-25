@@ -1,0 +1,170 @@
+============================= test session starts ==============================
+platform linux -- Python 3.12.16, pytest-8.3.3, pluggy-1.7.0 -- /home/ubuntu/venvs/pyspark/bin/python
+rootdir: /home/ubuntu/repos/ts-cobol-carddemo/workbench/validation
+configfile: pytest.ini
+testpaths: steps
+plugins: bdd-8.1.0
+collecting ... collected 25 items
+
+steps/READCARD_steps.py::test_every_card_in_the_populated_golden_master_is_listed PASSED [  4%]
+steps/READCARD_steps.py::test_a_singlecard_master_lists_exactly_one_detail_line PASSED [  8%]
+steps/READCARD_steps.py::test_a_large_card_master_lists_every_record PASSED [ 12%]
+steps/READCARD_steps.py::test_unordered_input_is_listed_in_ascending_cardnumber_order PASSED [ 16%]
+steps/READCARD_steps.py::test_card_numbers_containing_letters_follow_ksds_ebcdic_collation PASSED [ 20%]
+steps/READCARD_steps.py::test_trimmed_input_records_are_emitted_as_150character_images PASSED [ 24%]
+steps/READCARD_steps.py::test_a_full_150character_record_is_emitted_unchanged PASSED [ 28%]
+steps/READCARD_steps.py::test_card_number_and_cvv_are_emitted_in_clear_text_exactly_as_legacy PASSED [ 32%]
+steps/READCARD_steps.py::test_the_listing_is_framed_by_the_cbact02c_banners PASSED [ 36%]
+steps/READCARD_steps.py::test_an_empty_card_master_completes_successfully PASSED [ 40%]
+steps/READCARD_steps.py::test_a_missing_card_master_abends_with_the_open_error PASSED [ 44%]
+steps/READCARD_steps.py::test_an_overlength_record_abends_with_the_read_error_before_any_detail_line PASSED [ 48%]
+steps/READCARD_steps.py::test_duplicate_card_numbers_abend_with_the_read_error_before_any_detail_line PASSED [ 52%]
+steps/READCARD_steps.py::test_a_failure_while_closing_the_listing_abends_with_the_close_error PASSED [ 56%]
+steps/READCARD_steps.py::test_end_of_file_ends_the_read_loop_normally PASSED [ 60%]
+steps/READCARD_steps.py::test_file_status_values_are_displayed_in_the_cbact02c_format[35-0035] PASSED [ 64%]
+steps/READCARD_steps.py::test_file_status_values_are_displayed_in_the_cbact02c_format[34-0034] PASSED [ 68%]
+steps/READCARD_steps.py::test_file_status_values_are_displayed_in_the_cbact02c_format[22-0022] PASSED [ 72%]
+steps/READCARD_steps.py::test_file_status_values_are_displayed_in_the_cbact02c_format[9<x04>-9004] PASSED [ 76%]
+steps/READCARD_steps.py::test_file_status_values_are_displayed_in_the_cbact02c_format[9<x22>-9034] PASSED [ 80%]
+steps/READCARD_steps.py::test_file_status_values_are_displayed_in_the_cbact02c_format[90-9048] PASSED [ 84%]
+steps/READCARD_steps.py::test_the_card_master_is_opened_readonly PASSED  [ 88%]
+steps/READCARD_steps.py::test_the_listing_carries_no_count_or_trailer_lines PASSED [ 92%]
+steps/READCARD_steps.py::test_run_metrics_reconcile_with_the_legacy_sysout PASSED [ 96%]
+steps/READCARD_steps.py::test_a_parquet_card_master_produces_the_same_listing_as_the_fixedwidth_master PASSED [100%]
+
+=============================== warnings summary ===============================
+../../../../venvs/pyspark/lib/python3.12/site-packages/pytest_bdd/plugin.py:137
+  /home/ubuntu/venvs/pyspark/lib/python3.12/site-packages/pytest_bdd/plugin.py:137: PytestUnknownMarkWarning: Unknown pytest.mark.BR-001 - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html
+    mark = getattr(pytest.mark, tag)
+
+../../../../venvs/pyspark/lib/python3.12/site-packages/pytest_bdd/plugin.py:137
+  /home/ubuntu/venvs/pyspark/lib/python3.12/site-packages/pytest_bdd/plugin.py:137: PytestUnknownMarkWarning: Unknown pytest.mark.parity - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html
+    mark = getattr(pytest.mark, tag)
+
+../../../../venvs/pyspark/lib/python3.12/site-packages/pytest_bdd/plugin.py:137
+  /home/ubuntu/venvs/pyspark/lib/python3.12/site-packages/pytest_bdd/plugin.py:137: PytestUnknownMarkWarning: Unknown pytest.mark.positive - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html
+    mark = getattr(pytest.mark, tag)
+
+../../../../venvs/pyspark/lib/python3.12/site-packages/pytest_bdd/plugin.py:137
+  /home/ubuntu/venvs/pyspark/lib/python3.12/site-packages/pytest_bdd/plugin.py:137: PytestUnknownMarkWarning: Unknown pytest.mark.TS-01 - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html
+    mark = getattr(pytest.mark, tag)
+
+../../../../venvs/pyspark/lib/python3.12/site-packages/pytest_bdd/plugin.py:137
+  /home/ubuntu/venvs/pyspark/lib/python3.12/site-packages/pytest_bdd/plugin.py:137: PytestUnknownMarkWarning: Unknown pytest.mark.boundary - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html
+    mark = getattr(pytest.mark, tag)
+
+../../../../venvs/pyspark/lib/python3.12/site-packages/pytest_bdd/plugin.py:137
+  /home/ubuntu/venvs/pyspark/lib/python3.12/site-packages/pytest_bdd/plugin.py:137: PytestUnknownMarkWarning: Unknown pytest.mark.volume - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html
+    mark = getattr(pytest.mark, tag)
+
+../../../../venvs/pyspark/lib/python3.12/site-packages/pytest_bdd/plugin.py:137
+  /home/ubuntu/venvs/pyspark/lib/python3.12/site-packages/pytest_bdd/plugin.py:137: PytestUnknownMarkWarning: Unknown pytest.mark.TS-03 - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html
+    mark = getattr(pytest.mark, tag)
+
+../../../../venvs/pyspark/lib/python3.12/site-packages/pytest_bdd/plugin.py:137
+  /home/ubuntu/venvs/pyspark/lib/python3.12/site-packages/pytest_bdd/plugin.py:137: PytestUnknownMarkWarning: Unknown pytest.mark.BR-002 - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html
+    mark = getattr(pytest.mark, tag)
+
+../../../../venvs/pyspark/lib/python3.12/site-packages/pytest_bdd/plugin.py:137
+  /home/ubuntu/venvs/pyspark/lib/python3.12/site-packages/pytest_bdd/plugin.py:137: PytestUnknownMarkWarning: Unknown pytest.mark.VR-12 - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html
+    mark = getattr(pytest.mark, tag)
+
+../../../../venvs/pyspark/lib/python3.12/site-packages/pytest_bdd/plugin.py:137
+  /home/ubuntu/venvs/pyspark/lib/python3.12/site-packages/pytest_bdd/plugin.py:137: PytestUnknownMarkWarning: Unknown pytest.mark.BR-003 - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html
+    mark = getattr(pytest.mark, tag)
+
+../../../../venvs/pyspark/lib/python3.12/site-packages/pytest_bdd/plugin.py:137
+  /home/ubuntu/venvs/pyspark/lib/python3.12/site-packages/pytest_bdd/plugin.py:137: PytestUnknownMarkWarning: Unknown pytest.mark.TS-04 - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html
+    mark = getattr(pytest.mark, tag)
+
+../../../../venvs/pyspark/lib/python3.12/site-packages/pytest_bdd/plugin.py:137
+  /home/ubuntu/venvs/pyspark/lib/python3.12/site-packages/pytest_bdd/plugin.py:137: PytestUnknownMarkWarning: Unknown pytest.mark.TS-08 - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html
+    mark = getattr(pytest.mark, tag)
+
+../../../../venvs/pyspark/lib/python3.12/site-packages/pytest_bdd/plugin.py:137
+  /home/ubuntu/venvs/pyspark/lib/python3.12/site-packages/pytest_bdd/plugin.py:137: PytestUnknownMarkWarning: Unknown pytest.mark.BR-004 - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html
+    mark = getattr(pytest.mark, tag)
+
+../../../../venvs/pyspark/lib/python3.12/site-packages/pytest_bdd/plugin.py:137
+  /home/ubuntu/venvs/pyspark/lib/python3.12/site-packages/pytest_bdd/plugin.py:137: PytestUnknownMarkWarning: Unknown pytest.mark.TS-02 - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html
+    mark = getattr(pytest.mark, tag)
+
+../../../../venvs/pyspark/lib/python3.12/site-packages/pytest_bdd/plugin.py:137
+  /home/ubuntu/venvs/pyspark/lib/python3.12/site-packages/pytest_bdd/plugin.py:137: PytestUnknownMarkWarning: Unknown pytest.mark.BR-005 - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html
+    mark = getattr(pytest.mark, tag)
+
+../../../../venvs/pyspark/lib/python3.12/site-packages/pytest_bdd/plugin.py:137
+  /home/ubuntu/venvs/pyspark/lib/python3.12/site-packages/pytest_bdd/plugin.py:137: PytestUnknownMarkWarning: Unknown pytest.mark.negative - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html
+    mark = getattr(pytest.mark, tag)
+
+../../../../venvs/pyspark/lib/python3.12/site-packages/pytest_bdd/plugin.py:137
+  /home/ubuntu/venvs/pyspark/lib/python3.12/site-packages/pytest_bdd/plugin.py:137: PytestUnknownMarkWarning: Unknown pytest.mark.TR-004 - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html
+    mark = getattr(pytest.mark, tag)
+
+../../../../venvs/pyspark/lib/python3.12/site-packages/pytest_bdd/plugin.py:137
+  /home/ubuntu/venvs/pyspark/lib/python3.12/site-packages/pytest_bdd/plugin.py:137: PytestUnknownMarkWarning: Unknown pytest.mark.BR-006 - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html
+    mark = getattr(pytest.mark, tag)
+
+../../../../venvs/pyspark/lib/python3.12/site-packages/pytest_bdd/plugin.py:137
+  /home/ubuntu/venvs/pyspark/lib/python3.12/site-packages/pytest_bdd/plugin.py:137: PytestUnknownMarkWarning: Unknown pytest.mark.TS-05 - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html
+    mark = getattr(pytest.mark, tag)
+
+../../../../venvs/pyspark/lib/python3.12/site-packages/pytest_bdd/plugin.py:137
+  /home/ubuntu/venvs/pyspark/lib/python3.12/site-packages/pytest_bdd/plugin.py:137: PytestUnknownMarkWarning: Unknown pytest.mark.TR-002 - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html
+    mark = getattr(pytest.mark, tag)
+
+../../../../venvs/pyspark/lib/python3.12/site-packages/pytest_bdd/plugin.py:137
+  /home/ubuntu/venvs/pyspark/lib/python3.12/site-packages/pytest_bdd/plugin.py:137: PytestUnknownMarkWarning: Unknown pytest.mark.TS-06 - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html
+    mark = getattr(pytest.mark, tag)
+
+../../../../venvs/pyspark/lib/python3.12/site-packages/pytest_bdd/plugin.py:137
+  /home/ubuntu/venvs/pyspark/lib/python3.12/site-packages/pytest_bdd/plugin.py:137: PytestUnknownMarkWarning: Unknown pytest.mark.V-01 - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html
+    mark = getattr(pytest.mark, tag)
+
+../../../../venvs/pyspark/lib/python3.12/site-packages/pytest_bdd/plugin.py:137
+  /home/ubuntu/venvs/pyspark/lib/python3.12/site-packages/pytest_bdd/plugin.py:137: PytestUnknownMarkWarning: Unknown pytest.mark.V-02 - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html
+    mark = getattr(pytest.mark, tag)
+
+../../../../venvs/pyspark/lib/python3.12/site-packages/pytest_bdd/plugin.py:137
+  /home/ubuntu/venvs/pyspark/lib/python3.12/site-packages/pytest_bdd/plugin.py:137: PytestUnknownMarkWarning: Unknown pytest.mark.TS-07 - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html
+    mark = getattr(pytest.mark, tag)
+
+../../../../venvs/pyspark/lib/python3.12/site-packages/pytest_bdd/plugin.py:137
+  /home/ubuntu/venvs/pyspark/lib/python3.12/site-packages/pytest_bdd/plugin.py:137: PytestUnknownMarkWarning: Unknown pytest.mark.TR-003 - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html
+    mark = getattr(pytest.mark, tag)
+
+../../../../venvs/pyspark/lib/python3.12/site-packages/pytest_bdd/plugin.py:137
+  /home/ubuntu/venvs/pyspark/lib/python3.12/site-packages/pytest_bdd/plugin.py:137: PytestUnknownMarkWarning: Unknown pytest.mark.TR-001 - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html
+    mark = getattr(pytest.mark, tag)
+
+../../../../venvs/pyspark/lib/python3.12/site-packages/pytest_bdd/plugin.py:137
+  /home/ubuntu/venvs/pyspark/lib/python3.12/site-packages/pytest_bdd/plugin.py:137: PytestUnknownMarkWarning: Unknown pytest.mark.VR-09 - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html
+    mark = getattr(pytest.mark, tag)
+
+../../../../venvs/pyspark/lib/python3.12/site-packages/pytest_bdd/plugin.py:137
+  /home/ubuntu/venvs/pyspark/lib/python3.12/site-packages/pytest_bdd/plugin.py:137: PytestUnknownMarkWarning: Unknown pytest.mark.TR-005 - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html
+    mark = getattr(pytest.mark, tag)
+
+../../../../venvs/pyspark/lib/python3.12/site-packages/pytest_bdd/plugin.py:137
+  /home/ubuntu/venvs/pyspark/lib/python3.12/site-packages/pytest_bdd/plugin.py:137: PytestUnknownMarkWarning: Unknown pytest.mark.VR-10 - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html
+    mark = getattr(pytest.mark, tag)
+
+../../../../venvs/pyspark/lib/python3.12/site-packages/pytest_bdd/plugin.py:137
+  /home/ubuntu/venvs/pyspark/lib/python3.12/site-packages/pytest_bdd/plugin.py:137: PytestUnknownMarkWarning: Unknown pytest.mark.VR-11 - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html
+    mark = getattr(pytest.mark, tag)
+
+../../../../venvs/pyspark/lib/python3.12/site-packages/pytest_bdd/plugin.py:137
+  /home/ubuntu/venvs/pyspark/lib/python3.12/site-packages/pytest_bdd/plugin.py:137: PytestUnknownMarkWarning: Unknown pytest.mark.TR-006 - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html
+    mark = getattr(pytest.mark, tag)
+
+../../../../venvs/pyspark/lib/python3.12/site-packages/pytest_bdd/plugin.py:137
+  /home/ubuntu/venvs/pyspark/lib/python3.12/site-packages/pytest_bdd/plugin.py:137: PytestUnknownMarkWarning: Unknown pytest.mark.reconciliation - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html
+    mark = getattr(pytest.mark, tag)
+
+../../../../venvs/pyspark/lib/python3.12/site-packages/pytest_bdd/plugin.py:137
+  /home/ubuntu/venvs/pyspark/lib/python3.12/site-packages/pytest_bdd/plugin.py:137: PytestUnknownMarkWarning: Unknown pytest.mark.OQ-04 - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html
+    mark = getattr(pytest.mark, tag)
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+- generated xml file: /home/ubuntu/repos/ts-cobol-carddemo/workbench/environment/bdd_junit_results.xml -
+======================= 25 passed, 33 warnings in 16.00s =======================

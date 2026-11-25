@@ -1,0 +1,8 @@
+2026-11-25 08:23:57,657 INFO readcard job start READCARD/STEP05 input=/home/ubuntu/repos/ts-cobol-carddemo/fixtures/read-masters/r02-empty/input/AWS.M2.CARDDEMO.CARDDATA.PS.txt
+2026-11-25 08:23:59,519 INFO readcard records read=0
+2026-11-25 08:24:00,029 INFO readcard records processed=0
+2026-11-25 08:24:00,030 INFO readcard job end rc=0 records=0 rejected=0
+2026-11-25 08:24:00,085 INFO py4j.clientserver Closing down clientserver connection
+read-masters/r01-populated [java (READCARD)]: PASS (0 records, 0 fields, 0 differences)
+read-masters/r02-empty [java (READCARD)]: PASS (0 records, 0 fields, 0 differences)
+report: work/parity-java/report.md
