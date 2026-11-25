@@ -25,6 +25,13 @@ Feature: READCARD / CBACT02C - read and print card data file
     And SYSOUT ends with "ERROR READING CARDFILE" then "ABENDING PROGRAM"
     And SYSOUT does not contain the end banner
 
+  # CBACT02C-BR-002 (EBCDIC unload ends inside a record)
+  Scenario: Complete cards are printed before a truncated EBCDIC record abends the run
+    Given the card data file "cards_truncated.ebcdic" in "ebcdic" format
+    When READCARD runs
+    Then STEP05 ends with return code "U0999"
+    And SYSOUT holds 3 card lines before "ERROR READING CARDFILE" then "ABENDING PROGRAM"
+
   # CBACT02C-BR-002 (open failure)
   Scenario: A missing card data file stops the run with abend 999
     Given the card data file "does_not_exist.txt" in "text" format

@@ -70,6 +70,13 @@ def then_ends_two(ctx, a, b):
     assert ctx["sysout"][-2:] == [a, b]
 
 
+@then(parsers.parse('SYSOUT holds {n:d} card lines before "{a}" then "{b}"'))
+def then_cards_then_abend(ctx, n, a, b):
+    assert ctx["sysout"][0] == START
+    assert len(ctx["sysout"][1:-2]) == n
+    assert ctx["sysout"][-2:] == [a, b]
+
+
 @then("SYSOUT does not contain the end banner")
 def then_no_end(ctx):
     assert END not in ctx["sysout"]
@@ -121,3 +128,8 @@ def test_ebcdic_and_text_readers_agree(spark, readcard):
     text = readcard.read_cardfile_text(spark, str(DATA / "cards_unsorted.txt")).select(cols).orderBy("CARD_NUM").collect()
     ebc = readcard.read_cardfile_ebcdic(spark, str(DATA / "cards_unsorted.ebcdic"), readcard.DEFAULT_COPYBOOK).select(cols).orderBy("CARD_NUM").collect()
     assert text == ebc
+
+
+def test_cardfile_accepts_file_uri(run_job):
+    result = run_job((DATA / "cards_unsorted.txt").as_uri(), "text")
+    assert result["steps"]["STEP05"] == 0 and result["records"] == 3

@@ -13,7 +13,6 @@ Usage:
 
 import argparse
 import json
-import os
 import sys
 from pathlib import Path
 
@@ -78,10 +77,11 @@ def _read_copybook(path: Path) -> str:
     return path.read_text().expandtabs(8)
 
 
-def read_cardfile_ebcdic(spark: SparkSession, cardfile: str, copybook: Path) -> DataFrame:
+def read_cardfile_ebcdic(spark: SparkSession, cardfile: str, copybook: Path, file_end_offset: int = 0) -> DataFrame:
     """CARDFILE as an EBCDIC fixed-length 150-byte unload of the KSDS (Cobrix)."""
     df = (
         spark.read.format("cobol")
+        .option("file_end_offset", str(file_end_offset))
         .option("copybook_contents", _read_copybook(copybook))
         .option("record_format", "F")
         .option("encoding", "ebcdic")
@@ -120,15 +120,34 @@ def read_cardfile_text(spark: SparkSession, cardfile: str) -> DataFrame:
     return raw.select(*cols, rec.alias("display_line"), F.length(F.col("value")).alias("record_length"))
 
 
-def read_cardfile(spark: SparkSession, cardfile: str, fmt: str, copybook: Path) -> DataFrame:
-    """0000-CARDFILE-OPEN + 1000-CARDFILE-GET-NEXT (READ FILE -> spark.read())."""
-    if not os.path.exists(cardfile):
+def cardfile_length(spark: SparkSession, cardfile: str):
+    """Byte length of CARDFILE via the Hadoop FileSystem (paths and URIs), None when absent."""
+    jvm = spark._jvm
+    path = jvm.org.apache.hadoop.fs.Path(cardfile)
+    fs = path.getFileSystem(spark._jsc.hadoopConfiguration())
+    return fs.getFileStatus(path).getLen() if fs.exists(path) else None
+
+
+def read_cardfile(spark: SparkSession, cardfile: str, fmt: str, copybook: Path):
+    """0000-CARDFILE-OPEN + 1000-CARDFILE-GET-NEXT (READ FILE -> spark.read()).
+
+    Returns (DataFrame or None, trailing_bytes). trailing_bytes > 0 means the EBCDIC
+    unload ends inside a record: the complete records are still listed, then the read fails.
+    """
+    try:
+        length = cardfile_length(spark, cardfile)
+    except Exception as exc:  # noqa: BLE001 - unusable path maps to the COBOL open error
+        raise CardFileError("ERROR OPENING CARDFILE", str(exc)) from exc
+    if length is None:
         raise CardFileError("ERROR OPENING CARDFILE", f"CARDFILE not found: {cardfile}")
     try:
         if fmt == "ebcdic":
-            return read_cardfile_ebcdic(spark, cardfile, copybook)
+            trailing = length % CARD_RECORD_LENGTH
+            if length - trailing == 0:
+                return None, trailing
+            return read_cardfile_ebcdic(spark, cardfile, copybook, trailing), trailing
         if fmt == "text":
-            return read_cardfile_text(spark, cardfile)
+            return read_cardfile_text(spark, cardfile), 0
     except CardFileError:
         raise
     except Exception as exc:  # noqa: BLE001 - any open failure maps to the COBOL open error
@@ -173,8 +192,11 @@ def step05_cbact02c(spark: SparkSession, args, sysout: Sysout):
     """
     sysout.display(START_BANNER)  # CBACT02C-BR-003
     try:
-        cardfile_df = read_cardfile(spark, args.cardfile, args.cardfile_format, Path(args.copybook))
-        records = display_card_records(cardfile_df, sysout)
+        cardfile_df, trailing = read_cardfile(spark, args.cardfile, args.cardfile_format, Path(args.copybook))
+        records = display_card_records(cardfile_df, sysout) if cardfile_df is not None else 0
+        if trailing:
+            # CBACT02C-BR-002: last record is shorter than the 150-byte CARD-RECORD
+            raise CardFileError("ERROR READING CARDFILE", f"{trailing} trailing bytes after {records} records")
     except CardFileError as err:
         return abend_program(sysout, err), 0
     sysout.display(END_BANNER)  # CBACT02C-BR-003

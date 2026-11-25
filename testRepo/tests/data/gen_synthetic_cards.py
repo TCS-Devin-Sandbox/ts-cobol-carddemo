@@ -20,6 +20,7 @@ CARDS = [  # deliberately not in CARD-NUM order
 def main():
     (HERE / "cards_unsorted.txt").write_text("".join(c.rstrip() + "\n" for c in CARDS))
     (HERE / "cards_unsorted.ebcdic").write_bytes(b"".join(c.encode("cp037") for c in CARDS))
+    (HERE / "cards_truncated.ebcdic").write_bytes(b"".join(c.encode("cp037") for c in CARDS) + CARDS[0][:40].encode("cp037"))
     bad = CARDS[:2] + ["9" * 151]
     (HERE / "cards_bad_record.txt").write_text("".join(c.rstrip() + "\n" for c in bad))
 
