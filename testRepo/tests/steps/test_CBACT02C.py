@@ -133,3 +133,9 @@ def test_ebcdic_and_text_readers_agree(spark, readcard):
 def test_cardfile_accepts_file_uri(run_job):
     result = run_job((DATA / "cards_unsorted.txt").as_uri(), "text")
     assert result["steps"]["STEP05"] == 0 and result["records"] == 3
+
+
+def test_cardfile_directory_is_open_error(run_job):
+    result = run_job(DATA, "ebcdic")
+    assert result["steps"]["STEP05"] == "U0999"
+    assert result["sysout"][-2:] == ["ERROR OPENING CARDFILE", "ABENDING PROGRAM"]

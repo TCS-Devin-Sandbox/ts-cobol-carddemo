@@ -125,7 +125,13 @@ def cardfile_length(spark: SparkSession, cardfile: str):
     jvm = spark._jvm
     path = jvm.org.apache.hadoop.fs.Path(cardfile)
     fs = path.getFileSystem(spark._jsc.hadoopConfiguration())
-    return fs.getFileStatus(path).getLen() if fs.exists(path) else None
+    if not fs.exists(path):
+        return None
+    status = fs.getFileStatus(path)
+    if status.isDirectory():
+        # CARDFILE DD names one dataset (the KSDS unload), not a directory of files
+        raise CardFileError("ERROR OPENING CARDFILE", f"CARDFILE is a directory: {cardfile}")
+    return status.getLen()
 
 
 def read_cardfile(spark: SparkSession, cardfile: str, fmt: str, copybook: Path):
@@ -136,6 +142,8 @@ def read_cardfile(spark: SparkSession, cardfile: str, fmt: str, copybook: Path):
     """
     try:
         length = cardfile_length(spark, cardfile)
+    except CardFileError:
+        raise
     except Exception as exc:  # noqa: BLE001 - unusable path maps to the COBOL open error
         raise CardFileError("ERROR OPENING CARDFILE", str(exc)) from exc
     if length is None:
