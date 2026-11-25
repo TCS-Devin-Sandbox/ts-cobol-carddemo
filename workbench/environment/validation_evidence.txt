@@ -1,0 +1,45 @@
+$ lsb_release -ds
+Ubuntu 22.04.5 LTS
+$ python3 --version
+Python 3.12.16
+$ java -version
+openjdk version "17.0.21.1" 2026-11-17
+OpenJDK Runtime Environment (build 17.0.21.1+2-1-22.04.1-Ubuntu)
+OpenJDK 64-Bit Server VM (build 17.0.21.1+2-1-22.04.1-Ubuntu, mixed mode, sharing)
+$ spark-submit --version
+   /___/ .__/\_,_/_/ /_/\_\   version 3.5.1
+Using Scala version 2.12.18, OpenJDK 64-Bit Server VM, 17.0.21.1
+Branch HEAD
+Compiled by user heartsavior on 2024-02-15T11:24:58Z
+$ pip show pyspark pytest pytest-bdd pandas
+pandas            3.1.1
+pyspark           3.5.1
+pytest            8.3.3
+pytest-bdd        8.1.0
+$ python3 tools/parity/compare.py --help
+usage: compare.py [-h] --actual ACTUAL [--expected EXPECTED] [--report REPORT]
+                  [--label LABEL] [--encoding {ascii,ebcdic}]
+                  [--steps JOB[.STEP] [JOB[.STEP] ...]]
+                  chain case
+
+Field-level parity comparison of recorded chain outputs.
+
+    compare.py <chain> <case> --actual <dir> [--steps JOB[.STEP] ...]
+
+Compares fixtures/<chain>/<case>/expected (golden) with <dir> (candidate):
+
+* datasets with a copybook layout are decoded record by record with
+  tools/parity/copybook.py and compared field by field (COMP-3, zoned
+  overpunch and EBCDIC aware), reporting field name, expected and actual;
+* text datasets (reports) and SYSOUT are compared line by line;
+* rc.json and database CSV snapshots must match exactly for a full chain;
+* --steps compares only the selected jobs' or steps' outputs and return codes.
+
+Writes a Markdown report (default work/parity/report.md, appended) and
+exits 1 on any difference.  Never edit fixtures or COBOL to make it pass.
+$ smoke test (fixtures/read-masters/r01-populated/input/*.txt)
+Spark version: 3.5.1
+root
+ |-- value: string (nullable = true)
+
+Record Count: 8

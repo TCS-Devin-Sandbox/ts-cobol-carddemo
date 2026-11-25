@@ -1,0 +1,59 @@
+{
+  "job_name": "READCARD",
+  "step": "STEP05",
+  "program": "CBACT02C",
+  "validation_status": "PASS",
+  "requirements_validated": 18,
+  "requirements_failed": 0,
+  "requirements_partial": 0,
+  "business_rules_total": 12,
+  "business_rules_passed": 12,
+  "business_rules_partial": 0,
+  "business_rules_failed": 0,
+  "additional_items_validated": [
+    "V-01",
+    "V-02",
+    "OQ-02",
+    "OQ-04"
+  ],
+  "mappings_total": 10,
+  "mappings_passed": 10,
+  "bdd_scenarios_generated": 20,
+  "bdd_test_cases_executed": 25,
+  "bdd_scenarios_passed": 25,
+  "bdd_scenarios_failed": 0,
+  "golden_parity": {
+    "r01-populated": "PASS",
+    "r02-empty": "PASS"
+  },
+  "record_count_validation": "PASS",
+  "control_total_validation": "PASS",
+  "business_total_validation": "NOT_APPLICABLE",
+  "reconciliation_status": "PASS",
+  "defects": [
+    {
+      "id": "D-01",
+      "severity": "medium",
+      "rule": "BR-006",
+      "summary": "END banner written before close-error diagnostics",
+      "status": "resolved in Stage 4 v2",
+      "found_in_run": 1
+    }
+  ],
+  "code_quality_findings": [
+    "Q-01 temp listing left if generate_output fails",
+    "Q-02 generic S2 exception mapped to status 34"
+  ],
+  "design_errata": [
+    "VR-12 collation example reversed",
+    "TR-003 '90' displays 9048 off-host, 9240 on z/OS"
+  ],
+  "limitations": [
+    "live legacy re-run blocked by Docker Hub 429",
+    "no legacy error-path goldens",
+    "local[*] only"
+  ],
+  "migration_readiness": "READY_FOR_SIT_UAT_PARALLEL_RUN",
+  "run": 2,
+  "stage4_revision": "v2"
+}

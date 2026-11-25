@@ -1,0 +1,223 @@
+{
+  "workload": "READCARD",
+  "repository": "TCS-Devin-Sandbox/ts-cobol-carddemo",
+  "baseline_commit": "642387a",
+  "events": [
+    {
+      "timestamp": "2026-11-24T15:02:00+05:30",
+      "stage": "orchestration",
+      "action": "started",
+      "actor": "Devin",
+      "requested_by": "aruna.vs"
+    },
+    {
+      "timestamp": "2026-11-24T15:20:00+05:30",
+      "stage": "1-discovery",
+      "action": "completed",
+      "actor": "Devin (discovery-agent)",
+      "artifacts": [
+        "discovery/discovery.json",
+        "discovery/discovery_report.md",
+        "discovery/execution_flow.md",
+        "discovery/lineage.md"
+      ],
+      "status": "pending_approval"
+    },
+    {
+      "timestamp": "2026-11-24T15:10:26+05:30",
+      "stage": "1-discovery",
+      "action": "approved",
+      "actor": "aruna.vs",
+      "decision_notes": "Approved. R-01 resolved: preserve clear-text card number/CVV output exactly as legacy (parity).",
+      "timestamp_note": "approximate, recorded retroactively"
+    },
+    {
+      "timestamp": "2026-11-24T15:11:26+05:30",
+      "stage": "2-technical-summary-bre",
+      "action": "started",
+      "actor": "Devin (technical-summary-business-rules-extraction)",
+      "timestamp_note": "approximate, recorded retroactively"
+    },
+    {
+      "timestamp": "2026-11-24T15:12:26+05:30",
+      "stage": "2-technical-summary-bre",
+      "action": "completed",
+      "actor": "Devin (technical-summary-business-rules-extraction)",
+      "artifacts": [
+        "technical_summary/technical_summary.md",
+        "technical_summary/business_rules.md",
+        "technical_summary/technical_flow.md",
+        "technical_summary/business_capabilities.md"
+      ],
+      "status": "pending_approval",
+      "timestamp_note": "approximate, recorded retroactively"
+    },
+    {
+      "timestamp": "2026-11-24T15:13:26+05:30",
+      "stage": "2-technical-summary-bre",
+      "action": "approved",
+      "actor": "aruna.vs",
+      "timestamp_note": "approximate, recorded retroactively"
+    },
+    {
+      "timestamp": "2026-11-24T15:14:26+05:30",
+      "stage": "3-target-design",
+      "action": "started",
+      "actor": "Devin (target-design-modernization-specification)",
+      "timestamp_note": "approximate, recorded retroactively"
+    },
+    {
+      "timestamp": "2026-11-24T15:15:26+05:30",
+      "stage": "3-target-design",
+      "action": "completed",
+      "actor": "Devin (target-design-modernization-specification)",
+      "artifacts": [
+        "target_design/target_design.md",
+        "target_design/target_data_model.md",
+        "target_design/source_to_target_mapping.md",
+        "target_design/processing_specification.md",
+        "target_design/testing_requirements.md"
+      ],
+      "status": "pending_approval",
+      "timestamp_note": "approximate, recorded retroactively"
+    },
+    {
+      "timestamp": "2026-11-24T15:16:26+05:30",
+      "stage": "3-target-design",
+      "action": "approved",
+      "actor": "aruna.vs",
+      "decision_notes": "Approved with default answers to OQ-01..OQ-04.",
+      "timestamp_note": "approximate, recorded retroactively"
+    },
+    {
+      "timestamp": "2026-11-24T15:17:26+05:30",
+      "stage": "4-pyspark-generation",
+      "action": "started",
+      "actor": "Devin (pyspark-code-generation)",
+      "timestamp_note": "approximate, recorded retroactively"
+    },
+    {
+      "timestamp": "2026-11-24T15:18:26+05:30",
+      "stage": "4-pyspark-generation",
+      "action": "completed",
+      "actor": "Devin (pyspark-code-generation)",
+      "artifacts": [
+        "pyspark_generation/pyspark_application.py",
+        "pyspark_generation/config.json",
+        "pyspark_generation/business_rule_traceability.md",
+        "pyspark_generation/processing_flow.md",
+        "pyspark_generation/reconciliation_framework.md"
+      ],
+      "status": "pending_approval",
+      "findings": [
+        "Erratum: target_design/testing_requirements.md VR-12 example collation direction reversed; approved artifact not modified."
+      ],
+      "timestamp_note": "approximate, recorded retroactively"
+    },
+    {
+      "timestamp": "2026-11-24T15:19:26+05:30",
+      "stage": "4-pyspark-generation",
+      "action": "approved",
+      "actor": "aruna.vs",
+      "decision_notes": "Approve Stage 4",
+      "timestamp_note": "approximate, recorded retroactively"
+    },
+    {
+      "timestamp": "2026-11-24T15:20:26+05:30",
+      "stage": "5-validation",
+      "action": "started",
+      "actor": "Devin (validation-test-generation-reconciliation)",
+      "timestamp_note": "approximate, recorded retroactively"
+    },
+    {
+      "timestamp": "2026-11-24T15:21:26+05:30",
+      "stage": "5-validation",
+      "action": "completed",
+      "actor": "Devin (validation-test-generation-reconciliation)",
+      "status": "pending_approval",
+      "results": {
+        "golden_parity": "2/2 PASS",
+        "bdd": "24/25 PASS",
+        "rules": "11 PASS, 1 PARTIAL"
+      },
+      "findings": [
+        "D-01 close-error path prints END banner (BR-006/A-04)",
+        "Docker Hub 429 blocked live legacy re-run"
+      ],
+      "timestamp_note": "approximate, recorded retroactively"
+    },
+    {
+      "timestamp": "2026-11-24T15:18:35+05:30",
+      "stage": "5-validation",
+      "action": "run-1 reviewed",
+      "actor": "aruna.vs",
+      "decision_notes": "Reject Stage 4 for a targeted D-01 fix, then re-run Stage 5"
+    },
+    {
+      "timestamp": "2026-11-24T15:18:35+05:30",
+      "stage": "4-pyspark-generation",
+      "action": "rejected",
+      "actor": "aruna.vs",
+      "reason": "D-01",
+      "preserved": "pyspark_generation/history/v1/"
+    },
+    {
+      "timestamp": "2026-11-24T15:19:35+05:30",
+      "stage": "4-pyspark-generation",
+      "action": "regenerated v2",
+      "actor": "Devin (pyspark-code-generation)",
+      "change": "handle_abend drops END banner on close error (2 lines)",
+      "status": "pending_approval"
+    },
+    {
+      "timestamp": "2026-11-24T15:20:35+05:30",
+      "stage": "5-validation",
+      "action": "run-2 started",
+      "actor": "Devin (validation-test-generation-reconciliation)",
+      "authorisation": "user decision above (re-run Stage 5 after fix)",
+      "preserved": "validation/history/run-1/"
+    },
+    {
+      "timestamp": "2026-11-24T15:24:35+05:30",
+      "stage": "5-validation",
+      "action": "run-2 completed",
+      "actor": "Devin (validation-test-generation-reconciliation)",
+      "status": "pending_approval",
+      "results": {
+        "golden_parity": "2/2 PASS",
+        "bdd": "25/25 PASS",
+        "rules": "12/12 PASS"
+      }
+    },
+    {
+      "timestamp": "2026-11-24T15:25:25+05:30",
+      "stage": "4-pyspark-generation",
+      "action": "approved v2",
+      "actor": "aruna.vs",
+      "decision_notes": "Approve Stage 4 v2"
+    },
+    {
+      "timestamp": "2026-11-24T15:25:25+05:30",
+      "stage": "5-validation",
+      "action": "approved",
+      "actor": "aruna.vs",
+      "decision_notes": "Approve Stage 5 and assemble the final workbench"
+    },
+    {
+      "timestamp": "2026-11-24T15:25:25+05:30",
+      "stage": "final-workbench",
+      "action": "started",
+      "actor": "Devin (agentic-workbench-orchestrator)"
+    },
+    {
+      "timestamp": "2026-11-24T15:26:12+05:30",
+      "stage": "final-workbench",
+      "action": "completed",
+      "actor": "Devin (agentic-workbench-orchestrator)",
+      "artifacts": [
+        "traceability/traceability_matrix.md",
+        "final_report/modernization_workbench_report.md"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,133 @@
+{
+  "job_name": "READCARD",
+  "job_purpose": "Run CBACT02C to read the card master VSAM KSDS sequentially and print every card record to SYSOUT (JCL comment: 'RUN THE PROGRAM THAT READS THE CARD MASTER VSAM FILE'; program header: 'Read and print card data file').",
+  "source_artifacts": [
+    {"path": "app/jcl/READCARD.jcl", "type": "JCL"},
+    {"path": "app/cbl/CBACT02C.cbl", "type": "COBOL batch program"},
+    {"path": "app/cpy/CVACT02Y.cpy", "type": "COBOL copybook (CARD-RECORD, RECLN 150)"},
+    {"path": "app/jcl/CARDFILE.jcl", "type": "JCL (upstream: IDCAMS define/load of CARDDATA KSDS + AIX)"},
+    {"path": "app/csd/CARDDEMO.CSD", "type": "CICS CSD (FILE CARDDAT / CARDAIX)"},
+    {"path": "tools/runjcl/chains.json", "type": "off-host chain definition (read-masters)"},
+    {"path": "fixtures/read-masters/r01-populated", "type": "golden fixture"},
+    {"path": "fixtures/read-masters/r02-empty", "type": "golden fixture"}
+  ],
+  "job_attributes": {
+    "job_card": "//READCARD JOB 'READCARD',CLASS=A,MSGCLASS=0,NOTIFY=&SYSUID",
+    "class": "A",
+    "msgclass": "0",
+    "notify": "&SYSUID",
+    "proc_invocations": [],
+    "symbolic_parameters": ["&SYSUID (system symbol, NOTIFY only)"],
+    "cond_or_if_logic": "none",
+    "restart_parameters": "none (no RESTART=, no checkpoint DD)"
+  },
+  "steps": [
+    {
+      "step_name": "STEP05",
+      "program_name": "CBACT02C",
+      "program_type": "Batch COBOL (application program, LE runtime)",
+      "steplib": "AWS.M2.CARDDEMO.LOADLIB (DISP=SHR)",
+      "input_datasets": [
+        {"dd": "CARDFILE", "dsn": "AWS.M2.CARDDEMO.CARDDATA.VSAM.KSDS", "disp": "SHR", "organization": "VSAM KSDS", "key": "offset 0, length 16 (card number)", "lrecl": 150, "access": "sequential, OPEN INPUT"}
+      ],
+      "output_datasets": [
+        {"dd": "SYSOUT", "dsn": "SYSOUT=*", "content": "DISPLAY output: start/end banners, one 150-byte CARD-RECORD line per record, error diagnostics"},
+        {"dd": "SYSPRINT", "dsn": "SYSOUT=*", "content": "allocated, not referenced by CBACT02C"}
+      ],
+      "utilities_used": [],
+      "called_modules": ["CEE3ABD (LE abend service, only on I/O error)"],
+      "dependencies": [
+        "AWS.M2.CARDDEMO.CARDDATA.VSAM.KSDS must exist and be loaded (produced by CARDFILE.jcl STEP10/STEP15)",
+        "Load module CBACT02C in AWS.M2.CARDDEMO.LOADLIB",
+        "Copybook CVACT02Y at compile time"
+      ]
+    }
+  ],
+  "programs": [
+    {
+      "program_name": "CBACT02C",
+      "source": "app/cbl/CBACT02C.cbl",
+      "purpose": "Read and print card data file",
+      "copybooks": ["CVACT02Y"],
+      "called_programs": [{"name": "CEE3ABD", "type": "static CALL literal", "kind": "IBM LE callable service", "condition": "abend path only (ABCODE 999, TIMING 0)"}],
+      "dynamic_calls": [],
+      "input_files": [{"select": "CARDFILE-FILE", "assign": "CARDFILE", "organization": "INDEXED", "access_mode": "SEQUENTIAL", "record_key": "FD-CARD-NUM PIC X(16)", "file_status": "CARDFILE-STATUS", "fd_record": "FD-CARDFILE-REC: FD-CARD-NUM X(16) + FD-CARD-DATA X(134)"}],
+      "output_files": [],
+      "database_objects": [],
+      "sql_usage": "none",
+      "cics_usage": "none",
+      "working_storage": ["CARD-RECORD (CVACT02Y)", "CARDFILE-STATUS", "IO-STATUS", "TWO-BYTES-BINARY / TWO-BYTES-ALPHA (REDEFINES)", "IO-STATUS-04", "APPL-RESULT S9(9) COMP with 88 APPL-AOK=0, APPL-EOF=16", "END-OF-FILE X VALUE 'N'", "ABCODE S9(9) BINARY", "TIMING S9(9) BINARY"],
+      "paragraphs": ["(mainline)", "1000-CARDFILE-GET-NEXT", "0000-CARDFILE-OPEN", "9000-CARDFILE-CLOSE", "9999-ABEND-PROGRAM", "9910-DISPLAY-IO-STATUS"],
+      "business_functions": ["Sequential full-file listing of card master records in primary-key (card number) order"],
+      "error_handling": [
+        "OPEN status != '00' -> DISPLAY 'ERROR OPENING CARDFILE', file status, abend U999",
+        "READ status '10' -> EOF (APPL-RESULT 16), normal termination",
+        "READ status other than '00'/'10' -> DISPLAY 'ERROR READING CARDFILE', file status, abend U999",
+        "CLOSE status != '00' -> DISPLAY 'ERROR CLOSING CARDFILE', file status, abend U999"
+      ]
+    }
+  ],
+  "record_layouts": [
+    {
+      "copybook": "CVACT02Y",
+      "record": "CARD-RECORD",
+      "length": 150,
+      "fields": [
+        {"name": "CARD-NUM", "pic": "X(16)", "offset": 0, "length": 16, "key": true},
+        {"name": "CARD-ACCT-ID", "pic": "9(11)", "offset": 16, "length": 11, "usage": "DISPLAY (zoned, unsigned)"},
+        {"name": "CARD-CVV-CD", "pic": "9(03)", "offset": 27, "length": 3, "usage": "DISPLAY (zoned, unsigned)"},
+        {"name": "CARD-EMBOSSED-NAME", "pic": "X(50)", "offset": 30, "length": 50},
+        {"name": "CARD-EXPIRAION-DATE", "pic": "X(10)", "offset": 80, "length": 10, "note": "name misspelt in source; observed values YYYY-MM-DD"},
+        {"name": "CARD-ACTIVE-STATUS", "pic": "X(01)", "offset": 90, "length": 1},
+        {"name": "FILLER", "pic": "X(59)", "offset": 91, "length": 59}
+      ]
+    }
+  ],
+  "datasets": [
+    {"dsn": "AWS.M2.CARDDEMO.CARDDATA.VSAM.KSDS", "type": "VSAM KSDS", "role_in_job": "input (read-only)", "keys": "16 0", "recordsize": "150 150", "shareoptions": "2 3", "defined_by": "CARDFILE.jcl STEP10", "loaded_by": "CARDFILE.jcl STEP15 REPRO from AWS.M2.CARDDEMO.CARDDATA.PS", "other_users": ["CICS FILE CARDDAT (COACTUPC, COACTVWC, COCRDLIC, COCRDSLC, COCRDUPC)", "CBEXPORT.jcl"]},
+    {"dsn": "AWS.M2.CARDDEMO.CARDDATA.VSAM.AIX / .AIX.PATH", "type": "VSAM AIX (KEYS(11 16) NONUNIQUEKEY, account id)", "role_in_job": "not used by READCARD", "note": "UPGRADE set; CICS FILE CARDAIX"},
+    {"dsn": "AWS.M2.CARDDEMO.CARDDATA.PS", "type": "PS (seed source)", "role_in_job": "indirect upstream source via CARDFILE.jcl"},
+    {"dsn": "AWS.M2.CARDDEMO.LOADLIB", "type": "PDS/PDSE load library", "role_in_job": "STEPLIB"},
+    {"dsn": "SYSOUT=*", "type": "spool", "role_in_job": "output (SYSOUT, SYSPRINT)"}
+  ],
+  "dependencies": [
+    {"type": "program", "from": "CBACT02C", "to": "CEE3ABD", "kind": "static CALL, LE service", "resolved": true},
+    {"type": "copybook", "from": "CBACT02C", "to": "CVACT02Y", "resolved": true},
+    {"type": "data", "from": "READCARD/STEP05", "to": "AWS.M2.CARDDEMO.CARDDATA.VSAM.KSDS", "kind": "VSAM KSDS input", "resolved": true},
+    {"type": "job", "from": "READCARD", "to": "CARDFILE", "kind": "data producer (define + REPRO load)", "resolved": true, "note": "no scheduler definition in repo; ordering is by data dependency only"},
+    {"type": "chain", "from": "READCARD", "to": "read-masters chain (off-host)", "kind": "tools/runjcl/chains.json order READACCT -> READCARD -> READXREF -> READCUST", "resolved": true, "note": "no data dependency between the four readers"},
+    {"type": "shared_resource", "from": "AWS.M2.CARDDEMO.CARDDATA.VSAM.KSDS", "to": "CICS region CICSAWSA FILE CARDDAT", "kind": "concurrent online update possible (SHAREOPTIONS 2 3)", "resolved": true}
+  ],
+  "db2_objects": [],
+  "external_systems": [],
+  "business_functions": [
+    {"id": "BF-01", "name": "Card master listing", "description": "Read every record of the card master KSDS in ascending card-number order and write each 150-byte record verbatim to SYSOUT between start/end banner lines.", "evidence": "CBACT02C.cbl:71-87, 93"},
+    {"id": "BF-02", "name": "I/O failure detection and abend", "description": "Any non-'00' OPEN/CLOSE status or READ status other than '00'/'10' prints a diagnostic and abends via CEE3ABD with code 999.", "evidence": "CBACT02C.cbl:93-158"},
+    {"id": "BF-03", "name": "File status formatting", "description": "Status printed as 'FILE STATUS IS: NNNN' + 4 chars; numeric status -> '00'+status; non-numeric or stat1='9' -> stat1 + 3-digit binary value of stat2.", "evidence": "CBACT02C.cbl:161-174"}
+  ],
+  "observed_logic": {
+    "transformations": "none (record moved READ ... INTO CARD-RECORD and displayed as-is)",
+    "validation": "file status checks only; no field-level validation",
+    "filtering": "none (all records listed)",
+    "enrichment": "none",
+    "calculation": "none",
+    "sorting": "implicit ascending primary-key order from KSDS sequential access",
+    "aggregation": "none (no record count printed)",
+    "report_generation": "SYSOUT DISPLAY listing, no headers/page breaks"
+  },
+  "verified_behaviour": {
+    "r01-populated": "2 records listed in key order, RC 0 (fixtures/read-masters/r01-populated/expected/sysout/READCARD.STEP05.txt, rc.json)",
+    "r02-empty": "empty KSDS: only start/end banners, RC 0 (fixtures/read-masters/r02-empty)"
+  },
+  "risks": [
+    {"id": "R-01", "severity": "medium", "category": "data sensitivity", "description": "SYSOUT prints full card number and CVV (CARD-CVV-CD) in clear for every record; target must decide whether to preserve, mask or restrict."},
+    {"id": "R-02", "severity": "low", "category": "unsupported construct", "description": "CEE3ABD (LE) abend with U999 must be mapped to a target failure/exit-code convention."},
+    {"id": "R-03", "severity": "low", "category": "concurrency", "description": "KSDS is shared with CICS FILE CARDDAT (SHAREOPTIONS 2 3, DISP=SHR); a batch read may see in-flight online updates. No close/open of CICS file in READCARD."},
+    {"id": "R-04", "severity": "low", "category": "hardcoded names", "description": "Dataset names AWS.M2.CARDDEMO.* are hardcoded in JCL; no symbolic parameters."},
+    {"id": "R-05", "severity": "low", "category": "documentation", "description": "No scheduler (Control-M/TWS) definition in the repo; production run frequency, predecessors and restart policy are unknown."},
+    {"id": "R-06", "severity": "info", "category": "encoding", "description": "On-host data is EBCDIC; off-host fixtures are ASCII line-sequential with trailing FILLER spaces trimmed, while SYSOUT lines carry the full 150 bytes. Target must reproduce 150-byte padded output."},
+    {"id": "R-07", "severity": "info", "category": "unused allocation", "description": "SYSPRINT DD is allocated but never written by CBACT02C."},
+    {"id": "R-08", "severity": "info", "category": "existing migration", "description": "A Java/Spring Batch read-masters port already exists in java/read-masters (docs/BATCH-RESTART.md); PySpark target would be a parallel implementation."}
+  ],
+  "complexity": {"programs": 1, "copybooks": 1, "datasets_in_job": 1, "sql": "none", "vsam": "1 KSDS, sequential read", "utilities": 0, "external_dependencies": 0, "rating": "LOW"}
+}

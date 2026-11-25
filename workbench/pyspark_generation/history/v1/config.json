@@ -1,0 +1,65 @@
+{
+  "job_name": "READCARD",
+  "step_name": "STEP05",
+  "program_name": "CBACT02C",
+  "spark": {
+    "app_name": "readcard-cbact02c",
+    "master": "local[*]",
+    "log_level": "WARN",
+    "conf": {
+      "spark.ui.enabled": "false",
+      "spark.sql.shuffle.partitions": "8"
+    }
+  },
+  "input": {
+    "format": "fixed_width",
+    "path": "",
+    "dataset": "AWS.M2.CARDDEMO.CARDDATA.PS.txt",
+    "encoding": "latin-1",
+    "lrecl": 150,
+    "pad_short_records": true
+  },
+  "output": {
+    "path": "",
+    "sysout_file": "sysout/READCARD.STEP05.txt",
+    "rc_file": "rc.json",
+    "metrics_file": "run_metrics.json",
+    "encoding": "latin-1"
+  },
+  "rules": {
+    "collation": "ebcdic",
+    "enforce_unique_key": true,
+    "abend_code": 999,
+    "abend_rc": 12,
+    "emulate_harness_abend_line": true
+  },
+  "layout": {
+    "copybook": "CVACT02Y",
+    "key_field": "card_num",
+    "fields": [
+      {"name": "card_num",             "source": "CARD-NUM",            "offset": 0,  "length": 16},
+      {"name": "card_acct_id",         "source": "CARD-ACCT-ID",        "offset": 16, "length": 11},
+      {"name": "card_cvv_cd",          "source": "CARD-CVV-CD",         "offset": 27, "length": 3},
+      {"name": "card_embossed_name",   "source": "CARD-EMBOSSED-NAME",  "offset": 30, "length": 50},
+      {"name": "card_expiration_date", "source": "CARD-EXPIRAION-DATE", "offset": 80, "length": 10},
+      {"name": "card_active_status",   "source": "CARD-ACTIVE-STATUS",  "offset": 90, "length": 1},
+      {"name": "filler",               "source": "FILLER",              "offset": 91, "length": 59}
+    ]
+  },
+  "messages": {
+    "start_banner": "START OF EXECUTION OF PROGRAM CBACT02C",
+    "end_banner": "END OF EXECUTION OF PROGRAM CBACT02C",
+    "open_error": "ERROR OPENING CARDFILE",
+    "read_error": "ERROR READING CARDFILE",
+    "close_error": "ERROR CLOSING CARDFILE",
+    "file_status_prefix": "FILE STATUS IS: NNNN",
+    "abend": "ABENDING PROGRAM",
+    "harness_abend_prefix": "CEE3ABD: USER ABEND U"
+  },
+  "legacy_file_status": {
+    "open_error": "35",
+    "record_too_long": "34",
+    "duplicate_key": "22",
+    "close_error": "90"
+  }
+}
