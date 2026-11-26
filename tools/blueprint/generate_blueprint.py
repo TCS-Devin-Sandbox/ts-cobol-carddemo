@@ -908,6 +908,10 @@ class Model:
 E = html.escape
 
 
+class H(str):
+    """Trusted, already-escaped HTML fragment for table cells."""
+
+
 def fmt(n) -> str:
     return f"{n:,}"
 
@@ -981,7 +985,7 @@ def table(headers: list, rows: list, cls: str = "sortable", num_cols: set = froz
     for r in rows:
         tds = []
         for i, c in enumerate(r):
-            c = c if isinstance(c, str) and c.startswith("<") else E(fmt(c) if isinstance(c, int) else str(c))
+            c = c if isinstance(c, H) else E(fmt(c) if isinstance(c, int) else str(c))
             tds.append(f'<td class="{"num" if i in num_cols else ""}">{c}</td>')
         body.append("<tr>" + "".join(tds) + "</tr>")
     idattr = f' id="{tid}"' if tid else ""
@@ -989,15 +993,15 @@ def table(headers: list, rows: list, cls: str = "sortable", num_cols: set = froz
 
 
 def badge(text: str, kind: str = "") -> str:
-    return f'<span class="b {kind}">{E(text)}</span>'
+    return H(f'<span class="b {kind}">{E(text)}</span>')
 
 
 def flags_html(flags) -> str:
-    return " ".join(badge(f, "f" + f.lower()) for f in sorted(flags)) or ""
+    return H(" ".join(badge(f, "f" + f.lower()) for f in sorted(flags)))
 
 
 def band_html(band: str) -> str:
-    return badge(band, "band" + band.lower()) if band else ""
+    return badge(band, "band" + band.lower()) if band else H("")
 
 
 CSS = """
@@ -1094,7 +1098,7 @@ def render(m: Model, date: str) -> str:
         ps = [p for p in fs if p.is_program]
         cat_rows.append([badge(c, "cat" + c.lower()), len(fs), len(ps), sum(f.loc for f in fs),
                          sum(p.loc for p in ps), pct(sum(f.loc for f in fs), grand)])
-    cat_rows.append(["<b>Total</b>", len(files), len(progs), grand, sum(p.loc for p in progs), "100.0%"])
+    cat_rows.append([H("<b>Total</b>"), len(files), len(progs), grand, sum(p.loc for p in progs), "100.0%"])
     cat_table = table(["Category", "Files", "Programs", "Total LOC (all files)", "Program LOC", "% of LOC"],
                       cat_rows, cls="", num_cols={1, 2, 3, 4, 5})
     cat_type_rows = []
@@ -1132,7 +1136,7 @@ def render(m: Model, date: str) -> str:
     for t in types_present:
         fs = by_type[t]
         loc = sum(f.loc for f in fs)
-        loc_rows.append([f'<span class="sw" style="background:{TYPE_COLORS[t]}"></span>{E(t)}', len(fs),
+        loc_rows.append([H(f'<span class="sw" style="background:{TYPE_COLORS[t]}"></span>{E(t)}'), len(fs),
                          sum(f.physical for f in fs), sum(f.comment for f in fs), sum(f.blank for f in fs),
                          loc, pct(loc, grand), round(loc / len(fs)) if fs else 0])
     loc_rows.sort(key=lambda r: -r[5])
@@ -1143,7 +1147,7 @@ def render(m: Model, date: str) -> str:
                 f'<b>{fmt(grand)} LOC</b>.</p>')
     prog_loc = sum(p.loc for p in progs)
     drill = table(["File", "Path", "Type", "Physical", "Comment", "Blank", "LOC", "% of total"],
-                  [[f.name, f"<code>{E(f.path)}</code>", f.ctype, f.physical, f.comment, f.blank, f.loc, pct(f.loc, grand)]
+                  [[f.name, H(f"<code>{E(f.path)}</code>"), f.ctype, f.physical, f.comment, f.blank, f.loc, pct(f.loc, grand)]
                    for f in sorted(files, key=lambda f: (TYPE_ORDER.index(f.ctype), -f.loc))],
                   num_cols={3, 4, 5, 6, 7})
 
@@ -1165,7 +1169,7 @@ def render(m: Model, date: str) -> str:
     for t in [t for t in TYPE_ORDER if t in PROGRAM_TYPES and t in by_type]:
         ps = [p for p in progs if p.ctype == t]
         band_rows.append([t] + [sum(1 for p in ps if p.band == b) for b in BANDS] + [len(ps)])
-    band_rows.append(["<b>All programs</b>"] + [sum(1 for p in progs if p.band == b) for b in BANDS] + [len(progs)])
+    band_rows.append([H("<b>All programs</b>")] + [sum(1 for p in progs if p.band == b) for b in BANDS] + [len(progs)])
     band_cat_rows = [[c] + [sum(1 for p in progs if p.band == b and p.category == c) for b in BANDS]
                      + [sum(1 for p in progs if p.category == c)] for c in ("Batch", "Online")]
     band_table = table(["Type", "Low", "Medium", "High", "Total"], band_rows, cls="", num_cols={1, 2, 3, 4})
@@ -1186,12 +1190,12 @@ def render(m: Model, date: str) -> str:
     n_views = sum(1 for t in m.db2_tables.values() if t["kind"] == "VIEW")
     db2_table = table(["Table / view", "Kind", "Programs (EXEC SQL)", "Operations", "Defined / declared in"], db2_rows)
     db2_other = table(["Object", "Name", "On table", "Defined in"],
-                      [[k, n, o or "—", f"<code>{E(p)}</code>"] for k, n, o, p in m.db2_other]) if m.db2_other else ""
+                      [[k, n, o or "—", H(f"<code>{E(p)}</code>")] for k, n, o, p in m.db2_other]) if m.db2_other else ""
     dbd_table = table(["DBD", "Access", "Dataset DD names", "Segments", "Source"],
-                      [[d["name"], d["access"], ", ".join(d["dds"]), ", ".join(d["segments"]), f"<code>{E(d['file'])}</code>"] for d in m.dbds])
+                      [[d["name"], d["access"], ", ".join(d["dds"]), ", ".join(d["segments"]), H(f"<code>{E(d['file'])}</code>")] for d in m.dbds])
     psb_table = table(["PSB", "Lang", "PCBs (type → DBD, PROCOPT)", "Scheduled by JCL", "Category", "Source"],
                       [[p["name"], p["lang"], "; ".join(f"{c['type']} → {c['dbd']} ({c['procopt']})" for c in p["pcbs"]),
-                        ", ".join(p["jcl"]) or "—", badge(p["category"], "cat" + p["category"].lower()), f"<code>{E(p['file'])}</code>"] for p in m.psbs])
+                        ", ".join(p["jcl"]) or "—", badge(p["category"], "cat" + p["category"].lower()), H(f"<code>{E(p['file'])}</code>")] for p in m.psbs])
     imsprog_table = table(["Program", "Category", "Interface", "DL/I calls", "PSB (from JCL)"],
                           [[p["name"], badge(p["category"], "cat" + p["category"].lower()), p["api"], p["calls"], p["psbs"] or "—"] for p in m.ims_programs])
     n_pcbs = sum(len(p["pcbs"]) for p in m.psbs)
@@ -1209,14 +1213,14 @@ def render(m: Model, date: str) -> str:
     for meth, items in (("QSAM", qsam), ("VSAM", vsam), ("GSAM", gsam)):
         det = Counter(d["detail"].split(" (")[0] for d in items)
         am_rows.append([meth, len(items), ", ".join(f"{k}: {v}" for k, v in sorted(det.items()))])
-    am_rows.append(["<b>Total</b>", len(qsam) + len(vsam) + len(gsam), ""])
+    am_rows.append([H("<b>Total</b>"), len(qsam) + len(vsam) + len(gsam), ""])
     am_table = table(["Access method", "Datasets", "Breakdown"], am_rows, cls="", num_cols={1})
     cobfile_table = table(["Program", "Category", "File (SELECT)", "DD / ASSIGN", "ORGANIZATION", "ACCESS", "Access method"],
                           [[p.name, badge(p.category, "cat" + p.category.lower()), s["file"], s["dd"], s["org"], s["access"],
                             f'{s["method"]} {s["detail"]}'] for p, s in m.cobol_files])
     cobfile_sum = Counter(s["method"] for _, s in m.cobol_files)
     cics_table = table(["CICS file", "Group", "Dataset (DSNAME)", "Online programs referencing", "CSD"],
-                       [[c["file"], c["group"], c["dsn"] or "—", ", ".join(c["programs"]) or "—", f"<code>{E(c['csd'])}</code>"] for c in m.cics_files])
+                       [[c["file"], c["group"], c["dsn"] or "—", ", ".join(c["programs"]) or "—", H(f"<code>{E(c['csd'])}</code>")] for c in m.cics_files])
     lib_table = table(["Library", "JCL members"], [[k, ", ".join(sorted(v))] for k, v in sorted(m.libraries.items())])
 
     # ---------- section 5 ----------
