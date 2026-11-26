@@ -1,0 +1,53 @@
+# MG-01 — Transaction Type Maintenance — Business & Technical Summary
+
+**Trans Group:** MG-01 — Transaction type maintenance (Db2) — list, filter, add, update, delete
+
+| Transaction | Program | Map / Mapset | Data |
+|---|---|---|---|
+| CTLI | COTRTLIC | CTRTLIA / COTRTLI | Db2 `CARDDEMO.TRANSACTION_TYPE` (R, U, D) |
+| CTTU | COTRTUPC | CTRTUPA / COTRTUP | Db2 `CARDDEMO.TRANSACTION_TYPE` (C, R, U, D) |
+
+## a. Business Summary
+
+### Purpose and workflow
+MG-01 maintains the transaction-type reference table: two-digit codes (`TR_TYPE CHAR(2)`, primary key) with a description of up to 50 characters (`TR_DESCRIPTION VARCHAR(50)`) (Source: `Input/ddl/TRNTYPE.ddl`). Other data depends on these codes: `TRANSACTION_TYPE_CATEGORY.TRC_TYPE_CODE` references `TR_TYPE` with `ON DELETE RESTRICT` (Source: `Input/ddl/TRNTYCAT.ddl`), so a type that is still in use cannot be removed. The only actor is the CardDemo administrator. Both programs set the COMMAREA user type to admin on entry and return to the admin menu COADM01C (CA00) by default (Source: 0000-MAIN in COTRTLIC and COTRTUPC). The usual journey is admin menu → CTLI list → browse or filter → either edit or delete a row on the list, or press F2 to open CTTU and look up, add, change or delete a single type → F3 back.
+
+### CTLI — list, filter, inline update and delete
+The list shows seven types per page in code order, with a page number. F7 and F8 page up and down. On the first page F7 gives "No previous pages to display". Pressing F8 again after the last page gives "No more pages to display" (Source: 2500-SETUP-MESSAGE in COTRTLIC). The administrator can filter by an exact type code, by a description fragment matched anywhere in the text (`LIKE '%text%'`), or by both (Source: 1230-EDIT-DESC, C-TR-TYPE-FORWARD). A type filter that is not numeric is rejected with "TYPE CODE FILTER,IF SUPPLIED MUST BE A 2 DIGIT NUMBER". A filter that matches nothing is rejected with "No Records found for these filter conditions". In both cases the row selectors are locked (Source: 1220-EDIT-TYPECD, 1290-CROSS-EDITS).
+
+Each row has a one-character action field. "D" asks to delete: the row is highlighted with "Delete HIGHLIGHTED row ? Press F10 to confirm", and F10 deletes it ("HIGHLIGHTED row deleted.Hit Enter to continue"). "U" opens the description for editing: "Update HIGHLIGHTED row. Press F10 to save", and F10 saves it ("HIGHLIGHTED row was updated") (Source: 2500-SETUP-MESSAGE, 9200-UPDATE-RECORD, 9300-DELETE-RECORD). Only one action is allowed per screen ("Please select only 1 action"). Any code other than D or U is rejected ("Action code selected is invalid") (Source: 1210-EDIT-ARRAY). A new description must be supplied, may contain only letters, digits and spaces, and must actually differ from the stored value, ignoring case and surrounding spaces ("No change detected with respect to database values.") (Source: 1211-EDIT-ARRAY-DESC, 1240-EDIT-ALPHANUM-REQD). F10 is honoured only when nothing else has changed since the confirmation prompt (filters or selected row); otherwise it behaves like ENTER, so the user must confirm again (Source: 0000-MAIN PF10 guard).
+
+### CTTU — single-record maintenance
+CTTU opens with "Enter transaction type to be maintained". The code must be supplied, numeric and non-zero ("Tran Type code must be supplied." / "must be numeric." / "must not be zero."). A one-digit entry is zero-padded, so "5" is looked up as "05" (Source: 1210-EDIT-TRANTYPE, 1245-EDIT-NUM-REQD). If the code exists, its description is shown for editing and F4 starts a delete. If it does not exist, the user sees "No record found for this key in database" and "Press F05 to add. F12 to cancel", and F5 opens an empty description for a new type ("Enter new transaction type details.") (Source: 9100-GET-TRANSACTION-TYPE, 3250-SETUP-INFOMSG). Saving always takes two steps. The edited values are first validated, using the same description rules as CTLI ("Changes validated.Press F5 to save"), and F5 then commits them ("Changes committed to database"). Deleting likewise takes two presses of F4: "Delete this record ? Press F4 to confirm", then "Delete successful." F12 abandons a pending change ("Update was cancelled") or delete ("Delete was cancelled") (Source: 2000-DECIDE-ACTION). A failed save or delete shows "Changes unsuccessful" plus the database reason.
+
+## b. Technical Summary
+
+### COTRTLIC (CTLI)
+**Entry and flow.** The program is pseudo-conversational. Every exit goes through COMMON-RETURN, which sets FROM-TRANID/FROM-PROGRAM to CTLI/COTRTLIC and issues `RETURN TRANSID('CTLI')`. The COMMAREA (2000 bytes) holds `CARDDEMO-COMMAREA` (COCOM01Y) followed by `WS-THIS-PROGCOMMAREA` (Source: COMMON-RETURN). The private area carries the first and last keys of the page, the screen number, the next-page and last-page-shown flags, the delete-requested and update-requested flags, the selected row, and the filter values and seven rows last displayed (Source: WS-THIS-PROGCOMMAREA). When EIBCALEN is 0, or the program is entered from another program, or F3 is pressed after a return from CTTU, the state resets to page 1 (Source: 0000-MAIN lines 515-554). On re-entry the program receives CTRTLIA and runs 1200-EDIT-INPUTS in this order: 1210-EDIT-ARRAY (row actions), 1230-EDIT-DESC, 1220-EDIT-TYPECD, then 1290-CROSS-EDITS (the count query). Before any table access, every task runs the priming query `SELECT 1 FROM SYSIBM.SYSDUMMY1` (Source: 9998-PRIMING-QUERY in CSDB2RPY).
+
+**Keys.** The program accepts ENTER, F2, F3, F7 and F8, and F10 when a delete or update is pending. Any other key is remapped to ENTER (Source: 0000-MAIN lines 574-587). F3 issues SYNCPOINT and then XCTLs to CDEMO-FROM-PROGRAM, or to COADM01C when that field is blank or is COTRTLIC itself. F2 XCTLs to COTRTUPC with CARDDEMO-COMMAREA, and as written it also sets the user type to USER (Source: 0000-MAIN lines 591-652). The main EVALUATE dispatches on the key and the pending-action counters to 8000-READ-FORWARD, 8100-READ-BACKWARDS, 9200-UPDATE-RECORD or 9300-DELETE-RECORD.
+
+**Map handling.** 2000-SEND-MAP builds the output in this order: header (title, date mm/dd/yy, time), row attributes, row data, filter attributes, messages, then `SEND MAP ... CURSOR ERASE FREEKB`. Invalid filters are shown in red (DFHRED) with the cursor placed on them. The selected row is highlighted, and its description is unprotected when an update is pending. The info message is centred in 45 characters (Source: 2200-2600 paragraphs).
+
+**Db2.** The program uses two static cursors over `CARDDEMO.TRANSACTION_TYPE`. `C-TR-TYPE-FORWARD` (`TR_TYPE >= :WS-START-KEY ... ORDER BY TR_TYPE`) and `C-TR-TYPE-BACKWARD` (`TR_TYPE < :WS-START-KEY ... ORDER BY TR_TYPE DESC`) share the same optional filter predicates, which are switched on and off by the flag host variables `WS-EDIT-TYPE-FLAG` and `WS-EDIT-DESC-FLAG` (Source: cursor DECLAREs lines 338-368). A forward read fetches up to seven rows plus one look-ahead row to work out whether a next page exists. A backward read fills the rows from the bottom up (Source: 8000/8100). 9100-CHECK-FILTERS runs `SELECT COUNT(1)` with the same predicates. Updates run `UPDATE ... SET TR_DESCRIPTION WHERE TR_TYPE` and deletes run `DELETE ... WHERE TR_TYPE`, and each is followed by `EXEC CICS SYNCPOINT` on SQLCODE 0 (Source: 9200, 9300).
+
+**Error handling.** Error texts come from 9999-FORMAT-DB2-MESSAGE, which calls DSNTIAC and builds "<action> SQLCODE:<code> <text>". The update path handles SQLCODE +100, -911 and other negative codes. The delete path handles -532 (child rows exist) and any other non-zero code. A failure of the priming query sends the full message with `SEND TEXT` and ends the conversation with a plain `RETURN` (Source: SEND-LONG-TEXT).
+
+### COTRTUPC (CTTU)
+**Entry and flow.** On entry the program issues `HANDLE ABEND LABEL(ABEND-ROUTINE)`. State is reset when EIBCALEN is 0, or when the program is entered (not re-entered) from COADM01C or COTRTLIC (Source: 0000-MAIN lines 348-374). COMMON-RETURN does not overwrite CDEMO-FROM-PROGRAM, so F3 returns to whichever program called CTTU (Source: COMMON-RETURN, 0000-MAIN PF03). The private COMMAREA holds a one-byte state (`TTUP-CHANGE-ACTION`) and the old and new values (type and description). The states are not fetched, invalid search keys ('K'), not found ('X'), show details ('S'), create new ('R'), confirm delete ('9'), start delete ('8'), delete done ('7'), delete failed ('6'), changes not OK ('E'), validated but not confirmed ('N'), lock error ('L'), save failed ('F'), done ('C') and backed out ('B') (Source: WS-THIS-PROGCOMMAREA). 0001-CHECK-PFKEYS checks which keys the current state allows. The main EVALUATE then branches to delete confirmation (F4), new-record mode (F5 when the code was not found), save (F5 when validated), cancel (F12), or 1000-PROCESS-INPUTS followed by 2000-DECIDE-ACTION.
+
+**Map handling.** The program receives CTRTUPA with RESP and RESP2. 1150-STORE-MAP-IN-NEW treats "*" or spaces as an empty field. 3300-SETUP-SCREEN-ATTRS protects every field and then unprotects only the code or the description, depending on state. 3391-SETUP-PFKEY-ATTRS reveals the F4, F5 and F12 hints (BMS DRK fields FKEY04, FKEY05, FKEY12) when they are valid (Source: 3300, 3391).
+
+**Db2.** The read is a singleton `SELECT ... WHERE TR_TYPE = :DCL-TR-TYPE`. Save is an upsert: it runs UPDATE, and on SQLCODE +100 it runs INSERT. Delete runs `DELETE ... WHERE TR_TYPE = old key`. Each successful change is followed by `EXEC CICS SYNCPOINT` (Source: 9100, 9600, 9700, 9800).
+
+**Error handling.** Errors include SQLERRM in the message. SQLCODE -911 on update maps to "Could not lock record for update" with state 'L'. Other negative codes map to state 'F'. An unexpected state in 2000-DECIDE-ACTION sends "UNEXPECTED DATA SCENARIO" and abends with code 0001 (Source: ABEND-ROUTINE).
+
+### Target-relevant notes
+- No VSAM, TSQ/TDQ, IMS or MQ usage. MG-01 touches only one Db2 table, so it maps cleanly to a PostgreSQL table and REST endpoints.
+- Paging is key-based (keyset paging), not offset-based. The target should page on the first and last key of the current page to match.
+- Two-step confirmation (ENTER → F10/F5, F4 → F4) and the single-action-per-screen rule are business rules to keep.
+
+## Gaps
+- `DATA-WAS-CHANGED-BEFORE-UPDATE` and `FOUND-TRANTYPE-DATA` messages are defined but never set in COTRTUPC, so the legacy code has no optimistic-concurrency check.
+- After SQLCODE -532 on delete, COTRTUPC sets `RECORD-DELETE-FAILED` but not `TTUP-DELETE-FAILED`. The resulting screen state is not defined in 3250-SETUP-INFOMSG.
+- COTRTLIC sets `CDEMO-USRTYP-USER` on F2. Neither program enforces user type.
