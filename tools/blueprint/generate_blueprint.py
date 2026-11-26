@@ -430,7 +430,7 @@ def parse_jcl(fi: FileInfo) -> dict:
             cur["instream"] = instream = []
 
     symbols: dict = {}
-    steps, step, last_dd = [], None, ""
+    steps, step, last_dd, job_dds = [], None, "", []
     for s in stmts:
         ops = split_operands(s["operands"])
         params = kv(ops)
@@ -446,6 +446,12 @@ def parse_jcl(fi: FileInfo) -> dict:
                     "dds": []}
             steps.append(step)
             continue
+        if s["op"] == "DD" and step is None:
+            dsn = params.get("DSN") or params.get("DSNAME") or ""
+            if dsn:
+                job_dds.append({"dd": s["name"] or last_dd, "dsn": substitute(dsn, symbols).upper()})
+            last_dd = s["name"] or last_dd
+            continue
         if s["op"] == "DD" and step is not None:
             ddname = s["name"] or last_dd
             last_dd = ddname
@@ -455,7 +461,7 @@ def parse_jcl(fi: FileInfo) -> dict:
                 "disp": params.get("DISP", ""), "instream": s["instream"] or [],
                 "dummy": "DUMMY" in ops, "sysout": "SYSOUT" in params,
             })
-    return {"steps": steps, "symbols": symbols}
+    return {"steps": steps, "symbols": symbols, "job_dds": job_dds}
 
 
 GEN_RE = re.compile(r"^(.*)\(([+-]?\d+)\)$")
@@ -804,6 +810,8 @@ class Model:
         cobol_selects = {p.name: {s["dd"]: s for s in p.selects} for p in self.programs}
         for path, j in self.jcl.items():
             base = os.path.basename(path)
+            for dd in j.get("job_dds", []):
+                self.libraries[dd["dsn"]].add(base)
             for st in j["steps"]:
                 for dd in st["dds"]:
                     dsn = dd["dsn"]
