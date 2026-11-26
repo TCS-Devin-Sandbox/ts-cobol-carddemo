@@ -1276,7 +1276,7 @@ def render(m: Model, date: str) -> str:
 <p>Static inventory of the mainframe estate under <code>app/</code> — components, size, complexity and data resources.</p>
 <p>Generated {E(date)} by <code>tools/blueprint/generate_blueprint.py</code></p></header>
 <nav><a href="#dashboard">Dashboard</a><a href="#batch-online">Batch vs Online</a><a href="#loc">LOC</a><a href="#complexity">Complexity</a>
-<a href="#data">Data</a><a href="#files">File listing</a><a href="#method">Method</a></nav>
+<a href="#data">Data</a><a href="#files">File listing</a><a href="#scores">Scores</a><a href="#method">Method</a></nav>
 <main>
 <section id="dashboard"><h2>Summary dashboard</h2>
 <div class="grid"><div class="card hero" style="grid-column:span 2"><div class="v">{fmt(grand)}</div><div class="l">Grand total LOC — all {fmt(len(files))} components (non-blank, non-comment)</div></div>
@@ -1304,8 +1304,7 @@ copybooks/DCLGENs follow the programs that COPY them; DDL, DBDs and copybooks us
 
 <section id="complexity"><h2>3. Complexity classification</h2>
 <div class="cols2"><div><h3>Programs per band per type</h3>{band_table}</div><div><h3>Programs per band, Batch vs Online</h3>{band_cat_table}</div></div>
-<h3>Per-program score</h3>{cx_table}
-<p class="small muted">Thresholds and scoring are documented in the <a href="#method">method notes</a>.</p>
+<p class="small muted">Per-program scores are listed in <a href="#scores">section 6</a>; thresholds and scoring are documented in the <a href="#method">method notes</a>.</p>
 </section>
 
 <section id="data"><h2>4. Data resources</h2>
@@ -1325,6 +1324,8 @@ copybooks/DCLGENs follow the programs that COPY them; DDL, DBDs and copybooks us
 </section>
 
 <section id="files"><h2>5. Full file listing — {len(files)} files</h2>{file_table}</section>
+
+<section id="scores"><h2>6. Per-program score</h2>{cx_table}</section>
 </main>
 <footer id="method"><h3>Method and thresholds</h3>
 <p><b>Scope.</b> Every file under <code>app/</code> except data files (<code>data/</code>, <code>*.dat</code>), the catalog listing (<code>catlg/</code>, used only to corroborate dataset types) and documentation (<code>*.md</code>, <code>*.txt</code>, <code>.gitkeep</code>). Component type comes from the file extension (<code>cpy-bms/</code> copybooks are typed “BMS Copybook”).</p>
