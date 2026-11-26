@@ -397,6 +397,20 @@ def substitute(value: str, symbols: dict) -> str:
     return re.sub(r"(?<!&)&([A-Z0-9@#$]+)\.?", rep, value)
 
 
+def cics_file_refs(p: FileInfo) -> set:
+    """Files named in EXEC CICS FILE()/DATASET() options, literally or via a VALUE constant."""
+    if "CICS" not in p.flags:
+        return set()
+    text = "\n".join(p.code)
+    consts = {m.group(1): m.group(2).strip() for m in
+              re.finditer(r"\b\d\d\s+([A-Z0-9-]+)\s+PIC\b[^.']*?VALUE\s+'([^']*)'", text)}
+    refs = set()
+    for blk in re.finditer(r"EXEC\s+CICS\b(.*?)END-EXEC", text, re.S):
+        for arg in re.findall(r"\b(?:FILE|DATASET)\s*\(\s*([^)]+?)\s*\)", blk.group(1)):
+            refs.add(arg.strip("'").strip() if arg.startswith("'") else consts.get(arg, ""))
+    return refs - {""}
+
+
 def parse_jcl(fi: FileInfo) -> dict:
     """Return steps with DDs and in-stream data for a JCL/PROC member."""
     lines = [l.rstrip("\r\n")[:72] for l in fi.raw.splitlines()]
@@ -886,8 +900,7 @@ class Model:
             for m in re.finditer(r"DEFINE\s+FILE\(([A-Z0-9#@$]+)\)\s+GROUP\(([A-Z0-9#@$]+)\)(.*?)(?=DEFINE\s|\Z)", text, re.S):
                 dm = re.search(r"DSNAME\(([^)]+)\)", m.group(3))
                 dsn = dm.group(1).strip().upper() if dm else ""
-                users = sorted(p.name for p in self.programs if "CICS" in p.flags and
-                               re.search(r"'" + re.escape(m.group(1)) + r"\s*'", "\n".join(p.code)))
+                users = sorted(p.name for p in self.programs if m.group(1) in cics_file_refs(p))
                 self.cics_files.append({"file": m.group(1), "group": m.group(2), "dsn": dsn, "csd": f.path, "programs": users})
                 if dsn:
                     e = entry(dsn)
