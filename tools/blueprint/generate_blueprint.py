@@ -436,7 +436,7 @@ def parse_jcl(fi: FileInfo) -> dict:
         params = kv(ops)
         if s["op"] in ("SET", "PROC"):
             for k, v in params.items():
-                symbols[k] = v.strip("'")
+                symbols[k] = substitute(v.strip("'"), symbols)
             continue
         if s["op"] == "EXEC":
             pgm = params.get("PGM", "").upper()
