@@ -803,7 +803,7 @@ class Model:
         self.gdgs = {}
 
         def gdg(name):
-            return self.gdgs.setdefault(name, {"name": name, "defined_in": set(), "limit": "",
+            return self.gdgs.setdefault(name, {"name": name, "defined_in": set(), "limits": set(),
                                                "gens": set(), "jcl": set(), "listcat": False})
 
         self.libraries = defaultdict(set)
@@ -821,7 +821,7 @@ class Model:
                             if kind in ("GENERATIONDATAGROUP", "GDG"):
                                 g = gdg(name)
                                 g["defined_in"].add(base)
-                                g["limit"] = detail.replace("GDG", "").strip()
+                                g["limits"].add(detail.replace("GDG", "").strip())
                             else:
                                 e = entry(name)
                                 if kind != "NONVSAM":
@@ -1208,7 +1208,7 @@ def render(m: Model, date: str) -> str:
                           [[p["name"], badge(p["category"], "cat" + p["category"].lower()), p["api"], p["calls"], p["psbs"] or "—"] for p in m.ims_programs])
     n_pcbs = sum(len(p["pcbs"]) for p in m.psbs)
     gdg_table = table(["GDG base", "Defined by (IDCAMS)", "LIMIT", "Generations referenced", "Referenced in JCL", "In LISTCAT"],
-                      [[g["name"], ", ".join(sorted(g["defined_in"])) or "—", g["limit"] or "—",
+                      [[g["name"], ", ".join(sorted(g["defined_in"])) or "—", ", ".join(sorted(g["limits"] - {""})) or "—",
                         ", ".join(sorted(g["gens"])) or "—", ", ".join(sorted(g["jcl"])) or "—", "yes" if g["listcat"] else "no"]
                        for g in sorted(m.gdgs.values(), key=lambda g: g["name"])])
 
