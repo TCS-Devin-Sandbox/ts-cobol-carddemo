@@ -1105,16 +1105,15 @@ def render(m: Model, date: str) -> str:
     qsam = [d for d in m.datasets.values() if d["method"] == "QSAM"]
     gsam = [d for d in m.datasets.values() if d["method"] == "GSAM"]
     kpis = [
-        ("Files scanned", fmt(len(files))), ("Programs", fmt(len(progs))),
+        ("Programs", fmt(len(progs))),
         ("Batch programs", fmt(n_batch)), ("Online programs", fmt(n_online)),
-        ("JCL members", fmt(len(by_type.get("JCL", [])))),
         ("DB2 tables / views", fmt(len(m.db2_tables))), ("IMS DBDs", fmt(len(m.dbds))),
         ("GDGs", fmt(len(m.gdgs))), ("Datasets (QSAM/VSAM/GSAM)", f"{len(qsam)}/{len(vsam)}/{len(gsam)}"),
     ]
     kpi_html = "".join(f'<div class="card kpi"><div class="v">{v}</div><div class="l">{E(l)}</div></div>' for l, v in kpis)
-    pie1 = pie_block("Pie 1 — Components by type (file count)",
+    pie1 = pie_block("Components by type (file count)",
                      [(t, len(by_type[t]), TYPE_COLORS[t]) for t in types_present], "Files")
-    pie2 = pie_block("Pie 2 — Components by LOC",
+    pie2 = pie_block("Components by LOC",
                      [(t, sum(f.loc for f in by_type[t]), TYPE_COLORS[t]) for t in types_present], "LOC")
     top = sorted(progs, key=lambda p: -p.loc)[:15]
     bar_top = bar_svg([(p.name, p.loc, TYPE_COLORS[p.ctype]) for p in top])
@@ -1174,9 +1173,6 @@ def render(m: Model, date: str) -> str:
     loc_rows.sort(key=lambda r: -r[5])
     loc_table = table(["Type", "Files", "Physical lines", "Comment lines", "Blank lines", "LOC", "% of total", "Avg LOC/file"],
                       loc_rows, num_cols={1, 2, 3, 4, 5, 6, 7})
-    loc_foot = (f'<p class="small muted">Totals: {fmt(len(files))} files, {fmt(sum(f.physical for f in files))} physical lines, '
-                f'{fmt(sum(f.comment for f in files))} comment lines, {fmt(sum(f.blank for f in files))} blank lines, '
-                f'<b>{fmt(grand)} LOC</b>.</p>')
     prog_loc = sum(p.loc for p in progs)
     drill = table(["File", "Path", "Type", "Physical", "Comment", "Blank", "LOC", "% of total"],
                   [[f.name, H(f"<code>{E(f.path)}</code>"), f.ctype, f.physical, f.comment, f.blank, f.loc, pct(f.loc, grand)]
@@ -1219,7 +1215,6 @@ def render(m: Model, date: str) -> str:
             src.append("SQL scripts: " + ", ".join(sorted(t["other_refs"])))
         db2_rows.append([name, t["kind"], ", ".join(sorted(t["programs"])) or "—",
                          ", ".join(sorted(t["ops"] - {"OTHER"})) or "—", "; ".join(src) or "EXEC SQL only"])
-    n_views = sum(1 for t in m.db2_tables.values() if t["kind"] == "VIEW")
     db2_table = table(["Table / view", "Kind", "Programs (EXEC SQL)", "Operations", "Defined / declared in"], db2_rows)
     db2_other = table(["Object", "Name", "On table", "Defined in"],
                       [[k, n, o or "—", H(f"<code>{E(p)}</code>")] for k, n, o, p in m.db2_other]) if m.db2_other else ""
@@ -1273,15 +1268,13 @@ def render(m: Model, date: str) -> str:
         '<th>Batch/Online</th><th class="num">LOC</th><th>Complexity</th><th>Flags</th></tr></thead><tbody>'
         + "".join(file_rows) + "</tbody></table></div>")
 
-    features = Counter(f.feature for f in files)
-    feat_txt = ", ".join(f"{k} ({v} files)" for k, v in sorted(features.items()))
 
     return f"""<!DOCTYPE html>
 <html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>CardDemo Application Blueprint</title><style>{CSS}</style></head><body>
 <header><h1>CardDemo Application Blueprint</h1>
 <p>Static inventory of the mainframe estate under <code>app/</code> — components, size, complexity and data resources.</p>
-<p>Generated {E(date)} by <code>tools/blueprint/generate_blueprint.py</code> · {fmt(len(files))} source files · features: {E(feat_txt)}</p></header>
+<p>Generated {E(date)} by <code>tools/blueprint/generate_blueprint.py</code></p></header>
 <nav><a href="#dashboard">Dashboard</a><a href="#batch-online">Batch vs Online</a><a href="#loc">LOC</a><a href="#complexity">Complexity</a>
 <a href="#data">Data</a><a href="#files">File listing</a><a href="#method">Method</a></nav>
 <main>
@@ -1305,9 +1298,7 @@ copybooks/DCLGENs follow the programs that COPY them; DDL, DBDs and copybooks us
 </section>
 
 <section id="loc"><h2>2. Lines of code</h2>
-<div class="grid"><div class="card hero"><div class="v">{fmt(grand)}</div><div class="l">Grand total LOC, all programs and artifacts</div></div>
-{''.join(f'<div class="card kpi"><div class="v">{fmt(sum(f.loc for f in by_type[t]))}</div><div class="l">{E(t)} LOC · {len(by_type[t])} files</div></div>' for t in types_present if t in ("COBOL","PL/I","ASM","JCL","PROC","Copybook","BMS"))}</div>
-<h3>LOC per component type</h3>{loc_table}{loc_foot}
+<h3>LOC per component type</h3>{loc_table}
 <details><summary>Per-file drill-down ({len(files)} files)</summary>{drill}</details>
 </section>
 
@@ -1318,14 +1309,6 @@ copybooks/DCLGENs follow the programs that COPY them; DDL, DBDs and copybooks us
 </section>
 
 <section id="data"><h2>4. Data resources</h2>
-<div class="grid">
-<div class="card kpi"><div class="v">{len(m.db2_tables)}</div><div class="l">DB2 tables / views ({n_views} views)</div></div>
-<div class="card kpi"><div class="v">{len(m.dbds)}</div><div class="l">IMS DBDs</div></div>
-<div class="card kpi"><div class="v">{len(m.psbs)} / {n_pcbs}</div><div class="l">IMS PSBs / PCBs</div></div>
-<div class="card kpi"><div class="v">{len(m.gdgs)}</div><div class="l">GDG bases</div></div>
-<div class="card kpi"><div class="v">{len(qsam)}</div><div class="l">QSAM datasets</div></div>
-<div class="card kpi"><div class="v">{len(vsam)}</div><div class="l">VSAM datasets</div></div>
-<div class="card kpi"><div class="v">{len(gsam)}</div><div class="l">GSAM datasets</div></div></div>
 <h3>4.1 DB2 tables and views — {len(m.db2_tables)}</h3>{db2_table}
 {('<details><summary>Other DB2 objects (indexes, tablespaces, databases)</summary>' + db2_other + '</details>') if db2_other else ''}
 <h3>4.2 IMS/DB — {len(m.dbds)} DBDs, {len(m.psbs)} PSBs, {n_pcbs} PCBs, {len(m.ims_programs)} DL/I programs</h3>
