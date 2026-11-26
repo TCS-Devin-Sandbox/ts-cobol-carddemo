@@ -808,6 +808,17 @@ class Model:
 
         self.libraries = defaultdict(set)
         cobol_selects = {p.name: {s["dd"]: s for s in p.selects} for p in self.programs}
+        prog_calls = {p.name: p.calls for p in self.programs}
+
+        def with_callees(names):
+            seen, stack = [], list(names)
+            while stack:
+                n = stack.pop(0)
+                if n in prog_calls and n not in seen:
+                    seen.append(n)
+                    stack.extend(sorted(prog_calls[n]))
+            return seen
+
         for path, j in self.jcl.items():
             base = os.path.basename(path)
             for dd in j.get("job_dds", []):
@@ -858,7 +869,7 @@ class Model:
                         e["method"] = e["method"] or "VSAM"
                         e["detail"] = e["detail"] or "IMS DB (DBD " + self.imsdb_dds[dd["dd"]] + ")"
                         e["evidence"].add(f"DD {dd['dd']} matches IMS DBD DATASET")
-                    for prog in st.get("app_programs", []):
+                    for prog in with_callees(st.get("app_programs", [])):
                         sel = cobol_selects.get(prog, {}).get(dd["dd"])
                         if sel:
                             e["programs"].add(prog)
