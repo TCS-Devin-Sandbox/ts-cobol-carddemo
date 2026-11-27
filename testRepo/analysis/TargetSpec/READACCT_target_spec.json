@@ -1,0 +1,798 @@
+{
+  "target_specification": {
+    "document_metadata": {
+      "document_type": "Target State Specification",
+      "target_platform": "PySpark",
+      "generation_scope": "Mainframe to PySpark Modernization",
+      "code_generation_excluded": true,
+      "anti_hallucination_enforced": true
+    },
+    "migration_context": {
+      "application_name": null,
+      "migration_project": null,
+      "source_platform": "z/OS batch (JCL, Enterprise COBOL, HLASM, VSAM)",
+      "target_platform": "PySpark",
+      "target_runtime": "Apache Spark (spark-submit) with Cobrix spark-cobol for EBCDIC input",
+      "migration_wave": null,
+      "analysis_timestamp": null,
+      "source_reference": "rules/workbench-orchestration.md (Phase 3 key mappings)"
+    },
+    "application_scope": {
+      "jobs_in_scope": [
+        "READACCT"
+      ],
+      "programs_in_scope": [
+        "CBACT01C",
+        "COBDATFT"
+      ],
+      "datasets_in_scope": [
+        "AWS.M2.CARDDEMO.ACCTDATA.VSAM.KSDS",
+        "AWS.M2.CARDDEMO.ACCTDATA.PSCOMP",
+        "AWS.M2.CARDDEMO.ACCTDATA.ARRYPS",
+        "AWS.M2.CARDDEMO.ACCTDATA.VBPS"
+      ],
+      "tables_in_scope": [],
+      "interfaces_in_scope": [
+        "COBDATFT",
+        "CEE3ABD"
+      ],
+      "dependencies_in_scope": [
+        "CVACT01Y",
+        "CODATECN",
+        "IEFBR14",
+        "AWS.M2.CARDDEMO.LOADLIB"
+      ],
+      "source_reference": "testRepo/analysis/TechSummary/technical_summary.json"
+    },
+    "dataset_migration_specification": [
+      {
+        "source_dataset": "AWS.M2.CARDDEMO.ACCTDATA.VSAM.KSDS",
+        "source_ddname": "ACCTFILE",
+        "source_type": "VSAM KSDS (INDEXED, ACCESS SEQUENTIAL, RECORD KEY FD-ACCT-ID, 300 bytes)",
+        "target_object": "acctfile_df",
+        "target_type": "DataFrame (schema CVACT01Y; primary key ACCT_ID)",
+        "migration_pattern": "EBCDIC fixed-length 300-byte unload read with spark.read.format('cobol') (Cobrix) using copybook CVACT01Y; KSDS key order restored with orderBy(ACCT_ID)",
+        "retention_requirements": null,
+        "partition_strategy": null,
+        "source_reference": [
+          "app/jcl/READACCT.jcl:35-36",
+          "app/cbl/CBACT01C.cbl:29-33",
+          "app/cpy/CVACT01Y.cpy:4-17"
+        ]
+      },
+      {
+        "source_dataset": "AWS.M2.CARDDEMO.ACCTDATA.PSCOMP",
+        "source_ddname": "OUTFILE",
+        "source_type": "PS FB LRECL 107 (zoned overpunch + COMP-3)",
+        "target_object": "pscomp records",
+        "target_type": "Fixed 107-byte records; <output-dir>/datasets/AWS.M2.CARDDEMO.ACCTDATA.PSCOMP.txt (one hex line per record) or .bin",
+        "migration_pattern": "WRITE FILE -> ordered byte write; fields encoded explicitly (zoned, packed)",
+        "retention_requirements": null,
+        "partition_strategy": null,
+        "source_reference": [
+          "app/jcl/READACCT.jcl:37-40",
+          "app/cbl/CBACT01C.cbl:56-69"
+        ]
+      },
+      {
+        "source_dataset": "AWS.M2.CARDDEMO.ACCTDATA.ARRYPS",
+        "source_ddname": "ARRYFILE",
+        "source_type": "PS FB LRECL 110 (OCCURS 5, COMP-3)",
+        "target_object": "arryps records",
+        "target_type": "Fixed 110-byte records; datasets/AWS.M2.CARDDEMO.ACCTDATA.ARRYPS.txt (hex lines)",
+        "migration_pattern": "OCCURS -> ArrayType of 5 (balance, debit) entries encoded per entry",
+        "retention_requirements": null,
+        "partition_strategy": null,
+        "source_reference": [
+          "app/jcl/READACCT.jcl:41-44",
+          "app/cbl/CBACT01C.cbl:71-78"
+        ]
+      },
+      {
+        "source_dataset": "AWS.M2.CARDDEMO.ACCTDATA.VBPS",
+        "source_ddname": "VBRCFILE",
+        "source_type": "PS VB LRECL 84 (records of 12 and 39 bytes)",
+        "target_object": "vbps records",
+        "target_type": "Variable records; datasets/AWS.M2.CARDDEMO.ACCTDATA.VBPS.txt (one line per record)",
+        "migration_pattern": "Sequential VB -> two record layouts per account emitted in order (VBRC-REC1 then VBRC-REC2)",
+        "retention_requirements": null,
+        "partition_strategy": null,
+        "source_reference": [
+          "app/jcl/READACCT.jcl:45-48",
+          "app/cbl/CBACT01C.cbl:80-85,276-315"
+        ]
+      },
+      {
+        "source_dataset": "SYSOUT",
+        "source_ddname": "SYSOUT",
+        "source_type": "SYSOUT=*",
+        "target_object": "<output-dir>/sysout/READACCT.STEP05.txt and stdout",
+        "target_type": "Text file + print()",
+        "migration_pattern": "DISPLAY -> print() and ordered text write",
+        "retention_requirements": null,
+        "partition_strategy": null,
+        "source_reference": [
+          "app/jcl/READACCT.jcl:49"
+        ]
+      },
+      {
+        "source_dataset": "SYSOUT",
+        "source_ddname": "SYSPRINT",
+        "source_type": "SYSOUT=*",
+        "target_object": null,
+        "target_type": null,
+        "migration_pattern": "No program writes to SYSPRINT; no target object",
+        "retention_requirements": null,
+        "partition_strategy": null,
+        "source_reference": [
+          "app/jcl/READACCT.jcl:50"
+        ]
+      },
+      {
+        "source_dataset": "AWS.M2.CARDDEMO.LOADLIB",
+        "source_ddname": "STEPLIB",
+        "source_type": "Load library",
+        "target_object": null,
+        "target_type": null,
+        "migration_pattern": "Comment block only; replaced by the Python module path",
+        "retention_requirements": null,
+        "partition_strategy": null,
+        "source_reference": [
+          "app/jcl/READACCT.jcl:33-34"
+        ]
+      }
+    ],
+    "data_transformation_specification": [
+      {
+        "transformation_id": "T-001",
+        "source_component": "CVACT01Y ACCOUNT-RECORD",
+        "source_fields": [
+          "ACCT-ID",
+          "ACCT-ACTIVE-STATUS",
+          "ACCT-CURR-BAL",
+          "ACCT-CREDIT-LIMIT",
+          "ACCT-CASH-CREDIT-LIMIT",
+          "ACCT-OPEN-DATE",
+          "ACCT-EXPIRAION-DATE",
+          "ACCT-REISSUE-DATE",
+          "ACCT-CURR-CYC-CREDIT",
+          "ACCT-CURR-CYC-DEBIT",
+          "ACCT-ADDR-ZIP",
+          "ACCT-GROUP-ID",
+          "FILLER"
+        ],
+        "target_fields": [
+          "ACCT_ID",
+          "ACCT_ACTIVE_STATUS",
+          "ACCT_CURR_BAL",
+          "ACCT_CREDIT_LIMIT",
+          "ACCT_CASH_CREDIT_LIMIT",
+          "ACCT_OPEN_DATE",
+          "ACCT_EXPIRAION_DATE",
+          "ACCT_REISSUE_DATE",
+          "ACCT_CURR_CYC_CREDIT",
+          "ACCT_CURR_CYC_DEBIT",
+          "ACCT_ADDR_ZIP",
+          "ACCT_GROUP_ID",
+          "FILLER"
+        ],
+        "transformation_type": "COBOL record layout -> StructType schema",
+        "transformation_rule_reference": null,
+        "source_reference": "app/cpy/CVACT01Y.cpy:4-17",
+        "field_mappings": [
+          {
+            "source_field": "ACCT-ID",
+            "picture": "9(11)",
+            "offset": 0,
+            "length": 11,
+            "target_field": "ACCT_ID",
+            "target_type": "LongType"
+          },
+          {
+            "source_field": "ACCT-ACTIVE-STATUS",
+            "picture": "X(01)",
+            "offset": 11,
+            "length": 1,
+            "target_field": "ACCT_ACTIVE_STATUS",
+            "target_type": "StringType"
+          },
+          {
+            "source_field": "ACCT-CURR-BAL",
+            "picture": "S9(10)V99",
+            "offset": 12,
+            "length": 12,
+            "target_field": "ACCT_CURR_BAL",
+            "target_type": "DecimalType(12,2)"
+          },
+          {
+            "source_field": "ACCT-CREDIT-LIMIT",
+            "picture": "S9(10)V99",
+            "offset": 24,
+            "length": 12,
+            "target_field": "ACCT_CREDIT_LIMIT",
+            "target_type": "DecimalType(12,2)"
+          },
+          {
+            "source_field": "ACCT-CASH-CREDIT-LIMIT",
+            "picture": "S9(10)V99",
+            "offset": 36,
+            "length": 12,
+            "target_field": "ACCT_CASH_CREDIT_LIMIT",
+            "target_type": "DecimalType(12,2)"
+          },
+          {
+            "source_field": "ACCT-OPEN-DATE",
+            "picture": "X(10)",
+            "offset": 48,
+            "length": 10,
+            "target_field": "ACCT_OPEN_DATE",
+            "target_type": "StringType"
+          },
+          {
+            "source_field": "ACCT-EXPIRAION-DATE",
+            "picture": "X(10)",
+            "offset": 58,
+            "length": 10,
+            "target_field": "ACCT_EXPIRAION_DATE",
+            "target_type": "StringType"
+          },
+          {
+            "source_field": "ACCT-REISSUE-DATE",
+            "picture": "X(10)",
+            "offset": 68,
+            "length": 10,
+            "target_field": "ACCT_REISSUE_DATE",
+            "target_type": "StringType"
+          },
+          {
+            "source_field": "ACCT-CURR-CYC-CREDIT",
+            "picture": "S9(10)V99",
+            "offset": 78,
+            "length": 12,
+            "target_field": "ACCT_CURR_CYC_CREDIT",
+            "target_type": "DecimalType(12,2)"
+          },
+          {
+            "source_field": "ACCT-CURR-CYC-DEBIT",
+            "picture": "S9(10)V99",
+            "offset": 90,
+            "length": 12,
+            "target_field": "ACCT_CURR_CYC_DEBIT",
+            "target_type": "DecimalType(12,2)"
+          },
+          {
+            "source_field": "ACCT-ADDR-ZIP",
+            "picture": "X(10)",
+            "offset": 102,
+            "length": 10,
+            "target_field": "ACCT_ADDR_ZIP",
+            "target_type": "StringType"
+          },
+          {
+            "source_field": "ACCT-GROUP-ID",
+            "picture": "X(10)",
+            "offset": 112,
+            "length": 10,
+            "target_field": "ACCT_GROUP_ID",
+            "target_type": "StringType"
+          },
+          {
+            "source_field": "FILLER",
+            "picture": "X(178)",
+            "offset": 122,
+            "length": 178,
+            "target_field": "FILLER",
+            "target_type": "StringType"
+          }
+        ]
+      },
+      {
+        "transformation_id": "T-002",
+        "source_component": "1000-ACCTFILE-GET-NEXT READ ACCTFILE-FILE INTO ACCOUNT-RECORD",
+        "source_fields": [
+          "FD-ACCT-ID"
+        ],
+        "target_fields": [
+          "ACCT_ID"
+        ],
+        "transformation_type": "READ FILE -> spark.read(); KSDS key order -> orderBy(ACCT_ID)",
+        "transformation_rule_reference": "CBACT01C-BR-001",
+        "source_reference": "app/cbl/CBACT01C.cbl:29-33,166"
+      },
+      {
+        "transformation_id": "T-003",
+        "source_component": "1100-DISPLAY-ACCT-RECORD + DISPLAY ACCOUNT-RECORD",
+        "source_fields": [
+          "ACCOUNT-RECORD"
+        ],
+        "target_fields": [
+          "sysout lines"
+        ],
+        "transformation_type": "DISPLAY -> print(); signed DISPLAY numerics rendered as 12 digits + trailing '+'/'-' (GnuCOBOL legacy rendering in golden files); group item as raw 300 bytes",
+        "transformation_rule_reference": "CBACT01C-BR-001",
+        "source_reference": "app/cbl/CBACT01C.cbl:151,200-213"
+      },
+      {
+        "transformation_id": "T-004",
+        "source_component": "1300-POPUL-ACCT-RECORD -> OUT-ACCT-REC",
+        "source_fields": [
+          "ACCT-*"
+        ],
+        "target_fields": [
+          "PSCOMP record"
+        ],
+        "transformation_type": "MOVE -> column projection; numerics re-encoded as zoned overpunch, cycle debit as COMP-3",
+        "transformation_rule_reference": "CBACT01C-BR-002",
+        "source_reference": "app/cbl/CBACT01C.cbl:215-240"
+      },
+      {
+        "transformation_id": "T-005",
+        "source_component": "COBDATFT (CODATECN type '2' -> outtype '2')",
+        "source_fields": [
+          "ACCT-REISSUE-DATE"
+        ],
+        "target_fields": [
+          "OUT-ACCT-REISSUE-DATE"
+        ],
+        "transformation_type": "HLASM date routine -> Python function cobdatft(): YYYY-MM-DD -> YYYYMMDD (positions 1-4, 6-7, 9-10), result padded to 10",
+        "transformation_rule_reference": "CBACT01C-BR-002",
+        "source_reference": [
+          "app/cbl/CBACT01C.cbl:226-233",
+          "app/asm/COBDATFT.asm:1-84"
+        ]
+      },
+      {
+        "transformation_id": "T-006",
+        "source_component": "IF ACCT-CURR-CYC-DEBIT EQUAL TO ZERO MOVE 2525.00",
+        "source_fields": [
+          "ACCT-CURR-CYC-DEBIT"
+        ],
+        "target_fields": [
+          "OUT-ACCT-CURR-CYC-DEBIT"
+        ],
+        "transformation_type": "IF -> sequential carry of the output record area: 2525.00 when zero, else previous record's value (initial binary zeros)",
+        "transformation_rule_reference": "CBACT01C-BR-003",
+        "source_reference": "app/cbl/CBACT01C.cbl:236-238"
+      },
+      {
+        "transformation_id": "T-007",
+        "source_component": "1400-POPUL-ARRAY-RECORD (INITIALIZE + OCCURS 5)",
+        "source_fields": [
+          "ACCT-ID",
+          "ACCT-CURR-BAL"
+        ],
+        "target_fields": [
+          "ARRYPS record"
+        ],
+        "transformation_type": "OCCURS -> ArrayType; INITIALIZE -> unsigned zoned zero / packed +0 / spaces",
+        "transformation_rule_reference": "CBACT01C-BR-004",
+        "source_reference": "app/cbl/CBACT01C.cbl:253-261"
+      },
+      {
+        "transformation_id": "T-008",
+        "source_component": "1500/1550/1575 VBRC records",
+        "source_fields": [
+          "ACCT-ID",
+          "ACCT-ACTIVE-STATUS",
+          "ACCT-CURR-BAL",
+          "ACCT-CREDIT-LIMIT",
+          "WS-ACCT-REISSUE-YYYY"
+        ],
+        "target_fields": [
+          "VBPS rec1 (12)",
+          "VBPS rec2 (39)"
+        ],
+        "transformation_type": "VB -> two layouts per account, union in emission order",
+        "transformation_rule_reference": "CBACT01C-BR-005",
+        "source_reference": "app/cbl/CBACT01C.cbl:276-315"
+      },
+      {
+        "transformation_id": "T-009",
+        "source_component": "9910-DISPLAY-IO-STATUS / 9999-ABEND-PROGRAM",
+        "source_fields": [
+          "*-STATUS",
+          "ABCODE"
+        ],
+        "target_fields": [
+          "sysout error lines",
+          "rc"
+        ],
+        "transformation_type": "Error branch -> DISPLAY messages + job failure with abend code 999 (CEE3ABD)",
+        "transformation_rule_reference": "CBACT01C-BR-006",
+        "source_reference": "app/cbl/CBACT01C.cbl:406-426"
+      },
+      {
+        "transformation_id": "T-010",
+        "source_component": "PREDEL EXEC PGM=IEFBR14 DISP=(MOD,DELETE,DELETE)",
+        "source_fields": [],
+        "target_fields": [],
+        "transformation_type": "IEFBR14 delete -> comment block only (PySpark output directory is overwritten by STEP05)",
+        "transformation_rule_reference": null,
+        "source_reference": "app/jcl/READACCT.jcl:22-28"
+      }
+    ],
+    "business_rule_mapping": [
+      {
+        "rule_id": "CBACT01C-BR-001",
+        "source_program": "CBACT01C",
+        "source_location": "app/cbl/CBACT01C.cbl:147-154,200-213",
+        "source_logic": "PERFORM UNTIL END-OF-FILE = 'Y' ... 1100-DISPLAY-ACCT-RECORD ... DISPLAY ACCOUNT-RECORD",
+        "pyspark_logic": "acctfile_df.orderBy('ACCT_ID').toLocalIterator() -> print() account block per row",
+        "target_processing_component": "READACCT.py: step05_cbact01c / account_listing",
+        "traceability_reference": "testRepo/analysis/BRE/CBACT01C.json",
+        "source_reference": "app/cbl/CBACT01C.cbl:147-154,200-213"
+      },
+      {
+        "rule_id": "CBACT01C-BR-002",
+        "source_program": "CBACT01C",
+        "source_location": "app/cbl/CBACT01C.cbl:215-251",
+        "source_logic": "MOVE fields TO OUT-ACCT-REC; CALL 'COBDATFT'; WRITE OUT-ACCT-REC",
+        "pyspark_logic": "pscomp_record(): bytes from zoned()/packed() encoders and cobdatft()",
+        "target_processing_component": "READACCT.py: pscomp_record / cobdatft",
+        "traceability_reference": "testRepo/analysis/BRE/CBACT01C.json",
+        "source_reference": "app/cbl/CBACT01C.cbl:215-251"
+      },
+      {
+        "rule_id": "CBACT01C-BR-003",
+        "source_program": "CBACT01C",
+        "source_location": "app/cbl/CBACT01C.cbl:236-238",
+        "source_logic": "IF ACCT-CURR-CYC-DEBIT EQUAL TO ZERO MOVE 2525.00 TO OUT-ACCT-CURR-CYC-DEBIT",
+        "pyspark_logic": "when(debit == 0, 2525.00).otherwise(previous record value) - sequential carry in driver loop",
+        "target_processing_component": "READACCT.py: pscomp_record (OutRecordArea)",
+        "traceability_reference": "testRepo/analysis/BRE/CBACT01C.json",
+        "source_reference": "app/cbl/CBACT01C.cbl:236-238"
+      },
+      {
+        "rule_id": "CBACT01C-BR-004",
+        "source_program": "CBACT01C",
+        "source_location": "app/cbl/CBACT01C.cbl:253-261",
+        "source_logic": "INITIALIZE ARR-ARRAY-REC; MOVE ... TO ARR-ACCT-CURR-BAL(n) / ARR-ACCT-CURR-CYC-DEBIT(n)",
+        "pyspark_logic": "arryps_record(): 5-entry array, entries 4-5 initialized",
+        "target_processing_component": "READACCT.py: arryps_record",
+        "traceability_reference": "testRepo/analysis/BRE/CBACT01C.json",
+        "source_reference": "app/cbl/CBACT01C.cbl:253-261"
+      },
+      {
+        "rule_id": "CBACT01C-BR-005",
+        "source_program": "CBACT01C",
+        "source_location": "app/cbl/CBACT01C.cbl:276-315",
+        "source_logic": "MOVE 12/39 TO WS-RECD-LEN; WRITE VBR-REC",
+        "pyspark_logic": "vbrc_records(): two strings per account in order",
+        "target_processing_component": "READACCT.py: vbrc_records",
+        "traceability_reference": "testRepo/analysis/BRE/CBACT01C.json",
+        "source_reference": "app/cbl/CBACT01C.cbl:276-315"
+      },
+      {
+        "rule_id": "CBACT01C-BR-006",
+        "source_program": "CBACT01C",
+        "source_location": "app/cbl/CBACT01C.cbl:165-198,317-410",
+        "source_logic": "file status checks -> 9910 + 9999-ABEND-PROGRAM",
+        "pyspark_logic": "AcctFileError raised on open/read/write failure -> DISPLAY message + 'ABENDING PROGRAM', rc 'U0999'",
+        "target_processing_component": "READACCT.py: AcctFileError / abend_program",
+        "traceability_reference": "testRepo/analysis/BRE/CBACT01C.json",
+        "source_reference": "app/cbl/CBACT01C.cbl:165-198,317-410"
+      },
+      {
+        "rule_id": "CBACT01C-BR-007",
+        "source_program": "CBACT01C",
+        "source_location": "app/cbl/CBACT01C.cbl:141,158",
+        "source_logic": "DISPLAY start / end banner",
+        "pyspark_logic": "print() before read and after close",
+        "target_processing_component": "READACCT.py: step05_cbact01c",
+        "traceability_reference": "testRepo/analysis/BRE/CBACT01C.json",
+        "source_reference": "app/cbl/CBACT01C.cbl:141,158"
+      }
+    ],
+    "processing_architecture": {
+      "ingestion_layer": {
+        "source_component": "ACCTFILE",
+        "target_component": "spark.read.format('cobol') (EBCDIC) or text reader (fixtures)",
+        "processing_pattern": "Fixed-length read",
+        "source_reference": "app/jcl/READACCT.jcl:35-36"
+      },
+      "transformation_layer": {
+        "source_component": "CBACT01C 1300/1400/1500",
+        "target_component": "record encoders (zoned overpunch, COMP-3, COBDATFT)",
+        "processing_pattern": "Sequential key-ordered per-record mapping with carried record area",
+        "source_reference": "app/cbl/CBACT01C.cbl:215-315"
+      },
+      "validation_layer": {
+        "source_component": "file status checks",
+        "target_component": "AcctFileError -> abend 999",
+        "processing_pattern": "Fail-fast",
+        "source_reference": "app/cbl/CBACT01C.cbl:165-410"
+      },
+      "output_layer": {
+        "source_component": "OUTFILE, ARRYFILE, VBRCFILE, SYSOUT",
+        "target_component": "datasets/*.txt, sysout/READACCT.STEP05.txt, rc.json",
+        "processing_pattern": "Ordered byte/text output",
+        "source_reference": "app/jcl/READACCT.jcl:37-49"
+      },
+      "orchestration_layer": {
+        "source_component": "JCL READACCT PREDEL, STEP05; CA-7 CLOSEFIL -> READACCT -> READCARD",
+        "target_component": "Prefect task READACCT (order 1)",
+        "processing_pattern": "One PySpark stage per JCL step",
+        "source_reference": [
+          "app/jcl/READACCT.jcl:22,32",
+          "app/scheduler/CardDemo.ca7:338-341,367"
+        ]
+      }
+    },
+    "dependency_mapping": [
+      {
+        "dependency_name": "READACCT -> IEFBR14",
+        "dependency_type": "job_to_program",
+        "migration_strategy": "PREDEL -> comment block (step rc 0)",
+        "traceability_reference": "app/jcl/READACCT.jcl:22"
+      },
+      {
+        "dependency_name": "READACCT -> CBACT01C",
+        "dependency_type": "job_to_program",
+        "migration_strategy": "STEP05 -> step05_cbact01c()",
+        "traceability_reference": "app/jcl/READACCT.jcl:32"
+      },
+      {
+        "dependency_name": "CBACT01C -> COBDATFT",
+        "dependency_type": "program_to_program",
+        "migration_strategy": "Python function cobdatft()",
+        "traceability_reference": "app/cbl/CBACT01C.cbl:231"
+      },
+      {
+        "dependency_name": "CBACT01C -> CEE3ABD",
+        "dependency_type": "program_to_program",
+        "migration_strategy": "abend_program() -> rc U0999",
+        "traceability_reference": "app/cbl/CBACT01C.cbl:410"
+      },
+      {
+        "dependency_name": "CBACT01C -> CVACT01Y",
+        "dependency_type": "program_to_dataset",
+        "migration_strategy": "Cobrix copybook + StructType",
+        "traceability_reference": "app/cbl/CBACT01C.cbl:89"
+      },
+      {
+        "dependency_name": "READACCT -> READCARD",
+        "dependency_type": "interface_dependencies",
+        "migration_strategy": "Prefect downstream dependency",
+        "traceability_reference": "app/scheduler/CardDemo.ca7:367"
+      }
+    ],
+    "interface_migration_specification": [
+      {
+        "interface_name": "COBDATFT",
+        "interface_type": "HLASM subroutine",
+        "source_component": "CBACT01C",
+        "target_component": "READACCT.py cobdatft()",
+        "migration_pattern": "Converted to Python; same validation (type/outtype combinations) and 'INVALID INPUT' message",
+        "source_reference": "app/asm/COBDATFT.asm"
+      },
+      {
+        "interface_name": "CEE3ABD",
+        "interface_type": "LE callable service",
+        "source_component": "CBACT01C",
+        "target_component": "READACCT.py abend_program()",
+        "migration_pattern": "Explicit failure: 'ABENDING PROGRAM', rc U0999, exit non-zero",
+        "source_reference": "app/cbl/CBACT01C.cbl:406-410"
+      }
+    ],
+    "runtime_configuration_specification": [
+      {
+        "parameter": "ACCTFILE",
+        "original_value": "AWS.M2.CARDDEMO.ACCTDATA.VSAM.KSDS",
+        "target_parameter": "--acctfile <path>",
+        "source_reference": "app/jcl/READACCT.jcl:35-36"
+      },
+      {
+        "parameter": "ACCTFILE record format",
+        "original_value": "EBCDIC fixed 300 (unload); ASCII lines in fixtures",
+        "target_parameter": "--acctfile-format ebcdic|text (default ebcdic)",
+        "source_reference": "tools/runjcl/chains.json:48"
+      },
+      {
+        "parameter": "copybook",
+        "original_value": "CVACT01Y",
+        "target_parameter": "--copybook <path>",
+        "source_reference": "app/cbl/CBACT01C.cbl:89"
+      },
+      {
+        "parameter": "OUTFILE/ARRYFILE/VBRCFILE + SYSOUT",
+        "original_value": "DSNs above, SYSOUT=*",
+        "target_parameter": "--output-dir <dir> (datasets/, sysout/, rc.json)",
+        "source_reference": "app/jcl/READACCT.jcl:37-49"
+      }
+    ],
+    "validation_specification": [
+      {
+        "validation_type": "Reconciliation Validation",
+        "validation_scope": "PSCOMP, ARRYPS, VBPS field-level + SYSOUT + rc",
+        "source_system": "fixtures/read-masters r01-populated, r02-empty",
+        "target_system": "READACCT.py",
+        "success_criteria": "tools/parity/compare.py --steps READACCT.PREDEL READACCT.STEP05 PASS",
+        "source_reference": "fixtures/read-masters/"
+      },
+      {
+        "validation_type": "Reconciliation Validation",
+        "validation_scope": "Cycle-debit carry, negative values, COBDATFT",
+        "source_system": "testRepo/tests/data/readacct_quirks (recorded with the GnuCOBOL harness)",
+        "target_system": "READACCT.py",
+        "success_criteria": "Byte-identical datasets and SYSOUT",
+        "source_reference": "testRepo/tests/data/readacct_quirks/"
+      },
+      {
+        "validation_type": "Record Count Validation",
+        "validation_scope": "EBCDIC master",
+        "source_system": "app/data/EBCDIC/AWS.M2.CARDDEMO.ACCTDATA.PS (50 records)",
+        "target_system": "READACCT.py",
+        "success_criteria": "50 records on PSCOMP and ARRYPS, 100 on VBPS",
+        "source_reference": "app/data/EBCDIC/AWS.M2.CARDDEMO.ACCTDATA.PS"
+      },
+      {
+        "validation_type": "Business Rule Validation",
+        "validation_scope": "CBACT01C-BR-001..007",
+        "source_system": "testRepo/analysis/BRE/CBACT01C.json",
+        "target_system": "READACCT.py",
+        "success_criteria": "Each rule has at least one passing test",
+        "source_reference": "testRepo/analysis/BRE/CBACT01C.json"
+      }
+    ],
+    "testing_specification": [
+      {
+        "test_category": "Unit Testing",
+        "test_scope": "encoders, cobdatft, schema, abend path",
+        "dependent_artifacts": [
+          "testRepo/analysis/BRE/CBACT01C.json",
+          "testRepo/pyspark/code/READACCT/READACCT.py"
+        ],
+        "traceability_reference": "CBACT01C-BR-001..007"
+      },
+      {
+        "test_category": "Reconciliation Testing",
+        "test_scope": "golden fixtures + quirk case + EBCDIC master",
+        "dependent_artifacts": [
+          "fixtures/read-masters/",
+          "testRepo/tests/data/readacct_quirks/"
+        ],
+        "traceability_reference": "validation_specification"
+      }
+    ],
+    "non_functional_requirements": {
+      "performance_requirements": [],
+      "availability_requirements": [],
+      "recovery_requirements": [],
+      "scheduling_requirements": [
+        {
+          "requirement": "READACCT triggered by CLOSEFIL; READACCT triggers READCARD (CA-7 SCHID=030)",
+          "source_reference": "app/scheduler/CardDemo.ca7:338-341,367"
+        }
+      ],
+      "operational_requirements": []
+    },
+    "deployment_specification": {
+      "deployment_units": [
+        "testRepo/pyspark/code/READACCT/READACCT.py"
+      ],
+      "execution_sequence": [
+        "READACCT.PREDEL (IEFBR14, comment only)",
+        "READACCT.STEP05 (CBACT01C)"
+      ],
+      "environment_dependencies": [
+        "Apache Spark 3.5.x / PySpark",
+        "Cobrix spark-cobol_2.12 (EBCDIC input)",
+        "Java 17"
+      ],
+      "configuration_dependencies": [
+        "app/cpy/CVACT01Y.cpy"
+      ]
+    },
+    "traceability_matrix": [
+      {
+        "source_artifact": "READACCT.jcl",
+        "source_type": "JCL",
+        "target_artifact": "testRepo/pyspark/code/READACCT/READACCT.py",
+        "target_type": "PySpark module",
+        "mapping_type": "JOB -> module",
+        "reference": "app/jcl/READACCT.jcl:1"
+      },
+      {
+        "source_artifact": "READACCT.PREDEL",
+        "source_type": "JCL STEP",
+        "target_artifact": "step_predel()",
+        "target_type": "comment-only stage",
+        "mapping_type": "STEP -> stage",
+        "reference": "app/jcl/READACCT.jcl:22"
+      },
+      {
+        "source_artifact": "READACCT.STEP05",
+        "source_type": "JCL STEP",
+        "target_artifact": "step05_cbact01c()",
+        "target_type": "PySpark processing stage",
+        "mapping_type": "STEP -> stage",
+        "reference": "app/jcl/READACCT.jcl:32"
+      },
+      {
+        "source_artifact": "CBACT01C.cbl",
+        "source_type": "COBOL",
+        "target_artifact": "step05_cbact01c()",
+        "target_type": "Python function",
+        "mapping_type": "PROGRAM -> function",
+        "reference": "app/cbl/CBACT01C.cbl"
+      },
+      {
+        "source_artifact": "COBDATFT.asm",
+        "source_type": "HLASM",
+        "target_artifact": "cobdatft()",
+        "target_type": "Python function",
+        "mapping_type": "ASM -> function",
+        "reference": "app/asm/COBDATFT.asm"
+      },
+      {
+        "source_artifact": "CVACT01Y.cpy",
+        "source_type": "Copybook",
+        "target_artifact": "ACCOUNT_RECORD_SCHEMA",
+        "target_type": "StructType",
+        "mapping_type": "Copybook -> schema",
+        "reference": "app/cpy/CVACT01Y.cpy"
+      },
+      {
+        "source_artifact": "AWS.M2.CARDDEMO.ACCTDATA.VSAM.KSDS",
+        "source_type": "VSAM KSDS",
+        "target_artifact": "acctfile_df",
+        "target_type": "DataFrame",
+        "mapping_type": "VSAM KSDS -> DataFrame",
+        "reference": "app/jcl/READACCT.jcl:35-36"
+      }
+    ],
+    "migration_constraints": {
+      "unresolved_dependencies": [],
+      "unsupported_components": [
+        {
+          "component": "CEE3ABD",
+          "reason": "LE callable service; replaced by explicit failure",
+          "source_reference": "app/cbl/CBACT01C.cbl:410"
+        },
+        {
+          "component": "IEFBR14 (PREDEL)",
+          "reason": "Dataset delete utility; comment block only",
+          "source_reference": "app/jcl/READACCT.jcl:22"
+        },
+        {
+          "component": "STEPLIB DD",
+          "reason": "Load library; comment block only",
+          "source_reference": "app/jcl/READACCT.jcl:33-34"
+        }
+      ],
+      "migration_risks": [
+        {
+          "risk": "Cycle debit is not moved when non-zero, so the extract carries the previous record's value; reproduced as legacy behaviour (docs: AGENTS.md 'Legacy quirks are features')",
+          "source_reference": "app/cbl/CBACT01C.cbl:236-238"
+        },
+        {
+          "risk": "SYSOUT signed-numeric rendering and the trailing libcob 'implicit CLOSE' warnings come from the GnuCOBOL off-host harness that produced the golden files",
+          "source_reference": "fixtures/read-masters/r01-populated/expected/sysout/READACCT.STEP05.txt"
+        },
+        {
+          "risk": "VSAM file status codes have no Spark equivalent; failures map to abend 999 without the original status digits",
+          "source_reference": "app/cbl/CBACT01C.cbl:413-426"
+        }
+      ],
+      "implementation_constraints": [
+        {
+          "constraint": "Copybooks are tab-indented; expand tabs before Cobrix",
+          "source_reference": "AGENTS.md (Gotchas)"
+        },
+        {
+          "constraint": "Zoned overpunch uses ASCII sign characters {A-I / }J-R (compile flag -fsign=EBCDIC)",
+          "source_reference": "AGENTS.md (Gotchas)"
+        }
+      ]
+    },
+    "complexity_summary": {
+      "complexity_rating": "MEDIUM",
+      "dependency_complexity": "LOW",
+      "integration_complexity": "LOW",
+      "transformation_complexity": "MEDIUM",
+      "source_reference": "testRepo/analysis/TechSummary/technical_summary.json"
+    },
+    "conflict_details": [],
+    "confidence_level": "HIGH"
+  }
+}

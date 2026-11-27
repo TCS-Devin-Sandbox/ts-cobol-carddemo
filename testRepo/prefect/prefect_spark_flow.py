@@ -16,6 +16,7 @@ Environment:
   SPARK_SUBMIT   spark-submit executable (default: spark-submit on PATH)
   SPARK_MASTER   Spark master URL (default: local[*])
   COBRIX_JARS    comma-separated Cobrix jars (spark-cobol, cobol-parser, scodec, shapeless)
+  READACCT_ACCTFILE, READACCT_ACCTFILE_FORMAT, READACCT_OUTPUT_DIR
   READCARD_CARDFILE, READCARD_CARDFILE_FORMAT, READCARD_OUTPUT_DIR
 """
 
@@ -35,6 +36,11 @@ JOB_SEQUENCE = [
 ]
 
 JOB_ARGS = {
+    "READACCT": lambda: [
+        "--acctfile", os.environ.get("READACCT_ACCTFILE", str(REPO_ROOT / "app/data/EBCDIC/AWS.M2.CARDDEMO.ACCTDATA.PS")),
+        "--acctfile-format", os.environ.get("READACCT_ACCTFILE_FORMAT", "ebcdic"),
+        "--output-dir", os.environ.get("READACCT_OUTPUT_DIR", str(REPO_ROOT / "testRepo/run_output/READACCT")),
+    ],
     "READCARD": lambda: [
         "--cardfile", os.environ.get("READCARD_CARDFILE", str(REPO_ROOT / "app/data/EBCDIC/AWS.M2.CARDDEMO.CARDDATA.PS")),
         "--cardfile-format", os.environ.get("READCARD_CARDFILE_FORMAT", "ebcdic"),

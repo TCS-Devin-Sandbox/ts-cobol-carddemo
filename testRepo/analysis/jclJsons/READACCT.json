@@ -1,0 +1,571 @@
+{
+  "job_name": "READACCT",
+  "app_name": null,
+  "inventory_summary": {
+    "total_steps": 2,
+    "total_dd_statements_used": 10,
+    "unique_datasets": 5,
+    "vsam_used": true,
+    "vsam_dataset_count": 1,
+    "tape_dataset_count": 0,
+    "temporary_dataset_count": 0,
+    "gdg_plus1_used": false,
+    "unique_gdg_plus1_count": 0,
+    "business_context_classified": true,
+    "db2_used": false,
+    "ims_used": false,
+    "cics_used": false,
+    "external_interface_used": false,
+    "external_interface_count": 0,
+    "upstream_interface_count": 0,
+    "downstream_interface_count": 0,
+    "restartable_steps": 0,
+    "entry_program_count": 1,
+    "utility_step_count": 1,
+    "unique_utility_program_count": 1,
+    "runtime_program_count": 0,
+    "application_program_count": 1,
+    "system_program_count": 1,
+    "proc_used": false,
+    "symbolics_used": true,
+    "unresolved_reference_count": 0,
+    "niche_program_count": 0,
+    "niche_technology_used": false,
+    "niche_technology_types": [],
+    "niche_technology_detection_count": 0,
+    "niche_technology_risk_indicator": "NONE",
+    "missing_component_detected": false,
+    "missing_component_count": 0,
+    "components_found": 1,
+    "components_not_found": 0,
+    "external_components": 0,
+    "system_components": 1,
+    "repository_completeness_percentage": 100,
+    "jcl_complexity_score": 20,
+    "jcl_complexity_rating": "LOW"
+  },
+  "repository_validation": {
+    "repository_validation_performed": true,
+    "total_components_referenced": 2,
+    "components_found": 1,
+    "components_not_found": 0,
+    "external_components": 0,
+    "system_components": 1,
+    "repository_completeness_percentage": 100
+  },
+  "complexity_assessment": {
+    "jcl_complexity_score": 20,
+    "complexity_rating": "LOW",
+    "complexity_drivers": [
+      "EXEC Step x2 (PREDEL, STEP05) = 4",
+      "Dataset x5 (AWS.M2.CARDDEMO.LOADLIB, AWS.M2.CARDDEMO.ACCTDATA.VSAM.KSDS, AWS.M2.CARDDEMO.ACCTDATA.PSCOMP, AWS.M2.CARDDEMO.ACCTDATA.ARRYPS, AWS.M2.CARDDEMO.ACCTDATA.VBPS) = 5",
+      "VSAM Dataset x1 (AWS.M2.CARDDEMO.ACCTDATA.VSAM.KSDS) = 2",
+      "New catalogued dataset x3 (PSCOMP, ARRYPS, VBPS) = 3",
+      "Utility Step x1 (IEFBR14) = 1",
+      "Entry Program x1 (CBACT01C) = 4",
+      "Symbolic Variable x1 (&SYSUID) = 1"
+    ],
+    "complexity_breakdown": {
+      "structural_complexity": 4,
+      "dataset_complexity": 10,
+      "processing_complexity": 5,
+      "integration_complexity": 0,
+      "operational_complexity": 1
+    }
+  },
+  "business_context": {
+    "business_capability": null,
+    "business_process": null,
+    "business_function": "Run the program that reads the account master VSAM file",
+    "classification_confidence": "LOW",
+    "classification_evidence": [
+      "app/jcl/READACCT.jcl:30 //* RUN THE PROGRAM THAT READS THE ACCOUNT MASTER VSAM FILE",
+      "app/jcl/READACCT.jcl:20 //* PRE DELETE STEP"
+    ]
+  },
+  "job_card": {
+    "job_name": "READACCT",
+    "accounting_information": "'READACCT'",
+    "region": "8M",
+    "class": "A",
+    "msgclass": "H",
+    "notify": "&SYSUID",
+    "source_reference": "app/jcl/READACCT.jcl:1-2"
+  },
+  "gdg_plus1_inventory": [],
+  "interface_inventory": [],
+  "niche_program_calls": [],
+  "entry_programs": [
+    {
+      "program_name": "CBACT01C",
+      "step_name": "STEP05",
+      "invocation_type": "EXEC PGM",
+      "component_classification": "APPLICATION_PROGRAM",
+      "entry_program": true,
+      "source_found": true,
+      "reference_location": "app/jcl/READACCT.jcl:32",
+      "component_status": "FOUND"
+    }
+  ],
+  "utility_programs": [
+    {
+      "program_name": "IEFBR14",
+      "step_name": "PREDEL",
+      "invocation_type": "EXEC PGM",
+      "component_classification": "SYSTEM_UTILITY",
+      "entry_program": false,
+      "source_found": false,
+      "reference_location": "app/jcl/READACCT.jcl:22",
+      "component_status": "SYSTEM"
+    }
+  ],
+  "component_not_found": [],
+  "unresolved_references": [],
+  "symbolics": {
+    "set_variables": [],
+    "referenced_variables": [
+      {
+        "ref_name": "&SYSUID",
+        "resolved_value": null,
+        "reference_count": 1,
+        "reference_locations": [
+          "app/jcl/READACCT.jcl:2"
+        ]
+      }
+    ]
+  },
+  "steps": [
+    {
+      "step_name": "PREDEL",
+      "program": "IEFBR14",
+      "proc": null,
+      "conditions": null,
+      "entry_program": false,
+      "niche_technology": {
+        "niche_detected": false,
+        "technology_type": null,
+        "detection_source": null
+      },
+      "component_references": [
+        {
+          "component_name": "IEFBR14",
+          "component_type": "IBM_UTILITY",
+          "component_classification": "SYSTEM_UTILITY",
+          "reference_type": "EXEC PGM",
+          "reference_location": "app/jcl/READACCT.jcl:22",
+          "source_found": false,
+          "component_status": "SYSTEM"
+        }
+      ],
+      "external_interfaces": [],
+      "datasets": [
+        {
+          "dd_used": true,
+          "dd_used_reason": "Pre-delete of STEP05 output",
+          "ddname": "DD01",
+          "dataset_name_original": "AWS.M2.CARDDEMO.ACCTDATA.PSCOMP",
+          "dataset_name": "AWS.M2.CARDDEMO.ACCTDATA.PSCOMP",
+          "gdg_plus1": false,
+          "gdg_name": null,
+          "symbolic_resolution": {},
+          "type": "PS",
+          "role_io": "DELETE",
+          "temp_flag": false,
+          "rpt_ctl": null,
+          "disposition": "(MOD,DELETE,DELETE)",
+          "dcb": {
+            "recfm": null,
+            "lrecl": null,
+            "blksize": null
+          },
+          "sms": {
+            "storclas": null,
+            "mgmtclas": null,
+            "dataclas": null
+          },
+          "space": null,
+          "unit": null,
+          "volume": null,
+          "source_reference": "app/jcl/READACCT.jcl:23-24"
+        },
+        {
+          "dd_used": true,
+          "dd_used_reason": "Pre-delete of STEP05 output",
+          "ddname": "DD02",
+          "dataset_name_original": "AWS.M2.CARDDEMO.ACCTDATA.ARRYPS",
+          "dataset_name": "AWS.M2.CARDDEMO.ACCTDATA.ARRYPS",
+          "gdg_plus1": false,
+          "gdg_name": null,
+          "symbolic_resolution": {},
+          "type": "PS",
+          "role_io": "DELETE",
+          "temp_flag": false,
+          "rpt_ctl": null,
+          "disposition": "(MOD,DELETE,DELETE)",
+          "dcb": {
+            "recfm": null,
+            "lrecl": null,
+            "blksize": null
+          },
+          "sms": {
+            "storclas": null,
+            "mgmtclas": null,
+            "dataclas": null
+          },
+          "space": null,
+          "unit": null,
+          "volume": null,
+          "source_reference": "app/jcl/READACCT.jcl:25-26"
+        },
+        {
+          "dd_used": true,
+          "dd_used_reason": "Pre-delete of STEP05 output",
+          "ddname": "DD03",
+          "dataset_name_original": "AWS.M2.CARDDEMO.ACCTDATA.VBPS",
+          "dataset_name": "AWS.M2.CARDDEMO.ACCTDATA.VBPS",
+          "gdg_plus1": false,
+          "gdg_name": null,
+          "symbolic_resolution": {},
+          "type": "PS",
+          "role_io": "DELETE",
+          "temp_flag": false,
+          "rpt_ctl": null,
+          "disposition": "(MOD,DELETE,DELETE)",
+          "dcb": {
+            "recfm": null,
+            "lrecl": null,
+            "blksize": null
+          },
+          "sms": {
+            "storclas": null,
+            "mgmtclas": null,
+            "dataclas": null
+          },
+          "space": null,
+          "unit": null,
+          "volume": null,
+          "source_reference": "app/jcl/READACCT.jcl:27-28"
+        }
+      ],
+      "db2": {
+        "db2_used": false,
+        "program": null,
+        "plan": null,
+        "package": null,
+        "subsystem": null,
+        "libraries": [],
+        "utility_type": null,
+        "sql_statements": null
+      },
+      "ims": {
+        "ims_used": false,
+        "program": null,
+        "psb": null,
+        "region_type": null,
+        "dbd_names": [],
+        "pcb_names": [],
+        "libraries": {
+          "psblib": null,
+          "dbdlib": null,
+          "acblib": null,
+          "reslib": null
+        },
+        "datasets": [],
+        "control_statements": []
+      },
+      "cics": {
+        "cics_used": false,
+        "cics_resources": [],
+        "cics_evidence": []
+      },
+      "restart_checkpoint": {
+        "restartable": false,
+        "checkpoint_used": false,
+        "checkpoint_reference": null,
+        "restart_parameter": null,
+        "restart_evidence": []
+      },
+      "utility": {
+        "utility_used": true,
+        "utility_name": "IEFBR14",
+        "utility_category": "IBM_UTILITY",
+        "utility_subcategory": "DATASET_ALLOCATION_DELETE",
+        "sysin_content": null
+      }
+    },
+    {
+      "step_name": "STEP05",
+      "program": "CBACT01C",
+      "proc": null,
+      "conditions": null,
+      "entry_program": true,
+      "niche_technology": {
+        "niche_detected": false,
+        "technology_type": null,
+        "detection_source": null
+      },
+      "component_references": [
+        {
+          "component_name": "CBACT01C",
+          "component_type": "COBOL_PROGRAM",
+          "component_classification": "APPLICATION_PROGRAM",
+          "reference_type": "EXEC PGM",
+          "reference_location": "app/jcl/READACCT.jcl:32",
+          "source_found": true,
+          "component_status": "FOUND"
+        }
+      ],
+      "external_interfaces": [],
+      "datasets": [
+        {
+          "dd_used": true,
+          "dd_used_reason": "DSN present",
+          "ddname": "STEPLIB",
+          "dataset_name_original": "AWS.M2.CARDDEMO.LOADLIB",
+          "dataset_name": "AWS.M2.CARDDEMO.LOADLIB",
+          "gdg_plus1": false,
+          "gdg_name": null,
+          "symbolic_resolution": {},
+          "type": "LOAD_LIBRARY",
+          "role_io": "INPUT",
+          "temp_flag": false,
+          "rpt_ctl": null,
+          "disposition": "SHR",
+          "dcb": {
+            "recfm": null,
+            "lrecl": null,
+            "blksize": null
+          },
+          "sms": {
+            "storclas": null,
+            "mgmtclas": null,
+            "dataclas": null
+          },
+          "space": null,
+          "unit": null,
+          "volume": null,
+          "source_reference": "app/jcl/READACCT.jcl:33-34"
+        },
+        {
+          "dd_used": true,
+          "dd_used_reason": "DSN present",
+          "ddname": "ACCTFILE",
+          "dataset_name_original": "AWS.M2.CARDDEMO.ACCTDATA.VSAM.KSDS",
+          "dataset_name": "AWS.M2.CARDDEMO.ACCTDATA.VSAM.KSDS",
+          "gdg_plus1": false,
+          "gdg_name": null,
+          "symbolic_resolution": {},
+          "type": "VSAM_KSDS",
+          "role_io": "INPUT",
+          "temp_flag": false,
+          "rpt_ctl": null,
+          "disposition": "SHR",
+          "dcb": {
+            "recfm": null,
+            "lrecl": null,
+            "blksize": null
+          },
+          "sms": {
+            "storclas": null,
+            "mgmtclas": null,
+            "dataclas": null
+          },
+          "space": null,
+          "unit": null,
+          "volume": null,
+          "source_reference": "app/jcl/READACCT.jcl:35-36"
+        },
+        {
+          "dd_used": true,
+          "dd_used_reason": "DSN present",
+          "ddname": "OUTFILE",
+          "dataset_name_original": "AWS.M2.CARDDEMO.ACCTDATA.PSCOMP",
+          "dataset_name": "AWS.M2.CARDDEMO.ACCTDATA.PSCOMP",
+          "gdg_plus1": false,
+          "gdg_name": null,
+          "symbolic_resolution": {},
+          "type": "PS",
+          "role_io": "OUTPUT",
+          "temp_flag": false,
+          "rpt_ctl": null,
+          "disposition": "(NEW,CATLG,DELETE)",
+          "dcb": {
+            "recfm": "FB",
+            "lrecl": 107,
+            "blksize": 0
+          },
+          "sms": {
+            "storclas": null,
+            "mgmtclas": null,
+            "dataclas": null
+          },
+          "space": "CYL,(1,2),RLSE",
+          "unit": "SYSAD",
+          "volume": null,
+          "source_reference": "app/jcl/READACCT.jcl:37-40"
+        },
+        {
+          "dd_used": true,
+          "dd_used_reason": "DSN present",
+          "ddname": "ARRYFILE",
+          "dataset_name_original": "AWS.M2.CARDDEMO.ACCTDATA.ARRYPS",
+          "dataset_name": "AWS.M2.CARDDEMO.ACCTDATA.ARRYPS",
+          "gdg_plus1": false,
+          "gdg_name": null,
+          "symbolic_resolution": {},
+          "type": "PS",
+          "role_io": "OUTPUT",
+          "temp_flag": false,
+          "rpt_ctl": null,
+          "disposition": "(NEW,CATLG,DELETE)",
+          "dcb": {
+            "recfm": "FB",
+            "lrecl": 110,
+            "blksize": 0
+          },
+          "sms": {
+            "storclas": null,
+            "mgmtclas": null,
+            "dataclas": null
+          },
+          "space": "CYL,(1,2),RLSE",
+          "unit": "SYSAD",
+          "volume": null,
+          "source_reference": "app/jcl/READACCT.jcl:41-44"
+        },
+        {
+          "dd_used": true,
+          "dd_used_reason": "DSN present",
+          "ddname": "VBRCFILE",
+          "dataset_name_original": "AWS.M2.CARDDEMO.ACCTDATA.VBPS",
+          "dataset_name": "AWS.M2.CARDDEMO.ACCTDATA.VBPS",
+          "gdg_plus1": false,
+          "gdg_name": null,
+          "symbolic_resolution": {},
+          "type": "PS",
+          "role_io": "OUTPUT",
+          "temp_flag": false,
+          "rpt_ctl": null,
+          "disposition": "(NEW,CATLG,DELETE)",
+          "dcb": {
+            "recfm": "VB",
+            "lrecl": 84,
+            "blksize": 0
+          },
+          "sms": {
+            "storclas": null,
+            "mgmtclas": null,
+            "dataclas": null
+          },
+          "space": "CYL,(1,2),RLSE",
+          "unit": "SYSAD",
+          "volume": null,
+          "source_reference": "app/jcl/READACCT.jcl:45-48"
+        },
+        {
+          "dd_used": true,
+          "dd_used_reason": "SYSOUT present",
+          "ddname": "SYSOUT",
+          "dataset_name_original": null,
+          "dataset_name": null,
+          "gdg_plus1": false,
+          "gdg_name": null,
+          "symbolic_resolution": {},
+          "type": "SYSOUT",
+          "role_io": "OUTPUT",
+          "temp_flag": false,
+          "rpt_ctl": "RPT",
+          "disposition": null,
+          "dcb": {
+            "recfm": null,
+            "lrecl": null,
+            "blksize": null
+          },
+          "sms": {
+            "storclas": null,
+            "mgmtclas": null,
+            "dataclas": null
+          },
+          "space": null,
+          "unit": null,
+          "volume": null,
+          "source_reference": "app/jcl/READACCT.jcl:49"
+        },
+        {
+          "dd_used": true,
+          "dd_used_reason": "SYSOUT present",
+          "ddname": "SYSPRINT",
+          "dataset_name_original": null,
+          "dataset_name": null,
+          "gdg_plus1": false,
+          "gdg_name": null,
+          "symbolic_resolution": {},
+          "type": "SYSOUT",
+          "role_io": "OUTPUT",
+          "temp_flag": false,
+          "rpt_ctl": "RPT",
+          "disposition": null,
+          "dcb": {
+            "recfm": null,
+            "lrecl": null,
+            "blksize": null
+          },
+          "sms": {
+            "storclas": null,
+            "mgmtclas": null,
+            "dataclas": null
+          },
+          "space": null,
+          "unit": null,
+          "volume": null,
+          "source_reference": "app/jcl/READACCT.jcl:50"
+        }
+      ],
+      "db2": {
+        "db2_used": false,
+        "program": null,
+        "plan": null,
+        "package": null,
+        "subsystem": null,
+        "libraries": [],
+        "utility_type": null,
+        "sql_statements": null
+      },
+      "ims": {
+        "ims_used": false,
+        "program": null,
+        "psb": null,
+        "region_type": null,
+        "dbd_names": [],
+        "pcb_names": [],
+        "libraries": {
+          "psblib": null,
+          "dbdlib": null,
+          "acblib": null,
+          "reslib": null
+        },
+        "datasets": [],
+        "control_statements": []
+      },
+      "cics": {
+        "cics_used": false,
+        "cics_resources": [],
+        "cics_evidence": []
+      },
+      "restart_checkpoint": {
+        "restartable": false,
+        "checkpoint_used": false,
+        "checkpoint_reference": null,
+        "restart_parameter": null,
+        "restart_evidence": []
+      },
+      "utility": {
+        "utility_used": false,
+        "utility_name": null,
+        "utility_category": null,
+        "utility_subcategory": null,
+        "sysin_content": null
+      }
+    }
+  ]
+}
