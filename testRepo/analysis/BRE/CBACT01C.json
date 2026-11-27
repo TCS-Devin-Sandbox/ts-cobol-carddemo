@@ -1,0 +1,303 @@
+{
+  "business_summary": {
+    "program_name": "CBACT01C",
+    "program_description": "Read the account file and write into files.",
+    "business_objective": "Read the account master and produce an account listing plus three account extract files.",
+    "business_outcome": "Every account is printed on SYSOUT and written to the PSCOMP, ARRYPS and VBPS extract datasets in account-id order.",
+    "confidence_level": "MEDIUM",
+    "evidence": [
+      "app/cbl/CBACT01C.cbl:5 * FUNCTION    : READ THE ACCOUNT FILE AND WRITE INTO FILES.",
+      "app/jcl/READACCT.jcl:30 //* RUN THE PROGRAM THAT READS THE ACCOUNT MASTER VSAM FILE"
+    ]
+  },
+  "business_process_summary": [
+    {
+      "step": 1,
+      "description": "Read account record",
+      "source_reference": "app/cbl/CBACT01C.cbl:166"
+    },
+    {
+      "step": 2,
+      "description": "Print account details",
+      "source_reference": "app/cbl/CBACT01C.cbl:200-213"
+    },
+    {
+      "step": 3,
+      "description": "Write account extract record",
+      "source_reference": "app/cbl/CBACT01C.cbl:215-251"
+    },
+    {
+      "step": 4,
+      "description": "Write account balance array record",
+      "source_reference": "app/cbl/CBACT01C.cbl:253-274"
+    },
+    {
+      "step": 5,
+      "description": "Write two variable-length account records",
+      "source_reference": "app/cbl/CBACT01C.cbl:276-315"
+    },
+    {
+      "step": 6,
+      "description": "Repeat until end of account file",
+      "source_reference": "app/cbl/CBACT01C.cbl:147"
+    }
+  ],
+  "business_entities": [
+    {
+      "entity_name": "Account",
+      "source_structure": "ACCOUNT-RECORD",
+      "record_length": 300,
+      "source_reference": "app/cpy/CVACT01Y.cpy:2-4",
+      "source_snippet": "Data-structure for  account entity (RECLN 300) / 01  ACCOUNT-RECORD."
+    }
+  ],
+  "business_data_elements": [
+    {
+      "element_name": "ACCT-ID",
+      "picture": "9(11)",
+      "usage_in_rule": "Record key; processing order and key of every output record",
+      "rule_ids": [
+        "CBACT01C-BR-001",
+        "CBACT01C-BR-002",
+        "CBACT01C-BR-004",
+        "CBACT01C-BR-005"
+      ],
+      "source_reference": "app/cpy/CVACT01Y.cpy:5"
+    },
+    {
+      "element_name": "ACCT-CURR-BAL",
+      "picture": "S9(10)V99",
+      "usage_in_rule": "Copied to PSCOMP, ARRYPS entries 1-2 and VBPS record 2",
+      "rule_ids": [
+        "CBACT01C-BR-002",
+        "CBACT01C-BR-004",
+        "CBACT01C-BR-005"
+      ],
+      "source_reference": "app/cpy/CVACT01Y.cpy:7"
+    },
+    {
+      "element_name": "ACCT-CURR-CYC-DEBIT",
+      "picture": "S9(10)V99",
+      "usage_in_rule": "Zero triggers the 2525.00 default",
+      "rule_ids": [
+        "CBACT01C-BR-003"
+      ],
+      "source_reference": "app/cpy/CVACT01Y.cpy:14"
+    },
+    {
+      "element_name": "ACCT-REISSUE-DATE",
+      "picture": "X(10)",
+      "usage_in_rule": "Reformatted to YYYYMMDD; year goes to VBPS record 2",
+      "rule_ids": [
+        "CBACT01C-BR-002",
+        "CBACT01C-BR-005"
+      ],
+      "source_reference": "app/cpy/CVACT01Y.cpy:12"
+    }
+  ],
+  "business_rules": [
+    {
+      "rule_id": "CBACT01C-BR-001",
+      "rule_name": "Print account details for every account",
+      "rule_category": "Reporting Rule",
+      "business_description": "For each account read from the account master, in account-id order, the job prints the account's fields one per line, a separator line, the two variable-record images and then the full 300-byte account record.",
+      "condition": "END-OF-FILE = 'N' after 1000-ACCTFILE-GET-NEXT",
+      "action": "PERFORM 1100-DISPLAY-ACCT-RECORD; DISPLAY 'VBRC-REC1:' / 'VBRC-REC2:'; DISPLAY ACCOUNT-RECORD",
+      "outcome": "16 SYSOUT lines per account",
+      "acceptance_criteria": {
+        "given": "the account master holds N accounts",
+        "when": "READACCT runs",
+        "then": "SYSOUT holds N account blocks in ascending ACCT-ID order, each ending with the 300-byte account record"
+      },
+      "decision_table": [
+        {
+          "condition": "read status '00'",
+          "action": "print account block",
+          "source_reference": "app/cbl/CBACT01C.cbl:167-169"
+        },
+        {
+          "condition": "read status '10'",
+          "action": "no print; leave loop",
+          "source_reference": "app/cbl/CBACT01C.cbl:180-181"
+        }
+      ],
+      "source_reference": "app/cbl/CBACT01C.cbl:147-154,200-213",
+      "source_snippet": "PERFORM UNTIL END-OF-FILE = 'Y' IF  END-OF-FILE = 'N' PERFORM 1000-ACCTFILE-GET-NEXT IF  END-OF-FILE = 'N' DISPLAY ACCOUNT-RECORD END-IF END-IF END-PERFORM.",
+      "confidence_level": "HIGH"
+    },
+    {
+      "rule_id": "CBACT01C-BR-002",
+      "rule_name": "Account extract record",
+      "rule_category": "Transformation Rule",
+      "business_description": "Every account produces one 107-byte extract record (PSCOMP) holding id, status, balance, credit limits, open/expiry dates, cycle credit and group id; the reissue date is converted from YYYY-MM-DD to YYYYMMDD by COBDATFT.",
+      "condition": null,
+      "action": "MOVE account fields TO OUT-ACCT-REC; CALL 'COBDATFT' (type '2' -> outtype '2'); WRITE OUT-ACCT-REC",
+      "outcome": "One PSCOMP record per account",
+      "acceptance_criteria": {
+        "given": "an account with reissue date 2026-12-31",
+        "when": "READACCT runs",
+        "then": "its PSCOMP record holds reissue date '20261231  ' and the same id, status, balance and limits"
+      },
+      "decision_table": [],
+      "source_reference": "app/cbl/CBACT01C.cbl:215-251",
+      "source_snippet": "1300-POPUL-ACCT-RECORD. MOVE   ACCT-ID                 TO   OUT-ACCT-ID. MOVE   ACCT-ACTIVE-STATUS      TO   OUT-ACCT-ACTIVE-STATUS. MOVE   ACCT-CURR-BAL           TO   OUT-ACCT-CURR-BAL. MOVE   ACCT-CREDIT-LIMIT       TO   OUT-ACCT-CREDIT-LIMIT. MOVE   ACCT-CASH-CREDIT-LIMIT  TO OUT-ACCT-CASH-CREDIT-LIMIT. MOVE   ACCT-OPEN-DATE          TO   OUT-ACCT-OPEN-DATE. MOVE   ACCT-EXPIRAION-DATE     TO   OUT-ACCT-EXPIRAION-DATE. MOVE   ACCT-REISSUE-DATE       TO   CODATECN-INP-DATE WS-REISSUE-DATE. MOVE   '2'                     TO   CODATECN-TYPE. MOVE   '2'                     TO   CODATECN-OUTTYPE. CALL 'COBDATFT'       USING CODATECN-REC. MOVE   CODATECN-0UT-DATE       TO   OUT-ACCT-REISSUE-DATE.",
+      "confidence_level": "HIGH"
+    },
+    {
+      "rule_id": "CBACT01C-BR-003",
+      "rule_name": "Default cycle debit when zero",
+      "rule_category": "Calculation Rule",
+      "business_description": "When the account's current-cycle debit is zero the extract record carries a cycle debit of 2525.00. When it is not zero the program does not move it, so the extract keeps the value left in the output record area by the previous account (binary zeros for the first record).",
+      "condition": "ACCT-CURR-CYC-DEBIT = 0",
+      "action": "MOVE 2525.00 TO OUT-ACCT-CURR-CYC-DEBIT",
+      "outcome": "Packed cycle debit 2525.00, or the previous record's value when the debit is not zero",
+      "acceptance_criteria": {
+        "given": "accounts whose cycle debits are 777.00, 0, 1234.56",
+        "when": "READACCT runs",
+        "then": "their PSCOMP cycle debits are binary zeros, 2525.00 and 2525.00"
+      },
+      "decision_table": [
+        {
+          "condition": "ACCT-CURR-CYC-DEBIT = 0",
+          "action": "OUT-ACCT-CURR-CYC-DEBIT = 2525.00",
+          "source_reference": "app/cbl/CBACT01C.cbl:236-238"
+        },
+        {
+          "condition": "ACCT-CURR-CYC-DEBIT <> 0",
+          "action": "OUT-ACCT-CURR-CYC-DEBIT not moved (previous record value retained)",
+          "source_reference": "app/cbl/CBACT01C.cbl:236-238"
+        }
+      ],
+      "source_reference": "app/cbl/CBACT01C.cbl:236-238",
+      "source_snippet": "IF  ACCT-CURR-CYC-DEBIT EQUAL TO ZERO MOVE 2525.00         TO   OUT-ACCT-CURR-CYC-DEBIT END-IF.",
+      "confidence_level": "HIGH"
+    },
+    {
+      "rule_id": "CBACT01C-BR-004",
+      "rule_name": "Account balance array record",
+      "rule_category": "Transformation Rule",
+      "business_description": "Every account produces one 110-byte array record (ARRYPS): entries 1 and 2 carry the current balance with cycle debits 1005.00 and 1525.00, entry 3 carries fixed balance -1025.00 and debit -2500.00, and entries 4 and 5 are zero.",
+      "condition": null,
+      "action": "INITIALIZE ARR-ARRAY-REC; MOVE values per entry; WRITE ARR-ARRAY-REC",
+      "outcome": "One ARRYPS record per account",
+      "acceptance_criteria": {
+        "given": "an account with balance 500.00",
+        "when": "READACCT runs",
+        "then": "its ARRYPS record holds (500.00,1005.00),(500.00,1525.00),(-1025.00,-2500.00),(0,0),(0,0)"
+      },
+      "decision_table": [],
+      "source_reference": "app/cbl/CBACT01C.cbl:253-261",
+      "source_snippet": "1400-POPUL-ARRAY-RECORD. MOVE   ACCT-ID         TO   ARR-ACCT-ID. MOVE   ACCT-CURR-BAL   TO   ARR-ACCT-CURR-BAL(1). MOVE   1005.00         TO   ARR-ACCT-CURR-CYC-DEBIT(1). MOVE   ACCT-CURR-BAL   TO   ARR-ACCT-CURR-BAL(2). MOVE   1525.00         TO   ARR-ACCT-CURR-CYC-DEBIT(2). MOVE   -1025.00        TO   ARR-ACCT-CURR-BAL(3). MOVE   -2500.00        TO   ARR-ACCT-CURR-CYC-DEBIT(3). EXIT.",
+      "confidence_level": "HIGH"
+    },
+    {
+      "rule_id": "CBACT01C-BR-005",
+      "rule_name": "Two variable-length records per account",
+      "rule_category": "Transformation Rule",
+      "business_description": "Every account produces two records on the variable-length file (VBPS): a 12-byte record with account id and active status, then a 39-byte record with account id, current balance, credit limit and reissue year.",
+      "condition": null,
+      "action": "WRITE VBR-REC length 12 (VBRC-REC1); WRITE VBR-REC length 39 (VBRC-REC2)",
+      "outcome": "Two VBPS records per account",
+      "acceptance_criteria": {
+        "given": "the account master holds N accounts",
+        "when": "READACCT runs",
+        "then": "VBPS holds 2N records alternating 12 and 39 bytes"
+      },
+      "decision_table": [],
+      "source_reference": "app/cbl/CBACT01C.cbl:276-315",
+      "source_snippet": "1500-POPUL-VBRC-RECORD. MOVE   ACCT-ID            TO VB1-ACCT-ID VB2-ACCT-ID. MOVE   ACCT-ACTIVE-STATUS TO VB1-ACCT-ACTIVE-STATUS. MOVE   ACCT-CURR-BAL           TO  VB2-ACCT-CURR-BAL. MOVE   ACCT-CREDIT-LIMIT       TO  VB2-ACCT-CREDIT-LIMIT. MOVE   WS-ACCT-REISSUE-YYYY    TO  VB2-ACCT-REISSUE-YYYY. ... MOVE 12 TO WS-RECD-LEN ... MOVE 39 TO WS-RECD-LEN",
+      "confidence_level": "HIGH"
+    },
+    {
+      "rule_id": "CBACT01C-BR-006",
+      "rule_name": "File error stops the run",
+      "rule_category": "Exception Rule",
+      "business_description": "If the account file cannot be opened or read, an output file cannot be opened or written, or the account file cannot be closed, the job prints an error message and the file status and ends with abend code 999.",
+      "condition": "file status not '00' (read: not '00' and not '10'; write: not '00' and not '10')",
+      "action": "DISPLAY error message; PERFORM 9910-DISPLAY-IO-STATUS; PERFORM 9999-ABEND-PROGRAM",
+      "outcome": "Job ends abnormally (abend 999); later accounts are not processed",
+      "acceptance_criteria": {
+        "given": "the account file cannot be opened",
+        "when": "READACCT runs",
+        "then": "'ERROR OPENING ACCTFILE' and 'ABENDING PROGRAM' are printed and the step ends with abend 999"
+      },
+      "decision_table": [
+        {
+          "condition": "ACCTFILE-STATUS = '00'",
+          "APPL-RESULT": 0,
+          "action": "process record",
+          "source_reference": "app/cbl/CBACT01C.cbl:167"
+        },
+        {
+          "condition": "ACCTFILE-STATUS = '10'",
+          "APPL-RESULT": 16,
+          "action": "END-OF-FILE = 'Y'",
+          "source_reference": "app/cbl/CBACT01C.cbl:180-181"
+        },
+        {
+          "condition": "other ACCTFILE-STATUS",
+          "APPL-RESULT": 12,
+          "action": "DISPLAY 'ERROR READING ACCOUNT FILE'; abend 999",
+          "source_reference": "app/cbl/CBACT01C.cbl:191-195"
+        }
+      ],
+      "source_reference": "app/cbl/CBACT01C.cbl:165-198,317-410",
+      "source_snippet": "DISPLAY 'ERROR READING ACCOUNT FILE' MOVE ACCTFILE-STATUS TO IO-STATUS PERFORM 9910-DISPLAY-IO-STATUS PERFORM 9999-ABEND-PROGRAM",
+      "confidence_level": "HIGH"
+    },
+    {
+      "rule_id": "CBACT01C-BR-007",
+      "rule_name": "Start and end banners",
+      "rule_category": "Reporting Rule",
+      "business_description": "The listing starts with 'START OF EXECUTION OF PROGRAM CBACT01C' and, on normal completion, ends with 'END OF EXECUTION OF PROGRAM CBACT01C'.",
+      "condition": null,
+      "action": "DISPLAY banners",
+      "outcome": "Listing bracketed by banner lines",
+      "acceptance_criteria": null,
+      "decision_table": [],
+      "source_reference": "app/cbl/CBACT01C.cbl:141,158",
+      "source_snippet": "DISPLAY 'START OF EXECUTION OF PROGRAM CBACT01C'. ... DISPLAY 'END OF EXECUTION OF PROGRAM CBACT01C'.",
+      "confidence_level": "HIGH"
+    }
+  ],
+  "business_capability_mapping": [],
+  "processing_inputs": [
+    {
+      "name": "ACCTFILE",
+      "dataset": "AWS.M2.CARDDEMO.ACCTDATA.VSAM.KSDS",
+      "record_layout": "CVACT01Y ACCOUNT-RECORD",
+      "source_reference": "app/jcl/READACCT.jcl:35-36"
+    }
+  ],
+  "processing_outputs": [
+    {
+      "name": "OUTFILE",
+      "dataset": "AWS.M2.CARDDEMO.ACCTDATA.PSCOMP",
+      "content": "Account extract record per account",
+      "source_reference": "app/jcl/READACCT.jcl:37-40"
+    },
+    {
+      "name": "ARRYFILE",
+      "dataset": "AWS.M2.CARDDEMO.ACCTDATA.ARRYPS",
+      "content": "Account balance array record per account",
+      "source_reference": "app/jcl/READACCT.jcl:41-44"
+    },
+    {
+      "name": "VBRCFILE",
+      "dataset": "AWS.M2.CARDDEMO.ACCTDATA.VBPS",
+      "content": "Two variable records per account",
+      "source_reference": "app/jcl/READACCT.jcl:45-48"
+    },
+    {
+      "name": "SYSOUT",
+      "dataset": null,
+      "content": "Banners and account listing",
+      "source_reference": "app/jcl/READACCT.jcl:49"
+    }
+  ],
+  "traceability_summary": {
+    "total_business_rules": 7,
+    "rules_with_source_evidence": 7,
+    "rules_without_source_evidence": 0
+  }
+}

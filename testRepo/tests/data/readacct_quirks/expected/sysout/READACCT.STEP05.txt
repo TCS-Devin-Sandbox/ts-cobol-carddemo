@@ -1,0 +1,66 @@
+START OF EXECUTION OF PROGRAM CBACT01C
+ACCT-ID                 :00000000001
+ACCT-ACTIVE-STATUS      :Y
+ACCT-CURR-BAL           :000000012345+
+ACCT-CREDIT-LIMIT       :000000500000+
+ACCT-CASH-CREDIT-LIMIT  :000000250000+
+ACCT-OPEN-DATE          :2019-03-15
+ACCT-EXPIRAION-DATE     :2026-12-31
+ACCT-REISSUE-DATE       :2026-12-31
+ACCT-CURR-CYC-CREDIT    :000000000000+
+ACCT-CURR-CYC-DEBIT     :000000077700+
+ACCT-GROUP-ID           :GOLD      
+-------------------------------------------------
+VBRC-REC1:00000000001Y
+VBRC-REC2:0000000000100000001234E00000050000{2026
+00000000001Y00000001234E00000050000{00000025000{2019-03-152026-12-312026-12-3100000000000{00000007770{10115     GOLD                                                                                                                                                                                        
+ACCT-ID                 :00000000002
+ACCT-ACTIVE-STATUS      :Y
+ACCT-CURR-BAL           :000000000500-
+ACCT-CREDIT-LIMIT       :000000500000+
+ACCT-CASH-CREDIT-LIMIT  :000000250000+
+ACCT-OPEN-DATE          :2019-03-15
+ACCT-EXPIRAION-DATE     :2026-12-31
+ACCT-REISSUE-DATE       :2026-12-31
+ACCT-CURR-CYC-CREDIT    :000000000000+
+ACCT-CURR-CYC-DEBIT     :000000000000+
+ACCT-GROUP-ID           :GOLD      
+-------------------------------------------------
+VBRC-REC1:00000000002Y
+VBRC-REC2:0000000000200000000050}00000050000{2026
+00000000002Y00000000050}00000050000{00000025000{2019-03-152026-12-312026-12-3100000000000{00000000000{10115     GOLD                                                                                                                                                                                        
+ACCT-ID                 :00000000003
+ACCT-ACTIVE-STATUS      :Y
+ACCT-CURR-BAL           :000000000001+
+ACCT-CREDIT-LIMIT       :000000500000+
+ACCT-CASH-CREDIT-LIMIT  :000000250000+
+ACCT-OPEN-DATE          :2019-03-15
+ACCT-EXPIRAION-DATE     :2026-12-31
+ACCT-REISSUE-DATE       :2026-12-31
+ACCT-CURR-CYC-CREDIT    :000000000000+
+ACCT-CURR-CYC-DEBIT     :000000123456+
+ACCT-GROUP-ID           :GOLD      
+-------------------------------------------------
+VBRC-REC1:00000000003Y
+VBRC-REC2:0000000000300000000000A00000050000{2026
+00000000003Y00000000000A00000050000{00000025000{2019-03-152026-12-312026-12-3100000000000{00000012345F10115     GOLD                                                                                                                                                                                        
+ACCT-ID                 :00000000004
+ACCT-ACTIVE-STATUS      :Y
+ACCT-CURR-BAL           :000000000099-
+ACCT-CREDIT-LIMIT       :000000500000+
+ACCT-CASH-CREDIT-LIMIT  :000000250000+
+ACCT-OPEN-DATE          :2019-03-15
+ACCT-EXPIRAION-DATE     :2026-12-31
+ACCT-REISSUE-DATE       :2025-01-05
+ACCT-CURR-CYC-CREDIT    :000000000000+
+ACCT-CURR-CYC-DEBIT     :000000000000+
+ACCT-GROUP-ID           :GOLD      
+-------------------------------------------------
+VBRC-REC1:00000000004Y
+VBRC-REC2:0000000000400000000009R00000050000{2025
+00000000004Y00000000009R00000050000{00000025000{2019-03-152026-12-312025-01-0500000000000{00000000000{10115     GOLD                                                                                                                                                                                        
+END OF EXECUTION OF PROGRAM CBACT01C
+
+libcob: warning: implicit CLOSE of VBRC-FILE ('VBRCFILE')
+libcob: warning: implicit CLOSE of ARRY-FILE ('ARRYFILE')
+libcob: warning: implicit CLOSE of OUT-FILE ('OUTFILE')
