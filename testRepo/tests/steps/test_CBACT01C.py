@@ -248,3 +248,13 @@ def test_abend_deletes_partial_extracts(run_acct):
     result = run_acct(DATA / "accts_bad_record.txt", "text")
     assert result["steps"]["STEP05"] == "U0999"
     assert not list((result["output_dir"] / "datasets").glob("*.txt"))
+
+
+def test_flush_failure_on_close_abends(run_acct, readacct, monkeypatch):
+    def failing_close(self):
+        raise OSError("No space left on device")
+    monkeypatch.setattr(readacct.Datasets, "close", failing_close)
+    result = run_acct(DATA / "accts_unsorted.txt", "text")
+    assert result["steps"]["STEP05"] == "U0999"
+    assert result["sysout"][-2:] == ["ACCOUNT FILE WRITE STATUS IS:", "ABENDING PROGRAM"]
+    assert '"STEP05": "U0999"' in (result["output_dir"] / "rc.json").read_text()

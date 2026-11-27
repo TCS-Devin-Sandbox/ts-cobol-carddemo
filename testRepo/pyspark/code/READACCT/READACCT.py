@@ -368,7 +368,11 @@ def step05_cbact01c(spark: SparkSession, args, sysout: Sysout):
         if datasets is not None:
             datasets.discard()
         return abend_program(sysout, err), records
-    datasets.close()
+    try:
+        datasets.close()  # buffered records are flushed here
+    except OSError as exc:
+        datasets.discard()
+        return abend_program(sysout, AcctFileError("ACCOUNT FILE WRITE STATUS IS:", str(exc))), records
     sysout.display(END_BANNER)  # CBACT01C-BR-007
     sysout.lines += [""] + IMPLICIT_CLOSE_WARNINGS
     return 0, records
