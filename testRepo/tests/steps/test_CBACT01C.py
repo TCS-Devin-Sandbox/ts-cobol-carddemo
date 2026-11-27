@@ -242,3 +242,9 @@ def test_predel_removes_previous_outputs(readacct, tmp_path):
     stale = tmp_path / f"datasets/{PSCOMP}.txt"
     stale.write_text("old\n")
     assert readacct.step_predel(tmp_path) == 0 and not stale.exists()
+
+
+def test_abend_deletes_partial_extracts(run_acct):
+    result = run_acct(DATA / "accts_bad_record.txt", "text")
+    assert result["steps"]["STEP05"] == "U0999"
+    assert not list((result["output_dir"] / "datasets").glob("*.txt"))

@@ -285,7 +285,7 @@ class Datasets:
             try:
                 self.files[dsn] = open(self.dir / f"{dsn}.txt", "w", encoding="latin-1")
             except OSError as exc:  # 2000/3000/4000-*-OPEN
-                self.close()
+                self.discard()
                 raise AcctFileError(f"ERROR OPENING {label}", str(exc)) from exc
 
     def write(self, dsn: str, line: str) -> None:
@@ -297,6 +297,15 @@ class Datasets:
     def close(self) -> None:
         for fh in self.files.values():
             fh.close()
+
+    def discard(self) -> None:
+        """Abnormal end of STEP05: DISP=(NEW,CATLG,DELETE) deletes the three extracts."""
+        for dsn, fh in self.files.items():
+            try:
+                fh.close()
+            except OSError:
+                pass
+            (self.dir / f"{dsn}.txt").unlink(missing_ok=True)
 
 
 def abend_program(sysout: Sysout, error: AcctFileError) -> str:
@@ -356,10 +365,10 @@ def step05_cbact01c(spark: SparkSession, args, sysout: Sysout):
         if trailing:
             raise AcctFileError("ERROR READING ACCOUNT FILE", f"{trailing} trailing bytes after {records} records")
     except AcctFileError as err:
-        return abend_program(sysout, err), records
-    finally:
         if datasets is not None:
-            datasets.close()
+            datasets.discard()
+        return abend_program(sysout, err), records
+    datasets.close()
     sysout.display(END_BANNER)  # CBACT01C-BR-007
     sysout.lines += [""] + IMPLICIT_CLOSE_WARNINGS
     return 0, records
