@@ -305,7 +305,10 @@ class Datasets:
                 fh.close()
             except OSError:
                 pass
-            (self.dir / f"{dsn}.txt").unlink(missing_ok=True)
+            try:
+                (self.dir / f"{dsn}.txt").unlink(missing_ok=True)
+            except OSError as exc:  # cleanup must not mask the abend being reported
+                print(f"DETAIL: could not delete {dsn}: {exc}", file=sys.stderr)
 
 
 def abend_program(sysout: Sysout, error: AcctFileError) -> str:

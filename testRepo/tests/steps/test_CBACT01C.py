@@ -258,3 +258,13 @@ def test_flush_failure_on_close_abends(run_acct, readacct, monkeypatch):
     assert result["steps"]["STEP05"] == "U0999"
     assert result["sysout"][-2:] == ["ACCOUNT FILE WRITE STATUS IS:", "ABENDING PROGRAM"]
     assert '"STEP05": "U0999"' in (result["output_dir"] / "rc.json").read_text()
+
+
+def test_failed_extract_cleanup_still_reports_abend(run_acct, monkeypatch):
+    def failing_unlink(self, missing_ok=False):
+        raise PermissionError("read-only")
+    monkeypatch.setattr("pathlib.Path.unlink", failing_unlink)
+    result = run_acct(DATA / "accts_bad_record.txt", "text")
+    assert result["steps"]["STEP05"] == "U0999"
+    assert (result["output_dir"] / "rc.json").exists()
+    assert result["sysout"][-2:] == ["ERROR READING ACCOUNT FILE", "ABENDING PROGRAM"]
